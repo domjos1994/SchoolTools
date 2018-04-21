@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:weightSum="10">
+
+    <android.support.v7.widget.AppCompatImageView
+        app:srcCompat="@drawable/ic_access_time_black_24dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_margin="1dp"/>
+
+    <TextView
+        android:id="@+id/lblHoursStart"
+        android:layout_weight="3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/lblHoursEnd"
+        android:layout_weight="3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/lblHoursBreak"
+        android:layout_weight="4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:gravity="end|center"
+        android:text="@string/timetable_hour_break" />
+</LinearLayout>

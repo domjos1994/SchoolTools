@@ -1,0 +1,290 @@
+<!--
+  ~ Copyright (C) 2017  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="de.domjos.schooltools.activities.MarkListActivity"
+    tools:showIn="@layout/marklist_activity"
+    android:id="@+id/grdAll">
+
+    <TableLayout
+        android:id="@+id/grdMarkListType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/tbl_border">
+        <TableRow android:weightSum="40">
+            <TextView
+                android:layout_weight="12"
+                android:text="@string/marklist_type"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="3dp"
+                android:paddingStart="3dp"
+                android:paddingLeft="3dp"
+                android:paddingEnd="3dp"
+                android:paddingRight="3dp"/>
+            <Spinner
+                android:id="@+id/spMarkListType"
+                android:layout_weight="28"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/marklist_type"/>
+        </TableRow>
+        <TableRow android:weightSum="10">
+            <LinearLayout
+                android:layout_weight="10"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/White"/>
+        </TableRow>
+        <TableRow android:weightSum="40">
+            <TextView
+                android:layout_weight="12"
+                android:text="@string/marklist_state"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="3dp"
+                android:paddingStart="3dp"
+                android:paddingLeft="3dp"
+                android:paddingEnd="3dp"
+                android:paddingRight="3dp"/>
+            <TextView
+                android:id="@+id/lblMarkListState"
+                android:layout_weight="27"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/marklist_state_ok"/>
+            <ImageView
+                android:id="@+id/ivMarkListState"
+                android:visibility="gone"
+                android:src="@android:drawable/ic_dialog_alert"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+        </TableRow>
+    </TableLayout>
+
+    <ListView
+        android:id="@+id/lvMarkList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/grdMarkListType"
+        android:layout_above="@+id/grdControls"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/cmdMarkListOpenSearch"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="bottom|end"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        app:srcCompat="@drawable/ic_settings_blue_24dp"
+        android:layout_above="@+id/grdControls" />
+
+    <ScrollView
+        android:id="@+id/grdControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/tbl_border">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableLayout
+                android:id="@+id/grdMarkListMaxPoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TableRow android:weightSum="10">
+                    <TextView
+                        android:text="@string/marklist_maxPoints"
+                        android:layout_weight="4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="4dp"/>
+                    <EditText
+                        android:id="@+id/txtMarkListMaxPoints"
+                        android:hint="@string/marklist_maxPoints"
+                        android:layout_weight="6"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:inputType="numberSigned"/>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/grdMarkListSimple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+                <TableRow android:weightSum="10">
+                    <LinearLayout
+                        android:layout_weight="10"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#000"/>
+                </TableRow>
+                <RadioGroup
+                    android:layout_weight="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/rbMarkListSimpleTenthMarks"
+                        android:text="@string/marklist_mark_tenth"
+                        android:checked="true"
+                        android:layout_weight="5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+                    <RadioButton
+                        android:id="@+id/rbMarkListSimpleQuarterMarks"
+                        android:text="@string/marklist_mark_quarter"
+                        android:layout_weight="5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+                </RadioGroup>
+                <TableRow  android:weightSum="10">
+                    <CheckBox
+                        android:id="@+id/chkMarkListSimpleHalfPoints"
+                        android:text="@string/marklist_points_half"
+                        android:layout_weight="5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+                    <CheckBox
+                        android:id="@+id/chkMarkListSimpleDictatMode"
+                        android:text="@string/marklist_dictatMode"
+                        android:layout_weight="5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/grdMarkListExpert"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+                <TableRow android:weightSum="10">
+                    <LinearLayout
+                        android:layout_weight="10"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#000"/>
+                </TableRow>
+                <TableRow android:weightSum="10">
+                    <TextView
+                        android:text="@string/marklist_view"
+                        android:layout_weight="3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"/>
+                    <Spinner
+                        android:id="@+id/spMarkListExpertView"
+                        android:entries="@array/marklist_view"
+                        android:layout_weight="7"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"/>
+                </TableRow>
+                <TableRow android:weightSum="10">
+                    <TextView
+                        android:text="@string/marklist_markMode"
+                        android:layout_weight="3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"/>
+                    <Spinner
+                        android:id="@+id/spMarkListExpertMarkMode"
+                        android:entries="@array/marklist_markMode"
+                        android:layout_weight="7"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"/>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/grdMarkListWithCrease"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+                <TableRow android:weightSum="10">
+                    <LinearLayout
+                        android:layout_weight="10"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#000"/>
+                </TableRow>
+                <TableRow android:weightSum="10">
+                    <TextView
+                        android:text="@string/marklist_mark"
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"/>
+                    <EditText
+                        android:id="@+id/txtMarkListWithCreaseCustomMark"
+                        android:hint="@string/marklist_mark"
+                        android:layout_weight="3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"/>
+                    <TextView
+                        android:text="@string/marklist_points"
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"/>
+                    <EditText
+                        android:id="@+id/txtMarkListWithCreaseCustomPoints"
+                        android:hint="@string/marklist_points"
+                        android:layout_weight="3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"/>
+                </TableRow>
+                <TableRow android:weightSum="10">
+                    <TextView
+                        android:text="@string/marklist_bestMarkAt"
+                        android:layout_weight="4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"/>
+                    <EditText
+                        android:id="@+id/txtMarkListWithCreaseBestMarkAt"
+                        android:hint="@string/marklist_points"
+                        android:layout_weight="6"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"/>
+                </TableRow>
+                <TableRow android:weightSum="10">
+                    <TextView
+                        android:text="@string/marklist_worstMarkTo"
+                        android:layout_weight="4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"/>
+                    <EditText
+                        android:id="@+id/txtMarkListWithCreaseWorstMarkTo"
+                        android:hint="@string/marklist_points"
+                        android:layout_weight="6"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:inputType="numberDecimal"/>
+                </TableRow>
+            </TableLayout>
+        </TableLayout>
+    </ScrollView>
+</RelativeLayout>
+

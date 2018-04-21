@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navTimeTableLesson"
+        android:icon="@drawable/ic_book_black_24dp"
+        android:title="@string/timetable_lesson" />
+
+    <item
+        android:id="@+id/navTimeTableClass"
+        android:icon="@drawable/ic_people_black_24dp"
+        android:title="@string/timetable_class" />
+
+    <item
+        android:id="@+id/navTimeTableTeacher"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/timetable_teacher" />
+
+    <item
+        android:id="@+id/navTimeTableYear"
+        android:icon="@drawable/ic_event_note_black_24dp"
+        android:title="@string/mark_year" />
+
+    <item
+        android:id="@+id/navTimeTableTimes"
+        android:icon="@drawable/ic_access_time_black_24dp"
+        android:title="@string/timetable_times" />
+
+</menu>

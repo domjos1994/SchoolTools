@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="de.domjos.schooltools.activities.MarkEntryActivity"
+    android:background="@drawable/tbl_border">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TableLayout
+            android:id="@+id/content"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="10">
+                <TextView
+                    android:id="@+id/lblTestYear"
+                    android:text="@string/mark_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:padding="6dp"/>
+
+                <TextView
+                    android:id="@+id/lblTestSubject"
+                    android:text="@string/timetable_lesson"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:padding="6dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="10"
+                    android:padding="6dp"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/txtTestTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:hint="@string/sys_title"/>
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_weight="10"
+                android:weightSum="9">
+                <EditText
+                    android:id="@+id/txtTestWeight"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/mark_weight"
+                    android:inputType="numberDecimal"/>
+                <EditText
+                    android:id="@+id/txtTestMark"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/mark_mark"
+                    android:inputType="numberDecimal"/>
+                <EditText
+                    android:id="@+id/txtTestAverage"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/mark_average"
+                    android:inputType="numberDecimal"/>
+            </TableRow>
+
+            <EditText
+                android:id="@+id/txtTestDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:hint="@string/mark_date"
+                android:inputType="date"/>
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_weight="10"
+                android:weightSum="10">
+                <CheckBox
+                    android:id="@+id/chkTestMemory"
+                    android:layout_weight="5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sys_memory"/>
+                <EditText
+                    android:id="@+id/txtTestMemoryDate"
+                    android:layout_weight="5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/mark_date"
+                    android:inputType="date"/>
+            </TableRow>
+
+            <EditText
+                android:id="@+id/txtTestThemes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:hint="@string/mark_themes"
+                android:inputType="textMultiLine"/>
+
+            <EditText
+                android:id="@+id/txtTestDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:hint="@string/sys_description"
+                android:inputType="textMultiLine"/>
+        </TableLayout>
+    </ScrollView>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/navigation_sys" />
+
+</LinearLayout>

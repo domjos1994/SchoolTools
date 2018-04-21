@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2018  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<appwidget-provider
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/note_widget"
+    android:minHeight="180dp"
+    android:minWidth="180dp"
+    android:previewImage="@mipmap/ic_launcher_round"
+    android:resizeMode="vertical"
+    android:updatePeriodMillis="86400000">
+</appwidget-provider>

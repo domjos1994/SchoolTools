@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/main_nav_mark_list"
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:layout="@android:layout/preference_category">
+        <SwitchPreference
+            android:key="swtSchoolMarkListExpert"
+            android:defaultValue="false"
+            android:title="@string/settings_school_expert_header"
+            android:summary="@string/settings_school_expert_summary"/>
+        <EditTextPreference
+            android:key="txtSchoolMarkListExtendedMax"
+            android:defaultValue="@string/settings_school_extended_max_default"
+            android:inputType="numberSigned"
+            android:title="@string/settings_school_extended_max_header"
+            android:summary="@string/settings_school_extended_max_summary"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/main_nav_timetable"
+        android:icon="@drawable/ic_access_time_black_24dp"
+        android:layout="@android:layout/preference_category">
+        <SwitchPreference
+            android:key="swtSchoolTimeTableMode"
+            android:defaultValue="false"
+            android:title="@string/settings_school_perspective_header"
+            android:summaryOff="@string/settings_school_perspective_summary_of"
+            android:summaryOn="@string/settings_school_perspective_summary_on"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/main_nav_timer"
+        android:icon="@drawable/ic_event_note_black_24dp"
+        android:layout="@android:layout/preference_category">
+        <EditTextPreference
+            android:key="txtSchoolTimerNotification"
+            android:inputType="numberSigned"
+            android:defaultValue="@string/settings_school_timer_notification_default"
+            android:title="@string/settings_school_timer_notification_header"
+            android:summary="@string/settings_school_timer_notification_summary"/>
+    </PreferenceCategory>
+</PreferenceScreen>

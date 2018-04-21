@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2017  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="de.domjos.schooltools">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
+    <application
+        android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="dojodev.de"
+                    android:pathPattern="/schooltools"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.MarkListActivity"
+            android:label="@string/main_nav_mark_list"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/main_menu_settings"
+            android:parentActivityName=".activities.MainActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.ApiActivity"
+            android:label="@string/main_menu_export"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.TimeTableActivity"
+            android:label="@string/main_nav_timetable"
+            android:parentActivityName=".activities.MainActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.TimeTableTeacherActivity"
+            android:label="@string/timetable_teacher"
+            android:parentActivityName=".activities.TimeTableActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.TimeTableActivity" />
+        </activity>
+        <activity
+            android:name=".activities.TimeTableSubjectActivity"
+            android:label="@string/timetable_lesson"
+            android:parentActivityName=".activities.TimeTableActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.TimeTableActivity" />
+        </activity>
+        <activity
+            android:name=".activities.TimeTableHourActivity"
+            android:label="@string/timetable_times"
+            android:parentActivityName=".activities.TimeTableActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.TimeTableActivity" />
+        </activity>
+        <activity
+            android:name=".activities.TimeTableEntryActivity"
+            android:label="@string/main_nav_timetable"
+            android:parentActivityName=".activities.TimeTableActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.TimeTableActivity" />
+        </activity>
+        <activity
+            android:name=".activities.TimeTableClassActivity"
+            android:label="@string/timetable_class"
+            android:parentActivityName=".activities.TimeTableActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.TimeTableActivity" />
+        </activity>
+        <activity
+            android:name=".activities.MarkActivity"
+            android:label="@string/main_nav_mark"
+            android:parentActivityName=".activities.MainActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.MarkYearActivity"
+            android:label="@string/mark_year"
+            android:parentActivityName=".activities.MarkActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MarkActivity" />
+        </activity>
+        <activity
+            android:name=".activities.MarkEntryActivity"
+            android:label="@string/mark_test"
+            android:parentActivityName=".activities.MarkActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MarkActivity" />
+        </activity>
+        <activity
+            android:name=".activities.NoteActivity"
+            android:label="@string/main_nav_notes"
+            android:parentActivityName=".activities.MainActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.ToDoActivity"
+            android:label="@string/main_nav_todo"
+            android:parentActivityName=".activities.MainActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.TimerActivity"
+            android:label="@string/main_nav_timer"
+            android:parentActivityName=".activities.MainActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.HelpActivity"
+            android:label="@string/main_menu_help"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.HelpAboutActivity"
+            android:label="@string/help_about"
+            android:parentActivityName=".activities.HelpActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.HelpActivity" />
+        </activity>
+        <activity
+            android:name=".activities.ToDoListActivity"
+            android:label="@string/todo_list"
+            android:parentActivityName=".activities.ToDoActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.ToDoActivity" />
+        </activity>
+        <activity
+            android:name=".activities.ToDoEntryActivity"
+            android:label="@string/main_nav_todo"
+            android:parentActivityName=".activities.ToDoActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.ToDoActivity" />
+        </activity>
+        <activity
+            android:name=".activities.TimerEntryActivity"
+            android:label="@string/main_nav_timer"
+            android:parentActivityName=".activities.TimerActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.TimerActivity" />
+        </activity>
+        <activity
+            android:name=".activities.MarkListExtendedActivity"
+            android:label="@string/marklist_menu_extended"
+            android:parentActivityName=".activities.MarkListActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MarkListActivity" />
+        </activity>
+        <activity
+            android:name=".activities.WhatsNewActivity"
+            android:label="@string/whats_new"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
+        <activity android:name=".widgets.TimeTableWidgetConfigurationActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name=".helper.FileProvider"
+            android:authorities="${applicationId}.my.package.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <receiver
+            android:name=".widgets.TimeTableWidget"
+            android:label="@string/main_nav_timetable">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/time_table_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".widgets.NoteWidget"
+            android:label="@string/main_top5Notes">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/note_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".services.TimeTableWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".services.NoteWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".services.MemoryService"
+            android:exported="false" />
+    </application>
+
+</manifest>
