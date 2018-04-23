@@ -12,3 +12,5 @@
 /gradlew
 /gradle.properties
 /build.gradle
+/gradle
+/.idea
