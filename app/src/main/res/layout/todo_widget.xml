@@ -1,0 +1,35 @@
+<!--
+  ~ Copyright (C) 2017  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tbl_border"
+    android:padding="@dimen/widget_margin">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:height="30dp"
+        android:id="@+id/lblHeader"
+        android:scrollbars="horizontal"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:focusableInTouchMode="true"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:padding="2dp"
+        android:text="@string/main_importantToDos"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lblHeader"
+        android:id="@+id/lvToDos">
+    </ListView>
+</RelativeLayout>
