@@ -67,6 +67,9 @@ public class HelpActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            case R.id.menMainWhatsNew:
+                startActivity(new Intent(this.getApplicationContext(), WhatsNewActivity.class));
+                break;
             case R.id.menHelpAbout:
                 startActivity(new Intent(this.getApplicationContext(), HelpAboutActivity.class));
                 break;
