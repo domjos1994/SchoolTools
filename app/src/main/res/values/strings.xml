@@ -99,12 +99,14 @@
     <string-array name="settings_general_start_entries">
         <item>@string/main_today</item>
         <item>@string/main_top5Notes</item>
+        <item>@string/main_importantToDos</item>
         <item>@string/main_savedMarkList</item>
         <item>@string/main_nav_buttons</item>
     </string-array>
     <string-array name="settings_general_start_default">
         <item>@string/main_today</item>
         <item>@string/main_top5Notes</item>
+        <item>@string/main_importantToDos</item>
         <item>@string/main_savedMarkList</item>
     </string-array>
     <string name="settings_general_shown_modules_header">Module anzeigen</string>

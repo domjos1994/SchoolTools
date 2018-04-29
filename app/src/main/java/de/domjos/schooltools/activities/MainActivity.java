@@ -36,18 +36,10 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.EventAdapter;
-import de.domjos.schooltools.adapter.MarkListAdapter;
-import de.domjos.schooltools.adapter.NoteAdapter;
-import de.domjos.schooltools.adapter.SearchAdapter;
+import de.domjos.schooltools.adapter.*;
 import de.domjos.schooltools.core.SearchItem;
 import de.domjos.schooltools.core.marklist.de.GermanListWithCrease;
 import de.domjos.schooltools.core.model.Memory;
@@ -82,15 +74,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static GeneralSettings generals;
 
     private TableRow trMarkList, trMark, trTimeTable, trNotes, trTimer, trTodo, trExport, trSettings, trHelp;
-    private RelativeLayout llToday, llCurrentNotes, llSavedMarkList;
+    private RelativeLayout llToday, llCurrentNotes, llSavedMarkList, llImportantToDos;
     private ImageButton cmdRefresh;
     private SearchView cmdSearch;
-    private ListView lvCurrentNotes, lvSearchResults;
+    private ListView lvCurrentNotes;
+    private ListView lvSearchResults;
     private Spinner cmbSavedMarkList;
     private TableLayout tblButtons;
     private EventAdapter eventAdapter;
     private NoteAdapter noteAdapter;
     private SearchAdapter searchAdapter;
+    private ToDoAdapter toDoAdapter;
     private MarkListAdapter markListAdapter;
     private ArrayAdapter<String> savedMarkListAdapter;
     private boolean firstUse, versionChange;
@@ -111,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.hideWidgets();
         this.addEvents();
         this.addNotes();
+        addToDos();
         this.addMarkLists();
         this.deleteMemoriesFromPast();
         this.openWhatsNew();
@@ -217,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 addEvents();
                 addNotes();
+                addToDos();
                 addMarkLists();
                 Helper.createToast(getApplicationContext(), getString(R.string.main_refreshSuccessFully));
             }
@@ -391,6 +387,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.lvCurrentNotes.setAdapter(this.noteAdapter);
         this.noteAdapter.notifyDataSetChanged();
 
+        this.llImportantToDos = this.findViewById(R.id.llImportantToDos);
+        ListView lvImportantToDos = this.findViewById(R.id.lvImportantToDos);
+        this.toDoAdapter = new ToDoAdapter(this.getApplicationContext(), R.layout.todo_item, new ArrayList<ToDo>());
+        lvImportantToDos.setAdapter(this.toDoAdapter);
+        this.toDoAdapter.notifyDataSetChanged();
+
         this.llSavedMarkList = this.findViewById(R.id.llSavedMarklist);
 
         this.cmbSavedMarkList = this.findViewById(R.id.cmbSavedMarklist);
@@ -410,6 +412,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         lvMarkList.setOnTouchListener(this.addOnTouchListenerForScrolling());
         lvCurrentNotes.setOnTouchListener(this.addOnTouchListenerForScrolling());
+        lvImportantToDos.setOnTouchListener(this.addOnTouchListenerForScrolling());
         lvEvents.setOnTouchListener(this.addOnTouchListenerForScrolling());
     }
 
@@ -490,6 +493,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Note note = new Note();
                 note.setTitle(this.getString(R.string.main_noEntry));
                 this.noteAdapter.add(note);
+            }
+        }
+    }
+
+    private void addToDos() {
+        this.toDoAdapter.clear();
+        if(this.llImportantToDos.getVisibility()==View.VISIBLE) {
+            List<ToDo> toDos = MainActivity.globals.getSqLite().getToDos("");
+            Map<ToDo, Integer> todoMap = new HashMap<>();
+            for(ToDo toDo : toDos) {
+                todoMap.put(toDo, toDo.getImportance());
+            }
+
+            Object[] a = todoMap.entrySet().toArray();
+            Arrays.sort(a, new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    return ((Map.Entry<ToDo, Integer>) o2).getValue().compareTo(((Map.Entry<ToDo, Integer>) o1).getValue());
+                }
+            });
+            toDos.clear();
+            for(Object obj : a) {
+                Map.Entry<ToDo, Integer> entry = (Map.Entry<ToDo, Integer>) obj;
+
+                if(toDos.size() % 5 == 0) {
+                    break;
+                }
+                this.toDoAdapter.add(entry.getKey());
+            }
+            if(this.toDoAdapter.isEmpty()) {
+                ToDo toDo = new ToDo();
+                toDo.setTitle(this.getString(R.string.main_noEntry));
+                this.toDoAdapter.add(toDo);
             }
         }
     }
@@ -606,6 +641,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.tblButtons.setVisibility(View.GONE);
         this.llToday.setVisibility(View.GONE);
         this.llCurrentNotes.setVisibility(View.GONE);
+        this.llImportantToDos.setVisibility(View.GONE);
         this.llSavedMarkList.setVisibility(View.GONE);
 
         for(String item : MainActivity.settings.getStartWidgets(this.getApplicationContext())) {
@@ -617,6 +653,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             if(item.equals(this.getString(R.string.main_top5Notes))) {
                 this.llCurrentNotes.setVisibility(View.VISIBLE);
+            }
+            if(item.equals(this.getString(R.string.main_importantToDos))) {
+                this.llImportantToDos.setVisibility(View.VISIBLE);
             }
             if(item.equals(this.getString(R.string.main_savedMarkList))) {
                 this.llSavedMarkList.setVisibility(View.VISIBLE);

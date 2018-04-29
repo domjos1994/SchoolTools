@@ -92,44 +92,80 @@
 
 
 
-
-
-            <RelativeLayout
-                android:id="@+id/llSavedMarklist"
+            <LinearLayout
+                android:id="@+id/llRow2"
+                android:weightSum="10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll"
-                android:layout_margin="8dp"
-                android:background="@drawable/tbl_border">
-                <TextView
-                    android:id="@+id/lblSavedMarklist"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:text="@string/main_savedMarkList"
-                    android:padding="8dp"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"/>
-                <Spinner
-                    android:id="@+id/cmbSavedMarklist"
-                    android:layout_below="@+id/lblSavedMarklist"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <ListView
-                    android:id="@+id/lvMarklist"
-                    android:layout_below="@+id/cmbSavedMarklist"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_margin="8dp"
-                    tools:ignore="NestedScrolling" />
-            </RelativeLayout>
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+                <RelativeLayout
+                        android:id="@+id/llSavedMarklist"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/tbl_border">
+                    <TextView
+                            android:id="@+id/lblSavedMarklist"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:text="@string/main_savedMarkList"
+                            android:padding="8dp"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:layout_gravity="center"/>
+                    <Spinner
+                            android:id="@+id/cmbSavedMarklist"
+                            android:layout_below="@+id/lblSavedMarklist"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    <ListView
+                            android:id="@+id/lvMarklist"
+                            android:layout_below="@+id/cmbSavedMarklist"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:layout_margin="8dp"
+                            tools:ignore="NestedScrolling" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                        android:id="@+id/llImportantToDos"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/tbl_border">
+                    <TextView
+                            android:id="@+id/lblImportantToDosHeader"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:text="@string/main_top5Notes"
+                            android:padding="8dp"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:layout_gravity="center"/>
+                    <ListView
+                        android:id="@+id/lvImportantToDos"
+                        android:layout_below="@+id/lblImportantToDosHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_margin="8dp"
+                        tools:ignore="NestedScrolling" />
+                </RelativeLayout>
+            </LinearLayout>
+
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/llSavedMarklist">
+                android:layout_below="@+id/llRow2">
 
                 <TableLayout
                     android:id="@+id/tblButtons"
