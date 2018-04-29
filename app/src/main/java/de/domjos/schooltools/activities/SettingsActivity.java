@@ -65,11 +65,7 @@ public class SettingsActivity extends SettingsAppCompatActivity {
             } else if (preference instanceof RingtonePreference) {
                 // For ringtone preferences, look up the correct display value
                 // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    //preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
+                if (!TextUtils.isEmpty(stringValue)) {
                     Ringtone ringtone = RingtoneManager.getRingtone(
                             preference.getContext(), Uri.parse(stringValue));
 
@@ -221,7 +217,7 @@ public class SettingsActivity extends SettingsAppCompatActivity {
     }
 
     /**
-     * This fragment shows menu_marklist preferences only. It is used when the
+     * This fragment shows menu_markList preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -246,7 +242,7 @@ public class SettingsActivity extends SettingsAppCompatActivity {
     }
 
     /**
-     * This fragment shows menu_marklist preferences only. It is used when the
+     * This fragment shows menu_markList preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

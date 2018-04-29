@@ -146,15 +146,15 @@ public class TimeTableTeacherActivity extends AppCompatActivity {
             }
 
         };
-        this.navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        this.navigation = this.findViewById(R.id.navigation);
         this.navigation.setOnNavigationItemSelectedListener(navListener);
 
         // init controls
-        this.txtTeacherFirstName = (EditText) this.findViewById(R.id.txtTeacherFirstName);
-        this.txtTeacherLastName = (EditText) this.findViewById(R.id.txtTeacherLastName);
-        this.txtTeacherDescription = (EditText) this.findViewById(R.id.txtTeacherDescription);
+        this.txtTeacherFirstName = this.findViewById(R.id.txtTeacherFirstName);
+        this.txtTeacherLastName = this.findViewById(R.id.txtTeacherLastName);
+        this.txtTeacherDescription = this.findViewById(R.id.txtTeacherDescription);
         this.teacherAdapter = new TeacherAdapter(this.getApplicationContext(), R.layout.timetable_teacher_item, new ArrayList<Teacher>());
-        this.lvTeachers = (ListView) this.findViewById(R.id.lvTeacher);
+        this.lvTeachers = this.findViewById(R.id.lvTeacher);
         this.lvTeachers.setAdapter(this.teacherAdapter);
         this.teacherAdapter.notifyDataSetChanged();
         this.controlFields(false, false);
@@ -190,17 +190,7 @@ public class TimeTableTeacherActivity extends AppCompatActivity {
         this.txtTeacherDescription.setEnabled(editMode);
         this.lvTeachers.setEnabled(!editMode);
 
-        if(editMode) {
-            this.navigation.getMenu().getItem(0).setEnabled(false);
-            this.navigation.getMenu().getItem(1).setEnabled(false);
-            this.navigation.getMenu().getItem(2).setEnabled(false);
-            this.navigation.getMenu().getItem(3).setEnabled(true);
-            this.navigation.getMenu().getItem(4).setEnabled(true);
-        } else {
-            this.navigation.getMenu().getItem(0).setEnabled(true);
-            this.navigation.getMenu().getItem(3).setEnabled(false);
-            this.navigation.getMenu().getItem(4).setEnabled(false);
-        }
+        Helper.showMenuControls(editMode, this.navigation);
 
         if(reset) {
             this.txtTeacherFirstName.setText("");
@@ -210,7 +200,7 @@ public class TimeTableTeacherActivity extends AppCompatActivity {
         }
     }
 
-    public void reloadTeachers() {
+    private void reloadTeachers() {
         this.teacherAdapter.clear();
         for(Teacher teacher : MainActivity.globals.getSqLite().getTeachers("")) {
             this.teacherAdapter.add(teacher);

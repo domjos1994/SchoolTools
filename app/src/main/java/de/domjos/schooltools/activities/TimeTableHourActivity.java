@@ -190,6 +190,7 @@ public class TimeTableHourActivity extends AppCompatActivity {
         navigation.getMenu().getItem(2).setEnabled(false);
     }
 
+    @SuppressWarnings("deprecation")
     private void setDefaultValuesForAdd() {
         Hour latestHour = null;
         for(int i = 0; i<=this.hourAdapter.getCount()-1; i++) {
@@ -247,17 +248,7 @@ public class TimeTableHourActivity extends AppCompatActivity {
         this.chkHoursBreak.setEnabled(editMode);
         this.lvHours.setEnabled(!editMode);
 
-        if(editMode) {
-            this.navigation.getMenu().getItem(0).setEnabled(false);
-            this.navigation.getMenu().getItem(1).setEnabled(false);
-            this.navigation.getMenu().getItem(2).setEnabled(false);
-            this.navigation.getMenu().getItem(3).setEnabled(true);
-            this.navigation.getMenu().getItem(4).setEnabled(true);
-        } else {
-            this.navigation.getMenu().getItem(0).setEnabled(true);
-            this.navigation.getMenu().getItem(3).setEnabled(false);
-            this.navigation.getMenu().getItem(4).setEnabled(false);
-        }
+        Helper.showMenuControls(editMode, navigation);
 
         if(reset) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

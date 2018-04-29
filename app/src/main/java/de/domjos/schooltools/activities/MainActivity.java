@@ -10,13 +10,11 @@
 
 package de.domjos.schooltools.activities;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static Globals globals = new Globals();
     public static UserSettings settings;
-    public static GeneralSettings generals;
+    static GeneralSettings generals;
 
     private TableRow trMarkList, trMark, trTimeTable, trNotes, trTimer, trTodo, trExport, trSettings, trHelp;
     private RelativeLayout llToday, llCurrentNotes, llSavedMarkList;
@@ -224,13 +222,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        /*this.cmdSearch.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lvSearchResults.setVisibility(View.VISIBLE);
-            }
-        });*/
-
         this.cmdSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -256,54 +247,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // speech recognize
-        if(requestCode == 0 && resultCode == RESULT_OK) {
-            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            String result = results.get(0);
-
-
-            if(result.trim().startsWith(this.getString(R.string.note_header))) {
-                String content = result.trim().replace(this.getString(R.string.note_header), "").trim();
-                Note note = Helper.getNoteFromString(this.getApplicationContext(), content);
-                MainActivity.globals.getSqLite().insertOrUpdateNote(note);
-
-                Helper.createToast(getApplicationContext(), this.getString(R.string.main_speak_note_success));
-            }
-
-            if(result.trim().toLowerCase().startsWith(this.getString(R.string.main_speak_todo).toLowerCase())) {
-                String content = result.trim().toLowerCase().replace(this.getString(R.string.main_speak_todo).toLowerCase(), "").trim();
-                if(content.trim().startsWith(this.getString(R.string.sys_title))) {
-                    content = content.replace(this.getString(R.string.sys_title), "").trim();
-                    ToDoList toDoList = new ToDoList();
-                    if(content.contains(this.getString(R.string.sys_description))) {
-                        String[] arrContent = content.split(this.getString(R.string.sys_description));
-                        toDoList.setTitle(arrContent[0].trim());
-                        toDoList.setDescription(arrContent[1].trim());
-                    } else {
-                        toDoList.setTitle(content.trim());
-                    }
-                    MainActivity.globals.getSqLite().insertOrUpdateToDoList(toDoList);
-                } else {
-                    String name = content.trim().substring(0, content.trim().indexOf(this.getString(R.string.sys_title))).trim();
-                    List<ToDoList> toDoLists = MainActivity.globals.getSqLite().getToDoLists("title like '%" + name + "%'");
-                    if(!toDoLists.isEmpty()) {
-                        ToDoList toDoList = toDoLists.get(0);
-                        content = content.split(this.getString(R.string.sys_title))[1];
-                        ToDo toDo = new ToDo();
-                        if(content.contains(this.getString(R.string.sys_description))) {
-                            String[] arrContent = content.split(this.getString(R.string.sys_description));
-                            toDo.setTitle(arrContent[0].trim());
-                            toDo.setDescription(arrContent[1].trim());
-                        } else {
-                            toDo.setTitle(content.trim());
-                        }
-                        MainActivity.globals.getSqLite().insertOrUpdateToDo(toDo, toDoList.getTitle());
-                    }
-                }
-                Helper.createToast(getApplicationContext(), this.getString(R.string.main_speak_todo_success));
-            }
-        }
-
         // settings
         if (requestCode == 98) {
             this.hideButtons();
@@ -409,7 +352,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private void initControls() {
         // init Toolbar
         Toolbar toolbar = this.findViewById(R.id.toolbar);
@@ -468,29 +410,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.markListAdapter = new MarkListAdapter(this.getApplicationContext(), R.layout.marklist_item, new ArrayList<Map.Entry<Double, Double>>());
         lvMarkList.setAdapter(this.markListAdapter);
         this.markListAdapter.notifyDataSetChanged();
-        lvMarkList.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.getParent().requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
 
-        lvCurrentNotes.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.getParent().requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
+        lvMarkList.setOnTouchListener(this.addOnTouchListenerForScrolling());
+        lvCurrentNotes.setOnTouchListener(this.addOnTouchListenerForScrolling());
+        lvEvents.setOnTouchListener(this.addOnTouchListenerForScrolling());
+    }
 
-        lvEvents.setOnTouchListener(new View.OnTouchListener() {
+
+
+    private View.OnTouchListener addOnTouchListenerForScrolling() {
+        return new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 v.getParent().requestDisallowInterceptTouchEvent(true);
                 return false;
             }
-        });
+        };
     }
 
     private void initDatabase() {

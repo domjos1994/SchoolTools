@@ -61,35 +61,35 @@ public class MarkListExtendedActivity extends AppCompatActivity {
                 sbBestMarkFirst.setMax(sbMaximumPoints.getCurrent());
                 sbWorstMarkTo.setMax(sbMaximumPoints.getCurrent());
                 graphView.getViewport().setMaxX(sbMaximumPoints.getCurrent()+1);
-                calculateMarklistAndDrawDiagram();
+                calculateMarkListAndDrawDiagram();
             }
         });
 
         this.sbCustomMark.setOnChangeListener(new Runnable() {
             @Override
             public void run() {
-                calculateMarklistAndDrawDiagram();
+                calculateMarkListAndDrawDiagram();
             }
         });
 
         this.sbCustomPoints.setOnChangeListener(new Runnable() {
             @Override
             public void run() {
-                calculateMarklistAndDrawDiagram();
+                calculateMarkListAndDrawDiagram();
             }
         });
 
         this.sbBestMarkFirst.setOnChangeListener(new Runnable() {
             @Override
             public void run() {
-                calculateMarklistAndDrawDiagram();
+                calculateMarkListAndDrawDiagram();
             }
         });
 
         this.sbWorstMarkTo.setOnChangeListener(new Runnable() {
             @Override
             public void run() {
-                calculateMarklistAndDrawDiagram();
+                calculateMarkListAndDrawDiagram();
             }
         });
 
@@ -216,10 +216,10 @@ public class MarkListExtendedActivity extends AppCompatActivity {
             this.sbCustomPoints.setCurrent(this.sbMaximumPoints.getCurrent()/2);
             this.sbCustomMark.setCurrent(3.5f);
         }
-        this.calculateMarklistAndDrawDiagram();
+        this.calculateMarkListAndDrawDiagram();
     }
 
-    private void calculateMarklistAndDrawDiagram() {
+    private void calculateMarkListAndDrawDiagram() {
         try {
             /*if(this.sbMaximumPoints.getCurrent()<=this.sbBestMarkFirst.getCurrent()) {
                 this.sbBestMarkFirst.setCurrent(this.sbMaximumPoints.getCurrent());

@@ -356,7 +356,7 @@ public class ApiActivity extends AppCompatActivity {
         }
         String exportPath = String.format("%s/export_%s.%s", path, type, extension);
 
-        StringBuilder content = new StringBuilder("");
+        StringBuilder content = new StringBuilder();
         if(type.equals(this.getString(R.string.main_nav_mark_list))) {
             List<MarkListSettings> settingsList = new LinkedList<>();
             for(String name : this.sqLite.listMarkLists(where)) {

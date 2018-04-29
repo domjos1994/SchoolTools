@@ -331,6 +331,7 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void setDefaultValues(int name, int color_name, boolean main) {
         txtSubjectTitle.setText(this.getString(name));
         chkSubjectMainSubject.setChecked(main);
@@ -359,17 +360,7 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
         this.chkSubjectMainSubject.setEnabled(editMode);
         this.lvSubjects.setEnabled(!editMode);
 
-        if(editMode) {
-            this.navigation.getMenu().getItem(0).setEnabled(false);
-            this.navigation.getMenu().getItem(1).setEnabled(false);
-            this.navigation.getMenu().getItem(2).setEnabled(false);
-            this.navigation.getMenu().getItem(3).setEnabled(true);
-            this.navigation.getMenu().getItem(4).setEnabled(true);
-        } else {
-            this.navigation.getMenu().getItem(0).setEnabled(true);
-            this.navigation.getMenu().getItem(3).setEnabled(false);
-            this.navigation.getMenu().getItem(4).setEnabled(false);
-        }
+        Helper.showMenuControls(editMode, this.navigation);
 
         if(reset) {
             this.txtSubjectTitle.setText("");

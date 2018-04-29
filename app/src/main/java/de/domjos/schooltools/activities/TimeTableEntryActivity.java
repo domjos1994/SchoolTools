@@ -397,30 +397,10 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                         int subjectID = Integer.parseInt(textView.getTag().toString().split(" - ")[0].trim());
                                         int optionalID = Integer.parseInt(textView.getTag().toString().split(" - ")[1].trim());
 
-                                        for(int i = 0; i<=subjectAdapter.getCount()-1; i++) {
-                                            String item = subjectAdapter.getItem(i);
-                                            if(item!=null) {
-                                                if(!item.isEmpty()) {
-                                                    if (subjectID == Integer.parseInt(item.split(":")[0])) {
-                                                        spSubjects.setSelection(i);
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
+                                        listFromAdapter(subjectAdapter, spSubjects, subjectID);
 
                                         if(optionalID!=0) {
-                                            for(int i = 0; i<=optionalAdapter.getCount()-1; i++) {
-                                                String item = optionalAdapter.getItem(i);
-                                                if(item!=null) {
-                                                    if(!item.isEmpty()) {
-                                                        if(optionalID==Integer.parseInt(item.split(":")[0])) {
-                                                            spOptional.setSelection(i);
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                            listFromAdapter(optionalAdapter, spOptional, optionalID);
                                         }
                                     }
 
@@ -453,6 +433,20 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                         }
                     }
                 });
+            }
+        }
+    }
+
+    private void listFromAdapter(ArrayAdapter<String> adapter, Spinner sp, int id) {
+        for(int i = 0; i<=adapter.getCount()-1; i++) {
+            String item = adapter.getItem(i);
+            if(item!=null) {
+                if(!item.isEmpty()) {
+                    if(id==Integer.parseInt(item.split(":")[0])) {
+                        sp.setSelection(i);
+                        break;
+                    }
+                }
             }
         }
     }

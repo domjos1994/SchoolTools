@@ -9,9 +9,9 @@
 
 package de.domjos.schooltools.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -21,7 +21,6 @@ import android.widget.TextView;
 import de.domjos.schooltools.R;
 
 public class WhatsNewActivity extends AppCompatActivity {
-    private TextView lblContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +29,7 @@ public class WhatsNewActivity extends AppCompatActivity {
         this.initControls();
     }
 
+    @SuppressWarnings("deprecation")
     private void initControls() {
         final String phase = MainActivity.generals.getCurrentInternalPhase().toLowerCase();
         final String version = String.valueOf(MainActivity.generals.getCurrentInternalVersion()).replace(".", "_");
@@ -49,9 +49,13 @@ public class WhatsNewActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        this.lblContent = this.findViewById(R.id.lblContent);
+        TextView lblContent = this.findViewById(R.id.lblContent);
         try {
-            this.lblContent.setText(Html.fromHtml(this.getStringResourceByName("whats_new_" + phase +  "_" + version)));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                lblContent.setText(Html.fromHtml(this.getStringResourceByName("whats_new_" + phase +  "_" + version), Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                lblContent.setText(Html.fromHtml(this.getStringResourceByName("whats_new_" + phase +  "_" + version)));
+            }
         } catch (Exception ex) {
             setResult(RESULT_OK);
             finish();

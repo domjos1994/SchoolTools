@@ -21,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -480,7 +479,7 @@ public class MarkListActivity extends AppCompatActivity {
         this.grdMarkListExpert = this.findViewById(R.id.grdMarkListExpert);
         this.grdMarkListWithCrease = this.findViewById(R.id.grdMarkListWithCrease);
 
-        // init menu_marklist-type
+        // init menu_markList-type
         this.spMarkListType = this.findViewById(R.id.spMarkListType);
 
         // init error label
