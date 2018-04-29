@@ -140,6 +140,9 @@
     <string name="settings_school_perspective_header">Stundenplan-Modus</string>
     <string name="settings_school_perspective_summary_on">Stundenplan aus Sicht eines Lehrers</string>
     <string name="settings_school_perspective_summary_of">Stundenplan aus Sicht eines Schülers</string>
+    <string name="settings_school_breakTime_header">Länge der Pause</string>
+    <string name="settings_school_breakTime_summary">Die Standard-Länge der Pause</string>
+    <string name="settings_school_breakTime_default">20</string>
 
     <string name="settings_api_override_header">Einträge überschreiben</string>
     <string name="settings_api_override_summary_on">Bereits vorhandene Einträge überschreiben</string>

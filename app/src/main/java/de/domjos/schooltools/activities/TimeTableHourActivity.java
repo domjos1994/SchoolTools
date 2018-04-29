@@ -20,10 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.ListView;
-import android.widget.TimePicker;
+import android.widget.*;
 
 import java.sql.Time;
 import java.text.DecimalFormat;
@@ -50,6 +47,7 @@ public class TimeTableHourActivity extends AppCompatActivity {
     private int currentID;
 
     private HourAdapter hourAdapter;
+    private int intLatestHour, intLatestMinute;
 
     @Override
     @SuppressWarnings("deprecation")
@@ -83,13 +81,14 @@ public class TimeTableHourActivity extends AppCompatActivity {
             }
         });
 
-        this.tpHoursEnd.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+        this.chkHoursBreak.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onTimeChanged(TimePicker timePicker, int i, int i1) {
-                int hour = tpHoursStart.getCurrentHour();
-                int minutes = tpHoursStart.getCurrentMinute();
-
-                chkHoursBreak.setChecked(((i-hour)*60) + (i1-minutes)<45);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    configureTimes(intLatestHour, intLatestMinute, MainActivity.settings.getBreakTime());
+                } else {
+                    configureTimes(intLatestHour, intLatestMinute, 45);
+                }
             }
         });
     }
@@ -217,27 +216,9 @@ public class TimeTableHourActivity extends AppCompatActivity {
 
         if(latestHour!=null) {
             String[] splLatestHour = latestHour.getEnd().trim().split(":");
-            int intLatestHour = Integer.parseInt(splLatestHour[0].trim());
-            int intLatestMinute = Integer.parseInt(splLatestHour[1].trim());
-            int intLatestEndMinute = intLatestMinute + 45;
-            int intLatestEndHour = intLatestHour;
-
-            if(intLatestEndMinute>=60) {
-                intLatestEndHour++;
-                intLatestEndMinute = intLatestEndMinute % 60;
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                this.tpHoursStart.setHour(intLatestHour);
-                this.tpHoursStart.setMinute(intLatestMinute);
-                this.tpHoursEnd.setHour(intLatestEndHour);
-                this.tpHoursEnd.setMinute(intLatestEndMinute);
-            } else {
-                this.tpHoursStart.setCurrentHour(intLatestHour);
-                this.tpHoursStart.setCurrentMinute(intLatestMinute);
-                this.tpHoursEnd.setCurrentHour(intLatestEndHour);
-                this.tpHoursEnd.setCurrentMinute(intLatestEndMinute);
-            }
+            this.intLatestHour = Integer.parseInt(splLatestHour[0].trim());
+            this.intLatestMinute = Integer.parseInt(splLatestHour[1].trim());
+            this.configureTimes(this.intLatestHour, this.intLatestMinute, 45);
         }
     }
 
@@ -263,6 +244,28 @@ public class TimeTableHourActivity extends AppCompatActivity {
                 this.tpHoursEnd.setCurrentMinute(this.tpHoursStart.getCurrentMinute());
             }
             this.chkHoursBreak.setChecked(false);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void configureTimes(int hour, int minutes, int timeSpan) {
+        int intLatestEndMinute = minutes + timeSpan;
+        int intLatestEndHour = hour;
+        if(intLatestEndMinute>=60) {
+            intLatestEndHour++;
+            intLatestEndMinute = intLatestEndMinute % 60;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.tpHoursStart.setHour(hour);
+            this.tpHoursStart.setMinute(minutes);
+            this.tpHoursEnd.setHour(intLatestEndHour);
+            this.tpHoursEnd.setMinute(intLatestEndMinute);
+        } else {
+            this.tpHoursStart.setCurrentHour(hour);
+            this.tpHoursStart.setCurrentMinute(minutes);
+            this.tpHoursEnd.setCurrentHour(intLatestEndHour);
+            this.tpHoursEnd.setCurrentMinute(intLatestEndMinute);
         }
     }
 

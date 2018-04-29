@@ -62,6 +62,16 @@ public class UserSettings {
         }
     }
 
+    public int getBreakTime() {
+        String content = this.sharedPreferences.getString("txtSchoolTimeTableBreakTime", "20");
+        try {
+            return Integer.parseInt(content);
+        } catch (Exception ex) {
+            Log4JHelper.getLogger("warning").error(ex.getMessage(), ex);
+            return 100;
+        }
+    }
+
     public int getTimerNotificationDistance() {
         String content = this.sharedPreferences.getString("txtSchoolTimerNotification", "7");
         try {

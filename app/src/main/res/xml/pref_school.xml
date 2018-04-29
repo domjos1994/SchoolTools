@@ -37,6 +37,12 @@
             android:title="@string/settings_school_perspective_header"
             android:summaryOff="@string/settings_school_perspective_summary_of"
             android:summaryOn="@string/settings_school_perspective_summary_on"/>
+        <EditTextPreference
+            android:key="txtSchoolTimeTableBreakTime"
+            android:defaultValue="@string/settings_school_breakTime_default"
+            android:inputType="numberSigned"
+            android:title="@string/settings_school_breakTime_header"
+            android:summary="@string/settings_school_breakTime_summary"/>
     </PreferenceCategory>
 
     <PreferenceCategory
