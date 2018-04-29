@@ -251,6 +251,20 @@ public class Helper {
     }
 
 
+    public static void showMenuControls(boolean editMode, BottomNavigationView navigation) {
+        if (editMode) {
+            navigation.getMenu().getItem(0).setEnabled(false);
+            navigation.getMenu().getItem(1).setEnabled(false);
+            navigation.getMenu().getItem(2).setEnabled(false);
+            navigation.getMenu().getItem(3).setEnabled(true);
+            navigation.getMenu().getItem(4).setEnabled(true);
+        } else {
+            navigation.getMenu().getItem(0).setEnabled(true);
+            navigation.getMenu().getItem(3).setEnabled(false);
+            navigation.getMenu().getItem(4).setEnabled(false);
+        }
+    }
+
     public static boolean isInteger(String number) {
         return Pattern.matches("^\\d+$", number.trim());
     }

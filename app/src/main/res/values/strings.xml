@@ -305,6 +305,7 @@
             <br/>
         ]]>
     </string>
+    <string name="whats_new_info">Sie können diesen Dialog jederzeit in der Hilfe wieder aufrufen!</string>
 
     <string name="sys_new">Neu</string>
     <string name="sys_open">Öffnen</string>

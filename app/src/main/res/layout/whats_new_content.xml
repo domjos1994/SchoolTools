@@ -8,7 +8,8 @@
   ~ of the License, or (at your option) any later version.
   -->
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,10 +18,25 @@
     tools:context=".activities.WhatsNewActivity"
     tools:showIn="@layout/whats_new_activity">
 
-    <TextView
-        android:id="@+id/lblContent"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/lblContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/whats_new_info"
+            android:layout_margin="@dimen/text_margin"
+            android:padding="@dimen/text_margin"
+            android:textStyle="italic"
+            android:background="@color/Gray"/>
+    </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
