@@ -43,8 +43,8 @@ public class ToDoAdapter extends ArrayAdapter<ToDo> {
         View rowView = Helper.getRowView(this.context, parent, R.layout.todo_item);
         ToDo toDo = this.getItem(position);
 
-        TextView lblToDoTitle = (TextView) rowView.findViewById(R.id.lblToDoTitle);
-        ImageView ivCheck = (ImageView) rowView.findViewById(R.id.ivCheck);
+        TextView lblToDoTitle = rowView.findViewById(R.id.lblToDoTitle);
+        ImageView ivCheck = rowView.findViewById(R.id.ivCheck);
 
         if(toDo!=null) {
             if(lblToDoTitle!=null) {

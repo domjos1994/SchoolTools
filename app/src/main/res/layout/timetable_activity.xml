@@ -27,7 +27,8 @@
         <ListView
             android:id="@+id/lvTimeTable"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/cmdTimeTableAdd"

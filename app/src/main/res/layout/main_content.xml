@@ -50,6 +50,7 @@
                     android:layout_below="@+id/lblTodayHeader"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
+                    android:layout_margin="8dp"
                     tools:ignore="NestedScrolling" />
             </RelativeLayout>
 
