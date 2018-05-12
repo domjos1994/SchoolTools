@@ -113,7 +113,9 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                setDefaultSubjects(editable);
+                if(MainActivity.settings.isAutomaticallySubjects()) {
+                    setDefaultSubjects(editable);
+                }
             }
         });
 

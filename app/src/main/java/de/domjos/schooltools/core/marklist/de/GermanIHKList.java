@@ -82,7 +82,7 @@ public class GermanIHKList extends MarkListWithPercentage {
     }
 
     @Override
-    protected void validateChildFields() throws MarkListException {
+    protected void validateChildFields() {
 
     }
 
@@ -90,152 +90,70 @@ public class GermanIHKList extends MarkListWithPercentage {
     protected Map<Double, Double> calculateMarkList() throws MarkListException {
         Map<Double, Double> marklist = new LinkedHashMap<>();
 
-        if(super.isDictatMode()) {
-            switch(super.getViewMode()) {
-                case bestMarkFirst:
-                    for(double i = super.getMinMark(); i <= super.getMaxMark(); i += super.getMarkMultiplier()) {
-                        for(Map.Entry<Double, Double> entry : super.getPercentages().entrySet()) {
-                            if(i<=entry.getKey()) {
-                                if(entry.getValue()==0.0) {
-                                    marklist.put(
-                                        MathUtils.round(i, super.getMarkMultiplier()),
-                                        super.getMaxPoints() - MathUtils.round(0.0, super.getPointsMultiplier())
-                                    );
-                                } else {
-                                    marklist.put(
-                                        MathUtils.round(i, super.getMarkMultiplier()),
-                                        super.getMaxPoints() - MathUtils.round((entry.getValue() / 100) * super.getMaxPoints(), super.getPointsMultiplier())
-                                    );
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case worstMarkFirst:
-                    for(double i = super.getMaxMark(); i > super.getMinMark(); i -= super.getMarkMultiplier()) {
-                        for(Map.Entry<Double, Double> entry : super.getPercentages().entrySet()) {
-                            if(i<=entry.getKey()) {
-                                if(entry.getValue()==0) {
-                                    marklist.put(
-                                        MathUtils.round(i, super.getMarkMultiplier()),
-                                        super.getMaxPoints() - MathUtils.round(0.0, super.getPointsMultiplier())
-                                    );
-                                } else {
-                                    marklist.put(
-                                        MathUtils.round(i, super.getMarkMultiplier()),
-                                        super.getMaxPoints() - MathUtils.round((entry.getValue() / 100) * super.getMaxPoints(), super.getPointsMultiplier())
-                                    );
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case highestPointsFirst:
-                    for(double i = 0; i <= super.getMaxPoints(); i += super.getPointsMultiplier()) {
-                        for(Map.Entry<Double, Double> entry : super.getPercentages().entrySet()) {
-                            double points = 0.0;
-                            if(entry.getValue()!=0.0) {
-                                points = MathUtils.round((entry.getValue() / 100) * super.getMaxPoints(), super.getPointsMultiplier());
-                            }
-                            if(i<=points) {
-                                marklist.put(super.getMaxPoints() - points, MathUtils.round(entry.getKey(), super.getMarkMultiplier()));
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case lowestPointsFirst:
-                    for(double i = super.getMaxPoints(); i > 0; i -= super.getPointsMultiplier()) {
-                        for(Map.Entry<Double, Double> entry : super.getPercentages().entrySet()) {
-                            double points = 0.0;
-                            if(entry.getValue()!=0.0) {
-                                points = MathUtils.round((entry.getValue() / 100) * super.getMaxPoints(), super.getPointsMultiplier());
-                            }
-                            if(i<=points) {
-                                marklist.put(super.getMaxPoints() - points, MathUtils.round(entry.getKey(), super.getMarkMultiplier()));
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                default:
-                    return null;
-            }
-        } else {
-            switch(super.getViewMode()) {
-                case bestMarkFirst:
-                    for(double i = super.getMinMark(); i <= super.getMaxMark(); i += super.getMarkMultiplier()) {
-                        for(Map.Entry<Double, Double> entry : super.getPercentages().entrySet()) {
-                            if(i<=entry.getKey()) {
-                                if(entry.getValue()==0.0) {
-                                    marklist.put(
-                                        MathUtils.round(i, super.getMarkMultiplier()),
-                                        MathUtils.round(0.0, super.getPointsMultiplier())
-                                    );
-                                } else {
-                                    marklist.put(
-                                        MathUtils.round(i, super.getMarkMultiplier()),
-                                        MathUtils.round((entry.getValue() / 100) * super.getMaxPoints(), super.getPointsMultiplier())
-                                    );
-                                }
+        for(double i = super.getMinMark(); i<=super.getMaxMark(); i+=super.getMarkMultiplier()) {
+            double percentage = super.getPercentages().get(MathUtils.round(i, 0.1));
+            double percentagePoints = (super.getMaxPoints() / 100.0) * percentage;
+            double mark = MathUtils.round(i, super.getMarkMultiplier());
+            double points = MathUtils.round(percentagePoints, super.getPointsMultiplier());
 
-                                break;
-                            }
+            if(super.isDictatMode()) {
+                switch(super.getViewMode()) {
+                    case bestMarkFirst:
+                        if(points % this.getMaxPoints() != 0) {
+                            points = points % this.getMaxPoints();
                         }
-                    }
-                    break;
-                case worstMarkFirst:
-                    for(double i = super.getMaxMark(); i > super.getMinMark(); i -= super.getMarkMultiplier()) {
-                        for(Map.Entry<Double, Double> entry : super.getPercentages().entrySet()) {
-                            if(i<=entry.getKey()) {
-                                if(entry.getValue()==0.0) {
-                                    marklist.put(
-                                        MathUtils.round(i, super.getMarkMultiplier()),
-                                        MathUtils.round(0.0, super.getPointsMultiplier())
-                                    );
-                                } else {
-                                    marklist.put(
-                                        MathUtils.round(i, super.getMarkMultiplier()),
-                                        MathUtils.round((entry.getValue() / 100) * super.getMaxPoints(), super.getPointsMultiplier())
-                                    );
-                                }
-                                break;
-                            }
+                        marklist.put(mark, points);
+                        break;
+                    case worstMarkFirst:
+                        if(mark % this.getMaxMark() != 0) {
+                            mark = mark % this.getMaxMark();
                         }
-                    }
-                    break;
-                case highestPointsFirst:
-                    for(double i = 0; i <= super.getMaxPoints(); i += super.getPointsMultiplier()) {
-                        for(Map.Entry<Double, Double> entry : super.getPercentages().entrySet()) {
-                            double points = 0.0;
-                            if(entry.getValue()!=0.0) {
-                                points = MathUtils.round((entry.getValue() / 100) * i, super.getPointsMultiplier());
-                            }
-                            if(i<=points) {
-                                marklist.put(points, MathUtils.round(entry.getKey(), super.getMarkMultiplier()));
-                                break;
-                            }
+                        marklist.put(mark, points);
+                        break;
+                    case highestPointsFirst:
+                        if(points % this.getMaxPoints() != 0) {
+                            points = points % this.getMaxPoints();
                         }
-                    }
-                    break;
-                case lowestPointsFirst:
-                    for(double i = super.getMaxPoints(); i > 0; i -= super.getPointsMultiplier()) {
-                        for(Map.Entry<Double, Double> entry : super.getPercentages().entrySet()) {
-                            double points = 0.0;
-                            if(entry.getValue()!=0.0) {
-                                points = MathUtils.round((entry.getValue() / 100) * super.getMaxPoints(), super.getPointsMultiplier());
-                            }
-                            if(i<=points) {
-                                marklist.put(points, MathUtils.round(entry.getKey(), super.getMarkMultiplier()));
-                                break;
-                            }
+                        marklist.put(points, mark);
+                        break;
+                    case lowestPointsFirst:
+                        if(mark % this.getMaxMark() != 0) {
+                            mark = mark % this.getMaxMark();
                         }
-                    }
-                    break;
-                default:
-                    return null;
+                        marklist.put(points, mark);
+                        break;
+                    default:
+                        return null;
+                }
+            } else {
+                switch(super.getViewMode()) {
+                    case bestMarkFirst:
+                        marklist.put(mark, points);
+                        break;
+                    case worstMarkFirst:
+                        if(points % this.getMaxPoints() != 0) {
+                            points = points % this.getMaxPoints();
+                        }
+                        if(mark % this.getMaxMark() != 0) {
+                            mark = mark % this.getMaxMark();
+                        }
+                        marklist.put(mark, points);
+                        break;
+                    case highestPointsFirst:
+                        marklist.put(points, mark);
+                        break;
+                    case lowestPointsFirst:
+                        if(points % this.getMaxPoints() != 0) {
+                            points = points % this.getMaxPoints();
+                        }
+                        if(mark % this.getMaxMark() != 0) {
+                            mark = mark % this.getMaxMark();
+                        }
+                        marklist.put(points, mark);
+                        break;
+                    default:
+                        return null;
+                }
             }
         }
 

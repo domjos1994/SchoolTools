@@ -72,6 +72,10 @@ public class UserSettings {
         }
     }
 
+    public boolean isAutomaticallySubjects() {
+        return this.sharedPreferences.getBoolean("swtSchoolTimeTableAutomaticallySubject", true);
+    }
+
     public int getTimerNotificationDistance() {
         String content = this.sharedPreferences.getString("txtSchoolTimerNotification", "7");
         try {

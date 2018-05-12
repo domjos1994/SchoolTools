@@ -134,7 +134,7 @@
                         android:layout_weight="10"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#000"/>
+                        android:background="@color/White"/>
                 </TableRow>
                 <RadioGroup
                     android:layout_weight="10"
@@ -181,7 +181,7 @@
                         android:layout_weight="10"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#000"/>
+                        android:background="@color/White"/>
                 </TableRow>
                 <TableRow android:weightSum="10">
                     <TextView

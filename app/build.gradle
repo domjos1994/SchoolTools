@@ -28,6 +28,17 @@ android {
             minifyEnabled
             shrinkResources
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def count = new File(output.outputFile.getAbsolutePath().replace(output.outputFile.getName(), "")).listFiles().size()
+                    def version = String.format("%03d", count+1)
+
+                    output.outputFile = new File(output.outputFile.parent,
+                        output.outputFile.name.replace("app-release", "schooltools_" + appVersion + "_v" + version)
+                    )
+                }
+            }
+
             resValue "string", "appPhase", "${appPhase}"
             resValue "string", "appVersion", "${appVersion}"
             return void

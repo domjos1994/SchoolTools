@@ -43,6 +43,12 @@
             android:inputType="numberSigned"
             android:title="@string/settings_school_breakTime_header"
             android:summary="@string/settings_school_breakTime_summary"/>
+        <SwitchPreference
+            android:key="swtSchoolTimeTableAutomaticallySubject"
+            android:defaultValue="true"
+            android:title="@string/settings_school_automatically_subjects_header"
+            android:summaryOn="@string/settings_school_automatically_subjects_on"
+            android:summaryOff="@string/settings_school_automatically_subjects_of"/>
     </PreferenceCategory>
 
     <PreferenceCategory

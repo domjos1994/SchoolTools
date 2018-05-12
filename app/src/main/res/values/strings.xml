@@ -145,6 +145,9 @@
     <string name="settings_school_breakTime_header">Länge der Pause</string>
     <string name="settings_school_breakTime_summary">Die Standard-Länge der Pause</string>
     <string name="settings_school_breakTime_default">20</string>
+    <string name="settings_school_automatically_subjects_header">Automatische Ergänzung der Fächer</string>
+    <string name="settings_school_automatically_subjects_on">Die automatische Ergänzung der Fächer aktivieren</string>
+    <string name="settings_school_automatically_subjects_of">Die automatische Ergänzung der Fächer deaktivieren</string>
 
     <string name="settings_api_override_header">Einträge überschreiben</string>
     <string name="settings_api_override_summary_on">Bereits vorhandene Einträge überschreiben</string>
