@@ -29,4 +29,8 @@
         android:icon="@android:drawable/ic_input_delete"
         android:title="@string/sys_cancel" />
 
+    <item
+        android:id="@+id/navTimeTableShowData"
+        android:title="@string/sys_showData"
+        android:icon="@drawable/ic_arrow_drop_down_circle_black_24dp"/>
 </menu>

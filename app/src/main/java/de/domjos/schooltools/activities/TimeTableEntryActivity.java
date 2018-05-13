@@ -11,6 +11,7 @@
 package de.domjos.schooltools.activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,17 +19,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,6 +57,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
     private Spinner spTimeTableClass, spTimeTableYear;
     private TableLayout gridContent;
     private TimeTable currentItem = null;
+    private ScrollView svControls;
 
     private ArrayAdapter<String> classAdapter;
 
@@ -172,6 +169,13 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                         setResult(RESULT_OK);
                         finish();
                         return true;
+                    case R.id.navTimeTableShowData:
+                        if(svControls.getVisibility()==View.GONE) {
+                            svControls.setVisibility(View.VISIBLE);
+                        } else {
+                            svControls.setVisibility(View.GONE);
+                        }
+                        return true;
                 }
                 return false;
             }
@@ -194,6 +198,9 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         for(Year year : MainActivity.globals.getSqLite().getYears("")) {
             yearAdapter.add(year.getTitle());
         }
+
+        this.svControls = this.findViewById(R.id.svControls);
+
         this.txtTimeTableDescription = this.findViewById(R.id.txtTimeTableDescription);
         this.initTimes();
         this.initValidation();
@@ -283,6 +290,11 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         }
 
         this.controlFields(this.currentItem==null);
+    }
+
+    public static int dip2px(Context context, float dp) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
     }
 
     @Override
