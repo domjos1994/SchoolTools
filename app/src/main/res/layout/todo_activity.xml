@@ -55,7 +55,9 @@
                 android:layout_below="@+id/pnlChoice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="4dp"/>
+                android:layout_margin="4dp"
+                android:divider="@color/Gray"
+                android:dividerHeight="2dp"/>
         </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton

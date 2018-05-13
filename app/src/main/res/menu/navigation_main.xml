@@ -40,7 +40,7 @@
             <item
                 android:id="@+id/navMainToDo"
                 android:icon="@drawable/ic_done_all_black_24dp"
-                android:title="@string/main_nav_todo" />
+                android:title="@string/todo_list" />
         </menu>
     </item>
 </menu>

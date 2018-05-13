@@ -292,11 +292,6 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         this.controlFields(this.currentItem==null);
     }
 
-    public static int dip2px(Context context, float dp) {
-        float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_help_only, menu);

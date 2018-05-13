@@ -47,7 +47,9 @@
                 android:layout_weight="10"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/White"/>
+                android:background="@color/White"
+                android:divider="@color/Gray"
+                android:dividerHeight="2dp"/>
         </TableRow>
         <TableRow android:weightSum="40">
             <TextView

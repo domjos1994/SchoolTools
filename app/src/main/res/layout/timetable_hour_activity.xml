@@ -28,7 +28,9 @@
             android:id="@+id/lvHours"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/svControls"/>
+            android:layout_above="@+id/svControls"
+            android:divider="@color/Gray"
+            android:dividerHeight="2dp"/>
 
         <ScrollView
             android:id="@+id/svControls"

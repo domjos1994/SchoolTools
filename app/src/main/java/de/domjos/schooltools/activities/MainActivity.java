@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.hideWidgets();
         this.addEvents();
         this.addNotes();
-        addToDos();
+        this.addToDos();
         this.addMarkLists();
         this.deleteMemoriesFromPast();
         this.openWhatsNew();

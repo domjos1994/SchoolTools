@@ -27,7 +27,9 @@
         <ListView
             android:id="@+id/lvYear"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:divider="@color/Gray"
+            android:dividerHeight="2dp"/>
 
     </FrameLayout>
 
