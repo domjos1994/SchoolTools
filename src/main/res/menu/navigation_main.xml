@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2018  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/main_nav_mark">
+        <menu>
+            <item
+                android:id="@+id/navMainMarkList"
+                android:icon="@drawable/ic_view_list_black_24dp"
+                android:title="@string/main_nav_mark_list" />
+            <item
+                android:id="@+id/navMainCalculateMark"
+                android:icon="@drawable/ic_check_circle_black_24dp"
+                android:title="@string/main_nav_calculateMark" />
+        </menu>
+    </item>
+
+    <item android:title="@string/main_nav_plan">
+        <menu>
+            <item
+                android:id="@+id/navMainTimeTable"
+                android:icon="@drawable/ic_access_time_black_24dp"
+                android:title="@string/main_nav_timetable" />
+            <item
+                android:id="@+id/navMainNotes"
+                android:icon="@drawable/ic_note_black_24dp"
+                android:title="@string/main_nav_notes" />
+            <item
+                android:id="@+id/navMainTimer"
+                android:icon="@drawable/ic_date_range_black_24dp"
+                android:title="@string/main_nav_timer" />
+            <item
+                android:id="@+id/navMainToDo"
+                android:icon="@drawable/ic_done_all_black_24dp"
+                android:title="@string/todo_list" />
+        </menu>
+    </item>
+</menu>

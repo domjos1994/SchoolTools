@@ -1,0 +1,30 @@
+<!--
+  ~ Copyright (C) 2017-2018  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:key="swtNotifications"
+        android:defaultValue="true"
+        android:title="@string/settings_general_notifications"/>
+
+    <SwitchPreference
+        android:key="swtDeleteMemories"
+        android:defaultValue="true"
+        android:title="@string/settings_general_deleteMemories_title"
+        android:summary="@string/settings_general_deleteMemories_summary"/>
+
+
+    <SwitchPreference
+        android:key="swtResetDatabase"
+        android:defaultValue="true"
+        android:title="@string/settings_general_reset_database_title"
+        android:summary="@string/settings_general_deleteMemories_summary"/>
+</PreferenceScreen>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2018  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menHelpSendLog"
+        android:orderInCategory="100"
+        android:title="@string/help_sendLog"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menHelpDeleteLog"
+        android:orderInCategory="100"
+        android:title="@string/help_deleteLog"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menMainWhatsNew"
+        android:orderInCategory="100"
+        android:title="@string/whats_new"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menHelpAbout"
+        android:orderInCategory="100"
+        android:title="@string/help_about"
+        app:showAsAction="never" />
+</menu>

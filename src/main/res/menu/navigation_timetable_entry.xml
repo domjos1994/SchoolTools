@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2018  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navTimeTableSubEdit"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="@string/sys_edit" />
+
+    <item
+        android:id="@+id/navTimeTableSubDelete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/sys_delete" />
+
+    <item
+        android:id="@+id/navTimeTableSubSave"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="@string/sys_save" />
+    <item
+        android:id="@+id/navTimeTableSubCancel"
+        android:icon="@android:drawable/ic_input_delete"
+        android:title="@string/sys_cancel" />
+
+    <item
+        android:id="@+id/navTimeTableShowData"
+        android:title="@string/sys_showData"
+        android:icon="@drawable/ic_arrow_drop_down_circle_black_24dp"/>
+</menu>

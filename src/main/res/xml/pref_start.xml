@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2018  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <MultiSelectListPreference
+        android:key="lsStart"
+        android:title="@string/settings_start_start_header"
+        android:summary="@string/settings_start_start_summary"
+        android:entries="@array/settings_start_start_entries"
+        android:entryValues="@array/settings_start_start_entries"
+        android:defaultValue="@array/settings_start_start_default"
+        android:positiveButtonText="@string/sys_save"/>
+
+    <MultiSelectListPreference
+        android:key="lsShownModules"
+        android:title="@string/settings_start_shown_modules_header"
+        android:summary="@string/settings_start_shown_modules_summary"
+        android:entries="@array/settings_start_shown_modules_entries"
+        android:entryValues="@array/settings_start_shown_modules_entries"
+        android:defaultValue="@array/settings_start_shown_modules_entries"/>
+
+    <ListPreference
+        android:key="lsStartModule"
+        android:title="@string/settings_start_start_module_header"
+        android:summary="@string/settings_start_start_module_summary"
+        android:entries="@array/settings_start_start_module_entries"
+        android:entryValues="@array/settings_start_start_module_entries"
+        android:defaultValue="@string/main_nav_main"/>
+</PreferenceScreen>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2018  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="de.domjos.schooltools.activities.TimerEntryActivity"
+    android:background="@drawable/bg_water">
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TableLayout
+                android:id="@+id/pnlChoice"
+                android:orientation="horizontal"
+                android:weightSum="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top"
+                android:background="@drawable/tbl_border">
+                <TextView
+                    android:id="@+id/lblTimerDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:text="@string/mark_date"
+                    android:textSize="20sp"
+                    android:padding="4dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+                <EditText
+                    android:id="@+id/txtTimerTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:hint="@string/sys_title"/>
+                <EditText
+                    android:id="@+id/txtTimerDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:hint="@string/sys_description"/>
+                <EditText
+                    android:id="@+id/txtTimerCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:hint="@string/todo_category"/>
+                <TableRow
+                    android:background="@drawable/tbl_border">
+                    <TextView
+                        android:text="@string/timetable_lesson"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:padding="4dp"
+                        android:layout_weight="3"/>
+                    <Spinner
+                        android:id="@+id/spTimerSubject"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"/>
+                </TableRow>
+                <TableRow
+                    android:background="@drawable/tbl_border">
+                    <TextView
+                        android:text="@string/timetable_teacher"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:padding="4dp"
+                        android:layout_weight="3"/>
+                    <Spinner
+                        android:id="@+id/spTimerTeacher"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"/>
+                </TableRow>
+                <TableRow
+                    android:background="@drawable/tbl_border">
+                    <TextView
+                        android:text="@string/timetable_class"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:padding="4dp"
+                        android:layout_weight="3"/>
+                    <Spinner
+                        android:id="@+id/spTimerClass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"/>
+                </TableRow>
+                <TableRow>
+                    <CheckBox
+                        android:id="@+id/chkTimerMemory"
+                        android:text="@string/mark_date"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="4"/>
+                    <EditText
+                        android:id="@+id/txtTimerMemoryDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:hint="@string/mark_date"
+                        android:inputType="date"/>
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+    </FrameLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/navigation_sys" />
+
+</LinearLayout>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2018  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="de.domjos.schooltools.activities.TimeTableSubjectActivity"
+    android:background="@drawable/bg_water">
+
+    <RelativeLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ListView
+            android:id="@+id/lvSubjects"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/svControls"
+            android:divider="@color/Gray"
+            android:dividerHeight="2dp"/>
+
+        <ScrollView
+            android:id="@+id/svControls"
+            android:background="@drawable/tbl_border"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignParentBottom="true"
+            android:padding="2dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="10">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="20">
+                    <EditText
+                        android:id="@+id/txtSubjectAlias"
+                        android:hint="@string/timetable_subject_alias"
+                        android:layout_weight="4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                    <EditText
+                        android:id="@+id/txtSubjectTitle"
+                        android:hint="@string/sys_title"
+                        android:layout_weight="12"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                    <EditText
+                        android:id="@+id/txtSubjectHoursInWeek"
+                        android:hint="@string/timetable_subject_hoursInWeek"
+                        android:layout_weight="4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="20">
+                    <CheckBox
+                        android:id="@+id/chkSubjectMainSubject"
+                        android:text="@string/timetable_subject_mainSubject"
+                        android:layout_weight="8"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                    <Spinner
+                        android:id="@+id/spSubjectTeachers"
+                        android:layout_weight="12"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/txtSubjectDescription"
+                    android:hint="@string/sys_description"
+                    android:layout_weight="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:inputType="textMultiLine"/>
+
+                <TextView
+                    android:id="@+id/lblSelectedColor"
+                    android:text="@string/timetable_color"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textSize="28sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/White"/>
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/navigation_sys" />
+
+</LinearLayout>

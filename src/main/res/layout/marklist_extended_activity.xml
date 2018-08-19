@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2018  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="de.domjos.schooltools.activities.MarkListExtendedActivity">
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/pnlStatus"
+        android:layout_margin="2dp"
+        android:background="@drawable/bg_water"/>
+
+
+    <LinearLayout
+        android:id="@+id/pnlStatus"
+        android:layout_above="@+id/pnlControls"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:weightSum="40"
+        android:background="@color/Gray">
+        <TextView
+            android:layout_weight="12"
+            android:text="@string/marklist_state"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/lblMarkListState"
+            android:layout_weight="27"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/marklist_state_ok"
+            android:gravity="center"/>
+        <ImageView
+            android:id="@+id/ivMarkListState"
+            android:visibility="gone"
+            android:src="@android:drawable/ic_dialog_alert"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/pnlControls"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/tbl_border"
+        android:layout_alignParentBottom="true">
+        <TableLayout
+            android:id="@+id/content"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:weightSum="20">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="20">
+                <TextView
+                    android:text="@string/marklist_maxPoints"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"/>
+
+                <de.domjos.schooltools.helper.custom.LabelledSeekBar
+                    android:id="@+id/sbMaximumPoints"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="15"
+                    custom:editableLabel="false"
+                    custom:max="100"
+                    custom:current="40.0"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="20">
+                <TextView
+                    android:text="@string/marklist_mark"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"/>
+
+                <de.domjos.schooltools.helper.custom.LabelledSeekBar
+                    android:id="@+id/sbCustomMark"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="15"
+                    custom:editableLabel="false"
+                    custom:max="40"
+                    custom:current="20.0"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="20">
+                <TextView
+                    android:text="@string/marklist_points"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"/>
+
+                <de.domjos.schooltools.helper.custom.LabelledSeekBar
+                    android:id="@+id/sbCustomPoints"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="15"
+                    custom:editableLabel="false"
+                    custom:max="6"
+                    custom:current="4.4"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="20">
+                <TextView
+                    android:text="@string/marklist_bestMarkAt"
+                    android:textSize="12sp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"/>
+
+                <de.domjos.schooltools.helper.custom.LabelledSeekBar
+                    android:id="@+id/sbBestMarkFirst"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="15"
+                    custom:editableLabel="false"
+                    custom:max="40"
+                    custom:current="40.0"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_weight="20">
+                <TextView
+                    android:text="@string/marklist_worstMarkTo"
+                    android:textSize="12sp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"/>
+
+                <de.domjos.schooltools.helper.custom.LabelledSeekBar
+                    android:id="@+id/sbWorstMarkTo"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="15"
+                    custom:editableLabel="false"
+                    custom:max="40"
+                    custom:current="0.0"/>
+            </LinearLayout>
+        </TableLayout>
+    </ScrollView>
+</RelativeLayout>
