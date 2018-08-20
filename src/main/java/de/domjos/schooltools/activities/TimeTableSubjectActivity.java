@@ -330,6 +330,14 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
             case "sp":
                 this.setDefaultValues(R.string.timetable_subject_sp_name, R.string.timetable_subject_sp_color, false);
                 break;
+            case "mus":
+                this.setDefaultValues(R.string.timetable_subject_mus_name, R.string.timetable_subject_mus_color, false);
+                break;
+            case "itg":
+            case "edv":
+            case "inf":
+                this.setDefaultValues(R.string.timetable_subject_itg_name, R.string.timetable_subject_itg_color, false);
+                break;
             default:
         }
     }

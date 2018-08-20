@@ -219,6 +219,10 @@
     <string name="timetable_subject_geo_color">braun</string>
     <string name="timetable_subject_gk_name">Gemeinschaftskunde</string>
     <string name="timetable_subject_gk_color">schiefergrau</string>
+    <string name="timetable_subject_mus_name">Musik</string>
+    <string name="timetable_subject_mus_color">wasser</string>
+    <string name="timetable_subject_itg_name">Informatik</string>
+    <string name="timetable_subject_itg_color">kornblumenblau</string>
 
     <string name="timetable_hour_break">Pause</string>
     <string name="timetable_hour_hour">Stunde</string>
