@@ -512,6 +512,8 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                         row.setBackgroundResource(R.drawable.tbl_border);
                     }
                 }
+            } else {
+                gridContent.getChildAt(i).setVisibility(View.GONE);
             }
         }
     }
