@@ -364,6 +364,8 @@
     <string name="message_help_delete_success">Log-Datei erfolgreich gelöscht!</string>
     <string name="message_help_send_success">Log-Datei erfolgreich gesendet!</string>
 
+    <string name="message_timetable_warning_header">Warnung</string>
+    <string name="message_timetable_warning_content">Es fehlen die Angaben von %s noch!</string>
 
     <string name="message_validation_search_marklist">Bitte gültige Parameter eingeben!</string>
     <string name="message_validation_empty" formatted="false">%s darf nicht leer sein!</string>

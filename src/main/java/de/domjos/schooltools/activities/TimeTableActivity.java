@@ -9,11 +9,13 @@
 
 package de.domjos.schooltools.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,9 +51,46 @@ public class TimeTableActivity extends AppCompatActivity {
         this.cmdTimeTableAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
-                intent.putExtra("id", 0);
-                startActivityForResult(intent, 99);
+                boolean hours = MainActivity.globals.getSqLite().getHours("").isEmpty();
+                boolean teachers = MainActivity.globals.getSqLite().getTeachers("").isEmpty();
+                boolean subjects = MainActivity.globals.getSqLite().getSubjects("").isEmpty();
+                boolean years = MainActivity.globals.getSqLite().getYears("").isEmpty();
+                boolean schoolClasses = MainActivity.globals.getSqLite().getClasses("").isEmpty();
+
+                String missingFields = "";
+                if(hours) {
+                    missingFields += getString(R.string.timetable_hour) + ", ";
+                }
+                if(teachers) {
+                    missingFields += getString(R.string.timetable_teacher) + ", ";
+                }
+                if(subjects) {
+                    missingFields += getString(R.string.timetable_lesson) + ", ";
+                }
+                if(years) {
+                    missingFields += getString(R.string.timetable_year) + ", ";
+                }
+                if(schoolClasses) {
+                    missingFields += getString(R.string.timetable_class) + ", ";
+                }
+                if(!missingFields.isEmpty()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(TimeTableActivity.this);
+                    builder.setTitle(R.string.message_timetable_warning_header);
+                    builder.setMessage(String.format(getString(R.string.message_timetable_warning_content), (missingFields + ")").replace(", )", "")));
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
+                            intent.putExtra("id", 0);
+                            startActivityForResult(intent, 99);
+                        }
+                    });
+                    builder.show();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
+                    intent.putExtra("id", 0);
+                    startActivityForResult(intent, 99);
+                }
             }
         });
 
