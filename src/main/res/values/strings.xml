@@ -225,6 +225,10 @@
     <string name="timetable_subject_mus_color">wasser</string>
     <string name="timetable_subject_itg_name">Informatik</string>
     <string name="timetable_subject_itg_color">kornblumenblau</string>
+    <string name="timetable_subject_spa_name">Spanisch</string>
+    <string name="timetable_subject_spa_color">helles goldrutengelb</string>
+    <string name="timetable_subject_lat_name">Latein</string>
+    <string name="timetable_subject_lat_color">dunkelmeergrün</string>
 
     <string name="timetable_hour_break">Pause</string>
     <string name="timetable_hour_hour">Stunde</string>
