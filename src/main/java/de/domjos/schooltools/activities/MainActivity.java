@@ -11,8 +11,10 @@ package de.domjos.schooltools.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -116,8 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.trMarkList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MarkListActivity.class);
-                startActivity(intent);
+                openMarkListIntent();
             }
         });
 
@@ -304,7 +305,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent;
         switch (Helper.checkMenuID(item)) {
             case R.id.navMainMarkList:
-                intent = new Intent(this.getApplicationContext(), MarkListActivity.class);
+                intent = null;
+                openMarkListIntent();
                 break;
             case R.id.navMainCalculateMark:
                 intent = new Intent(this.getApplicationContext(), MarkActivity.class);
@@ -691,7 +693,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(!module.equals(this.getString(R.string.main_nav_main))) {
                 Intent intent = null;
                 if(module.equals(this.getString(R.string.main_nav_mark_list))) {
-                    intent = new Intent(this.getApplicationContext(), MarkListActivity.class);
+                    openMarkListIntent();
                 }
                 if(module.equals(this.getString(R.string.main_nav_mark))) {
                     intent = new Intent(this.getApplicationContext(), MarkActivity.class);
@@ -768,6 +770,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);
+        }
+    }
+
+    private void openMarkListIntent() {
+        if(MainActivity.globals.getGeneralSettings().isAcceptMarkListMessage()) {
+            Intent intent = new Intent(getApplicationContext(), MarkListActivity.class);
+            startActivity(intent);
+        } else {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+            dialogBuilder.setTitle(R.string.message_marklist_important_message_header);
+            dialogBuilder.setMessage(R.string.message_marklist_important_message_content);
+            dialogBuilder.setPositiveButton(R.string.message_marklist_important_message_accept, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    MainActivity.globals.getGeneralSettings().setAcceptMarkListMessage(true);
+                    Intent intent = new Intent(getApplicationContext(), MarkListActivity.class);
+                    startActivity(intent);
+                }
+            });
+            dialogBuilder.setNegativeButton(R.string.sys_cancel, null);
+            dialogBuilder.show();
         }
     }
 }

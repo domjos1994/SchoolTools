@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,7 +77,7 @@ public class TimeTableActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(TimeTableActivity.this);
                     builder.setTitle(R.string.message_timetable_warning_header);
                     builder.setMessage(String.format(getString(R.string.message_timetable_warning_content), (missingFields + ")").replace(", )", "")));
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(R.string.message_marklist_important_message_accept, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
@@ -85,6 +85,7 @@ public class TimeTableActivity extends AppCompatActivity {
                             startActivityForResult(intent, 99);
                         }
                     });
+                    builder.setNegativeButton(R.string.sys_cancel, null);
                     builder.show();
                 } else {
                     Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);

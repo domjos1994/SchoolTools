@@ -360,6 +360,9 @@
 
     <string name="message_marklist_search_mark" formatted="false">%s Punkte ergeben die Note %s!</string>
     <string name="message_marklist_search_points" formatted="false">Die Note %s bekommt man mit %s Punkte!</string>
+    <string name="message_marklist_important_message_header">Wichtige Information</string>
+    <string name="message_marklist_important_message_content">Die Tools sind Hilfsmittel!\nEs wird versucht, dass alles richtig rechnet, jedoch kann nicht dafür garantiert werden!\nEs wird keine Haftung bei fehlerhafter Kalkulation übernommen!</string>
+    <string name="message_marklist_important_message_accept">Akzeptieren</string>
 
     <string name="message_help_delete_success">Log-Datei erfolgreich gelöscht!</string>
     <string name="message_help_send_success">Log-Datei erfolgreich gesendet!</string>

@@ -15,7 +15,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class GeneralSettings {
-    private final static String INTERNAL_VERSION = "internalVersion", INTERNAL_PHASE = "internalPhase";
+    private final static String INTERNAL_VERSION = "internalVersion";
+    private final static String INTERNAL_PHASE = "internalPhase";
+    private final static String ACCEPT_MARK_LIST_MESSAGE = "acceptMarkListMessage";
 
     private SharedPreferences preferences;
     private final SharedPreferences.Editor editor;
@@ -42,5 +44,14 @@ public class GeneralSettings {
 
     public String getCurrentInternalPhase() {
         return this.preferences.getString(GeneralSettings.INTERNAL_PHASE, "");
+    }
+
+    public void setAcceptMarkListMessage(boolean accepted) {
+        this.editor.putBoolean(GeneralSettings.ACCEPT_MARK_LIST_MESSAGE, accepted);
+        this.editor.apply();
+    }
+
+    public boolean isAcceptMarkListMessage() {
+        return this.preferences.getBoolean(GeneralSettings.ACCEPT_MARK_LIST_MESSAGE, false);
     }
 }
