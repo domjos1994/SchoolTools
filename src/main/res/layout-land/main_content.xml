@@ -164,7 +164,7 @@
                 android:weightSum="10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ll"
+                android:layout_below="@+id/llRow2"
                 android:orientation="horizontal"
                 android:baselineAligned="false">
                 <RelativeLayout
@@ -421,7 +421,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/llRow2">
+                android:layout_below="@+id/llRow3">
 
                 <TableLayout
                     android:id="@+id/tblButtons"
