@@ -193,6 +193,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.spTimeTableYear.setAdapter(yearAdapter);
         yearAdapter.notifyDataSetChanged();
+        yearAdapter.add("");
         for(Year year : MainActivity.globals.getSqLite().getYears("")) {
             yearAdapter.add(year.getTitle());
         }
@@ -251,6 +252,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
     private void initValidation() {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addLengthValidator(txtTimeTableTitle, 3, 500);
+        this.validator.addEmptyValidator(spTimeTableYear, this.getString(R.string.timetable_year));
     }
 
     private void controlFields(boolean editMode) {

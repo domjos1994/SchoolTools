@@ -12,7 +12,10 @@ package de.domjos.schooltools.helper;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -45,6 +48,28 @@ public class Validator {
                 } else {
                     txt.setError(null);
                 }
+            }
+        });
+    }
+
+    public void addEmptyValidator(final Spinner sp, final String title) {
+        states.put(sp.getId(), false);
+        Helper.createToast(this.context, String.format(this.context.getString(R.string.message_validation_empty), title));
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(((String)sp.getAdapter().getItem(position)).isEmpty()) {
+                    Helper.createToast(context, String.format(context.getString(R.string.message_validation_empty), title));
+                    states.put(sp.getId(), false);
+                } else {
+                    states.put(sp.getId(), true);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Helper.createToast(context, String.format(context.getString(R.string.message_validation_empty), title));
+                states.put(sp.getId(), false);
             }
         });
     }
