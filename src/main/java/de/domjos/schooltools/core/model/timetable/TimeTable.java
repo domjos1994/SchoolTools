@@ -87,4 +87,9 @@ public class TimeTable {
             days[day.getPositionInWeek()] = day;
         }
     }
+
+    @Override
+    public String toString() {
+        return this.title;
+    }
 }

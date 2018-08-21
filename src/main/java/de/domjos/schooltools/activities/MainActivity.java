@@ -38,6 +38,8 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import org.apache.log4j.chainsaw.Main;
+
 import java.util.*;
 
 import de.domjos.schooltools.R;
@@ -75,19 +77,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final Globals globals = new Globals();
 
     private TableRow trMarkList, trMark, trTimeTable, trNotes, trTimer, trTodo, trExport, trSettings, trHelp;
-    private RelativeLayout llToday, llCurrentNotes, llSavedMarkList, llImportantToDos;
+    private RelativeLayout llToday, llCurrentNotes, llSavedMarkList, llImportantToDos, llSavedTimeTables;
     private ImageButton cmdRefresh;
     private SearchView cmdSearch;
     private ListView lvCurrentNotes;
     private ListView lvSearchResults;
-    private Spinner cmbSavedMarkList;
-    private TableLayout tblButtons;
+    private Spinner cmbSavedMarkList, cmbSavedTimeTables;
+    private TableLayout tblButtons, grdSavedTimeTables;
     private EventAdapter eventAdapter;
     private NoteAdapter noteAdapter;
     private SearchAdapter searchAdapter;
     private ToDoAdapter toDoAdapter;
     private MarkListAdapter markListAdapter;
     private ArrayAdapter<String> savedMarkListAdapter;
+    private ArrayAdapter<String> savedTimeTablesAdapter;
     private boolean firstUse, versionChange;
 
     @Override
@@ -109,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.addNotes();
         this.addToDos();
         this.addMarkLists();
+        this.initSavedTimeTables();
         this.deleteMemoriesFromPast();
         this.deleteToDosFromPast();
         this.openWhatsNew();
@@ -405,6 +409,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.cmbSavedMarkList.setAdapter(this.savedMarkListAdapter);
         this.savedMarkListAdapter.notifyDataSetChanged();
 
+        this.llSavedTimeTables = this.findViewById(R.id.llSavedTimeTables);
+
+        this.cmbSavedTimeTables = this.findViewById(R.id.cmbSavedTimeTables);
+        this.savedTimeTablesAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.cmbSavedTimeTables.setAdapter(this.savedTimeTablesAdapter);
+        this.savedTimeTablesAdapter.notifyDataSetChanged();
+        this.grdSavedTimeTables = this.findViewById(R.id.grdSavedTimeTables);
+
         this.lvSearchResults = this.findViewById(R.id.lvSearchResults);
         this.searchAdapter = new SearchAdapter(this.getApplicationContext());
         this.lvSearchResults.setAdapter(this.searchAdapter);
@@ -629,6 +641,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    private void initSavedTimeTables() {
+        TimeTableEntryActivity.initTimes(this.grdSavedTimeTables);
+        List<TimeTable> timeTables = MainActivity.globals.getSqLite().getTimeTables("");
+        this.savedTimeTablesAdapter.add(new TimeTable().toString());
+        for(TimeTable timeTable : timeTables) {
+            this.savedTimeTablesAdapter.add(timeTable.toString());
+        }
+        this.cmbSavedTimeTables.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String title = savedTimeTablesAdapter.getItem(position);
+                List<TimeTable> tables = MainActivity.globals.getSqLite().getTimeTables("title='" + title + "'");
+
+                if(tables!=null) {
+                    if(!tables.isEmpty()) {
+                        TimeTableEntryActivity.loadTimeTable(tables.get(0), grdSavedTimeTables, new LinkedHashMap<String, Integer>());
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     private void hideButton(String content, int id, TableRow row) {
         if(content.equals(this.getString(id))) {
             row.setVisibility(View.VISIBLE);
@@ -660,6 +699,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.llCurrentNotes.setVisibility(View.GONE);
         this.llImportantToDos.setVisibility(View.GONE);
         this.llSavedMarkList.setVisibility(View.GONE);
+        this.llSavedTimeTables.setVisibility(View.GONE);
 
         for(String item : MainActivity.globals.getUserSettings().getStartWidgets(this.getApplicationContext())) {
             if(item.equals(this.getString(R.string.main_nav_buttons))) {
@@ -667,6 +707,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             if(item.equals(this.getString(R.string.main_today))) {
                 this.llToday.setVisibility(View.VISIBLE);
+            }
+            if(item.equals(this.getString(R.string.main_savedTimeTables))) {
+                this.llSavedTimeTables.setVisibility(View.VISIBLE);
             }
             if(item.equals(this.getString(R.string.main_top5Notes))) {
                 this.llCurrentNotes.setVisibility(View.VISIBLE);

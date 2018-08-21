@@ -30,6 +30,7 @@
     <string name="main_today">Heute</string>
     <string name="main_top5Notes">Top 5 Notizen</string>
     <string name="main_importantToDos">5 Wichtigste ToDos</string>
+    <string name="main_savedTimeTables">Gespeicherte Stundenpläne</string>
     <string name="main_savedMarkList">Gespeicherte Notenliste</string>
     <string name="main_noEntry">Kein Eintrag</string>
     <string name="main_refreshSuccessFully">Erfolgreich aktualisiert!</string>
@@ -107,6 +108,7 @@
         <item>@string/main_today</item>
         <item>@string/main_top5Notes</item>
         <item>@string/main_importantToDos</item>
+        <item>@string/main_savedTimeTables</item>
         <item>@string/main_savedMarkList</item>
         <item>@string/main_nav_buttons</item>
     </string-array>

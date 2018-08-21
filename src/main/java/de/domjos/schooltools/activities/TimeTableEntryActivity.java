@@ -10,6 +10,7 @@
 package de.domjos.schooltools.activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -199,7 +200,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         this.svControls = this.findViewById(R.id.svControls);
 
         this.txtTimeTableDescription = this.findViewById(R.id.txtTimeTableDescription);
-        this.initTimes();
+        TimeTableEntryActivity.initTimes(this.gridContent);
         this.initValidation();
 
         if(currentID!=0) {
@@ -213,7 +214,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
 
         if(this.currentItem!=null) {
             this.txtTimeTableTitle.setText(this.currentItem.getTitle());
-            if(this.currentItem.getYear() != null) {
+            if (this.currentItem.getYear() != null) {
                 this.spTimeTableYear.setSelection(yearAdapter.getPosition(this.currentItem.getYear().getTitle()));
             }
             if (this.currentItem.getSchoolClass() != null) {
@@ -221,69 +222,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
             }
             this.txtTimeTableDescription.setText(this.currentItem.getDescription());
 
-            for(Day day : this.currentItem.getDays()) {
-                if(day!=null) {
-                    for(int row = 1; row<=gridContent.getChildCount()-1; row++) {
-                        TableRow tableRow = (TableRow)gridContent.getChildAt(row);
-                        TextView txtTime = (TextView) tableRow.getChildAt(0);
-                        TextView txtColumn = (TextView) tableRow.getChildAt(day.getPositionInWeek()+1);
-
-                        if(!MainActivity.globals.getUserSettings().isTimeTableMode()) {
-                            for(Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
-                                if(txtTime.getTag()!=null) {
-                                    int timeID = Integer.parseInt(txtTime.getTag().toString().trim());
-                                    if(entry.getKey().getID()==timeID) {
-                                        Subject subject = entry.getValue().getKey();
-                                        if(this.mpSubjects.containsKey(subject.getAlias())) {
-                                            this.mpSubjects.put(subject.getAlias(), (this.mpSubjects.get(subject.getAlias()) + 1));
-                                        } else {
-                                            this.mpSubjects.put(subject.getAlias(), 1);
-                                        }
-                                        Teacher teacher = entry.getValue().getValue();
-
-                                        txtColumn.setText(subject.getAlias());
-                                        txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
-                                        if(teacher!=null) {
-                                            txtColumn.setTag(subject.getID() + " - " + teacher.getID());
-                                        } else {
-                                            txtColumn.setTag(subject.getID() + " - " + 0);
-                                        }
-                                        break;
-                                    }
-                                } else {
-                                    break;
-                                }
-                            }
-                        } else {
-                            for(Map.Entry<Hour, Map.Entry<Subject, SchoolClass>> entry : day.getTeacherHour().entrySet()) {
-                                if(txtTime.getTag()!=null) {
-                                    int timeID = Integer.parseInt(txtTime.getTag().toString().trim());
-                                    if(entry.getKey().getID()==timeID) {
-                                        Subject subject = entry.getValue().getKey();
-                                        if(this.mpSubjects.containsKey(subject.getAlias())) {
-                                            this.mpSubjects.put(subject.getAlias(), (this.mpSubjects.get(subject.getAlias()) + 1));
-                                        } else {
-                                            this.mpSubjects.put(subject.getAlias(), 1);
-                                        }
-                                        SchoolClass schoolClass = entry.getValue().getValue();
-
-                                        txtColumn.setText(subject.getAlias());
-                                        txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
-                                        if(schoolClass!=null) {
-                                            txtColumn.setTag(subject.getID() + " - " + schoolClass.getID());
-                                        } else {
-                                            txtColumn.setTag(subject.getID() + " - " + 0);
-                                        }
-                                        break;
-                                    }
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            TimeTableEntryActivity.loadTimeTable(this.currentItem, this.gridContent, this.mpSubjects);
         }
 
         this.controlFields(this.currentItem==null);
@@ -332,9 +271,75 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         this.navigation.getMenu().getItem(2).setEnabled(editMode);
     }
 
+    public static void loadTimeTable(TimeTable currentItem, TableLayout gridContent, Map<String, Integer> mpSubjects) {
+        for(Day day : currentItem.getDays()) {
+            if(day!=null) {
+                for(int row = 1; row<=gridContent.getChildCount()-1; row++) {
+                    TableRow tableRow = (TableRow)gridContent.getChildAt(row);
+                    TextView txtTime = (TextView) tableRow.getChildAt(0);
+                    TextView txtColumn = (TextView) tableRow.getChildAt(day.getPositionInWeek()+1);
+
+                    if(!MainActivity.globals.getUserSettings().isTimeTableMode()) {
+                        for(Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
+                            if(txtTime.getTag()!=null) {
+                                int timeID = Integer.parseInt(txtTime.getTag().toString().trim());
+                                if(entry.getKey().getID()==timeID) {
+                                    Subject subject = entry.getValue().getKey();
+                                    if(mpSubjects.containsKey(subject.getAlias())) {
+                                        mpSubjects.put(subject.getAlias(), (mpSubjects.get(subject.getAlias()) + 1));
+                                    } else {
+                                        mpSubjects.put(subject.getAlias(), 1);
+                                    }
+                                    Teacher teacher = entry.getValue().getValue();
+
+                                    txtColumn.setText(subject.getAlias());
+                                    txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
+                                    if(teacher!=null) {
+                                        txtColumn.setTag(subject.getID() + " - " + teacher.getID());
+                                    } else {
+                                        txtColumn.setTag(subject.getID() + " - " + 0);
+                                    }
+                                    break;
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+                    } else {
+                        for(Map.Entry<Hour, Map.Entry<Subject, SchoolClass>> entry : day.getTeacherHour().entrySet()) {
+                            if(txtTime.getTag()!=null) {
+                                int timeID = Integer.parseInt(txtTime.getTag().toString().trim());
+                                if(entry.getKey().getID()==timeID) {
+                                    Subject subject = entry.getValue().getKey();
+                                    if(mpSubjects.containsKey(subject.getAlias())) {
+                                        mpSubjects.put(subject.getAlias(), (mpSubjects.get(subject.getAlias()) + 1));
+                                    } else {
+                                        mpSubjects.put(subject.getAlias(), 1);
+                                    }
+                                    SchoolClass schoolClass = entry.getValue().getValue();
+
+                                    txtColumn.setText(subject.getAlias());
+                                    txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
+                                    if(schoolClass!=null) {
+                                        txtColumn.setTag(subject.getID() + " - " + schoolClass.getID());
+                                    } else {
+                                        txtColumn.setTag(subject.getID() + " - " + 0);
+                                    }
+                                    break;
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private void initGrid() {
-        for(int i = 1; i<=gridContent.getChildCount()-1; i++) {
-            final TableRow tableRow = (TableRow) gridContent.getChildAt(i);
+        for(int i = 1; i<=this.gridContent.getChildCount()-1; i++) {
+            final TableRow tableRow = (TableRow) this.gridContent.getChildAt(i);
             for(int j = 0; j<=tableRow.getChildCount()-1; j++) {
                 final TextView textView = (TextView) tableRow.getChildAt(j);
                 final int finalJ = j;
@@ -466,7 +471,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         }
     }
 
-    private void listFromAdapter(ArrayAdapter<String> adapter, Spinner sp, int id) {
+    private static void listFromAdapter(ArrayAdapter<String> adapter, Spinner sp, int id) {
         for(int i = 0; i<=adapter.getCount()-1; i++) {
             String item = adapter.getItem(i);
             if(item!=null) {
@@ -487,7 +492,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         }
     }
 
-    private void initTimes() {
+    public static void initTimes(TableLayout grid) {
         Map<Double, Hour> times = new TreeMap<>();
         List<Hour> hours = MainActivity.globals.getSqLite().getHours("");
         for(Hour hour : hours) {
@@ -496,8 +501,8 @@ public class TimeTableEntryActivity extends AppCompatActivity {
 
         List hourList = Arrays.asList(times.values().toArray());
         int max = hourList.size()-1;
-        for(int i = 1; i<=gridContent.getChildCount()-1; i++) {
-            TableRow row = (TableRow) gridContent.getChildAt(i);
+        for(int i = 1; i<=grid.getChildCount()-1; i++) {
+            TableRow row = (TableRow) grid.getChildAt(i);
             TextView textView = (TextView) row.getChildAt(0);
             if((i-1)<=max) {
                 Hour hour = (Hour) hourList.get(i-1);
@@ -513,7 +518,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                gridContent.getChildAt(i).setVisibility(View.GONE);
+                grid.getChildAt(i).setVisibility(View.GONE);
             }
         }
     }
