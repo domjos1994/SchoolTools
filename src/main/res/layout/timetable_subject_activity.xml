@@ -55,7 +55,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:inputType="text"/>
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/txtSubjectTitle"
                         android:hint="@string/sys_title"
                         android:layout_weight="12"

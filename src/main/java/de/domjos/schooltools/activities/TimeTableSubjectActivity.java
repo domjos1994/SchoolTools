@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.domjos.schooltools.R;
@@ -54,8 +55,8 @@ import de.domjos.schooltools.helper.Validator;
 public class TimeTableSubjectActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     private ListView lvSubjects;
-    private EditText txtSubjectTitle, txtSubjectHoursInWeek, txtSubjectDescription;
-    private AutoCompleteTextView txtSubjectAlias;
+    private EditText txtSubjectHoursInWeek, txtSubjectDescription;
+    private AutoCompleteTextView txtSubjectTitle, txtSubjectAlias;
     private TextView lblSelectedColor;
     private Spinner spSubjectTeachers;
     private CheckBox chkSubjectMainSubject;
@@ -116,7 +117,26 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if(MainActivity.globals.getUserSettings().isAutomaticallySubjects()) {
-                    setDefaultSubjects(editable);
+                    setDefaultSubjectByAlias(editable);
+                }
+            }
+        });
+
+        this.txtSubjectTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(MainActivity.globals.getUserSettings().isAutomaticallySubjects()) {
+                    setDefaultSubjectByTitle(editable);
                 }
             }
         });
@@ -229,9 +249,10 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
         // init controls
         this.lvSubjects = this.findViewById(R.id.lvSubjects);
         this.txtSubjectTitle = this.findViewById(R.id.txtSubjectTitle);
+        this.txtSubjectTitle.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, this.fillTitleAutoCompleteFields()));
         this.txtSubjectAlias = this.findViewById(R.id.txtSubjectAlias);
         List<String> aliases = Arrays.asList("M", "Mus", "D", "Eng", "NWA", "NWT", "Bio", "Ch", "Ph", "Geo", "Gk", "Rel", "Mus", "Edv", "Itg", "Inf", "Sp", "Spa", "lat");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, aliases);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, aliases);
         this.txtSubjectAlias.setAdapter(adapter);
 
 
@@ -300,7 +321,54 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setDefaultSubjects(Editable editable) {
+    private List<String> fillTitleAutoCompleteFields() {
+        List<String> list = new LinkedList<>();
+        list.add(this.getString(R.string.timetable_subject_d_name));
+        list.add(this.getString(R.string.timetable_subject_eng_name));
+        list.add(this.getString(R.string.timetable_subject_m_name));
+        list.add(this.getString(R.string.timetable_subject_nwa_name));
+        list.add(this.getString(R.string.timetable_subject_nwt_name));
+        list.add(this.getString(R.string.timetable_subject_bio_name));
+        list.add(this.getString(R.string.timetable_subject_ch_name));
+        list.add(this.getString(R.string.timetable_subject_geo_name));
+        list.add(this.getString(R.string.timetable_subject_gk_name));
+        list.add(this.getString(R.string.timetable_subject_ph_name));
+        list.add(this.getString(R.string.timetable_subject_rel_name));
+        list.add(this.getString(R.string.timetable_subject_sp_name));
+        list.add(this.getString(R.string.timetable_subject_mus_name));
+        list.add(this.getString(R.string.timetable_subject_itg_name));
+        list.add(this.getString(R.string.timetable_subject_spa_name));
+        list.add(this.getString(R.string.timetable_subject_lat_name));
+        return  list;
+    }
+
+    private void setDefaultSubjectByTitle(Editable editable) {
+        String title = editable.toString();
+        this.fillDefaultSubject(title, R.string.timetable_subject_d_name, R.string.timetable_subject_d_color, true);
+        this.fillDefaultSubject(title, R.string.timetable_subject_eng_name, R.string.timetable_subject_eng_color, true);
+        this.fillDefaultSubject(title, R.string.timetable_subject_m_name, R.string.timetable_subject_m_color, true);
+        this.fillDefaultSubject(title, R.string.timetable_subject_nwa_name, R.string.timetable_subject_nwa_color, true);
+        this.fillDefaultSubject(title, R.string.timetable_subject_nwt_name, R.string.timetable_subject_nwt_color, true);
+        this.fillDefaultSubject(title, R.string.timetable_subject_bio_name, R.string.timetable_subject_bio_color, false);
+        this.fillDefaultSubject(title, R.string.timetable_subject_ch_name, R.string.timetable_subject_ch_color, false);
+        this.fillDefaultSubject(title, R.string.timetable_subject_geo_name, R.string.timetable_subject_geo_color, false);
+        this.fillDefaultSubject(title, R.string.timetable_subject_gk_name, R.string.timetable_subject_gk_color, false);
+        this.fillDefaultSubject(title, R.string.timetable_subject_ph_name, R.string.timetable_subject_ph_color, false);
+        this.fillDefaultSubject(title, R.string.timetable_subject_rel_name, R.string.timetable_subject_rel_color, false);
+        this.fillDefaultSubject(title, R.string.timetable_subject_sp_name, R.string.timetable_subject_sp_color, false);
+        this.fillDefaultSubject(title, R.string.timetable_subject_mus_name, R.string.timetable_subject_mus_color, false);
+        this.fillDefaultSubject(title, R.string.timetable_subject_itg_name, R.string.timetable_subject_itg_color, false);
+        this.fillDefaultSubject(title, R.string.timetable_subject_spa_name, R.string.timetable_subject_spa_color, true);
+        this.fillDefaultSubject(title, R.string.timetable_subject_lat_name, R.string.timetable_subject_lat_color, true);
+    }
+
+    private void fillDefaultSubject(String title, int name, int color, boolean main) {
+        if(title.equals(this.getString(name))) {
+            this.setDefaultValues(color, main);
+        }
+    }
+
+    private void setDefaultSubjectByAlias(Editable editable) {
         String alias = editable.toString().toLowerCase();
         switch (alias) {
             case "d":
@@ -360,6 +428,19 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
     @SuppressWarnings("deprecation")
     private void setDefaultValues(int name, int color_name, boolean main) {
         txtSubjectTitle.setText(this.getString(name));
+        chkSubjectMainSubject.setChecked(main);
+        if(main) {
+            txtSubjectHoursInWeek.setText(String.valueOf(4));
+        } else {
+            txtSubjectHoursInWeek.setText(String.valueOf(2));
+        }
+        int color = colorAdapter.getSelectedColor(this.getString(color_name));
+        lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
+        lblSelectedColor.setText(this.getString(color_name));
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setDefaultValues(int color_name, boolean main) {
         chkSubjectMainSubject.setChecked(main);
         if(main) {
             txtSubjectHoursInWeek.setText(String.valueOf(4));
