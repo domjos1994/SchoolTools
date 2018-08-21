@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:weightSum="20">
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/txtSubjectAlias"
                         android:hint="@string/timetable_subject_alias"
                         android:layout_weight="4"

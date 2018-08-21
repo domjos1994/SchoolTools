@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -33,6 +34,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.ColorAdapter;
@@ -51,7 +54,8 @@ import de.domjos.schooltools.helper.Validator;
 public class TimeTableSubjectActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     private ListView lvSubjects;
-    private EditText txtSubjectTitle, txtSubjectAlias, txtSubjectHoursInWeek, txtSubjectDescription;
+    private EditText txtSubjectTitle, txtSubjectHoursInWeek, txtSubjectDescription;
+    private AutoCompleteTextView txtSubjectAlias;
     private TextView lblSelectedColor;
     private Spinner spSubjectTeachers;
     private CheckBox chkSubjectMainSubject;
@@ -226,6 +230,11 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
         this.lvSubjects = this.findViewById(R.id.lvSubjects);
         this.txtSubjectTitle = this.findViewById(R.id.txtSubjectTitle);
         this.txtSubjectAlias = this.findViewById(R.id.txtSubjectAlias);
+        List<String> aliases = Arrays.asList("M", "Mus", "D", "Eng", "NWA", "NWT", "Bio", "Ch", "Ph", "Geo", "Gk", "Rel", "Mus", "Edv", "Itg", "Inf", "Sp", "Spa", "lat");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, aliases);
+        this.txtSubjectAlias.setAdapter(adapter);
+
+
         this.txtSubjectDescription = this.findViewById(R.id.txtSubjectDescription);
         this.txtSubjectHoursInWeek = this.findViewById(R.id.txtSubjectHoursInWeek);
         this.spSubjectTeachers = this.findViewById(R.id.spSubjectTeachers);
