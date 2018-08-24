@@ -73,10 +73,19 @@ public class ToDoListActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK, getIntent());
+        finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         switch (id) {
+            case android.R.id.home:
+                this.onBackPressed();
+                return true;
             case R.id.menHelp:
                 startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
                 break;
