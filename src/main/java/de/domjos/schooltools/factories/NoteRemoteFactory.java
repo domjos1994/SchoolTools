@@ -9,7 +9,9 @@
 
 package de.domjos.schooltools.factories;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 

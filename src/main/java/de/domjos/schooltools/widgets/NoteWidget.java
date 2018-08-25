@@ -9,6 +9,7 @@
 
 package de.domjos.schooltools.widgets;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -17,6 +18,7 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.NoteActivity;
 import de.domjos.schooltools.services.NoteWidgetService;
 
 /**
@@ -32,6 +34,7 @@ public class NoteWidget extends AppWidgetProvider {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.note_widget);
         remoteViews.setTextViewText(R.id.lblHeader, context.getString(R.string.main_nav_notes));
         remoteViews.setRemoteAdapter(R.id.lvNotes, serviceIntent);
+        remoteViews.setOnClickPendingIntent(R.id.lblHeader, PendingIntent.getActivity(context, 0, new Intent(context, NoteActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
