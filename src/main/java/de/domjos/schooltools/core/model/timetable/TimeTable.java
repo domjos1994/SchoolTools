@@ -24,6 +24,7 @@ public class TimeTable {
     private SchoolClass schoolClass;
     private Day[] days;
     private Year year;
+    private boolean showNotifications;
 
     public TimeTable() {
         this.ID = 0;
@@ -32,6 +33,7 @@ public class TimeTable {
         this.schoolClass = null;
         this.description = "";
         this.days = new Day[7];
+        this.showNotifications = false;
     }
 
     public int getID() {
@@ -86,6 +88,14 @@ public class TimeTable {
         if(day.getPositionInWeek()<=6 && day.getPositionInWeek()>=0) {
             days[day.getPositionInWeek()] = day;
         }
+    }
+
+    public boolean isShowNotifications() {
+        return this.showNotifications;
+    }
+
+    public void setShowNotifications(boolean showNotifications) {
+        this.showNotifications = showNotifications;
     }
 
     @Override

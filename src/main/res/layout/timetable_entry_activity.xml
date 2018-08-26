@@ -311,6 +311,14 @@
                         android:layout_width="match_parent"
                         android:inputType="textMultiLine"/>
                 </TableRow>
+                <TableRow
+                    android:weightSum="1">
+                    <CheckBox
+                        android:id="@+id/chkTimeTableShowNotifications"
+                        android:text="@string/settings_general_notifications"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"/>
+                </TableRow>
             </TableLayout>
         </ScrollView>
     </RelativeLayout>

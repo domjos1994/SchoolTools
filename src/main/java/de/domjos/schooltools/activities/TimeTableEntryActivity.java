@@ -10,7 +10,6 @@
 package de.domjos.schooltools.activities;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -52,6 +51,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
 
     private BottomNavigationView navigation;
     private EditText txtTimeTableTitle, txtTimeTableDescription;
+    private CheckBox chkTimeTableShowNotifications;
     private Spinner spTimeTableClass, spTimeTableYear;
     private TableLayout gridContent;
     private TimeTable currentItem = null;
@@ -97,6 +97,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                     currentItem = new TimeTable();
                                 }
                                 currentItem.setTitle(txtTimeTableTitle.getText().toString());
+                                currentItem.setShowNotifications(chkTimeTableShowNotifications.isChecked());
                                 currentItem.setDescription(txtTimeTableDescription.getText().toString());
                                 if(spTimeTableClass.getSelectedItem()!=null) {
                                     if(!spTimeTableClass.getSelectedItem().toString().equals("")) {
@@ -185,6 +186,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         int currentID = this.getIntent().getIntExtra("id", 0);
         this.gridContent = this.findViewById(R.id.gridContent);
         this.txtTimeTableTitle = this.findViewById(R.id.txtTimeTableTitle);
+        this.chkTimeTableShowNotifications = this.findViewById(R.id.chkTimeTableShowNotifications);
         this.spTimeTableClass = this.findViewById(R.id.spTimeTableClass);
         this.classAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.spTimeTableClass.setAdapter(this.classAdapter);
@@ -222,6 +224,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                 this.spTimeTableClass.setSelection(this.classAdapter.getPosition(this.currentItem.getSchoolClass().getTitle()));
             }
             this.txtTimeTableDescription.setText(this.currentItem.getDescription());
+            this.chkTimeTableShowNotifications.setChecked(this.currentItem.isShowNotifications());
 
             TimeTableEntryActivity.loadTimeTable(this.currentItem, this.gridContent, this.mpSubjects);
         }

@@ -58,6 +58,7 @@ import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.schooltools.helper.SQLite;
 import de.domjos.schooltools.services.MemoryService;
+import de.domjos.schooltools.services.TimeTableNotificationService;
 import de.domjos.schooltools.settings.GeneralSettings;
 import de.domjos.schooltools.settings.Globals;
 import de.domjos.schooltools.settings.MarkListSettings;
@@ -340,18 +341,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initServices() {
-        if(MainActivity.globals.getUserSettings().isNotificationsShown()) {
-            // init Memory Service
-            Intent intent = new Intent(this.getApplicationContext(), MemoryService.class);
-            PendingIntent pendingIntent = PendingIntent.getService(this.getApplicationContext(),  0, intent, 0);
+        try {
+            if(MainActivity.globals.getUserSettings().isNotificationsShown()) {
+                // init Memory Service
+                Intent intent = new Intent(this.getApplicationContext(), MemoryService.class);
+                PendingIntent pendingIntent1 = PendingIntent.getService(this.getApplicationContext(),  0, intent, 0);
 
-            // init frequently
-            AlarmManager alarmManager = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            long frequency= 8 * 60 * 60 * 1000;
-            assert alarmManager != null;
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), frequency, pendingIntent);
+                // init frequently
+                AlarmManager alarmManager1 = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                long frequency= 8 * 60 * 60 * 1000;
+                assert alarmManager1 != null;
+                alarmManager1.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), frequency, pendingIntent1);
+
+                AlarmManager alarmManager2 = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                PendingIntent pendingIntent2 = PendingIntent.getService(this.getApplicationContext(), 0, new Intent(this.getApplicationContext(), TimeTableNotificationService.class), 0);
+                frequency = 60 * 1000;
+                assert alarmManager2 != null;
+                alarmManager2.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), frequency, pendingIntent2);
+            }
+        } catch (Exception ex) {
+            Helper.printException(this.getApplicationContext(), ex);
         }
     }
+
+
 
     @SuppressLint("ClickableViewAccessibility")
     private void initControls() {

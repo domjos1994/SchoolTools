@@ -313,6 +313,9 @@
         <service
             android:name=".services.MemoryService"
             android:exported="false" />
+        <service
+            android:name=".services.TimeTableNotificationService"
+            android:exported="false" />
     </application>
 
 </manifest>

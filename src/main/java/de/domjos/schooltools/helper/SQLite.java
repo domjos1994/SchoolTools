@@ -556,13 +556,18 @@ public class SQLite extends SQLiteOpenHelper {
                     for(Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
                         if(entry.getValue()!=null) {
                             if(entry.getValue().getKey()!=null) {
-                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, teacher) VALUES(?, ?, ?, ?, ?);");
+                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, teacher, show_notifications) VALUES(?, ?, ?, ?, ?, ?);");
                                 sqLiteStatement.bindLong(1, timeTable.getID());
                                 sqLiteStatement.bindLong(2, day.getPositionInWeek());
                                 sqLiteStatement.bindLong(3, entry.getKey().getID());
                                 sqLiteStatement.bindLong(4, entry.getValue().getKey().getID());
                                 if(entry.getValue().getValue()!=null) {
                                     sqLiteStatement.bindLong(5, entry.getValue().getValue().getID());
+                                }
+                                if(timeTable.isShowNotifications()) {
+                                    sqLiteStatement.bindLong(6, 1);
+                                } else {
+                                    sqLiteStatement.bindLong(6, 0);
                                 }
                                 sqLiteStatement.execute();
                                 sqLiteStatement.close();
@@ -573,13 +578,18 @@ public class SQLite extends SQLiteOpenHelper {
                     for(Map.Entry<Hour, Map.Entry<Subject, SchoolClass>> entry : day.getTeacherHour().entrySet()) {
                         if(entry.getValue()!=null) {
                             if(entry.getValue().getKey()!=null) {
-                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, class) VALUES(?, ?, ?, ?, ?);");
+                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, class, show_notifications) VALUES(?, ?, ?, ?, ?, ?);");
                                 sqLiteStatement.bindLong(1, timeTable.getID());
                                 sqLiteStatement.bindLong(2, day.getPositionInWeek());
                                 sqLiteStatement.bindLong(3, entry.getKey().getID());
                                 sqLiteStatement.bindLong(4, entry.getValue().getKey().getID());
                                 if(entry.getValue().getValue()!=null) {
                                     sqLiteStatement.bindLong(5, entry.getValue().getValue().getID());
+                                }
+                                if(timeTable.isShowNotifications()) {
+                                    sqLiteStatement.bindLong(6, 1);
+                                } else {
+                                    sqLiteStatement.bindLong(6, 0);
                                 }
                                 sqLiteStatement.execute();
                                 sqLiteStatement.close();
@@ -643,6 +653,11 @@ public class SQLite extends SQLiteOpenHelper {
                         currentDay = cursor.getInt(2);
                     }
                     day.setPositionInWeek(cursor.getInt(2));
+                    if(cursor.getInt(8)==0) {
+                        timeTables.get(i).setShowNotifications(false);
+                    } else {
+                        timeTables.get(i).setShowNotifications(true);
+                    }
                     List<Hour> hours = this.getHours("ID=" + cursor.getInt(3));
                     List<Subject> subjects = this.getSubjects("ID=" + cursor.getInt(4));
 
