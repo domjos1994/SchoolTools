@@ -38,8 +38,6 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import org.apache.log4j.chainsaw.Main;
-
 import java.util.*;
 
 import de.domjos.schooltools.R;
@@ -115,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.initSavedTimeTables();
         this.deleteMemoriesFromPast();
         this.deleteToDosFromPast();
+        this.setSavedValuesForWidgets();
         this.openWhatsNew();
 
 
@@ -205,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.cmbSavedMarkList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                MainActivity.globals.getGeneralSettings().setWidgetMarkListSpinner(savedMarkListAdapter.getItem(position));
                 MarkListSettings settings = MainActivity.globals.getSqLite().getMarkList(savedMarkListAdapter.getItem(position));
                 calculateSelectedMarkList(settings);
             }
@@ -416,6 +416,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.cmbSavedTimeTables.setAdapter(this.savedTimeTablesAdapter);
         this.savedTimeTablesAdapter.notifyDataSetChanged();
         this.grdSavedTimeTables = this.findViewById(R.id.grdSavedTimeTables);
+
 
         this.lvSearchResults = this.findViewById(R.id.lvSearchResults);
         this.searchAdapter = new SearchAdapter(this.getApplicationContext());
@@ -652,6 +653,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String title = savedTimeTablesAdapter.getItem(position);
+                MainActivity.globals.getGeneralSettings().setWidgetTimetableSpinner(title);
+
                 List<TimeTable> tables = MainActivity.globals.getSqLite().getTimeTables("title='" + title + "'");
 
                 if(tables!=null) {
@@ -834,6 +837,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
             dialogBuilder.setNegativeButton(R.string.sys_cancel, null);
             dialogBuilder.show();
+        }
+    }
+
+    private void setSavedValuesForWidgets() {
+        String timeTable = MainActivity.globals.getGeneralSettings().getWidgetTimetableSpinner();
+        String markList = MainActivity.globals.getGeneralSettings().getWidgetMarkListSpinner();
+
+        if(markList!=null) {
+            for(int i = 0; i<=savedMarkListAdapter.getCount()-1; i++) {
+                if(savedMarkListAdapter.getItem(i)!=null) {
+                    String currentMarkList = this.savedMarkListAdapter.getItem(i);
+                    if(currentMarkList!=null) {
+                        if(currentMarkList.equals(markList)) {
+                            this.cmbSavedMarkList.setSelection(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(timeTable!=null) {
+            for(int i = 0; i<=savedTimeTablesAdapter.getCount()-1; i++) {
+                if(savedTimeTablesAdapter.getItem(i)!=null) {
+                    String currentTimeTable = this.savedTimeTablesAdapter.getItem(i);
+                    if(currentTimeTable!=null) {
+                        if(currentTimeTable.equals(timeTable)) {
+                            this.cmbSavedTimeTables.setSelection(i);
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 }
