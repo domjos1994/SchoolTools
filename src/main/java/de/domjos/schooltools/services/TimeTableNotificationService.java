@@ -94,7 +94,7 @@ public class TimeTableNotificationService extends IntentService {
     }
 
     private NotificationCompat.Builder getNotification(String subject) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this.getApplicationContext(), NotificationChannel.DEFAULT_CHANNEL_ID);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this.getApplicationContext(), "default");
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setLights(0xFFff0000, 500, 500);
         builder.setContentTitle(subject);
