@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2017-2018  Dominic Joas
   ~
   ~ This program is free software; you can redistribute it and/or
   ~ modify it under the terms of the GNU General Public License
   ~ as published by the Free Software Foundation; either version 3
   ~ of the License, or (at your option) any later version.
-  -->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="de.domjos.schooltools">
@@ -28,8 +26,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:label="@string/app_name"
             android:configChanges="orientation"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -179,8 +177,8 @@
         <activity
             android:name=".activities.TimerActivity"
             android:label="@string/main_nav_timer"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -314,6 +312,16 @@
         <service
             android:name=".services.MemoryService"
             android:exported="false" />
+
+        <activity
+            android:name=".activities.DescriptionActivity"
+            android:label="@string/sys_description"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.domjos.schooltools.activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
