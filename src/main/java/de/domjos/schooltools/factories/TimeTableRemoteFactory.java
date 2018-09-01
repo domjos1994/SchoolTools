@@ -112,12 +112,12 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
             Bundle bundle = manager.getAppWidgetOptions(appWidgetId);
             final int minWidth = bundle.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
             if(minWidth==120) {
-                row.setTextViewTextSize(R.id.lblHeader, 0, 10);
-            } else {
                 row.setTextViewTextSize(R.id.lblHeader, 0, 14);
+            } else {
+                row.setTextViewTextSize(R.id.lblHeader, 0, 18);
             }
         } else {
-            row.setTextViewTextSize(R.id.lblHeader, 0, 14);
+            row.setTextViewTextSize(R.id.lblHeader, 0, 18);
         }
         return row;
     }
