@@ -36,8 +36,10 @@ import de.domjos.schooltools.core.model.marklist.MarkListInterface;
 import de.domjos.schooltools.core.model.marklist.MarkListWithMarkMode;
 import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
+import de.domjos.schooltools.core.model.timetable.PupilHour;
 import de.domjos.schooltools.core.model.timetable.SchoolClass;
 import de.domjos.schooltools.core.model.timetable.Teacher;
+import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
@@ -580,9 +582,9 @@ public class ApiHelper {
                             break;
                         }
                         if(objArray[tmp] instanceof Map.Entry) {
-                            for(Map.Entry<Hour, Map.Entry<Subject, SchoolClass>> entry : day.getTeacherHour().entrySet()) {
+                            for(Map.Entry<Hour, TeacherHour> entry : day.getTeacherHour().entrySet()) {
                                 if(entry.getKey().getID()==hour.getID()) {
-                                    Subject subject = entry.getValue().getKey();
+                                    Subject subject = entry.getValue().getSubject();
                                     if (tblCells.get(row).get(0).getValue() != BaseColor.GRAY) {
                                         tblCells.get(row).set(column + 1, new AbstractMap.SimpleEntry<>(subject.getAlias(), new BaseColor(Integer.parseInt(subject.getBackgroundColor()))));
                                         tmp++;
@@ -601,9 +603,9 @@ public class ApiHelper {
                             break;
                         }
                         if(objArray[tmp] instanceof Map.Entry) {
-                            for(Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
+                            for(Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
                                 if(entry.getKey().getID()==hour.getID()) {
-                                    Subject subject = entry.getValue().getKey();
+                                    Subject subject = entry.getValue().getSubject();
                                     if (tblCells.get(row).get(0).getValue() != BaseColor.GRAY) {
                                         tblCells.get(row).set(column + 1, new AbstractMap.SimpleEntry<>(subject.getAlias(), new BaseColor(Integer.parseInt(subject.getBackgroundColor()))));
                                         tmp++;
@@ -653,18 +655,19 @@ public class ApiHelper {
                                 List<Hour> hours = this.sqLite.getHours("");
                                 for(Hour hour : hours) {
                                     boolean hourIsInMap = false;
-                                    for(Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
+                                    for(Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
                                         if(entry!=null) {
-                                            CSVObject hourObject = new CSVObject("###", 3);
+                                            CSVObject hourObject = new CSVObject("###", 4);
                                             if(hour.getID()==entry.getKey().getID()) {
                                                 CSVObject timeObject = this.getCSVObjectFromHour(entry.getKey());
 
                                                 if(entry.getValue()!=null) {
-                                                    CSVObject subjectObject = this.getCSVObjectFromSubject(entry.getValue().getKey(), "##", "{", "}");
-                                                    CSVObject teacherObject = this.getCSVObjectFromTeacher(entry.getValue().getValue(), "##");
+                                                    CSVObject subjectObject = this.getCSVObjectFromSubject(entry.getValue().getSubject(), "##", "{", "}");
+                                                    CSVObject teacherObject = this.getCSVObjectFromTeacher(entry.getValue().getTeacher(), "##");
                                                     hourObject.writeValue("1", timeObject, "{{", "}}");
                                                     hourObject.writeValue("2", subjectObject, "{{", "}}");
                                                     hourObject.writeValue("3", teacherObject, "{{", "}}");
+                                                    hourObject.writeValue("4", entry.getValue().getRoomNumber());
                                                     hourObjects.add(hourObject);
                                                     hourIsInMap = true;
                                                 }
@@ -685,18 +688,19 @@ public class ApiHelper {
                                 List<Hour> hours = this.sqLite.getHours("");
                                 for(Hour hour : hours) {
                                     boolean hourIsInMap = false;
-                                    for (Map.Entry<Hour, Map.Entry<Subject, SchoolClass>> entry : day.getTeacherHour().entrySet()) {
+                                    for (Map.Entry<Hour, TeacherHour> entry : day.getTeacherHour().entrySet()) {
                                         if (entry != null) {
-                                            CSVObject hourObject = new CSVObject("###", 3);
+                                            CSVObject hourObject = new CSVObject("###", 4);
                                             if(hour.getID()==entry.getKey().getID()) {
                                                 CSVObject timeObject = this.getCSVObjectFromHour(entry.getKey());
 
                                                 if (entry.getValue() != null) {
-                                                    CSVObject subjectObject = this.getCSVObjectFromSubject(entry.getValue().getKey(), "##", "{", "}");
-                                                    CSVObject schoolClassObject = this.getCSVObjectFromSchoolClass(entry.getValue().getValue(), "##");
+                                                    CSVObject subjectObject = this.getCSVObjectFromSubject(entry.getValue().getSubject(), "##", "{", "}");
+                                                    CSVObject schoolClassObject = this.getCSVObjectFromSchoolClass(entry.getValue().getSchoolClass(), "##");
                                                     hourObject.writeValue("1", timeObject, "{{", "}}");
                                                     hourObject.writeValue("2", subjectObject, "{{", "}}");
                                                     hourObject.writeValue("3", schoolClassObject, "{{", "}}");
+                                                    hourObject.writeValue("4", entry.getValue().getRoomNumber());
                                                     hourObjects.add(hourObject);
                                                     hourIsInMap = true;
                                                 }
@@ -768,7 +772,7 @@ public class ApiHelper {
                                     List<Hour> hours = this.sqLite.getHours("");
                                     for(Hour hour : hours) {
                                         boolean hourIsInMap = false;
-                                        for (Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
+                                        for (Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
                                             if (entry.getKey() != null) {
                                                 if(hour.getID()==entry.getKey().getID()) {
                                                     XMLElement hourElement = this.getXMLElementFromHour(entry.getKey());
@@ -776,18 +780,23 @@ public class ApiHelper {
                                                         pupilElement.addSubElement(hourElement);
 
                                                         if (entry.getValue() != null) {
-                                                            if (entry.getValue().getKey() != null) {
-                                                                XMLElement subject = this.getXMLElementFromSubject(entry.getValue().getKey());
+                                                            if (entry.getValue().getSubject() != null) {
+                                                                XMLElement subject = this.getXMLElementFromSubject(entry.getValue().getSubject());
                                                                 if (subject != null) {
                                                                     hourElement.addSubElement(subject);
                                                                 }
                                                             }
 
-                                                            if (entry.getValue().getValue() != null) {
-                                                                XMLElement teacher = this.getXMLElementFromTeacher(entry.getValue().getValue());
+                                                            if (entry.getValue().getTeacher() != null) {
+                                                                XMLElement teacher = this.getXMLElementFromTeacher(entry.getValue().getTeacher());
                                                                 if (teacher != null) {
                                                                     hourElement.addSubElement(teacher);
                                                                 }
+                                                            }
+                                                            if(entry.getValue().getRoomNumber() != null) {
+                                                                XMLElement element = new XMLElement("RoomNumber");
+                                                                element.setContent(entry.getValue().getRoomNumber());
+                                                                hourElement.addSubElement(element);
                                                             }
                                                         }
                                                         hourIsInMap = true;
@@ -810,7 +819,7 @@ public class ApiHelper {
                                     List<Hour> hours = this.sqLite.getHours("");
                                     for(Hour hour : hours) {
                                         boolean hourIsInMap = false;
-                                        for (Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
+                                        for (Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
                                             if (entry.getKey() != null) {
                                                 if(hour.getID()==entry.getKey().getID()) {
                                                     XMLElement hourElement = this.getXMLElementFromHour(entry.getKey());
@@ -818,18 +827,24 @@ public class ApiHelper {
                                                         teacherElement.addSubElement(hourElement);
 
                                                         if (entry.getValue() != null) {
-                                                            if (entry.getValue().getKey() != null) {
-                                                                XMLElement subject = this.getXMLElementFromSubject(entry.getValue().getKey());
+                                                            if (entry.getValue().getSubject() != null) {
+                                                                XMLElement subject = this.getXMLElementFromSubject(entry.getValue().getSubject());
                                                                 if (subject != null) {
                                                                     hourElement.addSubElement(subject);
                                                                 }
                                                             }
 
-                                                            if (entry.getValue().getValue() != null) {
-                                                                XMLElement teacher = this.getXMLElementFromTeacher(entry.getValue().getValue());
+                                                            if (entry.getValue().getTeacher() != null) {
+                                                                XMLElement teacher = this.getXMLElementFromTeacher(entry.getValue().getTeacher());
                                                                 if (teacher != null) {
                                                                     hourElement.addSubElement(teacher);
                                                                 }
+                                                            }
+
+                                                            if(entry.getValue().getRoomNumber() != null) {
+                                                                XMLElement element = new XMLElement("RoomNumber");
+                                                                element.setContent(entry.getValue().getRoomNumber());
+                                                                hourElement.addSubElement(element);
                                                             }
                                                         }
                                                         hourIsInMap = true;
@@ -913,7 +928,9 @@ public class ApiHelper {
                                         }
                                     }
                                 }
-                                day.addPupilHour(hour, subject, teacher);
+
+                                String roomNumber = hourObject.readStringValue("4");
+                                day.addPupilHour(hour, subject, teacher, roomNumber);
                             }
                         } else if(type.equals("t")) {
                             List<CSVObject> hourObjects = csvObject.readObjectsValue("3", "###", "[", "]");
@@ -950,7 +967,9 @@ public class ApiHelper {
                                         }
                                     }
                                 }
-                                day.addTeacherHour(hour, subject, schoolClass);
+
+                                String roomNumber = hourObject.readStringValue("4");
+                                day.addTeacherHour(hour, subject, schoolClass, roomNumber);
                             }
                         }
                         timeTable.addDay(day);
@@ -995,16 +1014,20 @@ public class ApiHelper {
 
                                                     Subject subject = null;
                                                     Teacher teacher = null;
+                                                    String roomNumber = "";
                                                     if(hourElement.getSubElements()!=null) {
                                                         if(!hourElement.getSubElements().isEmpty()) {
                                                             subject = this.getSubjectFromXMLElement(hourElement.getSubElements().get(0));
-                                                            if(hourElement.getSubElements().size()==2) {
+                                                            if(hourElement.getSubElements().size()>=2) {
                                                                 teacher = this.getTeacherFromXMLElement(hourElement.getSubElements().get(1));
+                                                            }
+                                                            if(hourElement.getSubElements().size()==3) {
+                                                                roomNumber = hourElement.getSubElements().get(2).getContent();
                                                             }
                                                         }
                                                     }
 
-                                                    day.addPupilHour(hour, subject, teacher);
+                                                    day.addPupilHour(hour, subject, teacher, roomNumber);
                                                 }
                                             }
                                         } else if(hoursElement.getAttributes().get("mode").equals("teacher")) {
@@ -1014,16 +1037,21 @@ public class ApiHelper {
 
                                                     Subject subject = null;
                                                     SchoolClass schoolClass = null;
+                                                    String roomNumber = "";
                                                     if(hourElement.getSubElements()!=null) {
                                                         if(!hourElement.getSubElements().isEmpty()) {
                                                             subject = this.getSubjectFromXMLElement(hourElement.getSubElements().get(0));
-                                                            if(hourElement.getSubElements().size()==2) {
+                                                            if(hourElement.getSubElements().size()>=2) {
                                                                 schoolClass = this.getSchoolClassFromXMLElement(hourElement.getSubElements().get(1));
+                                                            }
+
+                                                            if(hourElement.getSubElements().size()==3) {
+                                                                roomNumber = hourElement.getSubElements().get(2).getContent();
                                                             }
                                                         }
                                                     }
 
-                                                    day.addTeacherHour(hour, subject, schoolClass);
+                                                    day.addTeacherHour(hour, subject, schoolClass, roomNumber);
                                                 }
                                             }
                                         }

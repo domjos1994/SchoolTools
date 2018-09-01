@@ -27,6 +27,8 @@ import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.Memory;
 import de.domjos.schooltools.core.model.Note;
 import de.domjos.schooltools.core.model.TimerEvent;
+import de.domjos.schooltools.core.model.timetable.PupilHour;
+import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
 import de.domjos.schooltools.core.model.mark.SchoolYear;
@@ -553,21 +555,24 @@ public class SQLite extends SQLiteOpenHelper {
             db.execSQL("DELETE FROM timeTable WHERE plan=" + timeTable.getID() + ";");
             for(Day day : timeTable.getDays()) {
                 if(day!=null) {
-                    for(Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
+                    for(Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
                         if(entry.getValue()!=null) {
-                            if(entry.getValue().getKey()!=null) {
-                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, teacher, current_timetable) VALUES(?, ?, ?, ?, ?, ?);");
+                            if(entry.getValue().getSubject()!=null) {
+                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, teacher, roomNumber, current_timetable) VALUES(?, ?, ?, ?, ?, ?, ?);");
                                 sqLiteStatement.bindLong(1, timeTable.getID());
                                 sqLiteStatement.bindLong(2, day.getPositionInWeek());
                                 sqLiteStatement.bindLong(3, entry.getKey().getID());
-                                sqLiteStatement.bindLong(4, entry.getValue().getKey().getID());
-                                if(entry.getValue().getValue()!=null) {
-                                    sqLiteStatement.bindLong(5, entry.getValue().getValue().getID());
+                                sqLiteStatement.bindLong(4, entry.getValue().getSubject().getID());
+                                if(entry.getValue().getTeacher()!=null) {
+                                    sqLiteStatement.bindLong(5, entry.getValue().getTeacher().getID());
+                                }
+                                if(entry.getValue().getRoomNumber()!=null) {
+                                    sqLiteStatement.bindString(6, entry.getValue().getRoomNumber());
                                 }
                                 if(timeTable.isCurrentTimeTable()) {
-                                    sqLiteStatement.bindLong(6, 1);
+                                    sqLiteStatement.bindLong(7, 1);
                                 } else {
-                                    sqLiteStatement.bindLong(6, 0);
+                                    sqLiteStatement.bindLong(7, 0);
                                 }
                                 sqLiteStatement.execute();
                                 sqLiteStatement.close();
@@ -575,21 +580,24 @@ public class SQLite extends SQLiteOpenHelper {
                         }
                     }
 
-                    for(Map.Entry<Hour, Map.Entry<Subject, SchoolClass>> entry : day.getTeacherHour().entrySet()) {
+                    for(Map.Entry<Hour, TeacherHour> entry : day.getTeacherHour().entrySet()) {
                         if(entry.getValue()!=null) {
-                            if(entry.getValue().getKey()!=null) {
-                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, class, current_timetable) VALUES(?, ?, ?, ?, ?, ?);");
+                            if(entry.getValue().getSubject()!=null) {
+                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, class, roomNumber, current_timetable) VALUES(?, ?, ?, ?, ?, ?, ?);");
                                 sqLiteStatement.bindLong(1, timeTable.getID());
                                 sqLiteStatement.bindLong(2, day.getPositionInWeek());
                                 sqLiteStatement.bindLong(3, entry.getKey().getID());
-                                sqLiteStatement.bindLong(4, entry.getValue().getKey().getID());
-                                if(entry.getValue().getValue()!=null) {
-                                    sqLiteStatement.bindLong(5, entry.getValue().getValue().getID());
+                                sqLiteStatement.bindLong(4, entry.getValue().getSubject().getID());
+                                if(entry.getValue().getSchoolClass()!=null) {
+                                    sqLiteStatement.bindLong(5, entry.getValue().getSchoolClass().getID());
+                                }
+                                if(entry.getValue().getRoomNumber()!=null) {
+                                    sqLiteStatement.bindString(6, entry.getValue().getRoomNumber());
                                 }
                                 if(timeTable.isCurrentTimeTable()) {
-                                    sqLiteStatement.bindLong(6, 1);
+                                    sqLiteStatement.bindLong(7, 1);
                                 } else {
-                                    sqLiteStatement.bindLong(6, 0);
+                                    sqLiteStatement.bindLong(7, 0);
                                 }
                                 sqLiteStatement.execute();
                                 sqLiteStatement.close();
@@ -681,13 +689,15 @@ public class SQLite extends SQLiteOpenHelper {
                         }
                     }
 
+                    String roomNumber = cursor.getString(7);
+
                     if(teacher!=null) {
-                        day.addPupilHour(hours.get(0), subjects.get(0), teacher);
+                        day.addPupilHour(hours.get(0), subjects.get(0), teacher, roomNumber);
                     } else if(schoolClass!=null) {
-                        day.addTeacherHour(hours.get(0), subjects.get(0), schoolClass);
+                        day.addTeacherHour(hours.get(0), subjects.get(0), schoolClass, roomNumber);
                     } else {
-                        day.addPupilHour(hours.get(0), subjects.get(0), null);
-                        day.addTeacherHour(hours.get(0), subjects.get(0), null);
+                        day.addPupilHour(hours.get(0), subjects.get(0), null, roomNumber);
+                        day.addTeacherHour(hours.get(0), subjects.get(0), null, roomNumber);
                     }
                 }
                 timeTables.get(i).addDay(day);

@@ -17,6 +17,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,9 +36,11 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.core.model.mark.Year;
 import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
+import de.domjos.schooltools.core.model.timetable.PupilHour;
 import de.domjos.schooltools.core.model.timetable.SchoolClass;
 import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.timetable.Teacher;
+import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
@@ -131,23 +135,25 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                             if(txtCurrent.getTag()!=null) {
                                                 if(!MainActivity.globals.getUserSettings().isTimeTableMode()) {
                                                     if(txtCurrent.getTag().toString().contains(" - ")) {
-                                                        String spl[] = txtCurrent.getTag().toString().split(" - ");
+                                                        String rows[] = txtCurrent.getTag().toString().split("\n");
+                                                        String spl[] = rows[0].trim().split(" - ");
                                                         Subject subject = MainActivity.globals.getSqLite().getSubjects("ID=" + spl[0].trim()).get(0);
                                                         Teacher teacher = null;
                                                         if(!spl[1].trim().equals("0")) {
                                                             teacher = MainActivity.globals.getSqLite().getTeachers("ID=" + spl[1].trim()).get(0);
                                                         }
-                                                        day.addPupilHour(hour, subject, teacher);
+                                                        day.addPupilHour(hour, subject, teacher, rows[1].trim());
                                                     }
                                                 } else {
                                                     if(txtCurrent.getTag().toString().contains(" - ")) {
-                                                        String spl[] = txtCurrent.getTag().toString().split(" - ");
+                                                        String rows[] = txtCurrent.getTag().toString().split("\n");
+                                                        String spl[] = rows[0].trim().split(" - ");
                                                         Subject subject = MainActivity.globals.getSqLite().getSubjects("ID=" + spl[0].trim()).get(0);
                                                         SchoolClass schoolClass = null;
                                                         if(!spl[1].trim().equals("0")) {
                                                             schoolClass = MainActivity.globals.getSqLite().getClasses("ID=" + spl[1].trim()).get(0);
                                                         }
-                                                        day.addTeacherHour(hour, subject, schoolClass);
+                                                        day.addTeacherHour(hour, subject, schoolClass, rows[1].trim());
                                                     }
                                                 }
                                             }
@@ -285,17 +291,18 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                     TextView txtColumn = (TextView) tableRow.getChildAt(day.getPositionInWeek()+1);
 
                     if(!MainActivity.globals.getUserSettings().isTimeTableMode()) {
-                        for(Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
+                        for(Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
                             if(txtTime.getTag()!=null) {
                                 int timeID = Integer.parseInt(txtTime.getTag().toString().trim());
                                 if(entry.getKey().getID()==timeID) {
-                                    Subject subject = entry.getValue().getKey();
+                                    Subject subject = entry.getValue().getSubject();
                                     if(mpSubjects.containsKey(subject.getAlias())) {
                                         mpSubjects.put(subject.getAlias(), (mpSubjects.get(subject.getAlias()) + 1));
                                     } else {
                                         mpSubjects.put(subject.getAlias(), 1);
                                     }
-                                    Teacher teacher = entry.getValue().getValue();
+                                    Teacher teacher = entry.getValue().getTeacher();
+                                    String roomNumber = entry.getValue().getRoomNumber();
 
                                     txtColumn.setText(subject.getAlias());
                                     txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
@@ -304,6 +311,11 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                     } else {
                                         txtColumn.setTag(subject.getID() + " - " + 0);
                                     }
+                                    if(roomNumber!=null) {
+                                        if(!roomNumber.isEmpty()) {
+                                            txtColumn.setTag(txtColumn.getTag() + "\n" + roomNumber);
+                                        }
+                                    }
                                     break;
                                 }
                             } else {
@@ -311,17 +323,18 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        for(Map.Entry<Hour, Map.Entry<Subject, SchoolClass>> entry : day.getTeacherHour().entrySet()) {
+                        for(Map.Entry<Hour, TeacherHour> entry : day.getTeacherHour().entrySet()) {
                             if(txtTime.getTag()!=null) {
                                 int timeID = Integer.parseInt(txtTime.getTag().toString().trim());
                                 if(entry.getKey().getID()==timeID) {
-                                    Subject subject = entry.getValue().getKey();
+                                    Subject subject = entry.getValue().getSubject();
                                     if(mpSubjects.containsKey(subject.getAlias())) {
                                         mpSubjects.put(subject.getAlias(), (mpSubjects.get(subject.getAlias()) + 1));
                                     } else {
                                         mpSubjects.put(subject.getAlias(), 1);
                                     }
-                                    SchoolClass schoolClass = entry.getValue().getValue();
+                                    SchoolClass schoolClass = entry.getValue().getSchoolClass();
+                                    String roomNumber = entry.getValue().getRoomNumber();
 
                                     txtColumn.setText(subject.getAlias());
                                     txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
@@ -329,6 +342,12 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                         txtColumn.setTag(subject.getID() + " - " + schoolClass.getID());
                                     } else {
                                         txtColumn.setTag(subject.getID() + " - " + 0);
+                                    }
+
+                                    if(roomNumber!=null) {
+                                        if(!roomNumber.isEmpty()) {
+                                            txtColumn.setTag(txtColumn.getTag() + "\n" + roomNumber);
+                                        }
                                     }
                                     break;
                                 }
@@ -384,6 +403,8 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                     spOptional.setAdapter(optionalAdapter);
                                     optionalAdapter.notifyDataSetChanged();
 
+                                    final EditText txtRoomNumber = dialog.findViewById(R.id.txtRoomNumber);
+
                                     for(Subject subject : MainActivity.globals.getSqLite().getSubjects("")) {
                                         if(mpSubjects.get(subject.getAlias())!=null) {
                                             if(subject.getHoursInWeek()>mpSubjects.get(subject.getAlias())) {
@@ -410,8 +431,9 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                     spOptional.setSelection(optionalAdapter.getPosition(""));
 
                                     if(textView.getTag()!=null) {
-                                        int subjectID = Integer.parseInt(textView.getTag().toString().split(" - ")[0].trim());
-                                        int optionalID = Integer.parseInt(textView.getTag().toString().split(" - ")[1].trim());
+                                        String tag[] = textView.getTag().toString().split("\n");
+                                        int subjectID = Integer.parseInt(tag[0].trim().split(" - ")[0].trim());
+                                        int optionalID = Integer.parseInt(tag[0].trim().split(" - ")[1].trim());
                                         List<Subject> subjects = MainActivity.globals.getSqLite().getSubjects("ID=" + subjectID);
                                         if(subjects!=null) {
                                             if(!subjects.isEmpty()) {
@@ -425,6 +447,9 @@ public class TimeTableEntryActivity extends AppCompatActivity {
 
                                         if(optionalID!=0) {
                                             listFromAdapter(optionalAdapter, spOptional, optionalID);
+                                        }
+                                        if(tag.length==2) {
+                                            txtRoomNumber.setText(tag[1]);
                                         }
                                     }
 
@@ -447,6 +472,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                                 } else {
                                                     textView.setTag(item.split(":")[0] + " - " + spOptional.getSelectedItem().toString().split(":")[0].trim());
                                                 }
+                                                textView.setTag(textView.getTag() + "\n" + txtRoomNumber.getText());
                                             } else {
                                                 textView.setText("");
                                                 textView.setBackgroundResource(R.drawable.tbl_border);

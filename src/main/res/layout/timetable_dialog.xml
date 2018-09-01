@@ -43,6 +43,14 @@
     </TableRow>
 
     <TableRow android:weightSum="1">
+        <EditText
+            android:id="@+id/txtRoomNumber"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </TableRow>
+
+    <TableRow android:weightSum="1">
         <ImageButton
             android:id="@+id/cmdAdd"
             android:enabled="false"

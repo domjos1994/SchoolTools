@@ -40,8 +40,6 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import java.sql.Time;
-import java.time.LocalDate;
 import java.util.*;
 
 import de.domjos.schooltools.R;
@@ -57,8 +55,8 @@ import de.domjos.schooltools.core.model.mark.SchoolYear;
 import de.domjos.schooltools.core.model.mark.Test;
 import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
-import de.domjos.schooltools.core.model.timetable.SchoolClass;
-import de.domjos.schooltools.core.model.timetable.Teacher;
+import de.domjos.schooltools.core.model.timetable.PupilHour;
+import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
@@ -829,7 +827,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     Date date = new Date();
                                     if (day.getPupilHour() != null) {
                                         int counter = 0;
-                                        for (Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
+                                        for (Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
                                             Date start = Converter.convertStringTimeToDate(this.getApplicationContext(), entry.getKey().getStart());
                                             Date end = Converter.convertStringTimeToDate(this.getApplicationContext(), entry.getKey().getEnd());
 
@@ -838,13 +836,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                                 boolean isBeforeEnd = end.after(date);
 
                                                 if(isAfterStart && isBeforeEnd) {
-                                                    timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getKey()));
+                                                    timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getSubject()));
 
                                                     if(day.getPupilHour().size()-1>counter) {
                                                         Hour hour = (Hour)day.getPupilHour().keySet().toArray()[counter+1];
-                                                        if(day.getPupilHour().values().toArray()[counter] instanceof Map.Entry) {
-                                                            Map.Entry mapEntry = (Map.Entry) day.getPupilHour().values().toArray()[counter+1];
-                                                            timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, (Subject) mapEntry.getKey()));
+                                                        if(day.getPupilHour().values().toArray()[counter] instanceof PupilHour) {
+                                                            PupilHour mapEntry = (PupilHour) day.getPupilHour().values().toArray()[counter+1];
+                                                            timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, mapEntry.getSubject()));
                                                         }
                                                     }
                                                 }
@@ -854,7 +852,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     }
                                     if (day.getTeacherHour() != null) {
                                         int counter = 0;
-                                        for (Map.Entry<Hour, Map.Entry<Subject, SchoolClass>> entry : day.getTeacherHour().entrySet()) {
+                                        for (Map.Entry<Hour, TeacherHour> entry : day.getTeacherHour().entrySet()) {
                                             Date start = Converter.convertStringTimeToDate(this.getApplicationContext(), entry.getKey().getStart());
                                             Date end = Converter.convertStringTimeToDate(this.getApplicationContext(), entry.getKey().getEnd());
 
@@ -863,13 +861,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                                 boolean isBeforeEnd = end.after(date);
 
                                                 if(isAfterStart && isBeforeEnd) {
-                                                    timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getKey()));
+                                                    timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getSubject()));
 
                                                     if(day.getTeacherHour().size()-1>counter) {
                                                         Hour hour = (Hour)day.getTeacherHour().keySet().toArray()[counter+1];
-                                                        if(day.getTeacherHour().values().toArray()[counter+1] instanceof Map.Entry) {
-                                                            Map.Entry mapEntry = (Map.Entry) day.getTeacherHour().values().toArray()[counter+1];
-                                                            timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, (Subject) mapEntry.getKey()));
+                                                        if(day.getTeacherHour().values().toArray()[counter+1] instanceof TeacherHour) {
+                                                            TeacherHour mapEntry = (TeacherHour) day.getTeacherHour().values().toArray()[counter+1];
+                                                            timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, mapEntry.getSubject()));
                                                         }
                                                     }
                                                 }

@@ -22,8 +22,8 @@ import de.domjos.schooltools.core.model.Subject;
  */
 public class Day {
     private int positionInWeek;
-    private Map<Hour, Map.Entry<Subject, Teacher>> pupilHour;
-    private Map<Hour, Map.Entry<Subject, SchoolClass>> teacherHour;
+    private Map<Hour, PupilHour> pupilHour;
+    private Map<Hour, TeacherHour> teacherHour;
 
     public Day() {
         this.positionInWeek = 0;
@@ -39,19 +39,19 @@ public class Day {
         this.positionInWeek = positionInWeek;
     }
 
-    public Map<Hour, Map.Entry<Subject, Teacher>> getPupilHour() {
+    public Map<Hour, PupilHour> getPupilHour() {
         return this.pupilHour;
     }
 
-    public void addPupilHour(Hour hour, Subject subject, Teacher teacher) {
-        this.pupilHour.put(hour, new AbstractMap.SimpleEntry<>(subject, teacher));
+    public void addPupilHour(Hour hour, Subject subject, Teacher teacher, String roomNumber) {
+        this.pupilHour.put(hour, new PupilHour(subject, teacher, roomNumber));
     }
 
-    public Map<Hour, Map.Entry<Subject, SchoolClass>> getTeacherHour() {
+    public Map<Hour, TeacherHour> getTeacherHour() {
         return this.teacherHour;
     }
 
-    public void addTeacherHour(Hour hour, Subject subject, SchoolClass schoolClass) {
-        this.teacherHour.put(hour, new AbstractMap.SimpleEntry<>(subject, schoolClass));
+    public void addTeacherHour(Hour hour, Subject subject, SchoolClass schoolClass, String roomNumber) {
+        this.teacherHour.put(hour, new TeacherHour(subject, schoolClass, roomNumber));
     }
 }

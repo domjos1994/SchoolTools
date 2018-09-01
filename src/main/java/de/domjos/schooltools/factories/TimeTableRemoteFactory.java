@@ -30,6 +30,7 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
+import de.domjos.schooltools.core.model.timetable.PupilHour;
 import de.domjos.schooltools.core.model.timetable.Teacher;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;
@@ -188,11 +189,11 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
                                     Hour hour = (Hour) objArray[k];
                                     if(days[i]!=null) {
                                         if(days[i].getPupilHour()!=null) {
-                                            for(Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : days[i].getPupilHour().entrySet()) {
+                                            for(Map.Entry<Hour, PupilHour> entry : days[i].getPupilHour().entrySet()) {
                                                 if(entry.getKey().getStart().equals(hour.getStart()) && entry.getKey().getEnd().equals(hour.getEnd())) {
-                                                    if(entry.getValue().getKey()!=null) {
-                                                        strDays[i] = entry.getValue().getKey().getAlias().trim();
-                                                        intColors[i] = Integer.parseInt(entry.getValue().getKey().getBackgroundColor());
+                                                    if(entry.getValue().getSubject()!=null) {
+                                                        strDays[i] = entry.getValue().getSubject().getAlias().trim();
+                                                        intColors[i] = Integer.parseInt(entry.getValue().getSubject().getBackgroundColor());
                                                     }
                                                     break;
                                                 }
