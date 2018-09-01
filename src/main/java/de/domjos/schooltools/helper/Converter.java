@@ -106,6 +106,21 @@ public class Converter {
         return null;
     }
 
+    public static Date convertStringTimeToDate(Context context, String time) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTime(new Date());
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int year = calendar.get(Calendar.YEAR);
+            return formatter.parse(String.format("%s.%s.%s %s", day, month, year, time));
+        } catch (Exception ex) {
+            Helper.printException(context, ex);
+        }
+        return null;
+    }
+
     public static byte[] convertDrawableToByteArray(Context context, int id) {
         Drawable d;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {

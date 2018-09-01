@@ -556,7 +556,7 @@ public class SQLite extends SQLiteOpenHelper {
                     for(Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
                         if(entry.getValue()!=null) {
                             if(entry.getValue().getKey()!=null) {
-                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, teacher, show_notifications) VALUES(?, ?, ?, ?, ?, ?);");
+                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, teacher, current_timetable) VALUES(?, ?, ?, ?, ?, ?);");
                                 sqLiteStatement.bindLong(1, timeTable.getID());
                                 sqLiteStatement.bindLong(2, day.getPositionInWeek());
                                 sqLiteStatement.bindLong(3, entry.getKey().getID());
@@ -564,7 +564,7 @@ public class SQLite extends SQLiteOpenHelper {
                                 if(entry.getValue().getValue()!=null) {
                                     sqLiteStatement.bindLong(5, entry.getValue().getValue().getID());
                                 }
-                                if(timeTable.isShowNotifications()) {
+                                if(timeTable.isCurrentTimeTable()) {
                                     sqLiteStatement.bindLong(6, 1);
                                 } else {
                                     sqLiteStatement.bindLong(6, 0);
@@ -578,7 +578,7 @@ public class SQLite extends SQLiteOpenHelper {
                     for(Map.Entry<Hour, Map.Entry<Subject, SchoolClass>> entry : day.getTeacherHour().entrySet()) {
                         if(entry.getValue()!=null) {
                             if(entry.getValue().getKey()!=null) {
-                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, class, show_notifications) VALUES(?, ?, ?, ?, ?, ?);");
+                                sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, class, current_timetable) VALUES(?, ?, ?, ?, ?, ?);");
                                 sqLiteStatement.bindLong(1, timeTable.getID());
                                 sqLiteStatement.bindLong(2, day.getPositionInWeek());
                                 sqLiteStatement.bindLong(3, entry.getKey().getID());
@@ -586,7 +586,7 @@ public class SQLite extends SQLiteOpenHelper {
                                 if(entry.getValue().getValue()!=null) {
                                     sqLiteStatement.bindLong(5, entry.getValue().getValue().getID());
                                 }
-                                if(timeTable.isShowNotifications()) {
+                                if(timeTable.isCurrentTimeTable()) {
                                     sqLiteStatement.bindLong(6, 1);
                                 } else {
                                     sqLiteStatement.bindLong(6, 0);
@@ -654,9 +654,9 @@ public class SQLite extends SQLiteOpenHelper {
                     }
                     day.setPositionInWeek(cursor.getInt(2));
                     if(cursor.getInt(8)==0) {
-                        timeTables.get(i).setShowNotifications(false);
+                        timeTables.get(i).setCurrentTimeTable(false);
                     } else {
-                        timeTables.get(i).setShowNotifications(true);
+                        timeTables.get(i).setCurrentTimeTable(true);
                     }
                     List<Hour> hours = this.getHours("ID=" + cursor.getInt(3));
                     List<Subject> subjects = this.getSubjects("ID=" + cursor.getInt(4));

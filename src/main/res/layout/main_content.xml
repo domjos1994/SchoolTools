@@ -55,10 +55,37 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/llSavedTimeTables"
+                android:id="@+id/llTodayCurrentTimeTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/llToday"
+                android:layout_margin="8dp"
+                android:background="@drawable/tbl_border">
+                <TextView
+                    android:id="@+id/lblTodayCurrentTimeTableHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/main_today_timetable"
+                    android:padding="8dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
+                <ListView
+                    android:id="@+id/lvTodayCurrentTimeTableEvents"
+                    android:layout_below="@+id/lblTodayCurrentTimeTableHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    tools:ignore="NestedScrolling" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/llSavedTimeTables"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llTodayCurrentTimeTable"
                 android:layout_margin="8dp"
                 android:background="@drawable/tbl_border">
                 <TextView

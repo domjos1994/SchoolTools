@@ -63,28 +63,28 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/llCurrentNotes"
+                    android:id="@+id/llTodayCurrentTimeTable"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
                     android:layout_margin="8dp"
                     android:background="@drawable/tbl_border">
                     <TextView
-                        android:id="@+id/lblCurrentNotes"
+                        android:id="@+id/lblTodayCurrentTimeTableHeader"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:text="@string/main_top5Notes"
+                        android:text="@string/main_today_timetable"
                         android:padding="8dp"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:gravity="center"
                         android:layout_gravity="center"/>
                     <ListView
-                        android:id="@+id/lvNotes"
-                        android:layout_below="@+id/lblCurrentNotes"
+                        android:id="@+id/lvTodayCurrentTimeTableEvents"
+                        android:layout_below="@+id/lblTodayCurrentTimeTableHeader"
                         android:layout_width="match_parent"
-                        android:layout_height="160dp"
+                        android:layout_height="80dp"
                         android:layout_margin="8dp"
                         tools:ignore="NestedScrolling" />
                 </RelativeLayout>
@@ -171,7 +171,7 @@
                     android:id="@+id/llSavedTimeTables"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="10"
+                    android:layout_weight="5"
                     android:layout_margin="8dp"
                     android:background="@drawable/tbl_border">
                     <TextView
@@ -415,6 +415,33 @@
                             </TableRow>
                         </TableLayout>
                     </ScrollView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/llCurrentNotes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/tbl_border">
+                    <TextView
+                        android:id="@+id/lblCurrentNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/main_top5Notes"
+                        android:padding="8dp"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"/>
+                    <ListView
+                        android:id="@+id/lvNotes"
+                        android:layout_below="@+id/lblCurrentNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_margin="8dp"
+                        tools:ignore="NestedScrolling" />
                 </RelativeLayout>
             </LinearLayout>
 

@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -38,6 +39,8 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.*;
 
 import de.domjos.schooltools.R;
@@ -47,9 +50,14 @@ import de.domjos.schooltools.core.exceptions.MarkListException;
 import de.domjos.schooltools.core.marklist.de.GermanListWithCrease;
 import de.domjos.schooltools.core.model.Memory;
 import de.domjos.schooltools.core.model.Note;
+import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.TimerEvent;
 import de.domjos.schooltools.core.model.mark.SchoolYear;
 import de.domjos.schooltools.core.model.mark.Test;
+import de.domjos.schooltools.core.model.timetable.Day;
+import de.domjos.schooltools.core.model.timetable.Hour;
+import de.domjos.schooltools.core.model.timetable.SchoolClass;
+import de.domjos.schooltools.core.model.timetable.Teacher;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
@@ -75,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final Globals globals = new Globals();
 
     private TableRow trMarkList, trMark, trTimeTable, trNotes, trTimer, trTodo, trExport, trSettings, trHelp;
-    private RelativeLayout llToday, llCurrentNotes, llSavedMarkList, llImportantToDos, llSavedTimeTables;
+    private RelativeLayout llToday, llTodayCurrentTimeTable, llCurrentNotes, llSavedMarkList, llImportantToDos, llSavedTimeTables;
     private ImageButton cmdRefresh;
     private SearchView cmdSearch;
     private ListView lvCurrentNotes;
@@ -86,10 +94,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NoteAdapter noteAdapter;
     private SearchAdapter searchAdapter;
     private ToDoAdapter toDoAdapter;
+    private SubjectHourAdapter timeTableEventAdapter;
     private MarkListAdapter markListAdapter;
     private ArrayAdapter<String> savedMarkListAdapter;
     private ArrayAdapter<String> savedTimeTablesAdapter;
     private boolean firstUse, versionChange;
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +125,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.deleteToDosFromPast();
         this.setSavedValuesForWidgets();
         this.openWhatsNew();
+        this.countDownTimer = new CountDownTimer(Long.MAX_VALUE, 10000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                initCurrentTimeTableEvent();
+            }
 
+            @Override
+            public void onFinish() {
+                countDownTimer.start();
+            }
+        }.start();
 
 
         this.trMarkList.setOnClickListener(new View.OnClickListener() {
@@ -395,6 +415,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.eventAdapter = new EventAdapter(this.getApplicationContext(), R.layout.main_today_event, new ArrayList<Map.Entry<String, String>>());
         lvEvents.setAdapter(this.eventAdapter);
         this.eventAdapter.notifyDataSetChanged();
+
+        this.llTodayCurrentTimeTable = this.findViewById(R.id.llTodayCurrentTimeTable);
+        ListView lvTodayCurrentTimeTable = this.findViewById(R.id.lvTodayCurrentTimeTableEvents);
+        this.timeTableEventAdapter = new SubjectHourAdapter(this.getApplicationContext(), R.layout.timetable_subject_item, new ArrayList<Map.Entry<Hour, Subject>>());
+        lvTodayCurrentTimeTable.setAdapter(this.timeTableEventAdapter);
+        this.timeTableEventAdapter.notifyDataSetChanged();
 
         this.llCurrentNotes = this.findViewById(R.id.llCurrentNotes);
         this.lvCurrentNotes = this.findViewById(R.id.lvNotes);
@@ -705,6 +731,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void hideWidgets() {
         this.tblButtons.setVisibility(View.GONE);
         this.llToday.setVisibility(View.GONE);
+        this.llTodayCurrentTimeTable.setVisibility(View.GONE);
         this.llCurrentNotes.setVisibility(View.GONE);
         this.llImportantToDos.setVisibility(View.GONE);
         this.llSavedMarkList.setVisibility(View.GONE);
@@ -716,6 +743,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             if(item.equals(this.getString(R.string.main_today))) {
                 this.llToday.setVisibility(View.VISIBLE);
+            }
+            if(item.equals(this.getString(R.string.main_today_timetable))) {
+                this.llTodayCurrentTimeTable.setVisibility(View.VISIBLE);
             }
             if(item.equals(this.getString(R.string.main_savedTimeTables))) {
                 this.llSavedTimeTables.setVisibility(View.VISIBLE);
@@ -765,6 +795,86 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if(intent!=null) {
                     startActivityForResult(intent, 99);
+                }
+            }
+        }
+    }
+
+    private void initCurrentTimeTableEvent() {
+        List<TimeTable> timeTables = MainActivity.globals.getSqLite().getTimeTables("");
+        if(timeTables!=null) {
+            if(!timeTables.isEmpty()) {
+                for(TimeTable timeTable : timeTables) {
+                    if(timeTable.isCurrentTimeTable()) {
+                        Calendar calendar = GregorianCalendar.getInstance(Locale.getDefault());
+                        calendar.setTime(new Date());
+                        int position = calendar.get(Calendar.DAY_OF_WEEK);
+                        position = position-1;
+                        if(position==0) {
+                            position = 7;
+                        }
+
+                        Day[] days = timeTable.getDays();
+                        for(Day day : days) {
+                            if(day!=null) {
+                                int dayPos = day.getPositionInWeek();
+                                if (dayPos == position) {
+                                    Date date = new Date();
+                                    if (day.getPupilHour() != null) {
+                                        int counter = 0;
+                                        for (Map.Entry<Hour, Map.Entry<Subject, Teacher>> entry : day.getPupilHour().entrySet()) {
+                                            Date start = Converter.convertStringTimeToDate(this.getApplicationContext(), entry.getKey().getStart());
+                                            Date end = Converter.convertStringTimeToDate(this.getApplicationContext(), entry.getKey().getEnd());
+
+                                            if(start != null && end != null)  {
+                                                boolean isAfterStart = start.before(date);
+                                                boolean isBeforeEnd = end.after(date);
+
+                                                if(isAfterStart && isBeforeEnd) {
+                                                    timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getKey()));
+
+                                                    if(day.getPupilHour().size()-1>counter) {
+                                                        Hour hour = (Hour)day.getPupilHour().keySet().toArray()[counter+1];
+                                                        if(day.getPupilHour().values().toArray()[counter] instanceof Map.Entry) {
+                                                            Map.Entry mapEntry = (Map.Entry) day.getPupilHour().values().toArray()[counter+1];
+                                                            timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, (Subject) mapEntry.getKey()));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            counter++;
+                                        }
+                                    }
+                                    if (day.getTeacherHour() != null) {
+                                        int counter = 0;
+                                        for (Map.Entry<Hour, Map.Entry<Subject, SchoolClass>> entry : day.getTeacherHour().entrySet()) {
+                                            Date start = Converter.convertStringTimeToDate(this.getApplicationContext(), entry.getKey().getStart());
+                                            Date end = Converter.convertStringTimeToDate(this.getApplicationContext(), entry.getKey().getEnd());
+
+                                            if(start != null && end != null)  {
+                                                boolean isAfterStart = start.before(date);
+                                                boolean isBeforeEnd = end.after(date);
+
+                                                if(isAfterStart && isBeforeEnd) {
+                                                    timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getKey()));
+
+                                                    if(day.getTeacherHour().size()-1>counter) {
+                                                        Hour hour = (Hour)day.getTeacherHour().keySet().toArray()[counter+1];
+                                                        if(day.getTeacherHour().values().toArray()[counter+1] instanceof Map.Entry) {
+                                                            Map.Entry mapEntry = (Map.Entry) day.getTeacherHour().values().toArray()[counter+1];
+                                                            timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, (Subject) mapEntry.getKey()));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            counter++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    }
                 }
             }
         }

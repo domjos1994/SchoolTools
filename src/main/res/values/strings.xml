@@ -28,6 +28,7 @@
     <string name="main_menu_close">Beenden</string>
 
     <string name="main_today">Heute</string>
+    <string name="main_today_timetable">Aktuelle Fächer</string>
     <string name="main_top5Notes">Top 5 Notizen</string>
     <string name="main_importantToDos">5 Wichtigste ToDos</string>
     <string name="main_savedTimeTables">Gespeicherte Stundenpläne</string>
@@ -96,7 +97,7 @@
     <string name="mark_test">Arbeit</string>
 
     <string name="settings_general">Allgemein</string>
-    <string name="settings_general_notifications">Notifikationen anzeigen</string>
+    <string name="settings_general_notifications">ist Aktueller Stundenplan</string>
     <string name="settings_general_deleteMemories_title">Erinnerungen löschen</string>
     <string name="settings_general_deleteMemories_summary">Erinnerungen löschen, nachdem sie abgelaufen sind</string>
     <string name="settings_general_reset_database_title">Datenbank zurücksetzen</string>
@@ -106,6 +107,7 @@
     <string name="settings_start_start_summary">Wählen Sie die Widgets aus, welche auf der Startseite angezeigt werden.</string>
     <string-array name="settings_start_start_entries">
         <item>@string/main_today</item>
+        <item>@string/main_today_timetable</item>
         <item>@string/main_top5Notes</item>
         <item>@string/main_importantToDos</item>
         <item>@string/main_savedTimeTables</item>

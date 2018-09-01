@@ -24,7 +24,7 @@ public class TimeTable {
     private SchoolClass schoolClass;
     private Day[] days;
     private Year year;
-    private boolean showNotifications;
+    private boolean currentTimeTable;
 
     public TimeTable() {
         this.ID = 0;
@@ -33,7 +33,7 @@ public class TimeTable {
         this.schoolClass = null;
         this.description = "";
         this.days = new Day[7];
-        this.showNotifications = false;
+        this.currentTimeTable = false;
     }
 
     public int getID() {
@@ -90,12 +90,12 @@ public class TimeTable {
         }
     }
 
-    public boolean isShowNotifications() {
-        return this.showNotifications;
+    public boolean isCurrentTimeTable() {
+        return this.currentTimeTable;
     }
 
-    public void setShowNotifications(boolean showNotifications) {
-        this.showNotifications = showNotifications;
+    public void setCurrentTimeTable(boolean currentTimeTable) {
+        this.currentTimeTable = currentTimeTable;
     }
 
     @Override

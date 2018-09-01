@@ -314,7 +314,7 @@
                 <TableRow
                     android:weightSum="1">
                     <CheckBox
-                        android:id="@+id/chkTimeTableShowNotifications"
+                        android:id="@+id/chkTimeTableCurrent"
                         android:text="@string/settings_general_notifications"
                         android:layout_weight="1"
                         android:layout_width="match_parent"/>
