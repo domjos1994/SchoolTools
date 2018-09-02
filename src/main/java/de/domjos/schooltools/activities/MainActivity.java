@@ -13,6 +13,8 @@ import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -69,6 +71,7 @@ import de.domjos.schooltools.settings.GeneralSettings;
 import de.domjos.schooltools.settings.Globals;
 import de.domjos.schooltools.settings.MarkListSettings;
 import de.domjos.schooltools.settings.UserSettings;
+import de.domjos.schooltools.widgets.TimeTableWidget;
 
 /**
  * Activity For the Main-Screen
@@ -275,6 +278,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.cmdRefresh.callOnClick();
             this.hideButtons();
             this.hideMenuItems();
+            this.initCurrentTimeTableEvent();
             this.openStartModule();
             this.hideWidgets();
         }

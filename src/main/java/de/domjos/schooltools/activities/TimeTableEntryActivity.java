@@ -142,7 +142,11 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                                         if(!spl[1].trim().equals("0")) {
                                                             teacher = MainActivity.globals.getSqLite().getTeachers("ID=" + spl[1].trim()).get(0);
                                                         }
-                                                        day.addPupilHour(hour, subject, teacher, rows[1].trim());
+                                                        if(rows.length==2) {
+                                                            day.addPupilHour(hour, subject, teacher, rows[1].trim());
+                                                        } else {
+                                                            day.addPupilHour(hour, subject, teacher, "");
+                                                        }
                                                     }
                                                 } else {
                                                     if(txtCurrent.getTag().toString().contains(" - ")) {
@@ -153,7 +157,12 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                                         if(!spl[1].trim().equals("0")) {
                                                             schoolClass = MainActivity.globals.getSqLite().getClasses("ID=" + spl[1].trim()).get(0);
                                                         }
-                                                        day.addTeacherHour(hour, subject, schoolClass, rows[1].trim());
+                                                        if(rows.length==2) {
+                                                            day.addTeacherHour(hour, subject, schoolClass, rows[1].trim());
+                                                        } else {
+                                                            day.addTeacherHour(hour, subject, schoolClass, "");
+                                                        }
+
                                                     }
                                                 }
                                             }

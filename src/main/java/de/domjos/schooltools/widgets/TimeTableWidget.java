@@ -51,9 +51,13 @@ public class TimeTableWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
+        if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)) {
+            int[] ids = intent.getExtras().getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+            this.onUpdate(context, AppWidgetManager.getInstance(context), ids);
+        } else super.onReceive(context, intent);
     }
 }
 

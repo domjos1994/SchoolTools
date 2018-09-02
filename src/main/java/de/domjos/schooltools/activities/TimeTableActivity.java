@@ -9,8 +9,12 @@
 
 package de.domjos.schooltools.activities;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -22,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +35,8 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.TimeTableAdapter;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;
+import de.domjos.schooltools.services.TimeTableWidgetService;
+import de.domjos.schooltools.widgets.TimeTableWidget;
 
 /**
  * Activity For the TimeTable-Screen
@@ -135,12 +142,24 @@ public class TimeTableActivity extends AppCompatActivity {
         try {
             if(resultCode==RESULT_OK) {
                 if(requestCode==99) {
-                    reloadTimeTables();
+                    this.reloadTimeTables();
+                    this.updateAppWidgets();
                 }
             }
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);
         }
+    }
+
+
+    private void updateAppWidgets() {
+        Context context = this;
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context, TimeTableWidget.class));
+        Intent updateIntent = new Intent();
+        //updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        context.sendBroadcast(updateIntent);
     }
 
     private void initControls() {
