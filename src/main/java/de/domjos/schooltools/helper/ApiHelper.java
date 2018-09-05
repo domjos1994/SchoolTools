@@ -581,12 +581,13 @@ public class ApiHelper {
                         if(objArray.length<tmp+1) {
                             break;
                         }
-                        if(objArray[tmp] instanceof Map.Entry) {
+                        if(objArray[tmp] instanceof TeacherHour) {
                             for(Map.Entry<Hour, TeacherHour> entry : day.getTeacherHour().entrySet()) {
                                 if(entry.getKey().getID()==hour.getID()) {
                                     Subject subject = entry.getValue().getSubject();
+                                    String roomNumber = entry.getValue().getRoomNumber();
                                     if (tblCells.get(row).get(0).getValue() != BaseColor.GRAY) {
-                                        tblCells.get(row).set(column + 1, new AbstractMap.SimpleEntry<>(subject.getAlias(), new BaseColor(Integer.parseInt(subject.getBackgroundColor()))));
+                                        tblCells.get(row).set(column + 1, new AbstractMap.SimpleEntry<>(subject.getAlias() + "\n" + roomNumber, new BaseColor(Integer.parseInt(subject.getBackgroundColor()))));
                                         tmp++;
                                     }
                                     break;
@@ -602,12 +603,13 @@ public class ApiHelper {
                         if(objArray.length<tmp+1) {
                             break;
                         }
-                        if(objArray[tmp] instanceof Map.Entry) {
+                        if(objArray[tmp] instanceof PupilHour) {
                             for(Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
                                 if(entry.getKey().getID()==hour.getID()) {
                                     Subject subject = entry.getValue().getSubject();
+                                    String roomNumber = entry.getValue().getRoomNumber();
                                     if (tblCells.get(row).get(0).getValue() != BaseColor.GRAY) {
-                                        tblCells.get(row).set(column + 1, new AbstractMap.SimpleEntry<>(subject.getAlias(), new BaseColor(Integer.parseInt(subject.getBackgroundColor()))));
+                                        tblCells.get(row).set(column + 1, new AbstractMap.SimpleEntry<>(subject.getAlias() + "\n" + roomNumber, new BaseColor(Integer.parseInt(subject.getBackgroundColor()))));
                                         tmp++;
                                     }
                                     break;
