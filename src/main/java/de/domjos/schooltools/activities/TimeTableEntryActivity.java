@@ -447,8 +447,26 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                         if(subjects!=null) {
                                             if(!subjects.isEmpty()) {
                                                 oldSubject = subjects.get(0);
+                                                if(mpSubjects.containsKey(oldSubject.getAlias())) {
+                                                    mpSubjects.put(oldSubject.getAlias(), mpSubjects.get(oldSubject.getAlias())-1);
+                                                }
                                                 String formatted = String.format("%s: %s", oldSubject.getID(), oldSubject.getTitle());
-                                                subjectAdapter.add(formatted);
+
+                                                boolean isAvailable = false;
+                                                for(int i = 0; i<=subjectAdapter.getCount()-1; i++) {
+                                                    String item = subjectAdapter.getItem(i);
+                                                    if(item!=null) {
+                                                        if (item.equals(formatted)) {
+                                                            spSubjects.setSelection(i);
+                                                            isAvailable = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                                if(!isAvailable) {
+                                                    subjectAdapter.add(formatted);
+                                                }
                                             }
                                         }
 
