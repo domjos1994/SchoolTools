@@ -40,6 +40,7 @@ import de.domjos.schooltools.core.model.timetable.SchoolClass;
 import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.timetable.Teacher;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
+import de.domjos.schooltools.settings.GeneralSettings;
 import de.domjos.schooltools.settings.MarkListSettings;
 
 /**
@@ -54,7 +55,12 @@ public class SQLite extends SQLiteOpenHelper {
 
     public SQLite(Context context, String name, int version) {
         super(context, name, null, version);
+        new GeneralSettings(context).setDatabaseVersion(version);
         this.context = context;
+    }
+
+    public SQLite(Context context) {
+        super(context, "schoolTools.db", null, new GeneralSettings(context).getDatabaseVersion());
     }
 
     @Override
@@ -75,7 +81,14 @@ public class SQLite extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
+            this.onCreate(db);
             db.setVersion(newVersion);
+
+            // add roomNumber
+            if(!this.columnExists(db, "timeTable", "roomNumber")) {
+                db.execSQL("ALTER TABLE timeTable ADD COLUMN roomNumber VARCHAR(255) DEFAULT ''");
+            }
+
             String initContent = Helper.readFileFromRaw(this.context, R.raw.update);
             String tables[] = initContent.split(";");
             for(String query : tables) {
@@ -86,6 +99,19 @@ public class SQLite extends SQLiteOpenHelper {
         } catch (Exception ex) {
             Helper.printException(this.context, ex);
         }
+    }
+
+    private boolean columnExists(SQLiteDatabase db, String table, String column) {
+        boolean exists = false;
+        Cursor cursor = db.rawQuery("PRAGMA table_info('" + table + "')", null);
+        while (cursor.moveToNext()) {
+            if(cursor.getString(1).equals(column)) {
+                exists = true;
+                break;
+            }
+        }
+        cursor.close();
+        return exists;
     }
 
     public void deleteEntry(String table, String column, int id, String where) {

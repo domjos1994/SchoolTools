@@ -13,6 +13,7 @@ package de.domjos.schooltools.settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 
 public class GeneralSettings {
     private final static String INTERNAL_VERSION = "internalVersion";
@@ -46,6 +47,17 @@ public class GeneralSettings {
 
     public String getCurrentInternalPhase() {
         return this.preferences.getString(GeneralSettings.INTERNAL_PHASE, "");
+    }
+
+    public int getCurrentVersionCode(Context context) {
+        int version;
+        try {
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            version = pInfo.versionCode;
+        } catch (Exception ex) {
+            version = 1;
+        }
+        return version;
     }
 
     public void setAcceptMarkListMessage(boolean accepted) {

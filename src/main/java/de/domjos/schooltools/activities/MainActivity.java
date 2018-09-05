@@ -13,12 +13,11 @@ import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -41,6 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import java.util.*;
 
@@ -71,7 +71,6 @@ import de.domjos.schooltools.settings.GeneralSettings;
 import de.domjos.schooltools.settings.Globals;
 import de.domjos.schooltools.settings.MarkListSettings;
 import de.domjos.schooltools.settings.UserSettings;
-import de.domjos.schooltools.widgets.TimeTableWidget;
 
 /**
  * Activity For the Main-Screen
@@ -488,7 +487,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initDatabase() {
-        SQLite sqLite = new SQLite(this.getApplicationContext(), "schoolTools.db", 1);
+        SQLite sqLite = new SQLite(this.getApplicationContext(), "schoolTools.db", MainActivity.globals.getGeneralSettings().getCurrentVersionCode(MainActivity.this));
         MainActivity.globals.setSqLite(sqLite);
     }
 
@@ -684,7 +683,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void initSavedTimeTables() {
-        TimeTableEntryActivity.initTimes(this.grdSavedTimeTables);
+        MainActivity.initTimes(this.grdSavedTimeTables);
         List<TimeTable> timeTables = MainActivity.globals.getSqLite().getTimeTables("");
         this.savedTimeTablesAdapter.add(new TimeTable().toString());
         for(TimeTable timeTable : timeTables) {
@@ -710,6 +709,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+    }
+
+    public static void initTimes(TableLayout grid) {
+        Map<Double, Hour> times = new TreeMap<>();
+        List<Hour> hours = MainActivity.globals.getSqLite().getHours("");
+        for(Hour hour : hours) {
+            times.put(Double.parseDouble(hour.getStart().replace(":", ".")), hour);
+        }
+
+        List hourList = Arrays.asList(times.values().toArray());
+        int max = hourList.size()-1;
+        for(int i = 1; i<=grid.getChildCount()-1; i++) {
+            TableRow row = (TableRow) grid.getChildAt(i);
+            TextView textView = (TextView) row.getChildAt(0);
+            if((i-1)<=max) {
+                Hour hour = (Hour) hourList.get(i-1);
+                textView.setText(String.format("%s%n%s", hour.getStart(), hour.getEnd()));
+                textView.setTag(String.valueOf(hour.getID()));
+
+                if(hour.isBreak()) {
+                    textView.setTextSize(14);
+                    textView.setText(textView.getText().toString().replace("\n", ":"));
+                    for(int j = 1; j<=row.getChildCount()-1; j++) {
+                        row.getChildAt(j).setBackgroundColor(Color.TRANSPARENT);
+                        row.setBackgroundResource(R.drawable.tbl_border);
+                    }
+                }
+            } else {
+                grid.getChildAt(i).setVisibility(View.GONE);
+            }
+        }
     }
 
     private void hideButton(String content, int id, TableRow row) {

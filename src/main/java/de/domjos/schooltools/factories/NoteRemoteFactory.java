@@ -9,9 +9,7 @@
 
 package de.domjos.schooltools.factories;
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -19,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.Note;
 import de.domjos.schooltools.helper.SQLite;
 
@@ -34,7 +33,7 @@ public class NoteRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
     public NoteRemoteFactory(Context context) {
         this.notes = new LinkedList<>();
         this.context =  context;
-        this.sqLite = new SQLite(this.context, "schoolTools.db", 1);
+        this.sqLite = new SQLite(this.context);
     }
 
     @Override

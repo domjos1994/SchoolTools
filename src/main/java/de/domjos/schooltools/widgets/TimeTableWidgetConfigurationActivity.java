@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
@@ -78,7 +79,7 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
     }
 
     private void reloadTimeTables() {
-        this.sqLite = new SQLite(this.getApplicationContext(), "schoolTools.db", 1);
+        this.sqLite = new SQLite(this.getApplicationContext());
         for(TimeTable timeTable : sqLite.getTimeTables("")) {
             this.timeTableAdapter.add(timeTable.getTitle());
         }

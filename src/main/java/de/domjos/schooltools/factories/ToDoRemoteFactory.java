@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.helper.SQLite;
 
@@ -32,7 +33,7 @@ public class ToDoRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
     public ToDoRemoteFactory(Context context) {
         this.toDos = new LinkedList<>();
         this.context =  context;
-        this.sqLite = new SQLite(this.context, "schoolTools.db", 1);
+        this.sqLite = new SQLite(this.context);
     }
 
     @Override

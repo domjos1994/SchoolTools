@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
@@ -53,7 +54,7 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
     public TimeTableRemoteFactory(Context context, Intent intent) {
         this.context = context;
         this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-        this.sqLite = new SQLite(this.context, "schoolTools.db", 1);
+        this.sqLite = new SQLite(this.context);
         this.timeTableRow = new LinkedList<>();
     }
 
