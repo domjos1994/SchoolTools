@@ -53,8 +53,15 @@ public class Validator {
     }
 
     public void addEmptyValidator(final Spinner sp, final String title) {
-        states.put(sp.getId(), false);
-        Helper.createToast(this.context, String.format(this.context.getString(R.string.message_validation_empty), title));
+        if(sp.getSelectedItem()!=null) {
+            if(sp.getSelectedItem().toString().equals("")) {
+                states.put(sp.getId(), false);
+                Helper.createToast(this.context, String.format(this.context.getString(R.string.message_validation_empty), title));
+            } else {
+                states.put(sp.getId(), true);
+            }
+        }
+
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
