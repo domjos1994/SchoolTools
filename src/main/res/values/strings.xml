@@ -177,6 +177,7 @@
     <string name="timetable_class">Klasse</string>
     <string name="timetable_year">Jahr</string>
     <string name="timetable_hour">Std</string>
+    <string name="timetable_roomNumber">Raum-Nummer</string>
 
     <string name="timetable_days_mon">Mo</string>
     <string name="timetable_days_tue">Di</string>
