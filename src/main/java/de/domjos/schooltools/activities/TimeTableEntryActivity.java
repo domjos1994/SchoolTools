@@ -17,8 +17,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,8 +59,6 @@ public class TimeTableEntryActivity extends AppCompatActivity {
     private TimeTable currentItem = null;
     private ScrollView svControls;
 
-    private ArrayAdapter<String> classAdapter;
-
     private Validator validator;
     private Map<String, Integer> mpSubjects;
 
@@ -72,7 +68,6 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         setContentView(R.layout.timetable_entry_activity);
         this.mpSubjects = new LinkedHashMap<>();
         this.initControls();
-        this.reloadClasses();
         this.initGrid();
         Helper.closeSoftKeyboard(TimeTableEntryActivity.this);
     }
@@ -108,7 +103,11 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                         SchoolClass schoolClass = new SchoolClass();
                                         schoolClass.setTitle(spTimeTableClass.getSelectedItem().toString());
                                         currentItem.setSchoolClass(schoolClass);
+                                    } else {
+                                        currentItem.setSchoolClass(null);
                                     }
+                                } else {
+                                    currentItem.setSchoolClass(null);
                                 }
                                 if(spTimeTableYear.getSelectedItem()!=null) {
                                     if(!spTimeTableYear.getSelectedItem().toString().equals("")) {
@@ -118,7 +117,11 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                                 currentItem.setYear(years.get(0));
                                             }
                                         }
+                                    } else {
+                                        currentItem.setYear(null);
                                     }
+                                } else {
+                                    currentItem.setYear(null);
                                 }
 
                                 for(int i = 0; i<=6; i++) {
@@ -202,10 +205,16 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         this.gridContent = this.findViewById(R.id.gridContent);
         this.txtTimeTableTitle = this.findViewById(R.id.txtTimeTableTitle);
         this.chkTimeTableCurrent = this.findViewById(R.id.chkTimeTableCurrent);
+
         this.spTimeTableClass = this.findViewById(R.id.spTimeTableClass);
-        this.classAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
-        this.spTimeTableClass.setAdapter(this.classAdapter);
-        this.classAdapter.notifyDataSetChanged();
+        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.spTimeTableClass.setAdapter(classAdapter);
+        classAdapter.notifyDataSetChanged();
+        classAdapter.add("");
+        for(SchoolClass schoolClass : MainActivity.globals.getSqLite().getClasses("")) {
+            classAdapter.add(schoolClass.getTitle());
+        }
+
         this.spTimeTableYear = this.findViewById(R.id.spTimeTableYear);
         ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.spTimeTableYear.setAdapter(yearAdapter);
@@ -236,7 +245,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                 this.spTimeTableYear.setSelection(yearAdapter.getPosition(this.currentItem.getYear().getTitle()));
             }
             if (this.currentItem.getSchoolClass() != null) {
-                this.spTimeTableClass.setSelection(this.classAdapter.getPosition(this.currentItem.getSchoolClass().getTitle()));
+                this.spTimeTableClass.setSelection(classAdapter.getPosition(this.currentItem.getSchoolClass().getTitle()));
             }
             this.txtTimeTableDescription.setText(this.currentItem.getDescription());
             this.chkTimeTableCurrent.setChecked(this.currentItem.isCurrentTimeTable());
@@ -540,13 +549,6 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                     }
                 }
             }
-        }
-    }
-
-    private void reloadClasses() {
-        this.classAdapter.clear();
-        for(SchoolClass schoolClass : MainActivity.globals.getSqLite().getClasses("")) {
-            this.classAdapter.add(schoolClass.getTitle());
         }
     }
 
