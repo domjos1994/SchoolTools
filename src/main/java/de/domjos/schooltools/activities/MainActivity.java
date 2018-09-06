@@ -55,9 +55,13 @@ import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.TimerEvent;
 import de.domjos.schooltools.core.model.mark.SchoolYear;
 import de.domjos.schooltools.core.model.mark.Test;
+import de.domjos.schooltools.core.model.mark.Year;
+import de.domjos.schooltools.core.model.marklist.MarkList;
 import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
 import de.domjos.schooltools.core.model.timetable.PupilHour;
+import de.domjos.schooltools.core.model.timetable.SchoolClass;
+import de.domjos.schooltools.core.model.timetable.Teacher;
 import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.core.model.todo.ToDo;
@@ -616,11 +620,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         for(SchoolYear schoolYear : MainActivity.globals.getSqLite().getSchoolYears("")) {
-            if(schoolYear.getSubject()!=null) {
-                if(schoolYear.getSubject().getTitle().toLowerCase().contains(search.toLowerCase())) {
-                    this.searchAdapter.add(new SearchItem(schoolYear.getSubject().getID(), schoolYear.getSubject().getTitle(), this.getString(R.string.timetable_lesson)));
-                }
-            }
             for(Test test : schoolYear.getTests()) {
                 if(test.getTitle().toLowerCase().contains(search.toLowerCase())) {
                     this.searchAdapter.add(new SearchItem(test.getID(), test.getTitle(), this.getString(R.string.mark_test)));
@@ -650,6 +649,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.searchAdapter.add(searchItem);
         }
 
+
+        for(Subject subject : MainActivity.globals.getSqLite().getSubjects("title like '%" + search + "'")) {
+            this.searchAdapter.add(new SearchItem(subject.getID(), subject.getTitle(), this.getString(R.string.timetable_lesson)));
+        }
+
+        for(Teacher teacher : MainActivity.globals.getSqLite().getTeachers("lastName like '%" + search + "'")) {
+            this.searchAdapter.add(new SearchItem(teacher.getID(), teacher.getLastName(), this.getString(R.string.timetable_teacher)));
+        }
+
+        for(SchoolClass schoolClass : MainActivity.globals.getSqLite().getClasses("title like '%" + search + "'")) {
+            this.searchAdapter.add(new SearchItem(schoolClass.getID(), schoolClass.getTitle(), this.getString(R.string.timetable_class)));
+        }
+
+        for(Year year : MainActivity.globals.getSqLite().getYears("title like '%" + search + "'")) {
+            this.searchAdapter.add(new SearchItem(year.getID(), year.getTitle(), this.getString(R.string.mark_year)));
+        }
 
 
         if(this.searchAdapter.isEmpty()) {

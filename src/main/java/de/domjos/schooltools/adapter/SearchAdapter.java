@@ -26,8 +26,12 @@ import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.activities.MarkActivity;
 import de.domjos.schooltools.activities.MarkEntryActivity;
 import de.domjos.schooltools.activities.MarkListActivity;
+import de.domjos.schooltools.activities.MarkYearActivity;
 import de.domjos.schooltools.activities.NoteActivity;
+import de.domjos.schooltools.activities.TimeTableClassActivity;
 import de.domjos.schooltools.activities.TimeTableEntryActivity;
+import de.domjos.schooltools.activities.TimeTableSubjectActivity;
+import de.domjos.schooltools.activities.TimeTableTeacherActivity;
 import de.domjos.schooltools.activities.TimerEntryActivity;
 import de.domjos.schooltools.activities.ToDoEntryActivity;
 import de.domjos.schooltools.activities.ToDoListActivity;
@@ -119,6 +123,22 @@ public class SearchAdapter extends ArrayAdapter<SearchItem> {
                         if(entry.getType().equals(context.getString(R.string.main_nav_timer))) {
                             intent = new Intent(context, TimerEntryActivity.class);
                             intent.putExtra("date", entry.getExtra());
+                        }
+
+                        if(entry.getType().equals(context.getString(R.string.timetable_lesson))) {
+                            intent = new Intent(context, TimeTableSubjectActivity.class);
+                        }
+
+                        if(entry.getType().equals(context.getString(R.string.timetable_class))) {
+                            intent = new Intent(context, TimeTableClassActivity.class);
+                        }
+
+                        if(entry.getType().equals(context.getString(R.string.timetable_teacher))) {
+                            intent = new Intent(context, TimeTableTeacherActivity.class);
+                        }
+
+                        if(entry.getType().equals(context.getString(R.string.mark_year))) {
+                            intent = new Intent(context, MarkYearActivity.class);
                         }
 
                         if(intent!=null) {
