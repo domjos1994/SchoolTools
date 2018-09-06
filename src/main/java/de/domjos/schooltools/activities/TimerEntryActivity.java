@@ -223,17 +223,17 @@ public class TimerEntryActivity extends AppCompatActivity {
             this.txtTimerMemoryDate.setVisibility(View.GONE);
 
             this.spTimerSubject = this.findViewById(R.id.spTimerSubject);
-            this.subjectAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+            this.subjectAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
             this.spTimerSubject.setAdapter(this.subjectAdapter);
             this.subjectAdapter.notifyDataSetChanged();
 
             this.spTimerTeacher = this.findViewById(R.id.spTimerTeacher);
-            this.teacherAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+            this.teacherAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
             this.spTimerTeacher.setAdapter(this.teacherAdapter);
             this.teacherAdapter.notifyDataSetChanged();
 
             this.spTimerClass = this.findViewById(R.id.spTimerClass);
-            this.classAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+            this.classAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
             this.spTimerClass.setAdapter(this.classAdapter);
             this.classAdapter.notifyDataSetChanged();
         } catch (Exception ex) {

@@ -179,7 +179,7 @@ public class TimeTableHourActivity extends AppCompatActivity {
         this.tpHoursEnd = this.findViewById(R.id.tpHoursEnd);
         this.chkHoursBreak = this.findViewById(R.id.chkHoursBreak);
 
-        this.hourAdapter = new HourAdapter(this.getApplicationContext(), R.layout.timetable_hour_item, new ArrayList<Hour>());
+        this.hourAdapter = new HourAdapter(TimeTableHourActivity.this, R.layout.timetable_hour_item, new ArrayList<Hour>());
         this.lvHours.setAdapter(this.hourAdapter);
         this.hourAdapter.notifyDataSetChanged();
 

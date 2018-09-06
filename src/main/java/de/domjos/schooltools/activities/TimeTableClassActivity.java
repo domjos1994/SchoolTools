@@ -147,7 +147,7 @@ public class TimeTableClassActivity extends AppCompatActivity {
         this.txtSchoolClassName = this.findViewById(R.id.txtSchoolClassName);
         this.txtSchoolClassNumberOfPupil = this.findViewById(R.id.txtSchoolClassNumberOfPupil);
         this.txtSchoolClassDescription = this.findViewById(R.id.txtSchoolClassDescription);
-        this.classAdapter = new ClassAdapter(this.getApplicationContext(), R.layout.timetable_class_item, new ArrayList<SchoolClass>());
+        this.classAdapter = new ClassAdapter(TimeTableClassActivity.this, R.layout.timetable_class_item, new ArrayList<SchoolClass>());
         this.lvSchoolClass = this.findViewById(R.id.lvSchoolClass);
         this.lvSchoolClass.setAdapter(this.classAdapter);
         this.classAdapter.notifyDataSetChanged();

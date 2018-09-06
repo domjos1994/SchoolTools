@@ -151,27 +151,29 @@
                         android:checked="true"
                         android:layout_weight="5"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"/>
                     <RadioButton
                         android:id="@+id/rbMarkListSimpleQuarterMarks"
                         android:text="@string/marklist_mark_quarter"
                         android:layout_weight="5"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"/>
                 </RadioGroup>
                 <TableRow  android:weightSum="10">
-                    <CheckBox
-                        android:id="@+id/chkMarkListSimpleHalfPoints"
-                        android:text="@string/marklist_points_half"
-                        android:layout_weight="5"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent" />
-                    <CheckBox
-                        android:id="@+id/chkMarkListSimpleDictatMode"
-                        android:text="@string/marklist_dictatMode"
-                        android:layout_weight="5"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent" />
+                    <LinearLayout
+                        android:weightSum="10"
+                        android:orientation="horizontal">
+                        <CheckBox
+                            android:id="@+id/chkMarkListSimpleHalfPoints"
+                            android:text="@string/marklist_points_half"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"/>
+                        <CheckBox
+                            android:id="@+id/chkMarkListSimpleDictatMode"
+                            android:text="@string/marklist_dictatMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"/>
+                    </LinearLayout>
                 </TableRow>
             </TableLayout>
 
@@ -263,7 +265,7 @@
                         android:layout_weight="4"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:gravity="center"/>
+                        android:gravity="center|center_horizontal"/>
                     <EditText
                         android:id="@+id/txtMarkListWithCreaseBestMarkAt"
                         android:hint="@string/marklist_points"

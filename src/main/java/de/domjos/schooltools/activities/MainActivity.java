@@ -420,51 +420,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         this.llToday = this.findViewById(R.id.llToday);
         ListView lvEvents = this.findViewById(R.id.lvEvents);
-        this.eventAdapter = new EventAdapter(this.getApplicationContext(), R.layout.main_today_event, new ArrayList<Map.Entry<String, String>>());
+        this.eventAdapter = new EventAdapter(MainActivity.this, R.layout.main_today_event, new ArrayList<Map.Entry<String, String>>());
         lvEvents.setAdapter(this.eventAdapter);
         this.eventAdapter.notifyDataSetChanged();
 
         this.llTodayCurrentTimeTable = this.findViewById(R.id.llTodayCurrentTimeTable);
         ListView lvTodayCurrentTimeTable = this.findViewById(R.id.lvTodayCurrentTimeTableEvents);
-        this.timeTableEventAdapter = new SubjectHourAdapter(this.getApplicationContext(), R.layout.timetable_subject_item, new ArrayList<Map.Entry<Hour, Subject>>());
+        this.timeTableEventAdapter = new SubjectHourAdapter(MainActivity.this, R.layout.timetable_subject_item, new ArrayList<Map.Entry<Hour, Subject>>());
         lvTodayCurrentTimeTable.setAdapter(this.timeTableEventAdapter);
         this.timeTableEventAdapter.notifyDataSetChanged();
 
         this.llCurrentNotes = this.findViewById(R.id.llCurrentNotes);
         this.lvCurrentNotes = this.findViewById(R.id.lvNotes);
-        this.noteAdapter = new NoteAdapter(this.getApplicationContext(), R.layout.note_item, new ArrayList<Note>());
+        this.noteAdapter = new NoteAdapter(MainActivity.this, R.layout.note_item, new ArrayList<Note>());
         this.lvCurrentNotes.setAdapter(this.noteAdapter);
         this.noteAdapter.notifyDataSetChanged();
 
         this.llImportantToDos = this.findViewById(R.id.llImportantToDos);
         ListView lvImportantToDos = this.findViewById(R.id.lvImportantToDos);
-        this.toDoAdapter = new ToDoAdapter(this.getApplicationContext(), R.layout.todo_item, new ArrayList<ToDo>());
+        this.toDoAdapter = new ToDoAdapter(MainActivity.this, R.layout.todo_item, new ArrayList<ToDo>());
         lvImportantToDos.setAdapter(this.toDoAdapter);
         this.toDoAdapter.notifyDataSetChanged();
 
         this.llSavedMarkList = this.findViewById(R.id.llSavedMarklist);
 
         this.cmbSavedMarkList = this.findViewById(R.id.cmbSavedMarklist);
-        this.savedMarkListAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.savedMarkListAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.cmbSavedMarkList.setAdapter(this.savedMarkListAdapter);
         this.savedMarkListAdapter.notifyDataSetChanged();
 
         this.llSavedTimeTables = this.findViewById(R.id.llSavedTimeTables);
 
         this.cmbSavedTimeTables = this.findViewById(R.id.cmbSavedTimeTables);
-        this.savedTimeTablesAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.savedTimeTablesAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.cmbSavedTimeTables.setAdapter(this.savedTimeTablesAdapter);
         this.savedTimeTablesAdapter.notifyDataSetChanged();
         this.grdSavedTimeTables = this.findViewById(R.id.grdSavedTimeTables);
 
 
         this.lvSearchResults = this.findViewById(R.id.lvSearchResults);
-        this.searchAdapter = new SearchAdapter(this.getApplicationContext());
+        this.searchAdapter = new SearchAdapter(MainActivity.this);
         this.lvSearchResults.setAdapter(this.searchAdapter);
         this.searchAdapter.notifyDataSetChanged();
 
         ListView lvMarkList = this.findViewById(R.id.lvMarklist);
-        this.markListAdapter = new MarkListAdapter(this.getApplicationContext(), R.layout.marklist_item, new ArrayList<Map.Entry<Double, Double>>());
+        this.markListAdapter = new MarkListAdapter(MainActivity.this, R.layout.marklist_item, new ArrayList<Map.Entry<Double, Double>>());
         lvMarkList.setAdapter(this.markListAdapter);
         this.markListAdapter.notifyDataSetChanged();
 

@@ -187,12 +187,12 @@ public class ToDoActivity extends AppCompatActivity {
         // init other controls
         this.cmdToDoAdd = this.findViewById(R.id.cmdToDoAdd);
         this.spToDoList = this.findViewById(R.id.spToDoList);
-        this.toDoListAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.toDoListAdapter = new ArrayAdapter<>(ToDoActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.spToDoList.setAdapter(this.toDoListAdapter);
         this.toDoListAdapter.notifyDataSetChanged();
 
         this.lvToDos = this.findViewById(R.id.lvToDos);
-        this.toDoAdapter = new ToDoAdapter(this.getApplicationContext(), R.layout.todo_item, new ArrayList<ToDo>());
+        this.toDoAdapter = new ToDoAdapter(ToDoActivity.this, R.layout.todo_item, new ArrayList<ToDo>());
         this.lvToDos.setAdapter(this.toDoAdapter);
         this.toDoAdapter.notifyDataSetChanged();
     }

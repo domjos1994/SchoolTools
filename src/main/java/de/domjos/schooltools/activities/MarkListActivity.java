@@ -526,7 +526,7 @@ public class MarkListActivity extends AppCompatActivity {
 
         // init mark-list
         this.lvMarkList = this.findViewById(R.id.lvMarkList);
-        this.markListAdapter = new MarkListAdapter(this.getApplicationContext(), R.layout.marklist_item, new ArrayList<Map.Entry<Double, Double>>());
+        this.markListAdapter = new MarkListAdapter(MarkListActivity.this, R.layout.marklist_item, new ArrayList<Map.Entry<Double, Double>>());
         lvMarkList.setAdapter(this.markListAdapter);
         this.markListAdapter.notifyDataSetChanged();
 

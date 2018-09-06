@@ -218,7 +218,7 @@ public class TimerActivity extends AppCompatActivity {
         this.ivTimerPrevious = this.findViewById(R.id.ivTimerPrevious);
         this.ivTimerNext = this.findViewById(R.id.ivTimerNext);
         this.lvTimerEvents = this.findViewById(R.id.lvTimerEvents);
-        this.adapter = new TimerAdapter(this.getApplicationContext(), R.layout.timer_item, new ArrayList<TimerEvent>());
+        this.adapter = new TimerAdapter(TimerActivity.this, R.layout.timer_item, new ArrayList<TimerEvent>());
         this.lvTimerEvents.setAdapter(this.adapter);
         this.adapter.notifyDataSetChanged();
         this.cmdTimerEventAdd = this.findViewById(R.id.cmdTimerEventAdd);

@@ -240,7 +240,7 @@ public class NoteActivity extends AppCompatActivity {
         this.txtNoteMemoryDate.setVisibility(View.GONE);
 
         this.lvNotes = this.findViewById(R.id.lvNotes);
-        this.noteAdapter = new NoteAdapter(this.getApplicationContext(), R.layout.note_item, new ArrayList<Note>());
+        this.noteAdapter = new NoteAdapter(NoteActivity.this, R.layout.note_item, new ArrayList<Note>());
         this.lvNotes.setAdapter(this.noteAdapter);
         this.noteAdapter.notifyDataSetChanged();
     }

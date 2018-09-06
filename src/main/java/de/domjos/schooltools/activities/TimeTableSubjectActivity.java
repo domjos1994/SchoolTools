@@ -290,7 +290,7 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
         this.spSubjectTeachers.setAdapter(this.adapter);
         this.adapter.notifyDataSetChanged();
 
-        this.subjectAdapter = new SubjectAdapter(this.getApplicationContext(), R.layout.timetable_subject_item, new ArrayList<Subject>());
+        this.subjectAdapter = new SubjectAdapter(TimeTableSubjectActivity.this, R.layout.timetable_subject_item, new ArrayList<Subject>());
         this.lvSubjects.setAdapter(this.subjectAdapter);
         this.subjectAdapter.notifyDataSetChanged();
 

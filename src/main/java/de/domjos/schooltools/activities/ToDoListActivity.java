@@ -199,7 +199,7 @@ public class ToDoListActivity extends AppCompatActivity {
 
         // init other controls
         this.lvToDoLists = this.findViewById(R.id.lvToDoLists);
-        this.toDoListsAdapter = new ToDoListsAdapter(this.getApplicationContext(), R.layout.todo_list_item, new ArrayList<ToDoList>());
+        this.toDoListsAdapter = new ToDoListsAdapter(ToDoListActivity.this, R.layout.todo_list_item, new ArrayList<ToDoList>());
         this.lvToDoLists.setAdapter(this.toDoListsAdapter);
         this.toDoListsAdapter.notifyDataSetChanged();
 

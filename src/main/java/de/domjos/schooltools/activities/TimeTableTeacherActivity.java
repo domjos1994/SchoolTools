@@ -153,7 +153,7 @@ public class TimeTableTeacherActivity extends AppCompatActivity {
         this.txtTeacherFirstName = this.findViewById(R.id.txtTeacherFirstName);
         this.txtTeacherLastName = this.findViewById(R.id.txtTeacherLastName);
         this.txtTeacherDescription = this.findViewById(R.id.txtTeacherDescription);
-        this.teacherAdapter = new TeacherAdapter(this.getApplicationContext(), R.layout.timetable_teacher_item, new ArrayList<Teacher>());
+        this.teacherAdapter = new TeacherAdapter(TimeTableTeacherActivity.this, R.layout.timetable_teacher_item, new ArrayList<Teacher>());
         this.lvTeachers = this.findViewById(R.id.lvTeacher);
         this.lvTeachers.setAdapter(this.teacherAdapter);
         this.teacherAdapter.notifyDataSetChanged();

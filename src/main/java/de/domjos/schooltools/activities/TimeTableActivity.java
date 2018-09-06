@@ -200,7 +200,7 @@ public class TimeTableActivity extends AppCompatActivity {
             // init other controls
             this.cmdTimeTableAdd = this.findViewById(R.id.cmdTimeTableAdd);
 
-            this.timeTableAdapter = new TimeTableAdapter(this.getApplicationContext(), R.layout.timetable_item, new ArrayList<TimeTable>());
+            this.timeTableAdapter = new TimeTableAdapter(TimeTableActivity.this, R.layout.timetable_item, new ArrayList<TimeTable>());
             this.lvTimeTable = this.findViewById(R.id.lvTimeTable);
             this.lvTimeTable.setAdapter(this.timeTableAdapter);
             this.timeTableAdapter.notifyDataSetChanged();

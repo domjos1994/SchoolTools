@@ -173,7 +173,7 @@ public class MarkYearActivity extends AppCompatActivity {
         this.txtYearTitle = this.findViewById(R.id.txtYearTitle);
         this.txtYearDescription = this.findViewById(R.id.txtYearDescription);
         this.lvYear = this.findViewById(R.id.lvYear);
-        this.yearAdapter = new YearAdapter(this.getApplicationContext(), R.layout.mark_year_item, new ArrayList<Year>());
+        this.yearAdapter = new YearAdapter(MarkYearActivity.this, R.layout.mark_year_item, new ArrayList<Year>());
         this.lvYear.setAdapter(this.yearAdapter);
         this.yearAdapter.notifyDataSetChanged();
         this.controlFields(false, true, false);

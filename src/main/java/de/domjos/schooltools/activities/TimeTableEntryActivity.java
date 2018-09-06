@@ -207,7 +207,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         this.chkTimeTableCurrent = this.findViewById(R.id.chkTimeTableCurrent);
 
         this.spTimeTableClass = this.findViewById(R.id.spTimeTableClass);
-        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.spTimeTableClass.setAdapter(classAdapter);
         classAdapter.notifyDataSetChanged();
         classAdapter.add("");
@@ -216,7 +216,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         }
 
         this.spTimeTableYear = this.findViewById(R.id.spTimeTableYear);
-        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.spTimeTableYear.setAdapter(yearAdapter);
         yearAdapter.notifyDataSetChanged();
         yearAdapter.add("");
@@ -412,12 +412,12 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                     ImageButton cmdAdd = dialog.findViewById(R.id.cmdAdd);
 
                                     final Spinner spSubjects = dialog.findViewById(R.id.spSubject);
-                                    ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+                                    ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
                                     spSubjects.setAdapter(subjectAdapter);
                                     subjectAdapter.notifyDataSetChanged();
 
                                     final Spinner spOptional = dialog.findViewById(R.id.spTeacher);
-                                    ArrayAdapter<String> optionalAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+                                    ArrayAdapter<String> optionalAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
                                     spOptional.setAdapter(optionalAdapter);
                                     optionalAdapter.notifyDataSetChanged();
 

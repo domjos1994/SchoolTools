@@ -250,17 +250,17 @@ public class MarkActivity extends AppCompatActivity {
         this.lblMark = this.findViewById(R.id.lblMark);
 
         this.lvTest = this.findViewById(R.id.lvTest);
-        this.testAdapter = new TestAdapter(this.getApplicationContext(), R.layout.mark_item, new ArrayList<Test>());
+        this.testAdapter = new TestAdapter(MarkActivity.this, R.layout.mark_item, new ArrayList<Test>());
         this.lvTest.setAdapter(this.testAdapter);
         this.testAdapter.notifyDataSetChanged();
 
         this.spMarkSubject = this.findViewById(R.id.spMarkSubject);
-        this.subjectAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.subjectAdapter = new ArrayAdapter<>(MarkActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.spMarkSubject.setAdapter(this.subjectAdapter);
         this.subjectAdapter.notifyDataSetChanged();
 
         this.spMarkYear = this.findViewById(R.id.spMarkYear);
-        this.yearAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.yearAdapter = new ArrayAdapter<>(MarkActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.spMarkYear.setAdapter(this.yearAdapter);
         this.yearAdapter.notifyDataSetChanged();
     }
