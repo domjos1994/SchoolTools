@@ -158,7 +158,7 @@ public class NoteActivity extends AppCompatActivity {
         this.navigation.getMenu().getItem(1).setEnabled(!editMode && selected);
         this.navigation.getMenu().getItem(2).setEnabled(!editMode && selected);
         this.navigation.getMenu().getItem(3).setEnabled(editMode);
-        this.navigation.getMenu().getItem(4).setEnabled(!editMode);
+        this.navigation.getMenu().getItem(4).setEnabled(editMode);
 
         if(reset) {
             currentID = 0;
