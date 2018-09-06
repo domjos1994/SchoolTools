@@ -160,7 +160,7 @@ public class ApiActivity extends AppCompatActivity {
                 cmdApiPath.setEnabled(true);
                 cmdApiSave.setEnabled(true);
                 try {
-                    lblApiPath.setText(ApiHelper.findExistingFolder());
+                    lblApiPath.setText(ApiHelper.findExistingFolder(ApiActivity.this));
                 } catch (Error ex) {
                     Helper.printException(getApplicationContext(), ex);
                     File documentDir =new File(Environment.getExternalStorageDirectory() + String.valueOf(File.separatorChar) + "Documents");
@@ -191,7 +191,7 @@ public class ApiActivity extends AppCompatActivity {
                         File defaultDir = getApplicationContext().getFilesDir();
                         DialogProperties properties = new DialogProperties();
                         properties.selection_mode = DialogConfigs.SINGLE_MODE;
-                        properties.root = new File(new File(ApiHelper.findExistingFolder()).getParent());
+                        properties.root = new File(new File(ApiHelper.findExistingFolder(ApiActivity.this)).getParent());
                         properties.error_dir = defaultDir;
                         properties.offset = defaultDir;
 
@@ -217,7 +217,7 @@ public class ApiActivity extends AppCompatActivity {
                         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialogInterface) {
-                                lblApiPath.setText(ApiHelper.findExistingFolder());
+                                lblApiPath.setText(ApiHelper.findExistingFolder(ApiActivity.this));
                             }
                         });
 
@@ -416,7 +416,7 @@ public class ApiActivity extends AppCompatActivity {
         try {
             File emptyPDF = new File(path);
             if(!emptyPDF.exists()) {
-                if(!emptyPDF.createNewFile()) {
+                if (!emptyPDF.createNewFile()) {
                     return false;
                 }
             }
@@ -699,6 +699,9 @@ public class ApiActivity extends AppCompatActivity {
 
         this.cmdApiPath = this.findViewById(R.id.cmdApiPath);
         this.cmdApiPath.setEnabled(false);
+        if(!ApiHelper.isExternalStorageWritable()) {
+            this.cmdApiPath.setVisibility(View.GONE);
+        }
 
         this.cmdApiSave = this.findViewById(R.id.cmdApiSave);
         this.cmdApiSave.setEnabled(false);

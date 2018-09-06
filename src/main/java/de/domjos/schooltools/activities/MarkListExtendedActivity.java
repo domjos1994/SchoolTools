@@ -178,7 +178,7 @@ public class MarkListExtendedActivity extends AppCompatActivity {
                     DialogProperties properties = new DialogProperties();
                     properties.selection_mode = DialogConfigs.SINGLE_MODE;
                     properties.selection_type = DialogConfigs.DIR_SELECT;
-                    properties.root = new File(new File(ApiHelper.findExistingFolder()).getParent());
+                    properties.root = new File(new File(ApiHelper.findExistingFolder(MarkListExtendedActivity.this)).getParent());
                     properties.extensions = null;
                     properties.error_dir = defaultDir;
                     properties.offset = defaultDir;

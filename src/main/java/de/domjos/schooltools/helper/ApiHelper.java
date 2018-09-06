@@ -1501,7 +1501,7 @@ public class ApiHelper {
         return true;
     }
 
-    public static String findExistingFolder() {
+    public static String findExistingFolder(Context context) {
         File documentsFolder, downloadsFolder;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             documentsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
@@ -1509,22 +1509,36 @@ public class ApiHelper {
         } else {
             documentsFolder = new File(Environment.getExternalStorageDirectory() + "/Documents");
             downloadsFolder = new File(Environment.getExternalStorageDirectory() + "/Downloads");
+
         }
 
-        if(documentsFolder.exists() && documentsFolder.isDirectory()) {
-            return documentsFolder.getAbsolutePath();
-        } else if(documentsFolder.exists() && downloadsFolder.isDirectory()) {
-            return downloadsFolder.getAbsolutePath();
-        } else {
-            if(documentsFolder.mkdirs()) {
+        if(ApiHelper.isExternalStorageWritable()) {
+            if(documentsFolder.exists() && documentsFolder.isDirectory()) {
                 return documentsFolder.getAbsolutePath();
-            } else if(downloadsFolder.mkdirs()) {
+            } else if(downloadsFolder.exists() && downloadsFolder.isDirectory()) {
                 return downloadsFolder.getAbsolutePath();
             } else {
-                return documentsFolder.getAbsolutePath();
+                if(documentsFolder.mkdirs()) {
+                    return documentsFolder.getAbsolutePath();
+                } else if(downloadsFolder.mkdirs()) {
+                    return downloadsFolder.getAbsolutePath();
+                } else {
+                    return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
+                }
             }
+        } else {
+            return context.getFilesDir().getAbsolutePath();
         }
     }
+
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
 
     private void saveTimerEvent(TimerEvent timerEvent) {
         if(timerEvent!=null) {
