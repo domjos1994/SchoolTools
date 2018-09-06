@@ -10,6 +10,8 @@ package de.domjos.schooltools.helper;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -44,7 +46,9 @@ import java.util.GregorianCalendar;
 import java.util.regex.Pattern;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.TimeTableActivity;
 import de.domjos.schooltools.core.model.Note;
+import de.domjos.schooltools.widgets.TimeTableWidget;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -282,5 +286,15 @@ public class Helper {
             id = -99;
         }
         return id;
+    }
+
+    public static void sendBroadCast(Context context, Class cls) {
+        AppWidgetManager man = AppWidgetManager.getInstance(context);
+        int[] ids = man.getAppWidgetIds(new ComponentName(context, cls));
+        Intent updateIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        updateIntent.putExtra("name", cls.getCanonicalName());
+        context.sendBroadcast(updateIntent);
     }
 }

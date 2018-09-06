@@ -35,6 +35,7 @@ import de.domjos.schooltools.core.model.Note;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
+import de.domjos.schooltools.widgets.NoteWidget;
 
 /**
  * Activity For the Note-Screen
@@ -217,6 +218,7 @@ public class NoteActivity extends AppCompatActivity {
                                 MainActivity.globals.getSqLite().insertOrUpdateNote(note);
                                 reloadNotes();
                                 changeControls(false, true, false);
+                                Helper.sendBroadCast(NoteActivity.this, NoteWidget.class);
                             }
                         } catch (Exception ex) {
                             Helper.printException(getApplicationContext(), ex);

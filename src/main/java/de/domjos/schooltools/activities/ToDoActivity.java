@@ -31,6 +31,7 @@ import de.domjos.schooltools.adapter.ToDoAdapter;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
 import de.domjos.schooltools.helper.Helper;
+import de.domjos.schooltools.widgets.ToDoWidget;
 
 /**
  * Activity For the ToDo-Screen
@@ -120,6 +121,7 @@ public class ToDoActivity extends AppCompatActivity {
                 if(requestCode==98) {
                     this.reloadToDos();
                 }
+                Helper.sendBroadCast(ToDoActivity.this, ToDoWidget.class);
             }
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);

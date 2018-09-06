@@ -143,25 +143,13 @@ public class TimeTableActivity extends AppCompatActivity {
             if(resultCode==RESULT_OK) {
                 if(requestCode==99) {
                     this.reloadTimeTables();
-                    this.updateAppWidgets();
+                    Helper.sendBroadCast(TimeTableActivity.this, TimeTableWidget.class);
                 }
             }
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);
         }
     }
-
-
-    private void updateAppWidgets() {
-        Context context = this;
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context, TimeTableWidget.class));
-        Intent updateIntent = new Intent();
-        //updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        context.sendBroadcast(updateIntent);
-    }
-
     private void initControls() {
         try {
             // init BottomNavigation

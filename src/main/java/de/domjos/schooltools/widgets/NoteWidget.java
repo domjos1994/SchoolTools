@@ -15,6 +15,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import de.domjos.schooltools.R;
@@ -25,6 +26,13 @@ import de.domjos.schooltools.services.NoteWidgetService;
  * Implementation of App Widget functionality.
  */
 public class NoteWidget extends AppWidgetProvider {
+
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId);
+        }
+    }
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         Intent serviceIntent = new Intent(context, NoteWidgetService.class);
@@ -39,15 +47,20 @@ public class NoteWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
-        }
-    }
-
-    @Override
     public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
+        Bundle bundle = intent.getExtras();
+        if(bundle!=null) {
+            if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS) && intent.hasExtra("name")) {
+                String name = bundle.getString("name");
+                if(name!=null) {
+                    if(name.equals(NoteWidget.this.getClass().getCanonicalName())) {
+                        int[] ids = bundle.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.lvNotes);
+                    }
+                }
+            }
+        }
     }
 }
 

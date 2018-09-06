@@ -88,7 +88,7 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
     private void initControls() {
         this.cmdSave = this.findViewById(R.id.cmdSave);
 
-        this.timeTableAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.timeTableAdapter = new ArrayAdapter<>(TimeTableWidgetConfigurationActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
         this.cmbTimeTables = this.findViewById(R.id.cmbTimeTable);
         this.cmbTimeTables.setAdapter(this.timeTableAdapter);
         this.timeTableAdapter.notifyDataSetChanged();

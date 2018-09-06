@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.widget.RemoteViews;
 
@@ -31,7 +32,6 @@ import de.domjos.schooltools.services.TimeTableWidgetService;
  */
 public class TimeTableWidget extends AppWidgetProvider {
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
@@ -39,7 +39,6 @@ public class TimeTableWidget extends AppWidgetProvider {
         }
     }
 
-    @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         Intent serviceIntent = new Intent(context, TimeTableWidgetService.class);
         serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -54,10 +53,19 @@ public class TimeTableWidget extends AppWidgetProvider {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)) {
-            int[] ids = intent.getExtras().getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-            this.onUpdate(context, AppWidgetManager.getInstance(context), ids);
-        } else super.onReceive(context, intent);
+        Bundle bundle = intent.getExtras();
+        if(bundle!=null) {
+            if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS) && intent.hasExtra("name")) {
+                String name = bundle.getString("name");
+                if(name!=null) {
+                    if(name.equals(TimeTableWidget.this.getClass().getCanonicalName())) {
+                        int[] ids = bundle.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.grdTimeTable);
+                    }
+                }
+            }
+        }
     }
 }
 
