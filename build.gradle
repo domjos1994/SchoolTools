@@ -1,0 +1,121 @@
+/*
+ * Copyright (C) 2017-2018  Dominic Joas
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.4'
+    }
+}
+apply plugin: 'com.android.application'
+
+// create variables
+def andVersion='27.1.1'
+def appPhase='beta'
+def appVersion='0.1'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
+    defaultConfig {
+        applicationId "de.domjos.schooltools"
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode 4
+        versionName "${appVersion}"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    buildTypes {
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                new File(output.outputFile.getParent()).mkdirs()
+                def count = new File(output.outputFile.getParent()).listFiles().size()
+                def version = String.format("%d", count+1)
+
+                output.outputFileName = new File(
+                        output.outputFile.name.replace("SchoolTools-release", "schooltools_" + appVersion + "." + appPhase + "." + version)
+                )
+            }
+        }
+
+        release {
+            minifyEnabled
+            shrinkResources
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            resValue "string", "appPhase", "${appPhase}"
+            resValue "string", "appVersion", "${appVersion}"
+            return void
+        }
+        debug {
+            resValue "string", "appPhase", "${appPhase}"
+            resValue "string", "appVersion", "${appVersion}"
+            return void
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test:runner:0.5') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation('com.android.support.test:rules:0.5') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation('com.android.support.test.espresso:espresso-intents:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'design'
+    }
+    implementation "com.android.support:appcompat-v7:${andVersion}"
+    implementation "com.android.support:design:${andVersion}"
+    implementation "com.android.support:support-v4:${andVersion}"
+    implementation "com.android.support:support-vector-drawable:${andVersion}"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    // Libraries to create files and draw diagrams
+    implementation 'com.github.angads25:filepicker:1.1.1'
+    implementation 'com.itextpdf:itextg:5.5.10'
+    implementation 'com.jjoe64:graphview:4.2.2'
+    // Log4J-Logging for Android
+    implementation 'log4j:log4j:1.2.17'
+    implementation 'de.mindpipe.android:android-logging-log4j:1.0.3'
+    // Testing
+    testImplementation 'junit:junit:4.12'
+}
+
+repositories {
+    jcenter()
+    maven {
+        url 'https://maven.google.com/'
+        name 'Google'
+    }
+}

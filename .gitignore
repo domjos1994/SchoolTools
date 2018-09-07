@@ -1,17 +1,7 @@
-*.iml
-.gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-/settings.gradle
-/gradlew.bat
-/gradlew
-/gradle.properties
-/build.gradle
-/gradle
+/alpha
+/beta
+/release
 /.idea
-Würde .gitignore löschen
+*.iml
+/.gradle
+/gradle
