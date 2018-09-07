@@ -17,6 +17,6 @@ import de.domjos.schooltools.factories.ToDoRemoteFactory;
 public class ToDoWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new ToDoRemoteFactory(getApplicationContext());
+        return new ToDoRemoteFactory(getApplicationContext(), intent);
     }
 }

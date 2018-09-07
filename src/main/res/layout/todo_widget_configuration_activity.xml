@@ -8,17 +8,18 @@
   ~ of the License, or (at your option) any later version.
   -->
 
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.domjos.schooltools.widgets.TimeTableWidgetConfigurationActivity"
+    tools:context="de.domjos.schooltools.widgets.ToDoWidgetConfigurationActivity"
     android:orientation="vertical"
     android:background="@drawable/bg_ice">
 
     <TextView
-        android:text="@string/main_nav_timetable"
+        android:text="@string/main_importantToDos"
         android:id="@+id/lblHeader"
         android:textStyle="bold"
         android:textSize="16sp"
@@ -27,10 +28,16 @@
         android:gravity="center"
         android:layout_alignParentTop="true"/>
     <Spinner
-        android:id="@+id/cmbTimeTable"
+        android:id="@+id/cmbToDoList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/lblHeader"/>
+    <CheckBox
+        android:id="@+id/chkToDoNotSolved"
+        android:text="@string/main_importantToDos_onlyNotSolved"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cmbToDoList"/>
 
     <Button
         android:text="@string/sys_save"

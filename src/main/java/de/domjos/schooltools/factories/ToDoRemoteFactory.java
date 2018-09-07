@@ -9,8 +9,12 @@
 
 package de.domjos.schooltools.factories;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -37,9 +41,11 @@ public class ToDoRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
     private SQLite sqLite;
     private Context context;
     private final List<ToDo> toDos;
+    private int appWidgetId;
 
-    public ToDoRemoteFactory(Context context) {
+    public ToDoRemoteFactory(Context context, Intent intent) {
         this.toDos = new LinkedList<>();
+        this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
         this.context =  context;
         this.sqLite = new SQLite(this.context);
     }
@@ -176,8 +182,23 @@ public class ToDoRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
     }
 
     private void reloadToDos() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int id = preferences.getInt("todo_list_id_" + this.appWidgetId, -1);
+        boolean solved = preferences.getBoolean("todo_list_solved_" + this.appWidgetId, false);
+        String where = "";
+        if(id!=-1) {
+            where = "toDoList=" + id;
+            if(solved) {
+                where = where + " AND solved=0";
+            }
+        } else {
+            if(solved) {
+                where = "solved=0";
+            }
+        }
+
         this.toDos.clear();
-        List<ToDo> toDos = this.sqLite.getToDos("");
+        List<ToDo> toDos = this.sqLite.getToDos(where);
         Map<ToDo, Integer> todoMap = new HashMap<>();
         for(ToDo toDo : toDos) {
             todoMap.put(toDo, toDo.getImportance());

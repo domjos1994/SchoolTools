@@ -86,4 +86,9 @@ public class ToDoList {
     public void setToDos(List<ToDo> toDos) {
         this.toDos = toDos;
     }
+
+    @Override
+    public String toString() {
+        return this.title;
+    }
 }

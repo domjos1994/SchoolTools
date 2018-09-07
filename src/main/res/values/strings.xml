@@ -31,6 +31,7 @@
     <string name="main_today_timetable">Aktuelle Fächer</string>
     <string name="main_top5Notes">Top 5 Notizen</string>
     <string name="main_importantToDos">5 Wichtigste ToDos</string>
+    <string name="main_importantToDos_onlyNotSolved">nur nicht gelöste</string>
     <string name="main_savedTimeTables">Gespeicherte Stundenpläne</string>
     <string name="main_savedMarkList">Gespeicherte Notenliste</string>
     <string name="main_noEntry">Kein Eintrag</string>

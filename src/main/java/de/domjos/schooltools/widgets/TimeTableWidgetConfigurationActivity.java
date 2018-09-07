@@ -100,7 +100,6 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void getSettings(int timeTableID) {
         try {
             this.setTT_ID(timeTableID);
