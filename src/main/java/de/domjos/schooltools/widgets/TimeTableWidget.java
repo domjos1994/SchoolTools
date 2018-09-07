@@ -20,6 +20,7 @@ import android.support.annotation.RequiresApi;
 import android.widget.RemoteViews;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.services.TimeTableWidgetService;
 
 /**
@@ -50,22 +51,10 @@ public class TimeTableWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
-        Bundle bundle = intent.getExtras();
-        if(bundle!=null) {
-            if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS) && intent.hasExtra("name")) {
-                String name = bundle.getString("name");
-                if(name!=null) {
-                    if(name.equals(TimeTableWidget.this.getClass().getCanonicalName())) {
-                        int[] ids = bundle.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.grdTimeTable);
-                    }
-                }
-            }
-        }
+        Helper.receiveBroadCast(context, intent, R.id.grdTimeTable);
+        super.onReceive(context, intent);
     }
 }
 

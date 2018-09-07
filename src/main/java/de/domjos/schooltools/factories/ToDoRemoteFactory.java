@@ -10,6 +10,7 @@
 package de.domjos.schooltools.factories;
 
 import android.content.Context;
+import android.os.Build;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -21,14 +22,21 @@ import java.util.List;
 import java.util.Map;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.todo.ToDo;
+import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
 
+/**
+ * Factory to load TimeTables in widget
+ * @see de.domjos.schooltools.widgets.ToDoWidget
+ * @see de.domjos.schooltools.services.ToDoWidgetService
+ * @author Dominic Joas
+ * @version 0.1
+ */
 public class ToDoRemoteFactory implements RemoteViewsService.RemoteViewsFactory  {
     private SQLite sqLite;
     private Context context;
-    private final List<String> toDos;
+    private final List<ToDo> toDos;
 
     public ToDoRemoteFactory(Context context) {
         this.toDos = new LinkedList<>();
@@ -58,9 +66,92 @@ public class ToDoRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public RemoteViews getViewAt(int position) {
+        ToDo toDo = toDos.get(position);
+
         RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.todo_widget);
-        String callItem = this.toDos.get(position);
+        String callItem = toDo.getTitle() + ":\n" + toDo.getDescription();
+        if(toDo.getDescription().isEmpty()) {
+            callItem = toDo.getTitle();
+        }
         row.setTextViewText(R.id.lblHeader, callItem);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                switch (toDo.getImportance()) {
+                    case 10:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.DarkRed));
+                        break;
+                    case 9:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.Red));
+                        break;
+                    case 8:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.OrangeRed));
+                        break;
+                    case 7:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.DarkOrange));
+                        break;
+                    case 6:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.Orange));
+                        break;
+                    case 5:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.Yellow));
+                        break;
+                    case 4:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.DarkGreen));
+                        break;
+                    case 3:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.YellowGreen));
+                        break;
+                    case 2:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.GreenYellow));
+                        break;
+                    case 1:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.Green));
+                        break;
+                    default:
+                        row.setTextColor(R.id.lblHeader, this.context.getColor(R.color.LightGreen));
+                        break;
+                }
+            } else {
+                switch (toDo.getImportance()) {
+                    case 10:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.DarkRed));
+                        break;
+                    case 9:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.Red));
+                        break;
+                    case 8:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.OrangeRed));
+                        break;
+                    case 7:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.DarkOrange));
+                        break;
+                    case 6:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.Orange));
+                        break;
+                    case 5:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.Yellow));
+                        break;
+                    case 4:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.DarkGreen));
+                        break;
+                    case 3:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.YellowGreen));
+                        break;
+                    case 2:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.GreenYellow));
+                        break;
+                    case 1:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.Green));
+                        break;
+                    default:
+                        row.setTextColor(R.id.lblHeader, this.context.getResources().getColor(R.color.LightGreen));
+                        break;
+                }
+            }
+        } catch (Exception ex) {
+            Helper.printException(context, ex);
+        }
+
         return row;
     }
 
@@ -115,7 +206,7 @@ public class ToDoRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
                         break;
                     }
 
-                    this.toDos.add(((ToDo) entry.getKey()).getTitle());
+                    this.toDos.add(((ToDo) entry.getKey()));
                 }
             }
         }

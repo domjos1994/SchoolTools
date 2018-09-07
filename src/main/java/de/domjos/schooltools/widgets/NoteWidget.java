@@ -9,7 +9,6 @@
 
 package de.domjos.schooltools.widgets;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -19,11 +18,15 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.activities.NoteActivity;
+import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.services.NoteWidgetService;
 
 /**
- * Implementation of App Widget functionality.
+ * Widget to show Top5 Notes on Screen
+ * @see de.domjos.schooltools.factories.NoteRemoteFactory
+ * @see de.domjos.schooltools.services.NoteWidgetService
+ * @author Dominic Joas
+ * @version 0.1
  */
 public class NoteWidget extends AppWidgetProvider {
 
@@ -42,25 +45,13 @@ public class NoteWidget extends AppWidgetProvider {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.note_widget);
         remoteViews.setTextViewText(R.id.lblHeader, context.getString(R.string.main_nav_notes));
         remoteViews.setRemoteAdapter(R.id.lvNotes, serviceIntent);
-        remoteViews.setOnClickPendingIntent(R.id.lblHeader, PendingIntent.getActivity(context, 0, new Intent(context, NoteActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Bundle bundle = intent.getExtras();
-        if(bundle!=null) {
-            if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS) && intent.hasExtra("name")) {
-                String name = bundle.getString("name");
-                if(name!=null) {
-                    if(name.equals(NoteWidget.this.getClass().getCanonicalName())) {
-                        int[] ids = bundle.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.lvNotes);
-                    }
-                }
-            }
-        }
+        Helper.receiveBroadCast(context, intent, R.id.lvNotes);
+        super.onReceive(context, intent);
     }
 }
 

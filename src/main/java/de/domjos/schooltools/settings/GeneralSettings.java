@@ -21,6 +21,7 @@ public class GeneralSettings {
     private final static String ACCEPT_MARK_LIST_MESSAGE = "acceptMarkListMessage";
     private final static String WIDGET_TIMETABLE_SPINNER = "widgetTimeTableSpinner";
     private final static String WIDGET_MARKLIST_SPINNER = "widgetTimeTableSpinner";
+    private final static String CURRENT_DB_VERSION = "currentDBVersion";
 
     private SharedPreferences preferences;
     private final SharedPreferences.Editor editor;
@@ -58,6 +59,15 @@ public class GeneralSettings {
             version = 1;
         }
         return version;
+    }
+
+    public int getDatabaseVersion() {
+        return this.preferences.getInt(GeneralSettings.CURRENT_DB_VERSION, 0);
+    }
+
+    public void setDatabaseVersion(int version) {
+        this.editor.putInt(GeneralSettings.CURRENT_DB_VERSION, version);
+        this.editor.apply();
     }
 
     public void setAcceptMarkListMessage(boolean accepted) {

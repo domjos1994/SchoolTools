@@ -33,6 +33,7 @@ import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
 import de.domjos.schooltools.core.model.timetable.PupilHour;
 import de.domjos.schooltools.core.model.timetable.Teacher;
+import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
@@ -52,6 +53,8 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
     private final static int DEFAULT_COLOR = Color.BLACK;
 
     public TimeTableRemoteFactory(Context context, Intent intent) {
+        super();
+
         this.context = context;
         this.appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
         this.sqLite = new SQLite(this.context);
@@ -70,7 +73,7 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public void onDestroy() {
-
+        this.timeTableRow.clear();
     }
 
     @Override
@@ -80,16 +83,17 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public RemoteViews getViewAt(int position) {
-
-
-
         RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.timetable_widget);
         String callItem = this.timeTableRow.get(position).getKey();
         row.setTextViewText(R.id.lblHeader, callItem);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             row = this.changeSize(row);
         }
+
         int color = this.timeTableRow.get(position).getValue();
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(color==context.getColor(R.color.Gray)) {
                 row.setTextColor(R.id.lblHeader, TimeTableRemoteFactory.DEFAULT_COLOR);
@@ -113,12 +117,12 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
             Bundle bundle = manager.getAppWidgetOptions(appWidgetId);
             final int minWidth = bundle.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
             if(minWidth==120) {
-                row.setTextViewTextSize(R.id.lblHeader, 0, 14);
+                row.setTextViewTextSize(R.id.lblHeader, 0, 12);
             } else {
-                row.setTextViewTextSize(R.id.lblHeader, 0, 18);
+                row.setTextViewTextSize(R.id.lblHeader, 0, 14);
             }
         } else {
-            row.setTextViewTextSize(R.id.lblHeader, 0, 18);
+            row.setTextViewTextSize(R.id.lblHeader, 0, 14);
         }
         return row;
     }
@@ -193,7 +197,28 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
                                             for(Map.Entry<Hour, PupilHour> entry : days[i].getPupilHour().entrySet()) {
                                                 if(entry.getKey().getStart().equals(hour.getStart()) && entry.getKey().getEnd().equals(hour.getEnd())) {
                                                     if(entry.getValue().getSubject()!=null) {
-                                                        strDays[i] = entry.getValue().getSubject().getAlias().trim();
+                                                        if(entry.getValue().getRoomNumber().equals("")) {
+                                                            strDays[i] = entry.getValue().getSubject().getAlias().trim();
+                                                        } else {
+                                                            strDays[i] = entry.getValue().getSubject().getAlias().trim() + "\n" + entry.getValue().getRoomNumber();
+                                                        }
+
+                                                        intColors[i] = Integer.parseInt(entry.getValue().getSubject().getBackgroundColor());
+                                                    }
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if(days[i].getTeacherHour()!=null) {
+                                            for(Map.Entry<Hour, TeacherHour> entry : days[i].getTeacherHour().entrySet()) {
+                                                if(entry.getKey().getStart().equals(hour.getStart()) && entry.getKey().getEnd().equals(hour.getEnd())) {
+                                                    if(entry.getValue().getSubject()!=null) {
+                                                        if(entry.getValue().getRoomNumber().equals("")) {
+                                                            strDays[i] = entry.getValue().getSubject().getAlias().trim();
+                                                        } else {
+                                                            strDays[i] = entry.getValue().getSubject().getAlias().trim() + "\n" + entry.getValue().getRoomNumber();
+                                                        }
+
                                                         intColors[i] = Integer.parseInt(entry.getValue().getSubject().getBackgroundColor());
                                                     }
                                                     break;

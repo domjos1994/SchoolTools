@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -289,12 +290,21 @@ public class Helper {
     }
 
     public static void sendBroadCast(Context context, Class cls) {
-        AppWidgetManager man = AppWidgetManager.getInstance(context);
-        int[] ids = man.getAppWidgetIds(new ComponentName(context, cls));
-        Intent updateIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        updateIntent.putExtra("name", cls.getCanonicalName());
-        context.sendBroadcast(updateIntent);
+        Intent intent = new Intent(context, cls);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, cls));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        context.sendBroadcast(intent);
+    }
+
+    public static void receiveBroadCast(Context context, Intent intent, int id) {
+        Bundle bundle = intent.getExtras();
+        if(bundle!=null) {
+            if(intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)) {
+                int[] ids = bundle.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                appWidgetManager.notifyAppWidgetViewDataChanged(ids, id);
+            }
+        }
     }
 }

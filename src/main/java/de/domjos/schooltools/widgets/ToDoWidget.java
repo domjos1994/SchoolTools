@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.services.ToDoWidgetService;
 
 /**
@@ -49,19 +50,8 @@ public class ToDoWidget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Bundle bundle = intent.getExtras();
-        if(bundle!=null) {
-            if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS) && intent.hasExtra("name")) {
-                String name = bundle.getString("name");
-                if(name!=null) {
-                    if(name.equals(ToDoWidget.this.getClass().getCanonicalName())) {
-                        int[] ids = bundle.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.lvToDos);
-                    }
-                }
-            }
-        }
+        Helper.receiveBroadCast(context, intent, R.id.lvToDos);
+        super.onReceive(context, intent);
     }
 }
 

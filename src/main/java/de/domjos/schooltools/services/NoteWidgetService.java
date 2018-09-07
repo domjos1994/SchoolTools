@@ -15,12 +15,15 @@ import android.widget.RemoteViewsService;
 import de.domjos.schooltools.factories.NoteRemoteFactory;
 
 /**
+ * Service for the NoteWidget
+ * @see de.domjos.schooltools.factories.TimeTableRemoteFactory
+ * @see de.domjos.schooltools.widgets.TimeTableWidget
  * @author Dominic Joas
+ * @version 0.1
  */
-
 public class NoteWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new NoteRemoteFactory(getApplicationContext());
+        return new NoteRemoteFactory(getApplicationContext(), intent);
     }
 }

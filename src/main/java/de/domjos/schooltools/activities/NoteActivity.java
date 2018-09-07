@@ -201,6 +201,7 @@ public class NoteActivity extends AppCompatActivity {
                         MainActivity.globals.getSqLite().deleteEntry("memories", "itemID", currentID, "[table]='notes'");
                         reloadNotes();
                         changeControls(false, true, false);
+                        Helper.sendBroadCast(NoteActivity.this, NoteWidget.class);
                         break;
                     case R.id.navTimeTableSubCancel:
                         changeControls(false, true, false);

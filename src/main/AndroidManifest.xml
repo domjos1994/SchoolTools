@@ -325,8 +325,6 @@
         <service
             android:name=".services.MemoryService"
             android:exported="false" />
-
-
     </application>
 
 </manifest>
