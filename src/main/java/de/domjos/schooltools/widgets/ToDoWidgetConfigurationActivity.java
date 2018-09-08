@@ -50,7 +50,7 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
                 ToDoList toDoList = adapter.getItem(cmbToDoLists.getSelectedItemPosition());
 
                 if(toDoList!=null) {
-                    getSettings(toDoList.getID(), chkToDoNotSolved.isSelected());
+                    getSettings(toDoList.getID(), chkToDoNotSolved.isChecked());
                 }
             }
         });
@@ -81,7 +81,7 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
             this.saveSettings(id, solved);
 
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
-            TimeTableWidget.updateAppWidget(this.getApplicationContext(), appWidgetManager, this.appWidgetID);
+            ToDoWidget.updateAppWidget(this.getApplicationContext(), appWidgetManager, this.appWidgetID);
 
             Intent resultValue = new Intent(getApplicationContext(), ToDoWidget.class);
             resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, this.appWidgetID);
