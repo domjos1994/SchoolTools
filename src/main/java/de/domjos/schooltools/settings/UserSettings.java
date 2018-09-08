@@ -104,6 +104,16 @@ public class UserSettings {
         return this.sharedPreferences.getBoolean("swtNotifications", false);
     }
 
+    public boolean isWhatsNew() {
+        return this.sharedPreferences.getBoolean("swtWhatsNew", false);
+    }
+
+    public void setWhatsNew(boolean whatsNew) {
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putBoolean("swtWhatsNew", whatsNew);
+        editor.apply();
+    }
+
     public boolean isDeleteMemories() {
         return this.sharedPreferences.getBoolean("swtDeleteMemories", false);
     }

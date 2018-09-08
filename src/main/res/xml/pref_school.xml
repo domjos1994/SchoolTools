@@ -56,7 +56,7 @@
         android:icon="@drawable/ic_event_note_black_24dp"
         android:layout="@android:layout/preference_category">
         <EditTextPreference
-            android:key="swtToDoDelete"
+            android:key="txtSchoolTimerNotification"
             android:inputType="numberSigned"
             android:defaultValue="@string/settings_school_timer_notification_default"
             android:title="@string/settings_school_timer_notification_header"
@@ -68,7 +68,7 @@
         android:icon="@drawable/ic_done_all_black_24dp"
         android:layout="@android:layout/preference_category">
         <SwitchPreference
-            android:key="txtToDoDeleteAfterDeadline"
+            android:key="swtToDoDelete"
             android:inputType="numberSigned"
             android:title="@string/settings_school_todo_delete_header"
             android:summaryOn="@string/settings_school_todo_delete_on"

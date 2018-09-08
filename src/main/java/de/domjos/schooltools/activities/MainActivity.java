@@ -56,7 +56,6 @@ import de.domjos.schooltools.core.model.TimerEvent;
 import de.domjos.schooltools.core.model.mark.SchoolYear;
 import de.domjos.schooltools.core.model.mark.Test;
 import de.domjos.schooltools.core.model.mark.Year;
-import de.domjos.schooltools.core.model.marklist.MarkList;
 import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
 import de.domjos.schooltools.core.model.timetable.PupilHour;
@@ -103,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private MarkListAdapter markListAdapter;
     private ArrayAdapter<String> savedMarkListAdapter;
     private ArrayAdapter<String> savedTimeTablesAdapter;
-    private boolean firstUse, versionChange;
     private CountDownTimer countDownTimer;
 
     @Override
@@ -113,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log4JHelper.configure(MainActivity.this);
         MainActivity.globals.setUserSettings(new UserSettings(this.getApplicationContext()));
         MainActivity.globals.setGeneralSettings(new GeneralSettings(this.getApplicationContext()));
-        this.addGeneralSettings(this.getString(R.string.appPhase), Float.parseFloat(this.getString(R.string.appVersion)));
         this.initControls();
         this.resetDatabase();
         this.initDatabase();
@@ -276,6 +273,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // settings
         if (requestCode == 98) {
+            if(MainActivity.globals.getUserSettings().isWhatsNew()) {
+                WhatsNewActivity.resetShown("whats_new", this.getApplicationContext());
+                MainActivity.globals.getUserSettings().setWhatsNew(false);
+
+                Intent intent = new Intent(this.getApplicationContext(), WhatsNewActivity.class);
+                intent.putExtra(WhatsNewActivity.isWhatsNew, true);
+                intent.putExtra(WhatsNewActivity.info, "whats_new_info");
+                this.startActivity(intent);
+            }
+
             this.resetDatabase();
             this.initDatabase();
             this.cmdRefresh.callOnClick();
@@ -963,20 +970,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void addGeneralSettings(String phase, float version) {
-        this.firstUse = MainActivity.globals.getGeneralSettings().getCurrentInternalPhase().isEmpty();
-        String oldPhase = MainActivity.globals.getGeneralSettings().getCurrentInternalPhase();
-        float oldVersion = MainActivity.globals.getGeneralSettings().getCurrentInternalVersion();
-        MainActivity.globals.getGeneralSettings().setCurrentInternalPhase(phase);
-        MainActivity.globals.getGeneralSettings().setCurrentInternalVersion(version);
-        this.versionChange = (!oldPhase.equals(phase)) || (oldVersion!=version);
-    }
-
     private void openWhatsNew() {
-        if(this.firstUse || this.versionChange) {
-            Intent intent = new Intent(this.getApplicationContext(), WhatsNewActivity.class);
-            this.startActivity(intent);
-        }
+        Intent intent = new Intent(this.getApplicationContext(), WhatsNewActivity.class);
+        intent.putExtra(WhatsNewActivity.isWhatsNew, true);
+        intent.putExtra(WhatsNewActivity.info, "whats_new_info");
+        this.startActivity(intent);
     }
 
     private void resetDatabase() {

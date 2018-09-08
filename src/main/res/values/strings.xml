@@ -98,7 +98,10 @@
     <string name="mark_test">Arbeit</string>
 
     <string name="settings_general">Allgemein</string>
-    <string name="settings_general_notifications">ist Aktueller Stundenplan</string>
+    <string name="settings_general_notifications_title">Notifikationen anzeigen</string>
+    <string name="settings_general_notifications_summary">Notifikationen von aktuellen Erinnerungen anzeigen!</string>
+    <string name="settings_general_whatsNew_title">Neuigkeiten erneut anzeigen</string>
+    <string name="settings_general_whatsNew_summary">Den Neuigkeiten Bildschirm erneut anzeigen</string>
     <string name="settings_general_deleteMemories_title">Erinnerungen löschen</string>
     <string name="settings_general_deleteMemories_summary">Erinnerungen löschen, nachdem sie abgelaufen sind</string>
     <string name="settings_general_reset_database_title">Datenbank zurücksetzen</string>
@@ -312,11 +315,10 @@
     </string>
 
     <string name="whats_new">Neuigkeiten</string>
-    <string name="whats_new_test_0_1">
+    <string name="whats_new_content">
         <![CDATA[
             <h1>SchoolTools Version 0.1</h1>
-            <br/><br/><br/>
-            <h2>Was ist neu?</h2>
+            <h2>Funktionen</h2>
             <br/>
             <b>Notenliste</b>
             <ul>

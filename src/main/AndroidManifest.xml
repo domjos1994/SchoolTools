@@ -251,16 +251,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
         </activity>
-        <activity
-            android:name=".activities.DescriptionActivity"
-            android:label="@string/sys_description"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:targetApi="jelly_bean">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.domjos.schooltools.activities.MainActivity" />
-        </activity>
         <activity android:name=".widgets.TimeTableWidgetConfigurationActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

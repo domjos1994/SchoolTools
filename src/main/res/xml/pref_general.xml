@@ -13,7 +13,14 @@
     <SwitchPreference
         android:key="swtNotifications"
         android:defaultValue="true"
-        android:title="@string/settings_general_notifications"/>
+        android:title="@string/settings_general_notifications_title"
+        android:summary="@string/settings_general_notifications_summary"/>
+
+    <SwitchPreference
+        android:key="swtWhatsNew"
+        android:defaultValue="false"
+        android:title="@string/settings_general_whatsNew_title"
+        android:summary="@string/settings_general_whatsNew_summary"/>
 
     <SwitchPreference
         android:key="swtDeleteMemories"
