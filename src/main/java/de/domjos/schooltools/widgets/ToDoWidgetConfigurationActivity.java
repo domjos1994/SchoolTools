@@ -23,16 +23,16 @@ import de.domjos.schooltools.helper.SQLite;
 
 /**
  * Configuration Screen for ToDoWidget
- * @see de.domjos.schooltools.widgets.TimeTableWidget
- * @see de.domjos.schooltools.services.TimeTableWidgetService
- * @see de.domjos.schooltools.factories.TimeTableRemoteFactory
+ * @see de.domjos.schooltools.widgets.ToDoWidget
+ * @see de.domjos.schooltools.services.ToDoWidgetService
+ * @see de.domjos.schooltools.factories.ToDoRemoteFactory
  * @author Dominic Joas
  * @version 0.1
  */
 public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
     private int appWidgetID;
     private Button cmdSave;
-    private Spinner cmbTimeTables;
+    private Spinner cmbToDoLists;
     private CheckBox chkToDoNotSolved;
     private ArrayAdapter<ToDoList> adapter;
 
@@ -47,7 +47,7 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
-                ToDoList toDoList = adapter.getItem(cmbTimeTables.getSelectedItemPosition());
+                ToDoList toDoList = adapter.getItem(cmbToDoLists.getSelectedItemPosition());
 
                 if(toDoList!=null) {
                     getSettings(toDoList.getID(), chkToDoNotSolved.isSelected());
@@ -66,9 +66,9 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
         this.cmdSave = this.findViewById(R.id.cmdSave);
         this.chkToDoNotSolved = this.findViewById(R.id.chkToDoNotSolved);
 
-        this.cmbTimeTables = this.findViewById(R.id.cmbTimeTable);
+        this.cmbToDoLists = this.findViewById(R.id.cmbToDoList);
         this.adapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new LinkedList<ToDoList>());
-        this.cmbTimeTables.setAdapter(this.adapter);
+        this.cmbToDoLists.setAdapter(this.adapter);
         this.adapter.notifyDataSetChanged();
 
         for(ToDoList toDoList : sqLite.getToDoLists("")) {
@@ -83,7 +83,7 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
             TimeTableWidget.updateAppWidget(this.getApplicationContext(), appWidgetManager, this.appWidgetID);
 
-            Intent resultValue = new Intent();
+            Intent resultValue = new Intent(getApplicationContext(), ToDoWidget.class);
             resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, this.appWidgetID);
             resultValue.putExtra("id", id);
             resultValue.putExtra("solved", solved);
