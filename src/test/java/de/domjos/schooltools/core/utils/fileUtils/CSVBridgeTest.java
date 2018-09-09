@@ -24,9 +24,9 @@ public class CSVBridgeTest {
 
     @Before
     public void init() {
-        CSVBridge bridge = new CSVBridge(";", "id;TITLE_PARAM;description;listDate;todo;");
+        CSVBridge bridge = new CSVBridge(";", "id;title;description;listDate;todo;");
         bridge.writeValue(1, "id", 1);
-        bridge.writeValue(1, "TITLE_PARAM", "Wunschliste");
+        bridge.writeValue(1, "title", "Wunschliste");
         bridge.writeValue(1, "description", "Dies ist die Wunschliste\nfür Weihnachten!");
         bridge.writeValue(1, "listDate", new Date());
         CSVObject csvObject = new CSVObject("|", 5);
@@ -44,7 +44,7 @@ public class CSVBridgeTest {
         bridge.writeValue(1, "todo", Arrays.asList(csvObject, csvObject2), "(",")");
         bridge.addNewLine();
         bridge.writeValue(2, "id", 2);
-        bridge.writeValue(2, "TITLE_PARAM", "Wunschliste 2");
+        bridge.writeValue(2, "title", "Wunschliste 2");
         bridge.writeValue(2, "description", "Dies ist die Wunschliste\nfür Ostern!");
         bridge.writeValue(2, "listDate", new Date());
         CSVObject csvObject3 = new CSVObject("|", 5);

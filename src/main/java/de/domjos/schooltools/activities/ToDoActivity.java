@@ -141,7 +141,7 @@ public class ToDoActivity extends AppCompatActivity {
         if(!this.toDoListAdapter.isEmpty()) {
             if(this.spToDoList.getSelectedItem()!=null) {
                 if(!this.spToDoList.getSelectedItem().toString().equals("")) {
-                    for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("TITLE_PARAM='" + this.spToDoList.getSelectedItem().toString() + "'")) {
+                    for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("title='" + this.spToDoList.getSelectedItem().toString() + "'")) {
                         for(ToDo toDo : toDoList.getToDos()) {
                             this.toDoAdapter.add(toDo);
                         }

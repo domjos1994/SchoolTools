@@ -62,7 +62,7 @@ public class MarkActivity extends AppCompatActivity {
         int id = this.getIntent().getIntExtra("id", 0);
         if(id!=0) {
             for(int i = 0; i<=subjectAdapter.getCount()-1;i++) {
-                List<Subject> subjectList = MainActivity.globals.getSqLite().getSubjects("TITLE_PARAM='" + subjectAdapter.getItem(i) + "'");
+                List<Subject> subjectList = MainActivity.globals.getSqLite().getSubjects("title='" + subjectAdapter.getItem(i) + "'");
                 if(subjectList!=null) {
                     if(!subjectList.isEmpty()) {
                         if(subjectList.get(0).getID()==id) {

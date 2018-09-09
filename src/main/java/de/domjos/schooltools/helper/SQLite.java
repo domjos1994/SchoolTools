@@ -880,13 +880,13 @@ public class SQLite extends SQLiteOpenHelper {
             db.execSQL("DELETE FROM schoolYears WHERE test=" + testID + ";");
 
             int subjectID = 0, yearID = 0;
-            List<Year> years = this.getYears("TITLE_PARAM='" + year + "'");
+            List<Year> years = this.getYears("title='" + year + "'");
             if(year!=null) {
                 if(!years.isEmpty()) {
                     yearID = years.get(0).getID();
                 }
             }
-            List<Subject> subjects = this.getSubjects("TITLE_PARAM='" + subject + "'");
+            List<Subject> subjects = this.getSubjects("title='" + subject + "'");
             if(subjects!=null) {
                 if(!subjects.isEmpty()) {
                     subjectID = subjects.get(0).getID();
@@ -919,10 +919,10 @@ public class SQLite extends SQLiteOpenHelper {
             if(subject.isEmpty()) {
                 subjects = this.getSubjects("");
             } else {
-                subjects = this.getSubjects("TITLE_PARAM='" + subject + "'");
+                subjects = this.getSubjects("title='" + subject + "'");
             }
 
-            List<Year> years = this.getYears("TITLE_PARAM='" + year + "'");
+            List<Year> years = this.getYears("title='" + year + "'");
 
             for(Subject tmpSubject : subjects) {
                 for(Year tmpYear : years) {
@@ -1106,7 +1106,7 @@ public class SQLite extends SQLiteOpenHelper {
 
     public int insertOrUpdateToDo(ToDo toDo, String title) {
         SQLiteDatabase db = this.getWritableDatabase();
-        List<ToDoList> toDoLists = this.getToDoLists("TITLE_PARAM='" + title + "'");
+        List<ToDoList> toDoLists = this.getToDoLists("title='" + title + "'");
         ToDoList toDoList = null;
         if(toDoLists!=null) {
             if(!toDoLists.isEmpty()) {
@@ -1294,7 +1294,7 @@ public class SQLite extends SQLiteOpenHelper {
                 if(showNotification(memDate)) {
                     int id = cursor.getInt(2);
                     String table = cursor.getString(3);
-                    Cursor itemCursor = db.rawQuery(String.format("SELECT TITLE_PARAM, description FROM %s WHERE ID=%s;", table, id), null);
+                    Cursor itemCursor = db.rawQuery(String.format("SELECT title, description FROM %s WHERE ID=%s;", table, id), null);
                     while (itemCursor.moveToNext()) {
                         Memory memory = new Memory();
                         memory.setId(id);

@@ -481,7 +481,7 @@ public class MarkListActivity extends AppCompatActivity {
                     builder.setNegativeButton(this.getString(R.string.sys_delete), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.globals.getSqLite().deleteEntry("markLists", "TITLE_PARAM='" + spinner.getSelectedItem().toString() + "'");
+                            MainActivity.globals.getSqLite().deleteEntry("markLists", "title='" + spinner.getSelectedItem().toString() + "'");
                         }
                     });
                     builder.show();
