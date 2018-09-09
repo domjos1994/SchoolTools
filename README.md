@@ -20,6 +20,16 @@ Website: <a href="https://domjos.de/entwicklung/android-apps/schooltools.html" t
 - Ex-/Import in several formats
 - Widgets
   
+## Images
+
+### Unsplash
+The Application uses Images from <a href="https://unsplash.com" title="Unsplash">Unsplash</a>.
+
+### Icons
+The Application uses Icons from the Android Support Library.<br/>
+The Library is licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" title="Apache License Version 2">Apache License Version 2</a>.
+  
+  
 ## External Libraries
 
 ### Android FilePicker
@@ -33,3 +43,8 @@ The Library is licensed under the Apache <a href="https://www.gnu.org/licenses/a
 ### Graph-View
 The Application uses <a href="https://github.com/jjoe64/GraphView" title="GraphView">GraphView</a> developed by <a href="https://github.com/jjoe64" title="JJoe64">JJoe64</a>.<br/>
 The Library is licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" title="Apache License Version 2">Apache License Version 2</a>.
+
+
+## Copyright
+Copyright © 2017-2018 Dominic Joas<br/>
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
