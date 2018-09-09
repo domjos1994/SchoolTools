@@ -174,6 +174,19 @@
     <string name="settings_api_cancel_export_summary_on">Export abbrechen, sobald eine Zeile fehlerhaft!</string>
     <string name="settings_api_cancel_export_summary_of">Export erst abbrechen, sobald komplette Datei fehlerhaft!</string>
 
+    <string name="timetable_content">
+        <![CDATA[
+            <h2>Stundenplan</h2>
+            <p>
+                1. Zeiten anlegen (Uhr)<br/>
+                2. Jahr anlegen<br/>
+                3. Fächer anlegen<br/>
+                4. evtl. Lehrer anlegen<br/>
+                5. evtl. Klassen anlegen<br/>
+                6. Stundenplan anlegen
+            </p>
+        ]]>
+    </string>
     <string name="timetable_teacher">Lehrer</string>
     <string name="timetable_color">Farbe</string>
     <string name="timetable_lesson">Fach</string>
@@ -319,24 +332,7 @@
         <![CDATA[
             <h1>SchoolTools Version 0.1</h1>
             <h2>Funktionen</h2>
-            <br/>
-            <b>Notenliste</b>
-            <ul>
-                <li>erweiterte Ansicht</li>
-                <li>Beseitigung diverser Fehler</li>
-            </ul>
-            <b>Noten berechnen</b>
-            <ul>
-                <li>Beseitigung diverser Fehler</li>
-            </ul>
-            <b>Stundenplan</b>
-            <ul>
-                <li>vorprogrammierte Fächer (Eingabe von Alias)</li>
-                <li>Beseitigung diverser Fehler</li>
-            </ul>
-            <br/><br/><br/>
-            <h2>Was sich in Zukunft noch ändert?</h2>
-            <br/>
+
         ]]>
     </string>
     <string name="whats_new_info">Sie können diesen Dialog jederzeit in der Hilfe wieder aufrufen!</string>

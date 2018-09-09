@@ -9,12 +9,8 @@
 
 package de.domjos.schooltools.activities;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -26,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +30,6 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.TimeTableAdapter;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.services.TimeTableWidgetService;
 import de.domjos.schooltools.widgets.TimeTableWidget;
 
 /**
@@ -54,6 +48,7 @@ public class TimeTableActivity extends AppCompatActivity {
         setContentView(R.layout.timetable_activity);
         this.initControls();
         this.reloadTimeTables();
+        this.openDescription();
 
         this.cmdTimeTableAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +110,17 @@ public class TimeTableActivity extends AppCompatActivity {
                 startActivityForResult(intent, 99);
             }
         });
+    }
+
+    private void openDescription() {
+        Intent intent = new Intent(this.getApplicationContext(), WhatsNewActivity.class);
+        intent.putExtra(WhatsNewActivity.PARENT_CLASS, TimeTable.class.getName());
+        intent.putExtra(WhatsNewActivity.TITLE_PARAM, "main_nav_timetable");
+        intent.putExtra(WhatsNewActivity.CONTENT_PARAM, "timetable_content");
+        intent.putExtra(WhatsNewActivity.INFO_PARAM, "");
+        intent.putExtra(WhatsNewActivity.isWhatsNew, false);
+        intent.putExtra(WhatsNewActivity.isShownAlways, false);
+        startActivity(intent);
     }
 
     @Override
