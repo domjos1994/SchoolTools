@@ -174,12 +174,12 @@ public class TimerEntryActivity extends AppCompatActivity {
                                     }
                                     if(spTimerSubject.getSelectedItem()!=null) {
                                         if(!spTimerSubject.getSelectedItem().equals("")) {
-                                            timerEvent.setSubject(MainActivity.globals.getSqLite().getSubjects("title='" + spTimerSubject.getSelectedItem() + "'").get(0));
+                                            timerEvent.setSubject(MainActivity.globals.getSqLite().getSubjects("TITLE_PARAM='" + spTimerSubject.getSelectedItem() + "'").get(0));
                                         }
                                     }
                                     if(spTimerClass.getSelectedItem()!=null) {
                                         if(!spTimerClass.getSelectedItem().equals("")) {
-                                            timerEvent.setSchoolClass(MainActivity.globals.getSqLite().getClasses("title='" + spTimerClass.getSelectedItem() + "'").get(0));
+                                            timerEvent.setSchoolClass(MainActivity.globals.getSqLite().getClasses("TITLE_PARAM='" + spTimerClass.getSelectedItem() + "'").get(0));
                                         }
                                     }
                                     if(spTimerTeacher.getSelectedItem()!=null) {

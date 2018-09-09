@@ -92,7 +92,7 @@ public class ApiHelper {
 
         pdfBuilder.addTitle(settings.getTitle(), "subHeader", Paragraph.ALIGN_CENTER);
         pdfBuilder.addEmptyLine(3);
-        pdfBuilder.addParagraph(this.context.getString(R.string.main_menu_settings), content, "subHeader", "content");
+        pdfBuilder.addParagraph(this.context.getString(R.string.main_menu_settings), content, "subHeader", "CONTENT_PARAM");
         List<List<Map.Entry<String, BaseColor>>> lsBuilders = new LinkedList<>();
         Map<Double, Double> mp = null;
         switch (settings.getType()) {
@@ -152,12 +152,12 @@ public class ApiHelper {
     }
 
     public String exportMarkListToTEXT(List<MarkListSettings> settingList) {
-        CSVBridge writer = new CSVBridge(";", "id;title;max_points;best_mark_at;worst_mark_to;custom_mark;custom_points;half_points;tenth_marks;dictat_mode;type;mark_mode;view_mode");
+        CSVBridge writer = new CSVBridge(";", "id;TITLE_PARAM;max_points;best_mark_at;worst_mark_to;custom_mark;custom_points;half_points;tenth_marks;dictat_mode;type;mark_mode;view_mode");
         for(int i = 1; i<= settingList.size(); i++) {
             try {
                 MarkListSettings settings = settingList.get(i-1);
                 writer.writeValue(i, "id", settings.getId());
-                writer.writeValue(i, "title", settings.getTitle());
+                writer.writeValue(i, "TITLE_PARAM", settings.getTitle());
                 writer.writeValue(i, "max_points", settings.getMaxPoints());
                 writer.writeValue(i, "best_mark_at", settings.getBestMarkAt());
                 writer.writeValue(i, "worst_mark_to", settings.getWorstMarkTo());
@@ -189,7 +189,7 @@ public class ApiHelper {
         if(!markListSettings.isEmpty()) {
             for(MarkListSettings settings : markListSettings) {
                 XMLElement element = new XMLElement("MarkListSettings");
-                element.addAttribute("title", this.escapeText(settings.getTitle()));
+                element.addAttribute("TITLE_PARAM", this.escapeText(settings.getTitle()));
                 element.addAttribute("type", String.valueOf(settings.getType()));
 
                 XMLElement general = new XMLElement("General");
@@ -224,7 +224,7 @@ public class ApiHelper {
         } else {
             CSVBridge reader = new CSVBridge(";", "", content.trim(), true);
             for(int i = 1; i<=reader.size(); i++) {
-                MarkListSettings settings = new MarkListSettings(reader.readStringValue(i, "title"));
+                MarkListSettings settings = new MarkListSettings(reader.readStringValue(i, "TITLE_PARAM"));
                 settings.setId(reader.readIntegerValue(i, "id"));
                 settings.setMaxPoints(reader.readIntegerValue(i, "max_points"));
                 settings.setBestMarkAt(reader.readDoubleValue(i, "best_mark_at"));
@@ -249,7 +249,7 @@ public class ApiHelper {
             XMLBuilder builder = new XMLBuilder(file);
             List<XMLElement> elements = builder.getElements("MarkListSettings");
             for(XMLElement xmlElement : elements) {
-                MarkListSettings markListSettings = new MarkListSettings(this.unescapeText(xmlElement.getAttributes().get("title")));
+                MarkListSettings markListSettings = new MarkListSettings(this.unescapeText(xmlElement.getAttributes().get("TITLE_PARAM")));
                 markListSettings.setType(this.getIntegerFromMap(xmlElement.getAttributes(), "type"));
                 if(xmlElement.getSubElements().size()!=2) {
                     if(MainActivity.globals.getUserSettings().isApiCancelExport()) {
@@ -323,9 +323,9 @@ public class ApiHelper {
 
             pdfBuilder.addTable(Arrays.asList(this.context.getString(R.string.sys_description), ""), null, lsBuilders);
             pdfBuilder.addEmptyLine(2);
-            pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), test.getDescription(), "subHeader", "content");
+            pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), test.getDescription(), "subHeader", "CONTENT_PARAM");
             pdfBuilder.addEmptyLine(2);
-            pdfBuilder.addParagraph(this.context.getString(R.string.mark_themes), test.getThemes(), "subHeader", "content");
+            pdfBuilder.addParagraph(this.context.getString(R.string.mark_themes), test.getThemes(), "subHeader", "CONTENT_PARAM");
             pdfBuilder.newPage();
         }
         return pdfBuilder;
@@ -393,7 +393,7 @@ public class ApiHelper {
                     for(Test test : schoolYear.getTests()) {
                         XMLElement testElement = new XMLElement("Test");
                         testElement.addAttribute("id", String.valueOf(test.getID()));
-                        testElement.addAttribute("title", this.escapeText(test.getTitle()));
+                        testElement.addAttribute("TITLE_PARAM", this.escapeText(test.getTitle()));
                         testElement.addAttribute("description", this.escapeText(test.getDescription()));
                         testElement.addAttribute("themes", this.escapeText(test.getThemes()));
                         testElement.addAttribute("mark", String.valueOf(test.getMark()));
@@ -480,7 +480,7 @@ public class ApiHelper {
                                 for(XMLElement element : testElement.getSubElements()) {
                                     Test test = new Test();
                                     test.setID(this.getIntegerFromMap(element.getAttributes(), "id"));
-                                    test.setTitle(this.unescapeText(element.getAttributes().get("title")));
+                                    test.setTitle(this.unescapeText(element.getAttributes().get("TITLE_PARAM")));
                                     test.setDescription(this.unescapeText(element.getAttributes().get("description")));
                                     test.setThemes(this.unescapeText(element.getAttributes().get("themes")));
                                     test.setMark(this.getDoubleFromMap(element.getAttributes(), "mark"));
@@ -547,7 +547,7 @@ public class ApiHelper {
             description = this.context.getString(R.string.sys_description) + "\n" + timeTable.getDescription();
         }
         content = String.format(content, yearTitle, classTitle, description);
-        pdfBuilder.addParagraph("", content, "header", "content");
+        pdfBuilder.addParagraph("", content, "header", "CONTENT_PARAM");
         pdfBuilder.addEmptyLine(2);
 
         List<List<Map.Entry<String, BaseColor>>> tblCells = new LinkedList<>();
@@ -628,12 +628,12 @@ public class ApiHelper {
     }
 
     public String exportTimeTableToTEXT(List<TimeTable> timeTables) {
-        CSVBridge writer = new CSVBridge(";", "id;title;description;year;school_class;days");
+        CSVBridge writer = new CSVBridge(";", "id;TITLE_PARAM;description;year;school_class;days");
         for(int i = 1; i<=timeTables.size(); i++) {
             try {
                 TimeTable timeTable = timeTables.get(i-1);
                 writer.writeValue(i, "id", timeTable.getID());
-                writer.writeValue(i, "title", timeTable.getTitle());
+                writer.writeValue(i, "TITLE_PARAM", timeTable.getTitle());
                 writer.writeValue(i, "description", timeTable.getDescription());
                 writer.writeValue(i, "year", this.getCSVObjectFromYear(timeTable.getYear()), "(", ")");
                 writer.writeValue(i, "school_class", this.getCSVObjectFromSchoolClass(timeTable.getSchoolClass(), "|"), "(", ")");
@@ -749,7 +749,7 @@ public class ApiHelper {
                 for(TimeTable timeTable : timeTables) {
                     XMLElement xmlElement = new XMLElement("TimeTable");
                     xmlElement.addAttribute("id", String.valueOf(timeTable.getID()));
-                    xmlElement.addAttribute("title", this.escapeText(timeTable.getTitle()));
+                    xmlElement.addAttribute("TITLE_PARAM", this.escapeText(timeTable.getTitle()));
                     xmlElement.addAttribute("description", String.valueOf(timeTable.getDescription()));
 
                     XMLElement yearElement = this.getXMLElementFromYear(timeTable.getYear());
@@ -884,7 +884,7 @@ public class ApiHelper {
             for(int i = 1; i<=reader.size(); i++) {
                 TimeTable timeTable = new TimeTable();
                 timeTable.setID(reader.readIntegerValue(i, "id"));
-                timeTable.setTitle(reader.readStringValue(i, "title"));
+                timeTable.setTitle(reader.readStringValue(i, "TITLE_PARAM"));
                 timeTable.setDescription(reader.readStringValue(i, "description"));
                 timeTable.setYear(this.getYearFromCSVObject(reader.readObjectValue(i, "year", "|", "(", ")")));
                 timeTable.setSchoolClass(this.getSchoolClassFromCSVObject(reader.readObjectValue(i, "school_class", "|", "(", ")")));
@@ -992,7 +992,7 @@ public class ApiHelper {
             for(XMLElement xmlElement : elements.get(0).getSubElements()) {
                 TimeTable timeTable = new TimeTable();
                 timeTable.setID(this.getIntegerFromMap(xmlElement.getAttributes(), "id"));
-                timeTable.setTitle(this.unescapeText(xmlElement.getAttributes().get("title")));
+                timeTable.setTitle(this.unescapeText(xmlElement.getAttributes().get("TITLE_PARAM")));
                 timeTable.setDescription(this.unescapeText(xmlElement.getAttributes().get("description")));
 
                 for(XMLElement subElement : xmlElement.getSubElements()) {
@@ -1090,17 +1090,17 @@ public class ApiHelper {
     public PDFBuilder exportNoteToPDF(PDFBuilder pdfBuilder, Note note) throws Exception {
         pdfBuilder.addTitle(note.getTitle(), "header", Paragraph.ALIGN_CENTER);
         pdfBuilder.addParagraph("", Converter.convertDateToString(note.getMemoryDate()), "header", "subHeader");
-        pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), note.getDescription(), "subHeader", "content");
+        pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), note.getDescription(), "subHeader", "CONTENT_PARAM");
         pdfBuilder.newPage();
         return pdfBuilder;
     }
 
     public String exportNoteToTEXT(List<Note> notes) {
-        CSVBridge writer = new CSVBridge(";", "id;title;memory_date;description");
+        CSVBridge writer = new CSVBridge(";", "id;TITLE_PARAM;memory_date;description");
         for(int i = 1; i<=notes.size(); i++) {
             try {
                 writer.writeValue(i, "id", notes.get(i-1).getID());
-                writer.writeValue(i, "title", notes.get(i-1).getTitle());
+                writer.writeValue(i, "TITLE_PARAM", notes.get(i-1).getTitle());
                 writer.writeValue(i, "memory_date", notes.get(i-1).getMemoryDate());
                 writer.writeValue(i, "description", notes.get(i-1).getDescription());
                 if(notes.size()!=i) {
@@ -1126,7 +1126,7 @@ public class ApiHelper {
                     XMLElement element = new XMLElement("Note");
                     element.addAttribute("id", String.valueOf(note.getID()));
                     element.addAttribute("memory_date", Converter.convertDateToString(note.getMemoryDate()));
-                    element.addAttribute("title", this.escapeText(note.getTitle()));
+                    element.addAttribute("TITLE_PARAM", this.escapeText(note.getTitle()));
                     element.setContent(this.escapeText(note.getDescription()));
                     builder.addElement(element);
                 }
@@ -1144,7 +1144,7 @@ public class ApiHelper {
             for(int i = 1; i<=reader.size(); i++) {
                 Note note = new Note();
                 note.setID(reader.readIntegerValue(i, "id"));
-                note.setTitle(reader.readStringValue(i, "title"));
+                note.setTitle(reader.readStringValue(i, "TITLE_PARAM"));
                 note.setMemoryDate(reader.readDateValue(i, "memory_date"));
                 note.setDescription(reader.readStringValue(i, "description"));
 
@@ -1168,7 +1168,7 @@ public class ApiHelper {
                         note.setMemoryDate(Converter.convertStringToDate(memory));
                     }
                 }
-                note.setTitle(this.unescapeText(xmlElement.getAttributes().get("title")));
+                note.setTitle(this.unescapeText(xmlElement.getAttributes().get("TITLE_PARAM")));
                 note.setDescription(this.unescapeText(xmlElement.getContent()));
 
                 this.saveNote(note);
@@ -1196,7 +1196,7 @@ public class ApiHelper {
     public PDFBuilder exportToDoListToPDF(PDFBuilder pdfBuilder, ToDoList toDoList) throws Exception {
         pdfBuilder.addTitle(toDoList.getTitle(), "header", Paragraph.ALIGN_CENTER);
         pdfBuilder.addTitle(Converter.convertDateToString(toDoList.getListDate()), "subHeader", Paragraph.ALIGN_CENTER);
-        pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), toDoList.getDescription(), "subHeader", "content");
+        pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), toDoList.getDescription(), "subHeader", "CONTENT_PARAM");
         pdfBuilder.addEmptyLine(3);
 
         List<String> headerList =
@@ -1226,11 +1226,11 @@ public class ApiHelper {
     }
 
     public String exportToDoListToTEXT(List<ToDoList> toDoLists) {
-        CSVBridge writer = new CSVBridge(";", "id;title;description;list_date;to_dos");
+        CSVBridge writer = new CSVBridge(";", "id;TITLE_PARAM;description;list_date;to_dos");
         for(int i = 1; i<=toDoLists.size(); i++) {
             try {
                 writer.writeValue(i, "id", toDoLists.get(i-1).getID());
-                writer.writeValue(i, "title", toDoLists.get(i-1).getTitle());
+                writer.writeValue(i, "TITLE_PARAM", toDoLists.get(i-1).getTitle());
                 writer.writeValue(i, "description", toDoLists.get(i-1).getDescription());
                 writer.writeValue(i, "list_date", toDoLists.get(i-1).getListDate());
                 List<CSVObject> csvObjects = new LinkedList<>();
@@ -1263,7 +1263,7 @@ public class ApiHelper {
                     XMLElement element = new XMLElement("ToDoList");
                     element.addAttribute("id", String.valueOf(toDoList.getID()));
                     element.addAttribute("list_date", Converter.convertDateToString(toDoList.getListDate()));
-                    element.addAttribute("title", this.escapeText(toDoList.getTitle()));
+                    element.addAttribute("TITLE_PARAM", this.escapeText(toDoList.getTitle()));
                     if(toDoList.getToDos()!=null) {
                         if(!toDoList.getToDos().isEmpty()) {
                             for(ToDo toDo : toDoList.getToDos()) {
@@ -1288,7 +1288,7 @@ public class ApiHelper {
             for(int i = 1; i<=reader.size(); i++) {
                 ToDoList toDoList = new ToDoList();
                 toDoList.setID(reader.readIntegerValue(i, "id"));
-                toDoList.setTitle(reader.readStringValue(i, "title"));
+                toDoList.setTitle(reader.readStringValue(i, "TITLE_PARAM"));
                 toDoList.setDescription(reader.readStringValue(i, "description"));
                 toDoList.setListDate(reader.readDateValue(i, "list_date"));
                 this.saveToDoList(toDoList);
@@ -1319,7 +1319,7 @@ public class ApiHelper {
                 ToDoList toDoList = new ToDoList();
                 toDoList.setID(this.getIntegerFromMap(xmlElement.getAttributes(), "id"));
                 toDoList.setListDate(Converter.convertStringToDate(xmlElement.getAttributes().get("list_date")));
-                toDoList.setTitle(this.unescapeText(xmlElement.getAttributes().get("title")));
+                toDoList.setTitle(this.unescapeText(xmlElement.getAttributes().get("TITLE_PARAM")));
                 toDoList.setDescription(this.unescapeText(xmlElement.getContent()));
                 this.saveToDoList(toDoList);
 
@@ -1352,29 +1352,29 @@ public class ApiHelper {
 
     public PDFBuilder exportTimerEventToPDF(PDFBuilder pdfBuilder, TimerEvent timerEvent) throws Exception {
         pdfBuilder.addTitle(timerEvent.getTitle(), "header", Paragraph.ALIGN_CENTER);
-        pdfBuilder.addTitle(this.context.getString(R.string.todo_category) + ": " + timerEvent.getCategory(), "content", Paragraph.ALIGN_LEFT);
-        pdfBuilder.addTitle(this.context.getString(R.string.mark_date) + ": " + Converter.convertDateToString(timerEvent.getEventDate()), "content", Paragraph.ALIGN_LEFT);
-        pdfBuilder.addTitle(this.context.getString(R.string.sys_memory) + ": " + Converter.convertDateToString(timerEvent.getMemoryDate()), "content", Paragraph.ALIGN_LEFT);
+        pdfBuilder.addTitle(this.context.getString(R.string.todo_category) + ": " + timerEvent.getCategory(), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
+        pdfBuilder.addTitle(this.context.getString(R.string.mark_date) + ": " + Converter.convertDateToString(timerEvent.getEventDate()), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
+        pdfBuilder.addTitle(this.context.getString(R.string.sys_memory) + ": " + Converter.convertDateToString(timerEvent.getMemoryDate()), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
         if(timerEvent.getSchoolClass()!=null) {
-            pdfBuilder.addTitle(this.context.getString(R.string.timetable_class) + ": " + timerEvent.getSchoolClass().getTitle(), "content", Paragraph.ALIGN_LEFT);
+            pdfBuilder.addTitle(this.context.getString(R.string.timetable_class) + ": " + timerEvent.getSchoolClass().getTitle(), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
         }
         if(timerEvent.getTeacher()!=null) {
-            pdfBuilder.addTitle(this.context.getString(R.string.timetable_teacher) + ": " + timerEvent.getTeacher().getLastName(), "content", Paragraph.ALIGN_LEFT);
+            pdfBuilder.addTitle(this.context.getString(R.string.timetable_teacher) + ": " + timerEvent.getTeacher().getLastName(), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
         }
         if(timerEvent.getSubject()!=null) {
-            pdfBuilder.addTitle(this.context.getString(R.string.timetable_subject_alias) + ": " + timerEvent.getSubject().getAlias(), "content", Paragraph.ALIGN_LEFT);
+            pdfBuilder.addTitle(this.context.getString(R.string.timetable_subject_alias) + ": " + timerEvent.getSubject().getAlias(), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
         }
-        pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), timerEvent.getDescription(), "content", "content");
+        pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), timerEvent.getDescription(), "CONTENT_PARAM", "CONTENT_PARAM");
         pdfBuilder.newPage();
         return pdfBuilder;
     }
 
     public String exportTimerEventToTEXT(List<TimerEvent> timerEvents) {
-        CSVBridge writer = new CSVBridge(";", "id;title;category;description;event_date;memory_date;school_class;subject;teacher");
+        CSVBridge writer = new CSVBridge(";", "id;TITLE_PARAM;category;description;event_date;memory_date;school_class;subject;teacher");
         for(int i = 1; i<=timerEvents.size(); i++) {
             try {
                 writer.writeValue(i, "id", timerEvents.get(i-1).getID());
-                writer.writeValue(i, "title", timerEvents.get(i-1).getTitle());
+                writer.writeValue(i, "TITLE_PARAM", timerEvents.get(i-1).getTitle());
                 writer.writeValue(i, "category", timerEvents.get(i-1).getCategory());
                 writer.writeValue(i, "description", timerEvents.get(i-1).getDescription());
                 writer.writeValue(i, "event_date", timerEvents.get(i-1).getEventDate());
@@ -1406,7 +1406,7 @@ public class ApiHelper {
                     element.addAttribute("id", String.valueOf(timerEvent.getID()));
                     element.addAttribute("event_date", Converter.convertDateToString(timerEvent.getEventDate()));
                     element.addAttribute("memory_date", Converter.convertDateToString(timerEvent.getMemoryDate()));
-                    element.addAttribute("title", this.escapeText(timerEvent.getTitle()));
+                    element.addAttribute("TITLE_PARAM", this.escapeText(timerEvent.getTitle()));
                     element.addAttribute("category", this.escapeText(timerEvent.getCategory()));
                     element.addSubElement(this.getXMLElementFromSubject(timerEvent.getSubject()));
                     element.addSubElement(this.getXMLElementFromSchoolClass(timerEvent.getSchoolClass()));
@@ -1428,7 +1428,7 @@ public class ApiHelper {
             for(int i = 1; i<=reader.size(); i++) {
                 TimerEvent timerEvent = new TimerEvent();
                 timerEvent.setID(reader.readIntegerValue(i, "id"));
-                timerEvent.setTitle(reader.readStringValue(i, "title"));
+                timerEvent.setTitle(reader.readStringValue(i, "TITLE_PARAM"));
                 timerEvent.setCategory(reader.readStringValue(i, "category"));
                 timerEvent.setDescription(reader.readStringValue(i, "description"));
                 timerEvent.setEventDate(reader.readDateValue(i, "event_date"));
@@ -1478,7 +1478,7 @@ public class ApiHelper {
                         timerEvent.setEventDate(Converter.convertStringToDate(event));
                     }
                 }
-                timerEvent.setTitle(this.unescapeText(xmlElement.getAttributes().get("title")));
+                timerEvent.setTitle(this.unescapeText(xmlElement.getAttributes().get("TITLE_PARAM")));
                 timerEvent.setCategory(this.unescapeText(xmlElement.getAttributes().get("category")));
                 for(XMLElement element : xmlElement.getSubElements()) {
                     switch (element.getElement()) {
@@ -1690,7 +1690,7 @@ public class ApiHelper {
         if(element!=null) {
             ToDo toDo = new ToDo();
             toDo.setID(getIntegerFromMap(element.getAttributes(), "id"));
-            toDo.setTitle(this.unescapeText(element.getAttributes().get("title")));
+            toDo.setTitle(this.unescapeText(element.getAttributes().get("TITLE_PARAM")));
             toDo.setCategory(this.unescapeText(element.getAttributes().get("category")));
             toDo.setDescription(this.unescapeText(element.getContent()));
             try {
@@ -1710,7 +1710,7 @@ public class ApiHelper {
         if(toDo!=null) {
             XMLElement element = new XMLElement("ToDo");
             element.addAttribute("id", String.valueOf(toDo.getID()));
-            element.addAttribute("title", this.escapeText(toDo.getTitle()));
+            element.addAttribute("TITLE_PARAM", this.escapeText(toDo.getTitle()));
             element.addAttribute("category", this.escapeText(toDo.getCategory()));
             element.setContent(this.escapeText(toDo.getDescription()));
             element.addAttribute("memory_date", Converter.convertDateToString(toDo.getMemoryDate()));
@@ -1759,7 +1759,7 @@ public class ApiHelper {
     private SchoolClass getSchoolClassFromXMLElement(XMLElement element) {
         SchoolClass schoolClass = new SchoolClass();
         schoolClass.setID(this.getIntegerFromMap(element.getAttributes(), "id"));
-        schoolClass.setTitle(this.unescapeText(element.getAttributes().get("title")));
+        schoolClass.setTitle(this.unescapeText(element.getAttributes().get("TITLE_PARAM")));
         schoolClass.setDescription(this.unescapeText(element.getAttributes().get("description")));
         schoolClass.setNumberOfPupils(this.getIntegerFromMap(element.getAttributes(), "numberOfPupils"));
 
@@ -1774,7 +1774,7 @@ public class ApiHelper {
         if(schoolClass!=null) {
             XMLElement xmlElement = new XMLElement("SchoolClass");
             xmlElement.addAttribute("id", String.valueOf(schoolClass.getID()));
-            xmlElement.addAttribute("title", this.escapeText(schoolClass.getTitle()));
+            xmlElement.addAttribute("TITLE_PARAM", this.escapeText(schoolClass.getTitle()));
             xmlElement.addAttribute("numberOfPupils", String.valueOf(schoolClass.getNumberOfPupils()));
             xmlElement.addAttribute("description", this.escapeText(schoolClass.getDescription()));
             return xmlElement;
@@ -1785,7 +1785,7 @@ public class ApiHelper {
 
     private SchoolClass saveSchoolClass(SchoolClass schoolClass) {
         if(schoolClass!=null) {
-            List<SchoolClass> schoolClasses = this.sqLite.getClasses("title='" + schoolClass.getTitle() + "'");
+            List<SchoolClass> schoolClasses = this.sqLite.getClasses("TITLE_PARAM='" + schoolClass.getTitle() + "'");
             if(schoolClasses.isEmpty()) {
                 schoolClass.setID(0);
             } else {
@@ -1822,7 +1822,7 @@ public class ApiHelper {
 
     private Year getYearFromXMLElement(XMLElement element) {
         Year year = new Year();
-        year.setTitle(this.unescapeText(element.getAttributes().get("title")));
+        year.setTitle(this.unescapeText(element.getAttributes().get("TITLE_PARAM")));
         year.setID(this.getIntegerFromMap(element.getAttributes(), "id"));
         year.setDescription(this.unescapeText(element.getAttributes().get("description")));
 
@@ -1837,7 +1837,7 @@ public class ApiHelper {
         if(year!=null) {
             XMLElement xmlElement = new XMLElement("Year");
             xmlElement.addAttribute("id", String.valueOf(year.getID()));
-            xmlElement.addAttribute("title", this.escapeText(year.getTitle()));
+            xmlElement.addAttribute("TITLE_PARAM", this.escapeText(year.getTitle()));
             xmlElement.addAttribute("description", this.escapeText(year.getDescription()));
             return xmlElement;
         } else {
@@ -1847,7 +1847,7 @@ public class ApiHelper {
 
     private Year saveYear(Year year) {
         if(year!=null) {
-            List<Year> years = this.sqLite.getYears("title='" + year.getTitle() + "'");
+            List<Year> years = this.sqLite.getYears("TITLE_PARAM='" + year.getTitle() + "'");
             if(years.isEmpty()) {
                 year.setID(0);
             } else {
@@ -1900,7 +1900,7 @@ public class ApiHelper {
     private Subject getSubjectFromXMLElement(XMLElement element) {
         Subject subject = new Subject();
         subject.setID(this.getIntegerFromMap(element.getAttributes(), "id"));
-        subject.setTitle(this.unescapeText(element.getAttributes().get("title")));
+        subject.setTitle(this.unescapeText(element.getAttributes().get("TITLE_PARAM")));
         subject.setAlias(this.unescapeText(element.getAttributes().get("alias")));
         subject.setDescription(this.unescapeText(element.getAttributes().get("description")));
         subject.setBackgroundColor(this.unescapeText(element.getAttributes().get("backgroundColor")));
@@ -1924,7 +1924,7 @@ public class ApiHelper {
             XMLElement xmlElement = new XMLElement("Subject");
             xmlElement.setParentElement("SchoolYear");
             xmlElement.addAttribute("id", String.valueOf(subject.getID()));
-            xmlElement.addAttribute("title", this.escapeText(subject.getTitle()));
+            xmlElement.addAttribute("TITLE_PARAM", this.escapeText(subject.getTitle()));
             xmlElement.addAttribute("alias", this.escapeText(subject.getAlias()));
             xmlElement.addAttribute("description", this.escapeText(subject.getDescription()));
             xmlElement.addAttribute("backgroundColor", this.escapeText(subject.getBackgroundColor()));
@@ -1945,7 +1945,7 @@ public class ApiHelper {
             if(subject.getTeacher()!=null) {
                 subject.setTeacher(this.saveTeacher(subject.getTeacher()));
             }
-            List<Subject> subjects = this.sqLite.getSubjects("title='" + subject.getTitle() + "'");
+            List<Subject> subjects = this.sqLite.getSubjects("TITLE_PARAM='" + subject.getTitle() + "'");
             if(subjects.isEmpty()) {
                 subject.setID(0);
             } else {

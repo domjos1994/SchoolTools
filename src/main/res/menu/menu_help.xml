@@ -22,11 +22,6 @@
         android:title="@string/help_deleteLog"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menMainWhatsNew"
-        android:orderInCategory="100"
-        android:title="@string/whats_new"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/menHelpAbout"
         android:orderInCategory="100"
         android:title="@string/help_about"

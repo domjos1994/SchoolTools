@@ -122,11 +122,11 @@ public class MarkEntryActivity extends AppCompatActivity {
                     txtTestThemes.setText(test.getThemes());
                     txtTestDescription.setText(test.getDescription());
 
-                    if(sql.entryExists("timerEvents", "title='" + test.getTitle() + "' AND category='" + this.getString(R.string.mark_test) + "'")) {
+                    if(sql.entryExists("timerEvents", "TITLE_PARAM='" + test.getTitle() + "' AND category='" + this.getString(R.string.mark_test) + "'")) {
                         this.chkTestTimerEvent.setChecked(true);
                     }
 
-                    if(sql.entryExists("toDoLists", "title='" + test.getTitle() + "'")) {
+                    if(sql.entryExists("toDoLists", "TITLE_PARAM='" + test.getTitle() + "'")) {
                         this.chkTestToDoList.setChecked(true);
                     }
                 }
@@ -171,20 +171,20 @@ public class MarkEntryActivity extends AppCompatActivity {
                                     test.setDescription(txtTestDescription.getText().toString());
 
                                     if(chkTestTimerEvent.isChecked()) {
-                                        if(!sql.entryExists("timerEvents", "title='" + test.getTitle() + "' AND category='" + test + "'")) {
+                                        if(!sql.entryExists("timerEvents", "TITLE_PARAM='" + test.getTitle() + "' AND category='" + test + "'")) {
                                             TimerEvent event = new TimerEvent();
                                             event.setTitle(test.getTitle());
                                             event.setDescription(test.getDescription());
                                             event.setEventDate(test.getTestDate());
                                             event.setMemoryDate(test.getMemoryDate());
-                                            event.setSubject(MainActivity.globals.getSqLite().getSubjects("title='" + lblTestSubject.getText() + "'").get(0));
+                                            event.setSubject(MainActivity.globals.getSqLite().getSubjects("TITLE_PARAM='" + lblTestSubject.getText() + "'").get(0));
                                             event.setCategory(getString(R.string.mark_test));
                                             sql.insertOrUpdateTimerEvent(event);
                                         }
                                     }
 
                                     if(chkTestToDoList.isChecked() && !test.getThemes().isEmpty()) {
-                                        if(!sql.entryExists("toDoLists", "title='" + test.getTitle() + "'")) {
+                                        if(!sql.entryExists("toDoLists", "TITLE_PARAM='" + test.getTitle() + "'")) {
                                             ToDoList toDoList = new ToDoList();
                                             toDoList.setTitle(test.getTitle());
                                             toDoList.setListDate(test.getTestDate());

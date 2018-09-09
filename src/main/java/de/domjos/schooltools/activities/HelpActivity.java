@@ -65,11 +65,15 @@ public class HelpActivity extends AppCompatActivity {
                     }
                 }
                 break;
-            case R.id.menMainWhatsNew:
-                startActivity(new Intent(this.getApplicationContext(), WhatsNewActivity.class));
-                break;
             case R.id.menHelpAbout:
-                startActivity(new Intent(this.getApplicationContext(), HelpAboutActivity.class));
+                Intent intent = new Intent(this.getApplicationContext(), WhatsNewActivity.class);
+                intent.putExtra(WhatsNewActivity.isWhatsNew, false);
+                intent.putExtra(WhatsNewActivity.isShownAlways, true);
+                intent.putExtra(WhatsNewActivity.INFO_PARAM, "");
+                intent.putExtra(WhatsNewActivity.TITLE_PARAM, "help_about");
+                intent.putExtra(WhatsNewActivity.CONTENT_PARAM, "help_about_content");
+                intent.putExtra(WhatsNewActivity.PARENT_CLASS, HelpActivity.class.getName());
+                startActivity(intent);
                 break;
             default:
         }

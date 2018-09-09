@@ -64,7 +64,7 @@ public class EventHelper {
             Calendar cal = Calendar.getInstance();
             cal.setTime(Converter.convertStringToDate(memory.getDate()));
 
-            String eventUriString = "content://com.android.calendar/events";
+            String eventUriString = "CONTENT_PARAM://com.android.calendar/events";
             ContentValues eventValues = new ContentValues();
             eventValues.put("calendar_id", 1);
             eventValues.put(CalendarContract.Events.TITLE, memory.getTitle());

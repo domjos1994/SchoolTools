@@ -424,7 +424,7 @@ public class ApiActivity extends AppCompatActivity {
             PDFBuilder pdfBuilder = new PDFBuilder(emptyPDF.getAbsolutePath(), this.getApplicationContext());
             pdfBuilder.addFont("header", Font.FontFamily.HELVETICA, 32, true, true, BaseColor.BLACK);
             pdfBuilder.addFont("subHeader", Font.FontFamily.HELVETICA, 28, true, false, BaseColor.BLACK);
-            pdfBuilder.addFont("content", Font.FontFamily.HELVETICA, 16, false, false, BaseColor.BLACK);
+            pdfBuilder.addFont("CONTENT_PARAM", Font.FontFamily.HELVETICA, 16, false, false, BaseColor.BLACK);
 
             if(type.equals(this.getString(R.string.main_nav_mark_list))) {
                 List<String> stringList = this.sqLite.listMarkLists(where);

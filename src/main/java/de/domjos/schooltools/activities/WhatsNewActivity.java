@@ -10,6 +10,7 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,10 +24,16 @@ import android.widget.TextView;
 import de.domjos.schooltools.R;
 
 public class WhatsNewActivity extends AppCompatActivity {
+    public final static String isShownAlways = "isShownAlways";
     public final static String isWhatsNew = "isWhatsNew";
-    public final static String title = "title";
-    public final static String content = "content";
-    public final static String info = "info";
+    public final static String TITLE_PARAM = "TITLE_PARAM";
+    public final static String CONTENT_PARAM = "CONTENT_PARAM";
+    public final static String INFO_PARAM = "INFO_PARAM";
+    public final static String PARENT_CLASS = "ParentClassSource";
+
+    private String title, content, info;
+    private boolean whatsNew, shownAlways;
+
     private TextView lblContent;
     private TextView lblInfo;
     private SharedPreferences preferences;
@@ -36,7 +43,23 @@ public class WhatsNewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.whats_new_activity);
         this.preferences = this.getSharedPreferences("desc_data", MODE_PRIVATE);
+        this.getParameters();
         this.initControls();
+    }
+
+    @Override
+    public Intent getParentActivityIntent() {
+        Intent parentIntent= getIntent();
+        String className = parentIntent.getStringExtra(WhatsNewActivity.PARENT_CLASS);
+
+        Intent newIntent=null;
+        try {
+            newIntent = new Intent(WhatsNewActivity.this, Class.forName(className));
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return newIntent;
     }
 
     private void initControls() {
@@ -57,24 +80,17 @@ public class WhatsNewActivity extends AppCompatActivity {
             }
         });
 
-        Bundle bundle = this.getIntent().getExtras();
-        if(bundle!=null) {
-            String title = bundle.getString(WhatsNewActivity.title);
-            String content = bundle.getString(WhatsNewActivity.content);
-            String info = bundle.getString(WhatsNewActivity.info, "");
-
-            if(bundle.getBoolean(WhatsNewActivity.isWhatsNew)) {
-                content = "whats_new_content";
-                title = "whats_new";
-            }
-            if(this.alreadyShown(title)) {
-                setResult(RESULT_OK);
-                finish();
-            }
-
-            this.setTitle(this.getStringResourceByName(title));
-            this.fillContent(content, info);
+        if(this.whatsNew) {
+            content = "whats_new_content";
+            title = "whats_new";
         }
+        if(this.alreadyShown(title)) {
+            setResult(RESULT_OK);
+            finish();
+        }
+
+        this.setTitle(this.getStringResourceByName(title));
+        this.fillContent(content, info);
     }
 
     private void fillContent(String content, String info) {
@@ -101,15 +117,30 @@ public class WhatsNewActivity extends AppCompatActivity {
     }
 
     private boolean alreadyShown(String key) {
-        if(this.preferences.contains(key)) {
-            if(this.preferences.getBoolean(key, false)) {
-                return true;
+        if(!this.shownAlways) {
+            if(this.preferences.contains(key)) {
+                if(this.preferences.getBoolean(key, false)) {
+                    return true;
+                }
             }
+            SharedPreferences.Editor editor = this.preferences.edit();
+            editor.putBoolean(key, true);
+            editor.apply();
+            return false;
+        } else {
+            return false;
         }
-        SharedPreferences.Editor editor = this.preferences.edit();
-        editor.putBoolean(key, true);
-        editor.apply();
-        return false;
+    }
+
+    private void getParameters() {
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle!=null) {
+            this.title = bundle.getString(WhatsNewActivity.TITLE_PARAM);
+            this.content = bundle.getString(WhatsNewActivity.CONTENT_PARAM);
+            this.info = bundle.getString(WhatsNewActivity.INFO_PARAM, "");
+            this.whatsNew = bundle.getBoolean(WhatsNewActivity.isWhatsNew);
+            this.shownAlways = bundle.getBoolean(WhatsNewActivity.isShownAlways);
+        }
     }
 
     public static void resetShown(String key, Context context) {

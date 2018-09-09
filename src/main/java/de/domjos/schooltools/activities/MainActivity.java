@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 Intent intent = new Intent(this.getApplicationContext(), WhatsNewActivity.class);
                 intent.putExtra(WhatsNewActivity.isWhatsNew, true);
-                intent.putExtra(WhatsNewActivity.info, "whats_new_info");
+                intent.putExtra(WhatsNewActivity.INFO_PARAM, "whats_new_info");
                 this.startActivity(intent);
             }
 
@@ -634,30 +634,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        for(Note note : MainActivity.globals.getSqLite().getNotes("title like '%" + search + "%'")) {
+        for(Note note : MainActivity.globals.getSqLite().getNotes("TITLE_PARAM like '%" + search + "%'")) {
             this.searchAdapter.add(new SearchItem(note.getID(), note.getTitle(), this.getString(R.string.main_nav_notes)));
         }
 
-        for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("title like '%" + search + "%'")) {
+        for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("TITLE_PARAM like '%" + search + "%'")) {
             this.searchAdapter.add(new SearchItem(toDoList.getID(), toDoList.getTitle(), this.getString(R.string.todo_list)));
         }
 
-        for(ToDo toDo : MainActivity.globals.getSqLite().getToDos("title like '%" + search + "%'")) {
+        for(ToDo toDo : MainActivity.globals.getSqLite().getToDos("TITLE_PARAM like '%" + search + "%'")) {
             this.searchAdapter.add(new SearchItem(toDo.getID(), toDo.getTitle(), this.getString(R.string.main_nav_todo)));
         }
 
-        for(TimeTable timeTable : MainActivity.globals.getSqLite().getTimeTables("title like '%" + search + "%'")) {
+        for(TimeTable timeTable : MainActivity.globals.getSqLite().getTimeTables("TITLE_PARAM like '%" + search + "%'")) {
             this.searchAdapter.add(new SearchItem(timeTable.getID(), timeTable.getTitle(), this.getString(R.string.main_nav_timetable)));
         }
 
-        for(TimerEvent timerEvent : MainActivity.globals.getSqLite().getTimerEvents("title like '%" + search + "%'")) {
+        for(TimerEvent timerEvent : MainActivity.globals.getSqLite().getTimerEvents("TITLE_PARAM like '%" + search + "%'")) {
             SearchItem searchItem = new SearchItem(timerEvent.getID(), timerEvent.getTitle(), this.getString(R.string.main_nav_timer));
             searchItem.setExtra(Converter.convertDateToString(timerEvent.getEventDate()));
             this.searchAdapter.add(searchItem);
         }
 
 
-        for(Subject subject : MainActivity.globals.getSqLite().getSubjects("title like '%" + search + "'")) {
+        for(Subject subject : MainActivity.globals.getSqLite().getSubjects("TITLE_PARAM like '%" + search + "'")) {
             this.searchAdapter.add(new SearchItem(subject.getID(), subject.getTitle(), this.getString(R.string.timetable_lesson)));
         }
 
@@ -665,11 +665,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.searchAdapter.add(new SearchItem(teacher.getID(), teacher.getLastName(), this.getString(R.string.timetable_teacher)));
         }
 
-        for(SchoolClass schoolClass : MainActivity.globals.getSqLite().getClasses("title like '%" + search + "'")) {
+        for(SchoolClass schoolClass : MainActivity.globals.getSqLite().getClasses("TITLE_PARAM like '%" + search + "'")) {
             this.searchAdapter.add(new SearchItem(schoolClass.getID(), schoolClass.getTitle(), this.getString(R.string.timetable_class)));
         }
 
-        for(Year year : MainActivity.globals.getSqLite().getYears("title like '%" + search + "'")) {
+        for(Year year : MainActivity.globals.getSqLite().getYears("TITLE_PARAM like '%" + search + "'")) {
             this.searchAdapter.add(new SearchItem(year.getID(), year.getTitle(), this.getString(R.string.mark_year)));
         }
 
@@ -717,7 +717,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String title = savedTimeTablesAdapter.getItem(position);
                 MainActivity.globals.getGeneralSettings().setWidgetTimetableSpinner(title);
 
-                List<TimeTable> tables = MainActivity.globals.getSqLite().getTimeTables("title='" + title + "'");
+                List<TimeTable> tables = MainActivity.globals.getSqLite().getTimeTables("TITLE_PARAM='" + title + "'");
 
                 if(tables!=null) {
                     if(!tables.isEmpty()) {
@@ -973,7 +973,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void openWhatsNew() {
         Intent intent = new Intent(this.getApplicationContext(), WhatsNewActivity.class);
         intent.putExtra(WhatsNewActivity.isWhatsNew, true);
-        intent.putExtra(WhatsNewActivity.info, "whats_new_info");
+        intent.putExtra(WhatsNewActivity.INFO_PARAM, "whats_new_info");
         this.startActivity(intent);
     }
 

@@ -111,7 +111,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                 }
                                 if(spTimeTableYear.getSelectedItem()!=null) {
                                     if(!spTimeTableYear.getSelectedItem().toString().equals("")) {
-                                        List<Year> years = MainActivity.globals.getSqLite().getYears("title='" + spTimeTableYear.getSelectedItem() + "'");
+                                        List<Year> years = MainActivity.globals.getSqLite().getYears("TITLE_PARAM='" + spTimeTableYear.getSelectedItem() + "'");
                                         if(years!=null) {
                                             if(!years.isEmpty()) {
                                                 currentItem.setYear(years.get(0));
