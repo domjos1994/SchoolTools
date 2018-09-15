@@ -215,6 +215,7 @@ public class Helper {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("vnd.android.cursor.dir/email");
         String to[] = {email};
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Intent.EXTRA_EMAIL, to);
         intent.putExtra(Intent.EXTRA_STREAM, attachment);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);

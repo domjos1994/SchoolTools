@@ -51,7 +51,7 @@ public class HelpActivity extends AppCompatActivity {
             case R.id.menHelpSendLog:
                 if(this.logFile.exists()) {
                     try {
-                        Helper.sendMailWithAttachment("webmaster@domjos.de", "SchoolTools-LogFile", this.logFile, getApplicationContext());
+                        Helper.sendMailWithAttachment("webmaster@domjos.de", "SchoolTools-LogFile", this.logFile, HelpActivity.this);
                         Helper.createToast(getApplicationContext(), getString(R.string.message_help_send_success));
                     } catch (Exception ex) {
                         Helper.printException(getApplicationContext(), ex);
