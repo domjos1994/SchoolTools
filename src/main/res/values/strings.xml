@@ -331,8 +331,9 @@
     <string name="whats_new_content">
         <![CDATA[
             <h1>SchoolTools Version 0.1</h1>
-            <h2>Funktionen</h2>
-
+            <p>
+                Dies ist der erste offizielle Release der Applikation!
+            </p>
         ]]>
     </string>
     <string name="whats_new_info">Sie können diesen Dialog jederzeit in der Hilfe wieder aufrufen!</string>
