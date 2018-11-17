@@ -497,7 +497,7 @@ public class ApiActivity extends AppCompatActivity {
                 return true;
             } else {
                 for(Memory memory : sqLite.getCurrentMemories()) {
-                    if(memory.getId()==id) {
+                    if(memory.getID()==id) {
                         EventHelper helper = new EventHelper(memory);
                         Intent intent = helper.openCalendar();
                         if(intent!=null) {
@@ -562,7 +562,7 @@ public class ApiActivity extends AppCompatActivity {
             }
             if(selectedType.equals(this.getString(R.string.sys_memory))) {
                 for(Memory memory : sqLite.getCurrentMemories()) {
-                    this.apiEntry.add(String.format(unformattedString, memory.getId(), memory.getTitle()));
+                    this.apiEntry.add(String.format(unformattedString, memory.getID(), memory.getTitle()));
                 }
             }
         }

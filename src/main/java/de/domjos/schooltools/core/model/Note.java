@@ -9,6 +9,8 @@
 
 package de.domjos.schooltools.core.model;
 
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
+
 import java.util.Date;
 
 /**
@@ -17,41 +19,12 @@ import java.util.Date;
  * @author Dominic Joas
  * @version 1.0
  */
-public class Note {
-    private int ID;
-    private String title;
-    private String description;
+public class Note extends BaseDescriptionObject {
     private Date memoryDate;
 
     public Note() {
-        this.ID = 0;
-        this.title = "";
-        this.description = "";
+        super();
         this.memoryDate = null;
-    }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Date getMemoryDate() {

@@ -9,6 +9,8 @@
 
 package de.domjos.schooltools.core.model.mark;
 
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
+
 import java.util.Date;
 
 /**
@@ -17,31 +19,20 @@ import java.util.Date;
  * @author Dominic Joas
  * @version 1.0
  */
-public class Test {
-    private int ID;
+public class Test extends BaseDescriptionObject {
     private double weight, mark, average;
-    private String title, description, themes;
+    private String themes;
     private Date testDate;
     private Date memoryDate;
 
     public Test() {
-        this.ID = 0;
+        super();
         this.weight = 0.0;
         this.mark = 0.0;
         this.average = 0.0;
-        this.title = "";
-        this.description = "";
         this.themes = "";
         this.testDate = null;
         this.memoryDate = null;
-    }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 
     public double getWeight() {
@@ -66,22 +57,6 @@ public class Test {
 
     public void setAverage(double average) {
         this.average = average;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getThemes() {

@@ -50,7 +50,7 @@ public class MemoryService extends IntentService {
                             break;
                         case Test:
                             linkedIntent = new Intent(this.getApplicationContext(), MarkEntryActivity.class);
-                            linkedIntent.putExtra("id", memory.getId());
+                            linkedIntent.putExtra("id", memory.getID());
                             linkedIntent.putExtra("enabled", false);
                             break;
                         case toDo:
@@ -69,13 +69,13 @@ public class MemoryService extends IntentService {
                     id++;
                 } else {
                     if(MainActivity.globals.getUserSettings().isDeleteMemories()) {
-                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getId());
+                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
                     }
                 }
             } catch (Exception ex) {
                 Helper.printException(this.getApplicationContext(), ex);
                 if(MainActivity.globals.getUserSettings().isDeleteMemories()) {
-                    MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getId());
+                    MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
                 }
             }
         }

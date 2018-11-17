@@ -1297,7 +1297,7 @@ public class SQLite extends SQLiteOpenHelper {
                     Cursor itemCursor = db.rawQuery(String.format("SELECT title, description FROM %s WHERE ID=%s;", table, id), null);
                     while (itemCursor.moveToNext()) {
                         Memory memory = new Memory();
-                        memory.setId(id);
+                        memory.setID(id);
                         memory.setTitle(itemCursor.getString(0));
                         memory.setDescription(itemCursor.getString(1));
                         memory.setDate(memDate);

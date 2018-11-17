@@ -8,6 +8,8 @@
  */
 package de.domjos.schooltools.core.model.timetable;
 
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
+
 /**
  * Model-Class for the school-class of a Time-Table
  * @see de.domjos.schooltools.activities.TimeTableActivity
@@ -15,23 +17,12 @@ package de.domjos.schooltools.core.model.timetable;
  * @author Dominic Joas
  * @version 1.0
  */
-public class SchoolClass {
-    private int ID, numberOfPupils;
-    private String title, description;
+public class SchoolClass extends BaseDescriptionObject {
+    private int numberOfPupils;
 
     public SchoolClass() {
-        this.ID = 0;
+        super();
         this.numberOfPupils = 0;
-        this.title = "";
-        this.description = "";
-    }
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 
     public int getNumberOfPupils() {
@@ -40,21 +31,5 @@ public class SchoolClass {
 
     public void setNumberOfPupils(int numberOfPupils) {
         this.numberOfPupils = numberOfPupils;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

@@ -11,6 +11,7 @@ package de.domjos.schooltools.core.model;
 
 import java.util.Date;
 
+import de.domjos.schooltools.core.model.objects.BaseCategoryObject;
 import de.domjos.schooltools.core.model.timetable.SchoolClass;
 import de.domjos.schooltools.core.model.timetable.Teacher;
 
@@ -20,11 +21,7 @@ import de.domjos.schooltools.core.model.timetable.Teacher;
  * @author Dominic Joas
  * @version 1.0
  */
-public class TimerEvent {
-    private int ID;
-    private String title;
-    private String description;
-    private String category;
+public class TimerEvent extends BaseCategoryObject {
     private Date memoryDate;
     private Date eventDate;
     private Subject subject;
@@ -32,47 +29,12 @@ public class TimerEvent {
     private SchoolClass schoolClass;
 
     public TimerEvent() {
-        this.ID = 0;
-        this.title = "";
-        this.description = "";
-        this.category = "";
+        super();
         this.memoryDate = null;
         this.subject = null;
         this.teacher = null;
         this.schoolClass = null;
         this.eventDate = null;
-    }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCategory() {
-        return this.category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public Date getMemoryDate() {

@@ -9,6 +9,7 @@
 
 package de.domjos.schooltools.core.model;
 
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.core.model.timetable.Teacher;
 
 /**
@@ -17,42 +18,21 @@ import de.domjos.schooltools.core.model.timetable.Teacher;
  * @author Dominic Joas
  * @version 1.0
  */
-public class Subject {
-    private int ID, hoursInWeek;
+public class Subject extends BaseDescriptionObject {
+    private int hoursInWeek;
     private boolean mainSubject;
-    private String title;
     private String alias;
-    private String description;
     private String backgroundColor;
     private Teacher teacher;
 
     public Subject() {
-        this.ID = 0;
+        super();
         this.hoursInWeek = 0;
         this.mainSubject = false;
-        this.title = "";
         this.alias = "";
-        this.description = "";
         this.backgroundColor = "";
         this.teacher = null;
     }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
 
     public String getAlias() {
         return this.alias;
@@ -60,14 +40,6 @@ public class Subject {
 
     public void setAlias(String alias) {
         this.alias = alias;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getHoursInWeek() {

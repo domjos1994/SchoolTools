@@ -9,6 +9,8 @@
 
 package de.domjos.schooltools.core.model.todo;
 
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
+
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,43 +22,14 @@ import java.util.List;
  * @author Dominic Joas
  * @version 1.0
  */
-public class ToDoList {
-    private int ID;
-    private String title;
-    private String description;
+public class ToDoList extends BaseDescriptionObject {
     private Date listDate;
     private List<ToDo> toDos;
 
     public ToDoList() {
-        this.ID = 0;
-        this.title = "";
-        this.description = "";
+        super();
         this.listDate = null;
         this.toDos = new LinkedList<>();
-    }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Date getListDate() {
@@ -89,6 +62,6 @@ public class ToDoList {
 
     @Override
     public String toString() {
-        return this.title;
+        return this.getTitle();
     }
 }

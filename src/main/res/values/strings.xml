@@ -20,6 +20,8 @@
     <string name="main_nav_notes">Notizen</string>
     <string name="main_nav_timer">Schultimer</string>
     <string name="main_nav_todo">ToDo</string>
+    <string name="main_nav_learn">Lernen</string>
+    <string name="main_nav_learningCards">Kartei-Karten</string>
     <string name="main_speech">Sprachbefehl</string>
 
     <string name="main_menu_export">Export/Import</string>
@@ -108,7 +110,9 @@
     <string name="settings_general_reset_database_summary">Datenbank auf Auslieferungszustand zurücksetzen!</string>
     <string name="settings_start">Startbildschirm</string>
     <string name="settings_start_start_header">Widgets für Startseite auswählen</string>
-    <string name="settings_start_start_summary">Wählen Sie die Widgets aus, welche auf der Startseite angezeigt werden.</string>
+    <string name="settings_start_start_summary">Wählen Sie die Widgets aus, welche auf der Startseite angezeigt
+        werden.
+    </string>
     <string-array name="settings_start_start_entries">
         <item>@string/main_today</item>
         <item>@string/main_today_timetable</item>
@@ -133,6 +137,7 @@
         <item>@string/main_nav_todo</item>
         <item>@string/main_nav_notes</item>
         <item>@string/main_nav_timer</item>
+        <item>@string/main_nav_learningCards</item>
     </string-array>
     <string name="settings_start_start_module_header">Start-Modul wählen</string>
     <string name="settings_start_start_module_summary">Bitte wählen Sie das Start-Modul aus!</string>
@@ -144,6 +149,7 @@
         <item>@string/main_nav_todo</item>
         <item>@string/main_nav_notes</item>
         <item>@string/main_nav_timer</item>
+        <item>@string/main_nav_learningCards</item>
     </string-array>
     <string name="settings_school">Thematische Einstellungen</string>
     <string name="settings_school_expert_header">Experten-Modus (Notenliste)</string>
@@ -169,10 +175,13 @@
 
     <string name="settings_api_override_header">Einträge überschreiben</string>
     <string name="settings_api_override_summary_on">Bereits vorhandene Einträge überschreiben</string>
-    <string name="settings_api_override_summary_of">Bereits vorhandene Einträge nicht überschreiben, sondern neuen Eintrag erstellen</string>
+    <string name="settings_api_override_summary_of">Bereits vorhandene Einträge nicht überschreiben, sondern neuen
+        Eintrag erstellen
+    </string>
     <string name="settings_api_cancel_export_header">Export abbrechen</string>
     <string name="settings_api_cancel_export_summary_on">Export abbrechen, sobald eine Zeile fehlerhaft!</string>
-    <string name="settings_api_cancel_export_summary_of">Export erst abbrechen, sobald komplette Datei fehlerhaft!</string>
+    <string name="settings_api_cancel_export_summary_of">Export erst abbrechen, sobald komplette Datei fehlerhaft!
+    </string>
 
     <string name="timetable_content">
         <![CDATA[
@@ -357,12 +366,24 @@
     <string name="message_marklist_6">Die größte Note sollte kleiner als die maximale Punktzahl sein!</string>
     <string name="message_marklist_7">Der Noten-Multiplikator sollte zwischen 0 und 5 liegen!</string>
     <string name="message_marklist_8">Der Punkte-Multiplikator sollte zwischen 0 und 5 liegen!</string>
-    <string name="message_marklist_9">Die Punktzahl, mit der man die beste Note bekommt, sollte zwischen 0 und der Maximalen Punktzahl liegen!</string>
-    <string name="message_marklist_10">Die Punktzahl, mit der man die schlechteste Note bekommt, sollte zwischen 0 und der Maximalen Punktzahl liegen!</string>
-    <string name="message_marklist_11">Die Punktzahl, mit der man die beste Note bekommt, sollte größer sein, als die Punktzahl mit der man die schlechteste Note bekommt!</string>
-    <string name="message_marklist_12">Die benutzerdefinierte Punktzahl sollte zwischen 0 und der maximalen Punktzahl liegen!</string>
-    <string name="message_marklist_13">Die benutzerdefinierte Punktzahl sollte zwischen der Punktzahl, mit der man die beste Note bekommt, und der Punktzahl, mit der man die schlechteste Note bekommt, liegen!</string>
-    <string name="message_marklist_14">Die benutzerdefinierte Note sollte zwischen der größten und der kleinsten Note liegen!</string>
+    <string name="message_marklist_9">Die Punktzahl, mit der man die beste Note bekommt, sollte zwischen 0 und der
+        Maximalen Punktzahl liegen!
+    </string>
+    <string name="message_marklist_10">Die Punktzahl, mit der man die schlechteste Note bekommt, sollte zwischen 0 und
+        der Maximalen Punktzahl liegen!
+    </string>
+    <string name="message_marklist_11">Die Punktzahl, mit der man die beste Note bekommt, sollte größer sein, als die
+        Punktzahl mit der man die schlechteste Note bekommt!
+    </string>
+    <string name="message_marklist_12">Die benutzerdefinierte Punktzahl sollte zwischen 0 und der maximalen Punktzahl
+        liegen!
+    </string>
+    <string name="message_marklist_13">Die benutzerdefinierte Punktzahl sollte zwischen der Punktzahl, mit der man die
+        beste Note bekommt, und der Punktzahl, mit der man die schlechteste Note bekommt, liegen!
+    </string>
+    <string name="message_marklist_14">Die benutzerdefinierte Note sollte zwischen der größten und der kleinsten Note
+        liegen!
+    </string>
     <string name="message_marklist_not_implemented">Funktion nicht implementiert!</string>
     <string name="message_marklist_number">Fehler bei der Konvertierung zu einer Nummer!</string>
     <string name="message_marklist_settings_saved">Die Einstellungen wurden erfolgreich gespeichert!</string>
@@ -370,7 +391,10 @@
     <string name="message_marklist_search_mark" formatted="false">%s Punkte ergeben die Note %s!</string>
     <string name="message_marklist_search_points" formatted="false">Die Note %s bekommt man mit %s Punkte!</string>
     <string name="message_marklist_important_message_header">Wichtige Information</string>
-    <string name="message_marklist_important_message_content">Die Tools sind Hilfsmittel!\nEs wird versucht, dass alles richtig rechnet, jedoch kann nicht dafür garantiert werden!\nEs wird keine Haftung bei fehlerhafter Kalkulation übernommen!</string>
+    <string name="message_marklist_important_message_content">Die Tools sind Hilfsmittel!\nEs wird versucht, dass alles
+        richtig rechnet, jedoch kann nicht dafür garantiert werden!\nEs wird keine Haftung bei fehlerhafter Kalkulation
+        übernommen!
+    </string>
     <string name="message_marklist_important_message_accept">Akzeptieren</string>
 
     <string name="message_help_delete_success">Log-Datei erfolgreich gelöscht!</string>
@@ -383,8 +407,12 @@
     <string name="message_validation_empty" formatted="false">%s darf nicht leer sein!</string>
     <string name="message_validation_integer" formatted="false">%s muss eine Ganzzahl sein!</string>
     <string name="message_validation_double" formatted="false">%s muss eine Gleitkommazahl sein!</string>
-    <string name="message_validation_date" formatted="false">%s muss ein Datum im Format (dd-MM-yyyy) oder (dd.MM.yyyy) sein!</string>
-    <string name="message_validator_length" formatted="false">%s darf nicht länger als %d Zeichen und nicht kürzer als %d Zeichen sein!</string>
+    <string name="message_validation_date" formatted="false">%s muss ein Datum im Format (dd-MM-yyyy) oder (dd.MM.yyyy)
+        sein!
+    </string>
+    <string name="message_validator_length" formatted="false">%s darf nicht länger als %d Zeichen und nicht kürzer als
+        %d Zeichen sein!
+    </string>
     <string name="message_validator_times">Aktuelle Stunde ist ungültig!</string>
     <string name="message_validator_teachers">Der Lehrer existiert bereits!</string>
 </resources>

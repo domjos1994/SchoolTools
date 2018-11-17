@@ -12,6 +12,7 @@ package de.domjos.schooltools.core.model;
 import android.content.Context;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 
 /**
  * Model-Class for the Memories
@@ -20,42 +21,13 @@ import de.domjos.schooltools.R;
  * @author Dominic Joas
  * @version 1.0
  */
-public class Memory {
-    private int id;
-    private String title;
-    private String description;
+public class Memory extends BaseDescriptionObject {
     private Type type;
     private String date;
 
     public Memory() {
-        this.title = "";
-        this.description = "";
+        super();
         this.type = null;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Type getType() {

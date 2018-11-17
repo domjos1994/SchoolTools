@@ -8,7 +8,6 @@
  */
 package de.domjos.schooltools.core.model.timetable;
 
-import java.util.AbstractMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

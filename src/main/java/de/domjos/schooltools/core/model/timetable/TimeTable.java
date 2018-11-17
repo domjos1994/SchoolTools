@@ -9,6 +9,7 @@
 package de.domjos.schooltools.core.model.timetable;
 
 import de.domjos.schooltools.core.model.mark.Year;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 
 /**
  * Model-Class for the Time-Table
@@ -18,30 +19,18 @@ import de.domjos.schooltools.core.model.mark.Year;
  * @author Dominic Joas
  * @version 1.0
  */
-public class TimeTable {
-    private int ID;
-    private String title, description;
+public class TimeTable extends BaseDescriptionObject {
     private SchoolClass schoolClass;
     private Day[] days;
     private Year year;
     private boolean currentTimeTable;
 
     public TimeTable() {
-        this.ID = 0;
+        super();
         this.year = null;
-        this.title = "";
         this.schoolClass = null;
-        this.description = "";
         this.days = new Day[7];
         this.currentTimeTable = false;
-    }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 
     public Year getYear() {
@@ -52,28 +41,12 @@ public class TimeTable {
         this.year = year;
     }
 
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public SchoolClass getSchoolClass() {
         return this.schoolClass;
     }
 
     public void setSchoolClass(SchoolClass schoolClass) {
         this.schoolClass = schoolClass;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Day[] getDays() {
@@ -100,6 +73,6 @@ public class TimeTable {
 
     @Override
     public String toString() {
-        return this.title;
+        return super.getTitle();
     }
 }

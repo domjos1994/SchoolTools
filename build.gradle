@@ -17,24 +17,24 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 apply plugin: 'com.android.application'
 
 // create variables
-def andVersion='27.1.1'
-def appPhase='beta'
-def appVersion='0.1'
+def andVersion = '27.1.1'
+def appPhase = 'beta'
+def appVersion = '0.1'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "de.domjos.schooltools"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 6
+        versionCode 5
         versionName "${appVersion}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -50,7 +50,7 @@ android {
             variant.outputs.each { output ->
                 new File(output.outputFile.getParent()).mkdirs()
                 def count = new File(output.outputFile.getParent()).listFiles().size()
-                def version = String.format("%d", count+1)
+                def version = String.format("%d", count + 1)
 
                 output.outputFileName = new File(
                         output.outputFile.name.replace("SchoolTools-release", "schooltools_" + appVersion + "." + appPhase + "." + version)
@@ -77,6 +77,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:support-vector-drawable:27.1.1'
     androidTestImplementation('com.android.support.test:runner:0.5') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }

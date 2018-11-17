@@ -43,4 +43,12 @@
                 android:title="@string/todo_list" />
         </menu>
     </item>
+    <item android:title="@string/main_nav_learn">
+        <menu>
+            <item
+                android:id="@+id/navMainLearningCards"
+                android:icon="@drawable/ic_collections_bookmark_black_24dp"
+                android:title="@string/main_nav_learningCards"/>
+        </menu>
+    </item>
 </menu>

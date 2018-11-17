@@ -9,37 +9,22 @@
 
 package de.domjos.schooltools.core;
 
+import de.domjos.schooltools.core.model.objects.BaseObject;
+
 /**
  * @author Dominic Joas
  */
 
-public class SearchItem {
-    private int ID;
-    private String title;
+public class SearchItem extends BaseObject {
     private String type;
     private String extra;
 
     public SearchItem(int id, String title, String type) {
-        this.ID = id;
-        this.title = title;
+        super();
+        super.setID(id);
+        super.setTitle(title);
         this.type = type;
         this.extra = "";
-    }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getType() {

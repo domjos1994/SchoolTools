@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static final Globals globals = new Globals();
 
-    private TableRow trMarkList, trMark, trTimeTable, trNotes, trTimer, trTodo, trExport, trSettings, trHelp;
+    private TableRow trMarkList, trMark, trTimeTable, trNotes, trTimer, trTodo, trExport, trSettings, trHelp, trLearningCards;
     private RelativeLayout llToday, llTodayCurrentTimeTable, llCurrentNotes, llSavedMarkList, llImportantToDos, llSavedTimeTables;
     private ImageButton cmdRefresh;
     private SearchView cmdSearch;
@@ -175,6 +175,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), TimerActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        this.trLearningCards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LearningCardGroupActivity.class);
                 startActivity(intent);
             }
         });
@@ -360,6 +368,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.navMainToDo:
                 intent = new Intent(this.getApplicationContext(), ToDoActivity.class);
                 break;
+            case R.id.navMainLearningCards:
+                intent = new Intent(this.getApplicationContext(), LearningCardGroupActivity.class);
+                break;
             default:
                 intent = null;
         }
@@ -428,6 +439,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.trExport = this.findViewById(R.id.trExport);
         this.trSettings = this.findViewById(R.id.trSettings);
         this.trHelp = this.findViewById(R.id.trHelp);
+        this.trLearningCards = this.findViewById(R.id.trLearningCards);
 
         this.llToday = this.findViewById(R.id.llToday);
         ListView lvEvents = this.findViewById(R.id.lvEvents);
@@ -777,6 +789,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.navigationView.getMenu().findItem(R.id.navMainTimer).setVisible(false);
         this.navigationView.getMenu().findItem(R.id.navMainToDo).setVisible(false);
         this.navigationView.getMenu().findItem(R.id.navMainNotes).setVisible(false);
+        this.navigationView.getMenu().findItem(R.id.navMainLearningCards).setVisible(false);
 
         Set<String> modules = MainActivity.globals.getUserSettings().getShownModule(this.getApplicationContext());
         for(String content : modules) {
@@ -786,6 +799,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.hideMenu(content, R.string.main_nav_timer, R.id.navMainTimer, this.navigationView.getMenu());
             this.hideMenu(content, R.string.main_nav_notes, R.id.navMainToDo, this.navigationView.getMenu());
             this.hideMenu(content, R.string.main_nav_todo, R.id.navMainNotes, this.navigationView.getMenu());
+            this.hideMenu(content, R.string.main_nav_learningCards, R.id.navMainLearningCards, this.navigationView.getMenu());
         }
     }
 
@@ -852,6 +866,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 if(module.equals(this.getString(R.string.main_nav_notes))) {
                     intent = new Intent(this.getApplicationContext(), NoteActivity.class);
+                }
+                if(module.equals(this.getString(R.string.main_nav_learningCards))) {
+                    intent = new Intent(this.getApplicationContext(), LearningCardGroupActivity.class);
                 }
 
                 if(intent!=null) {
@@ -946,10 +963,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             for(Memory memory : MainActivity.globals.getSqLite().getCurrentMemories()) {
                 try {
                     if (Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate()))) {
-                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getId());
+                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
                     }
                 } catch (Exception ex) {
-                    MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getId());
+                    MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
                     Log4JHelper.getLogger(MainActivity.this.getPackageName()).error(ex.getMessage());
                 }
             }

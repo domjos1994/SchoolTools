@@ -576,6 +576,30 @@
                             android:layout_gravity="center"/>
                     </TableRow>
                     <TableRow
+                            android:id="@+id/trLearningCards"
+                            android:layout_width="match_parent"
+                            android:background="@drawable/tbl_border"
+                            android:layout_height="20dp"
+                            android:orientation="vertical"
+                            android:weightSum="10"
+                            android:layout_marginBottom="4dp">
+                        <ImageView
+                                app:srcCompat="@drawable/ic_collections_bookmark_black_24dp"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="30dp"
+                                android:scaleType="fitCenter"
+                                android:padding="4dp"
+                                android:contentDescription="@string/app_name"/>
+                        <TextView
+                                android:text="@string/main_nav_learningCards"
+                                android:layout_weight="9"
+                                android:layout_width="0dp"
+                                android:layout_height="30dp"
+                                android:gravity="center"
+                                android:layout_gravity="center"/>
+                    </TableRow>
+                    <TableRow
                         android:id="@+id/trExport"
                         android:layout_width="match_parent"
                         android:background="@drawable/tbl_border"
