@@ -17,13 +17,13 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LeaningCardGroup extends BaseCategoryObject {
+public class LearningCardGroup extends BaseCategoryObject {
     private Date deadLine;
     private Subject subject;
     private Teacher teacher;
     private List<LearningCard> learningCards;
 
-    public LeaningCardGroup() {
+    public LearningCardGroup() {
         super();
         this.deadLine = null;
         this.subject = null;

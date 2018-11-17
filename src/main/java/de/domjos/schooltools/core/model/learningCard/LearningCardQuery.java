@@ -3,7 +3,7 @@ package de.domjos.schooltools.core.model.learningCard;
 import de.domjos.schooltools.core.model.objects.BaseCategoryObject;
 
 public class LearningCardQuery extends BaseCategoryObject {
-    private LeaningCardGroup leaningCardGroup;
+    private LearningCardGroup learningCardGroup;
     private int priority;
     private int period;
     private int tries;
@@ -16,7 +16,7 @@ public class LearningCardQuery extends BaseCategoryObject {
 
     public LearningCardQuery() {
         super();
-        this.leaningCardGroup = null;
+        this.learningCardGroup = null;
         this.priority = 0;
         this.period = 1;
         this.tries = 1;
@@ -29,12 +29,12 @@ public class LearningCardQuery extends BaseCategoryObject {
         this.showNotesImmediately = false;
     }
 
-    public LeaningCardGroup getLeaningCardGroup() {
-        return this.leaningCardGroup;
+    public LearningCardGroup getLearningCardGroup() {
+        return this.learningCardGroup;
     }
 
-    public void setLeaningCardGroup(LeaningCardGroup leaningCardGroup) {
-        this.leaningCardGroup = leaningCardGroup;
+    public void setLearningCardGroup(LearningCardGroup learningCardGroup) {
+        this.learningCardGroup = learningCardGroup;
     }
 
     public int getPriority() {

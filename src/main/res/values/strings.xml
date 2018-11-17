@@ -269,6 +269,11 @@
 
     <string name="note_header">Notiz</string>
 
+    <string name="learningCard_overView">Überblick</string>
+    <string name="learningCard_groups">Gruppen</string>
+    <string name="learningCard_query">Abfragen</string>
+    <string name="learningCard_questions">Fragen</string>
+
     <string name="api_choice">Im- oder Export?</string>
     <string name="api_type">Modul</string>
     <string name="api_type_entry_type">Einträge wählen</string>

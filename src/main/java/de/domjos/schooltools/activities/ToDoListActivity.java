@@ -152,7 +152,7 @@ public class ToDoListActivity extends AppCompatActivity {
     }
 
     private void initControls() {
-        // init navigation
+        // init navigation_learning_card_group
         this.navigation = findViewById(R.id.navigation);
         OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
             @Override

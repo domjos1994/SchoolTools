@@ -149,7 +149,7 @@ public class TimerEntryActivity extends AppCompatActivity {
 
     private void initControls() {
         try {
-            // init navigation
+            // init navigation_learning_card_group
             BottomNavigationView navigation = this.findViewById(R.id.navigation);
             OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
                 @Override

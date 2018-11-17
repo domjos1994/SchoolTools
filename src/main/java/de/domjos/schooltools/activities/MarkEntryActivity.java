@@ -136,7 +136,7 @@ public class MarkEntryActivity extends AppCompatActivity {
 
     private void initControls() {
         try {
-            // init navigation
+            // init navigation_learning_card_group
             OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
 
                 @Override

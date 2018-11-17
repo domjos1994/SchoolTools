@@ -169,6 +169,8 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
             case R.layout.mark_activity:
                 intent = new Intent(this.getApplicationContext(), MarkActivity.class);
                 break;
+            case R.layout.learning_card_overview_activity:
+                intent = new Intent(this.getApplicationContext(), LearningCardOverviewActivity.class);
             default:
         }
 

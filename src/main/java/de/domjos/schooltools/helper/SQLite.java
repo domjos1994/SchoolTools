@@ -27,6 +27,8 @@ import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.Memory;
 import de.domjos.schooltools.core.model.Note;
 import de.domjos.schooltools.core.model.TimerEvent;
+import de.domjos.schooltools.core.model.learningCard.LearningCard;
+import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.core.model.timetable.PupilHour;
 import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.todo.ToDo;
@@ -1281,6 +1283,83 @@ public class SQLite extends SQLiteOpenHelper {
             Helper.printException(this.context, ex);
         }
         return timerEvents;
+    }
+
+    public void insertOrUpdateLearningCardGroup(LearningCardGroup learningCardGroup) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.beginTransaction();
+            SQLiteStatement sqLiteStatement;
+            if(learningCardGroup.getID()!=0) {
+                sqLiteStatement = db.compileStatement("UPDATE learningCardGroups SET title=?, description=?, category=?, deadline=?, subject=?, teacher=? WHERE ID=?;");
+                sqLiteStatement.bindLong(7, learningCardGroup.getID());
+            } else {
+                sqLiteStatement = db.compileStatement("INSERT INTO learningCardGroups(title,description,category, deadline,subject,teacher) VALUES(?,?,?,?,?,?);");
+            }
+            sqLiteStatement.bindString(1, learningCardGroup.getTitle());
+            sqLiteStatement.bindString(2, learningCardGroup.getDescription());
+            sqLiteStatement.bindString(3, learningCardGroup.getCategory());
+            if(learningCardGroup.getDeadLine()!=null) {
+                sqLiteStatement.bindString(4, Converter.convertDateToString(learningCardGroup.getDeadLine()));
+            } else {
+                sqLiteStatement.bindNull(4);
+            }
+            if(learningCardGroup.getSubject()!=null) {
+                sqLiteStatement.bindLong(5, learningCardGroup.getSubject().getID());
+            } else {
+                sqLiteStatement.bindNull(5);
+            }
+            if(learningCardGroup.getTeacher()!=null) {
+                sqLiteStatement.bindLong(6, learningCardGroup.getTeacher().getID());
+            } else {
+                sqLiteStatement.bindNull(6);
+            }
+
+            if(learningCardGroup.getID()==0) {
+                learningCardGroup.setID((int) sqLiteStatement.executeInsert());
+            } else {
+                sqLiteStatement.execute();
+            }
+
+            StringBuilder list = new StringBuilder("(");
+            for(LearningCard learningCard : learningCardGroup.getLearningCards()) {
+                if(learningCard.getID()!=0) {
+                    list.append(learningCard.getID());
+                    list.append(",");
+                }
+            }
+            list.append(")");
+            db.execSQL("DELETE FROM learningCards WHERE cardFroup=" + learningCardGroup.getID() + " AND NOT ID IN " + list.toString().replace(",)", ")"));
+
+            for(LearningCard learningCard : learningCardGroup.getLearningCards()) {
+                this.insertOrUpdateLearningCard(learningCardGroup.getID(), learningCard, db);
+            }
+
+            db.setTransactionSuccessful();
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    private void insertOrUpdateLearningCard(int learningCardGroupId, LearningCard learningCard, SQLiteDatabase db) {
+        SQLiteStatement statement;
+        if(learningCard.getID()==0) {
+            statement = db.compileStatement("INSERT INTO learningCards(title,category,question,answer,note1,note2,priority,cardGroup) VALUES(?,?,?,?,?,?,?,?);");
+        } else {
+            statement = db.compileStatement("UPDATE learningCards SET title=?,category=?,question=?,answer=?,note1=?,note2=?,priority=?,cardGroup=? WHERE ID=?");
+            statement.bindLong(9, learningCard.getID());
+        }
+        statement.bindString(1, learningCard.getTitle());
+        statement.bindString(2, learningCard.getCategory());
+        statement.bindString(3, learningCard.getQuestion());
+        statement.bindString(4, learningCard.getAnswer());
+        statement.bindString(5, learningCard.getNote1());
+        statement.bindString(6, learningCard.getNote2());
+        statement.bindLong(7, learningCard.getPriority());
+        statement.bindLong(8, learningCardGroupId);
+        statement.execute();
     }
 
     public List<Memory> getCurrentMemories() {

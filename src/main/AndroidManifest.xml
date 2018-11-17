@@ -242,14 +242,24 @@
                     android:value="de.domjos.schooltools.activities.MainActivity"/>
         </activity>
         <activity
-                android:name=".activities.LearningCardGroupActivity"
-                android:label="@string/main_nav_learningCards"
+                android:name=".activities.LearningCardOverviewActivity"
+                android:label="@string/learningCard_overView"
                 android:parentActivityName=".activities.MainActivity"
                 android:theme="@style/AppTheme.NoActionBar"
                 tools:targetApi="jelly_bean">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="de.domjos.schooltools.activities.MainActivity"/>
+        </activity>
+        <activity
+                android:name=".activities.LearningCardGroupActivity"
+                android:label="@string/learningCard_groups"
+                android:parentActivityName=".activities.LearningCardOverviewActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                tools:targetApi="jelly_bean">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="de.domjos.schooltools.activities.LearningCardOverviewActivity"/>
         </activity>
         <activity android:name=".widgets.TimeTableWidgetConfigurationActivity">
             <intent-filter>

@@ -92,7 +92,7 @@ public class ToDoEntryActivity extends AppCompatActivity {
         final int id = this.getIntent().getIntExtra("id", 0);
         final String list = this.getIntent().getStringExtra("list");
 
-        // init navigation
+        // init navigation_learning_card_group
         OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

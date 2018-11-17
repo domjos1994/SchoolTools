@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.trLearningCards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LearningCardGroupActivity.class);
+                Intent intent = new Intent(getApplicationContext(), LearningCardOverviewActivity.class);
                 startActivity(intent);
             }
         });
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent = new Intent(this.getApplicationContext(), ToDoActivity.class);
                 break;
             case R.id.navMainLearningCards:
-                intent = new Intent(this.getApplicationContext(), LearningCardGroupActivity.class);
+                intent = new Intent(this.getApplicationContext(), LearningCardOverviewActivity.class);
                 break;
             default:
                 intent = null;
@@ -868,7 +868,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     intent = new Intent(this.getApplicationContext(), NoteActivity.class);
                 }
                 if(module.equals(this.getString(R.string.main_nav_learningCards))) {
-                    intent = new Intent(this.getApplicationContext(), LearningCardGroupActivity.class);
+                    intent = new Intent(this.getApplicationContext(), LearningCardOverviewActivity.class);
                 }
 
                 if(intent!=null) {
