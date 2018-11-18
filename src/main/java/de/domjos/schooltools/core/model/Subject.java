@@ -73,4 +73,9 @@ public class Subject extends BaseDescriptionObject {
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
+
+    @Override
+    public String toString() {
+        return this.getTitle();
+    }
 }

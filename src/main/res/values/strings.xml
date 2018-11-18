@@ -273,6 +273,13 @@
     <string name="learningCard_groups">Gruppen</string>
     <string name="learningCard_query">Abfragen</string>
     <string name="learningCard_questions">Fragen</string>
+    <string name="learningCard_group_deadline">Stichtag</string>
+    <string name="learningCard_question">Frage</string>
+    <string name="learningCard_answer">Antwort</string>
+    <string name="learningCard_note1">Hinweis 1</string>
+    <string name="learningCard_note2">Hinweis 2</string>
+    <string name="learningCard_priority">Priorität</string>
+
 
     <string name="api_choice">Im- oder Export?</string>
     <string name="api_type">Modul</string>

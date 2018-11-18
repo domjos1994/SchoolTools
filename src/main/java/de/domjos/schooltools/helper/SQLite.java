@@ -1321,6 +1321,14 @@ public class SQLite extends SQLiteOpenHelper {
                 sqLiteStatement.execute();
             }
 
+            List<LearningCard> cards = new LinkedList<>();
+            for(LearningCard learningCard : learningCardGroup.getLearningCards()) {
+                if(learningCard.getID()!=0 || !learningCard.getTitle().trim().equals("") || !learningCard.getQuestion().trim().equals("")) {
+                    cards.add(learningCard);
+                }
+            }
+            learningCardGroup.setLearningCards(cards);
+
             StringBuilder list = new StringBuilder("(");
             for(LearningCard learningCard : learningCardGroup.getLearningCards()) {
                 if(learningCard.getID()!=0) {
@@ -1329,7 +1337,8 @@ public class SQLite extends SQLiteOpenHelper {
                 }
             }
             list.append(")");
-            db.execSQL("DELETE FROM learningCards WHERE cardFroup=" + learningCardGroup.getID() + " AND NOT ID IN " + list.toString().replace(",)", ")"));
+
+            db.execSQL("DELETE FROM learningCards WHERE cardGroup=" + learningCardGroup.getID() + " AND NOT ID IN " + list.toString().replace(",)", ")"));
 
             for(LearningCard learningCard : learningCardGroup.getLearningCards()) {
                 this.insertOrUpdateLearningCard(learningCardGroup.getID(), learningCard, db);
@@ -1341,6 +1350,48 @@ public class SQLite extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+    }
+
+    public List<LearningCardGroup> getLearningCardGroups(String where, boolean listLearningCards) {
+        List<LearningCardGroup> learningCardGroups = new LinkedList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            if (!where.isEmpty()) {
+                where = " WHERE " + where;
+            }
+
+            Cursor cursor = db.rawQuery("SELECT * FROM learningCardGroups" + where, null);
+            while (cursor.moveToNext()) {
+                LearningCardGroup learningCardGroup = new LearningCardGroup();
+                learningCardGroup.setID(cursor.getInt(0));
+                learningCardGroup.setTitle(cursor.getString(1));
+                learningCardGroup.setDescription(cursor.getString(2));
+                learningCardGroup.setCategory(cursor.getString(3));
+                String deadLine = cursor.getString(4);
+                if(!deadLine.equals("")) {
+                    learningCardGroup.setDeadLine(Converter.convertStringToDate(deadLine));
+                }
+                int subjectID = cursor.getInt(5);
+                if(subjectID!=0) {
+                    learningCardGroup.setSubject(this.getSubjects("ID=" + subjectID).get(0));
+                }
+                int teacherID = cursor.getInt(6);
+                if(teacherID!=0) {
+                    learningCardGroup.setTeacher(this.getTeachers("ID=" + subjectID).get(0));
+                }
+                learningCardGroups.add(learningCardGroup);
+            }
+            cursor.close();
+
+            if(listLearningCards) {
+                for(LearningCardGroup group : learningCardGroups) {
+                    group.setLearningCards(this.getLearningCards("cardGroup=" + group.getID(), db));
+                }
+            }
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+        return learningCardGroups;
     }
 
     private void insertOrUpdateLearningCard(int learningCardGroupId, LearningCard learningCard, SQLiteDatabase db) {
@@ -1360,6 +1411,31 @@ public class SQLite extends SQLiteOpenHelper {
         statement.bindLong(7, learningCard.getPriority());
         statement.bindLong(8, learningCardGroupId);
         statement.execute();
+    }
+
+    private List<LearningCard> getLearningCards(String where, SQLiteDatabase db) {
+        List<LearningCard> learningCards = new LinkedList<>();
+
+        if (!where.isEmpty()) {
+            where = " WHERE " + where;
+        }
+
+        Cursor cursor = db.rawQuery("SELECT * FROM learningCards" + where, null);
+        while (cursor.moveToNext()) {
+            LearningCard learningCard = new LearningCard();
+            learningCard.setID(cursor.getInt(0));
+            learningCard.setTitle(cursor.getString(1));
+            learningCard.setCategory(cursor.getString(2));
+            learningCard.setQuestion(cursor.getString(3));
+            learningCard.setAnswer(cursor.getString(4));
+            learningCard.setNote1(cursor.getString(5));
+            learningCard.setNote2(cursor.getString(6));
+            learningCard.setPriority(cursor.getInt(7));
+            learningCards.add(learningCard);
+        }
+        db.close();
+
+        return learningCards;
     }
 
     public List<Memory> getCurrentMemories() {

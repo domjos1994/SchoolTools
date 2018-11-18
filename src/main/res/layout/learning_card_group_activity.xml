@@ -11,7 +11,9 @@
     <ListView
         android:id="@+id/lvLearningCardGroups"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:dividerHeight="4dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/cmdLearningCardGroupAdd"
