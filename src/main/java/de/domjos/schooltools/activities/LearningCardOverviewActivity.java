@@ -37,7 +37,7 @@ public class LearningCardOverviewActivity extends AppCompatActivity {
                         startActivityForResult(new Intent(getApplicationContext(), LearningCardGroupActivity.class), 99);
                         break;
                     case R.id.navLearningCardQueries:
-
+                        startActivityForResult(new Intent(getApplicationContext(), LearningCardQueryActivity.class), 99);
                         break;
                 }
                 return false;

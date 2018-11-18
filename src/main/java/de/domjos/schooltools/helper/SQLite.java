@@ -29,6 +29,7 @@ import de.domjos.schooltools.core.model.Note;
 import de.domjos.schooltools.core.model.TimerEvent;
 import de.domjos.schooltools.core.model.learningCard.LearningCard;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
+import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
 import de.domjos.schooltools.core.model.timetable.PupilHour;
 import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.todo.ToDo;
@@ -1392,6 +1393,100 @@ public class SQLite extends SQLiteOpenHelper {
             Helper.printException(this.context, ex);
         }
         return learningCardGroups;
+    }
+
+    public void insertOrUpdateLearningCardQuery(LearningCardQuery learningCardQuery) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.beginTransaction();
+
+            SQLiteStatement statement;
+            if(learningCardQuery.getID()==0) {
+                statement = db.compileStatement(
+                    "INSERT INTO learningCardQueries(title,description,cardGroup,category,priority,wrongCardsOfQuery," +
+                            "periodic,period,untilDeadLine,answerMustEqual,showNotes,tries,showNotesImmediately) " +
+                            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                );
+            } else {
+                statement = db.compileStatement(
+                    "UPDATE learningCardQueries SET title=?,description=?,cardGroup=?,category=?,priority=?,wrongCardsOfQuery=?," +
+                            "periodic=?,period=?,untilDeadLine=?,answerMustEqual=?,showNotes=?,tries=?,showNotesImmediately=? " +
+                            "WHERE ID=?"
+                );
+                statement.bindLong(14, learningCardQuery.getID());
+            }
+
+            statement.bindString(1, learningCardQuery.getTitle());
+            statement.bindString(2, learningCardQuery.getDescription());
+            if(learningCardQuery.getLearningCardGroup()!=null) {
+                statement.bindLong(3, learningCardQuery.getLearningCardGroup().getID());
+            } else {
+                statement.bindNull(3);
+            }
+            statement.bindString(4, learningCardQuery.getCategory());
+            statement.bindLong(5, learningCardQuery.getPriority());
+            if(learningCardQuery.getWrongCardsOfQuery()!=null) {
+                statement.bindLong(6, learningCardQuery.getWrongCardsOfQuery().getID());
+            } else {
+                statement.bindNull(6);
+            }
+            statement.bindLong(7, learningCardQuery.isPeriodic() ? 1 : 0);
+            statement.bindLong(8, learningCardQuery.getPeriod());
+            statement.bindLong(9, learningCardQuery.isUntilDeadLine() ? 1 : 0);
+            statement.bindLong(10, learningCardQuery.isAnswerMustEqual() ? 1 : 0);
+            statement.bindLong(11, learningCardQuery.isShowNotes() ? 1 : 0);
+            statement.bindLong(12, learningCardQuery.getTries());
+            statement.bindLong(13, learningCardQuery.isShowNotesImmediately() ? 1 : 0);
+
+            statement.execute();
+
+            db.setTransactionSuccessful();
+            db.endTransaction();
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+    }
+
+    public List<LearningCardQuery> getLearningCardQueries(String where) {
+        List<LearningCardQuery> learningCardQueries = new LinkedList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try {
+            if (!where.isEmpty()) {
+                where = " WHERE " + where;
+            }
+
+            Cursor cursor = db.rawQuery("SELECT * FROM learningCardQueries" + where, null);
+            while (cursor.moveToNext()) {
+                LearningCardQuery learningCardQuery = new LearningCardQuery();
+                learningCardQuery.setID(cursor.getInt(0));
+                learningCardQuery.setTitle(cursor.getString(1));
+                learningCardQuery.setDescription(cursor.getString(2));
+                int cardGroup = cursor.getInt(3);
+                if(cardGroup!=0) {
+                    learningCardQuery.setLearningCardGroup(this.getLearningCardGroups("ID=" + cardGroup, false).get(0));
+                }
+                learningCardQuery.setCategory(cursor.getString(4));
+                learningCardQuery.setPriority(cursor.getInt(5));
+                int wrongCard = cursor.getInt(6);
+                if(wrongCard!=0) {
+                    learningCardQuery.setWrongCardsOfQuery(this.getLearningCardQueries("ID=" + wrongCard).get(0));
+                }
+                learningCardQuery.setPeriodic(cursor.getInt(7)==1);
+                learningCardQuery.setPeriod(cursor.getInt(8));
+                learningCardQuery.setUntilDeadLine(cursor.getInt(9)==1);
+                learningCardQuery.setAnswerMustEqual(cursor.getInt(10)==1);
+                learningCardQuery.setShowNotes(cursor.getInt(11)==1);
+                learningCardQuery.setTries(cursor.getInt(12));
+                learningCardQuery.setShowNotesImmediately(cursor.getInt(12)==1);
+
+                learningCardQueries.add(learningCardQuery);
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+        return learningCardQueries;
     }
 
     private void insertOrUpdateLearningCard(int learningCardGroupId, LearningCard learningCard, SQLiteDatabase db) {

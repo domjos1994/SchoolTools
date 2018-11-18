@@ -269,9 +269,6 @@
 
     <string name="note_header">Notiz</string>
 
-    <string name="learningCard_overView">Überblick</string>
-    <string name="learningCard_groups">Gruppen</string>
-    <string name="learningCard_query">Abfragen</string>
     <string name="learningCard_questions">Fragen</string>
     <string name="learningCard_group_deadline">Stichtag</string>
     <string name="learningCard_question">Frage</string>
@@ -279,7 +276,18 @@
     <string name="learningCard_note1">Hinweis 1</string>
     <string name="learningCard_note2">Hinweis 2</string>
     <string name="learningCard_priority">Priorität</string>
+    <string name="learningCard_groups">Gruppen</string>
 
+    <string name="learningCard_overView">Überblick</string>
+    <string name="learningCard_query">Abfragen</string>
+    <string name="learningCard_query_wrongCardsOfQuery">Falsche Antworten von</string>
+    <string name="learningCard_query_periodic">Periodisch</string>
+    <string name="learningCard_query_periodic_days">Tage</string>
+    <string name="learningCard_query_periodic_untilDeadLine">bis Stichtag</string>
+    <string name="learningCard_query_answerMustEqual">Antworten müssen Vorgabe entsprechen</string>
+    <string name="learningCard_query_showNotes">Hinweise zeigen</string>
+    <string name="learningCard_query_tries">Versuche</string>
+    <string name="learningCard_query_showNotesImmediately">Hinweise sofort zeigen</string>
 
     <string name="api_choice">Im- oder Export?</string>
     <string name="api_type">Modul</string>

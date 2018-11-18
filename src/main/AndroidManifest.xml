@@ -271,6 +271,16 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="de.domjos.schooltools.activities.LearningCardGroupActivity"/>
         </activity>
+        <activity
+                android:name=".activities.LearningCardQueryActivity"
+                android:label="@string/learningCard_query"
+                android:parentActivityName=".activities.LearningCardOverviewActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                tools:targetApi="jelly_bean">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="de.domjos.schooltools.activities.LearningCardOverviewActivity"/>
+        </activity>
         <activity android:name=".widgets.TimeTableWidgetConfigurationActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>

@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
+import de.domjos.schooltools.core.model.objects.BaseCategoryObject;
 import de.domjos.schooltools.helper.Helper;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class LearningCardGroupAdapter extends ArrayAdapter<LearningCardGroup> {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View rowView = Helper.getRowView(this.context, parent, R.layout.learning_card_group_item);
-        LearningCardGroup entry = this.getItem(position);
+        BaseCategoryObject entry = this.getItem(position);
 
         TextView lblSchoolClass = rowView.findViewById(R.id.lblLearningCardGroupTitle);
 
