@@ -1,6 +1,12 @@
 package de.domjos.schooltools.core.model.learningCard;
 
+import android.content.Context;
+import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.objects.BaseCategoryObject;
+import de.domjos.schooltools.helper.Helper;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class LearningCardQuery extends BaseCategoryObject {
     private LearningCardGroup learningCardGroup;
@@ -107,5 +113,15 @@ public class LearningCardQuery extends BaseCategoryObject {
 
     public void setShowNotesImmediately(boolean showNotesImmediately) {
         this.showNotesImmediately = showNotesImmediately;
+    }
+
+    public List<LearningCard> loadLearningCards(Context context) {
+        List<LearningCard> learningCards = new LinkedList<>();
+        try {
+            return MainActivity.globals.getSqLite().getLearningCards(this);
+        } catch (Exception ex) {
+            Helper.printException(context, ex);
+        }
+        return learningCards;
     }
 }

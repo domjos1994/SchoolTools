@@ -166,6 +166,54 @@ public class SQLite extends SQLiteOpenHelper {
         return this.entryExists(table, "ID=" + id);
     }
 
+    public List<String> getColumns(String table, String column, String where) {
+        List<String> results = new LinkedList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            Cursor cursor = db.rawQuery("SELECT " + column + " FROM " + table + " " + where, null);
+            while (cursor.moveToNext()) {
+                results.add(cursor.getString(0));
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+        return results;
+    }
+
+    public List<LearningCard> getLearningCards(LearningCardQuery query) {
+        List<LearningCard> learningCards = new LinkedList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            if(query.getWrongCardsOfQuery()!=null) {
+
+            } else {
+                List<String> ls = new LinkedList<>();
+                if (query.getLearningCardGroup() != null) {
+                    ls.add("cardGroup=" + query.getLearningCardGroup().getID());
+                }
+                if (!query.getCategory().isEmpty()) {
+                    ls.add("category='" + query.getCategory() + "'");
+                }
+                ls.add("priority>=" + query.getPriority());
+
+                StringBuilder where = new StringBuilder(" WHERE ");
+                for (String item : ls) {
+                    if(!item.trim().isEmpty()) {
+                        if(!where.toString().equals(" WHERE ")) {
+                            where.append(" AND ");
+                        }
+                        where.append(item);
+                    }
+                }
+                return this.getLearningCards(where.toString().replace(" WHERE ", ""), db);
+            }
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+        return learningCards;
+    }
+
     public void insertOrUpdateMarkList(String title, MarkListSettings settings) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {

@@ -17,12 +17,14 @@ import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.core.model.timetable.Teacher;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
+import de.domjos.schooltools.helper.Validator;
 
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class LearningCardGroupEntryActivity extends AppCompatActivity {
+    private Validator validator;
     private LearningCardGroup learningCardGroup;
     private int cardPosition = 0;
 
@@ -223,10 +225,12 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
                         return true;
                     case R.id.navLearningCardGroupSave:
                         try {
-                            getCardGroup();
-                            MainActivity.globals.getSqLite().insertOrUpdateLearningCardGroup(learningCardGroup);
-                            setResult(RESULT_OK);
-                            finish();
+                            if(validator.getState()) {
+                                getCardGroup();
+                                MainActivity.globals.getSqLite().insertOrUpdateLearningCardGroup(learningCardGroup);
+                                setResult(RESULT_OK);
+                                finish();
+                            }
                         } catch (Exception ex) {
                             Helper.printException(getApplicationContext(), ex);
                         }
@@ -296,6 +300,11 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
         this.txtLearningCardAnswer = this.findViewById(R.id.txtLearningCardAnswer);
         this.txtLearningCardNote1 = this.findViewById(R.id.txtLearningCardNote1);
         this.txtLearningCardNote2 = this.findViewById(R.id.txtLearningCardNote2);
+    }
+
+    private void initValidation() {
+        this.validator = new Validator(this.getApplicationContext());
+        this.validator.addEmptyValidator(this.txtLearningCardTitle);
     }
 
     private void loadCardGroup() {

@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.adapter.LearningCardQueryFragmentAdapter;
 
-public class LearningCardOverviewActivity extends AppCompatActivity {
+public class LearningCardOverviewActivity extends FragmentActivity {
+    private ViewPager viewPager;
+    private LearningCardQueryFragmentAdapter fragmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,5 +50,9 @@ public class LearningCardOverviewActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = this.findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(listener);
+
+        this.fragmentAdapter = new LearningCardQueryFragmentAdapter(this.getSupportFragmentManager(), this.getApplicationContext(), null);
+        this.viewPager = this.findViewById(R.id.pager);
+        this.viewPager.setAdapter(this.fragmentAdapter);
     }
 }
