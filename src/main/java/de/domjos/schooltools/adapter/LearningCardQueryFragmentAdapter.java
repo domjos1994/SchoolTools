@@ -6,20 +6,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCard;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
+import de.domjos.schooltools.fragment.LearningCardFragment;
 
 import java.util.List;
 
 public class LearningCardQueryFragmentAdapter extends FragmentStatePagerAdapter {
     private LearningCardQuery query;
     private List<LearningCard> learningCards;
-    private FragmentManager manager;
+    private Context context;
 
     public LearningCardQueryFragmentAdapter(FragmentManager fm, Context context, LearningCardQuery query) {
         super(fm);
+        this.context = context;
+        this.setQuery(query);
+    }
+
+    public final void setQuery(LearningCardQuery query) {
         this.query = query;
-        this.manager = fm;
         if(this.query!=null) {
-            this.learningCards = this.query.loadLearningCards(context);
+            this.learningCards = this.query.loadLearningCards(this.context);
         }
     }
 
@@ -33,6 +38,13 @@ public class LearningCardQueryFragmentAdapter extends FragmentStatePagerAdapter 
 
     @Override
     public Fragment getItem(int position) {
+        if(this.query!=null) {
+            LearningCardFragment fragment = new LearningCardFragment();
+            fragment.setLearningCard(this.learningCards.get(position));
+            fragment.setLearningCardQuery(this.query);
+            fragment.setContext(this.context);
+            return fragment;
+        }
         return null;
     }
 

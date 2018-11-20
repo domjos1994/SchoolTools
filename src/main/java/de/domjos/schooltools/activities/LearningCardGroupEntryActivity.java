@@ -44,6 +44,7 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.learning_card_group_entry_activity);
         this.initControls();
+        this.initValidation();
         this.loadCardGroup();
 
         this.lvLearningCards.setOnItemClickListener(new AdapterView.OnItemClickListener() {
