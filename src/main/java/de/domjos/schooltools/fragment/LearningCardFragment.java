@@ -1,6 +1,7 @@
 package de.domjos.schooltools.fragment;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,19 +12,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.learningCard.LearningCard;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQueryResult;
-import de.domjos.schooltools.helper.Helper;
+import de.domjos.schooltools.core.model.learningCard.LearningCardQueryTraining;
 
 public class LearningCardFragment extends Fragment {
     private LearningCardQueryResult learningCardQueryResult;
+    private LearningCardQueryTraining learningCardQueryTraining;
     private LearningCardQuery learningCardQuery;
     private LearningCard learningCard;
     private Context context;
     private int currentTry = 0;
 
-    private TextView lblLearningCardTitle, lblLearningCardQuestion, lblLearningCardNote1, lblLearningCardNote2, lblLearningCardCurrentTry, lblLearningCardMaxTries;
+    private TextView lblLearningCardTitle, lblLearningCardQuestion, lblLearningCardNote1, lblLearningCardNote2,
+                lblLearningCardCurrentTry, lblLearningCardMaxTries, lblLearningCardResult;
     private EditText txtLearningCardAnswer;
     private Button cmdCheckAnswer;
 
@@ -35,8 +39,9 @@ public class LearningCardFragment extends Fragment {
         this.learningCard = learningCard;
     }
 
-    public void setLearningCardQuery(LearningCardQuery learningCardQuery) {
-        this.learningCardQuery = learningCardQuery;
+    public void setLearningCardQueryTraining(LearningCardQueryTraining learningCardQueryTraining) {
+        this.learningCardQueryTraining = learningCardQueryTraining;
+        this.learningCardQuery = this.learningCardQueryTraining.getLearningCardQuery();
     }
 
     public void setContext(Context context) {
@@ -58,6 +63,7 @@ public class LearningCardFragment extends Fragment {
         this.lblLearningCardNote2 = view.findViewById(R.id.lblLearningCardNote2);
         this.lblLearningCardCurrentTry = view.findViewById(R.id.lblLearningCardCurrentTry);
         this.lblLearningCardMaxTries = view.findViewById(R.id.lblLearningCardMaxTries);
+        this.lblLearningCardResult = view.findViewById(R.id.lblLearningCardResult);
 
         this.setValues();
     }
@@ -89,7 +95,7 @@ public class LearningCardFragment extends Fragment {
                 public void onClick(View v) {
                     boolean result = checkAnswer();
                     learningCardQueryResult.setLearningCard(learningCard);
-                    learningCardQueryResult.setLearningCardQuery(learningCardQuery);
+                    learningCardQueryResult.setTraining(learningCardQueryTraining);
 
                     if(currentTry<=learningCardQuery.getTries()) {
                         if(currentTry==0) {
@@ -103,16 +109,32 @@ public class LearningCardFragment extends Fragment {
                         if(currentTry==2) {
                             learningCardQueryResult.setResult3(result);
                             learningCardQueryResult.setTry3(txtLearningCardAnswer.getText().toString());
-                            cmdCheckAnswer.setEnabled(false);
                         }
                     }
 
                     if(result) {
-                        Helper.createToast(context, context.getString(R.string.learningCard_query_answer_right));
+                        lblLearningCardResult.setText(context.getString(R.string.learningCard_query_answer_right));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            lblLearningCardResult.setBackgroundColor(context.getColor(R.color.Green));
+                        } else {
+                            lblLearningCardResult.setBackgroundColor(getResources().getColor(R.color.Green));
+                        }
                     } else {
-                        Helper.createToast(context, context.getString(R.string.learningCard_query_answer_wrong));
+                        lblLearningCardResult.setText(context.getString(R.string.learningCard_query_answer_wrong));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            lblLearningCardResult.setBackgroundColor(context.getColor(R.color.Red));
+                        } else {
+                            lblLearningCardResult.setBackgroundColor(getResources().getColor(R.color.Red));
+                        }
                     }
                     lblLearningCardCurrentTry.setText(String.valueOf(++currentTry));
+                    if(currentTry==learningCardQuery.getTries() || result) {
+                        cmdCheckAnswer.setEnabled(false);
+                        txtLearningCardAnswer.setEnabled(false);
+                    } else {
+                        txtLearningCardAnswer.setText("");
+                    }
+                    learningCardQueryResult.setID(MainActivity.globals.getSqLite().insertOrUpdateLearningCardResult(learningCardQueryResult));
                 }
             });
         }

@@ -195,9 +195,15 @@ CREATE TABLE IF NOT EXISTS learningCardQueries(
     FOREIGN KEY(wrongCardsOfQuery) REFERENCES learningCardQueries(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS learningCardQueryResults(
+CREATE TABLE IF NOT EXISTS learningCardQueryTrainings(
     ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     learningCardQuery INTEGER DEFAULT 0,
+    current_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS learningCardQueryResults(
+    ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    learningCardQueryTraining INTEGER DEFAULT 0,
     learningCard INTEGER DEFAULT 0,
     answerTry1 TEXT,
     resultTry1 INTEGER DEFAULT 0,
@@ -206,6 +212,6 @@ CREATE TABLE IF NOT EXISTS learningCardQueryResults(
     answerTry3 TEXT,
     resultTry3 INTEGER DEFAULT 0,
     resultWhole DOUBLE DEFAULT 0.0,
-    FOREIGN KEY(learningCardQuery) REFERENCES learningCardQueries(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(learningCardQueryTraining) REFERENCES learningCardQueryTrainings(ID) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY(learningCard) REFERENCES learningCards(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );

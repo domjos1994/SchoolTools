@@ -34,7 +34,11 @@
             android:layout_height="wrap_content"
             android:text="@string/learningCard_note1"
             android:textStyle="bold"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:orientation="horizontal"
+            android:background="@drawable/tbl_border"
+            android:layout_margin="8dp"
+            android:padding="4dp"/>
 
         <TextView
             android:id="@+id/lblLearningCardNote2"
@@ -42,34 +46,74 @@
             android:layout_height="wrap_content"
             android:text="@string/learningCard_note2"
             android:textStyle="bold"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:orientation="horizontal"
+            android:background="@drawable/tbl_border"
+            android:layout_margin="8dp"
+            android:padding="4dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="10"
-            android:orientation="horizontal">
+            android:weightSum="20"
+            android:orientation="horizontal"
+            android:background="@drawable/tbl_border"
+            android:layout_margin="8dp"
+            android:padding="4dp">
             <TextView
                 android:text="@string/learningCard_query_tries"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="5"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
             <TextView
                 android:id="@+id/lblLearningCardCurrentTry"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:gravity="end"/>
+
+            <TextView
+                android:text="@string/sys_seperator"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:gravity="center"/>
+
             <TextView
                 android:id="@+id/lblLearningCardMaxTries"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:layout_weight="11"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:weightSum="20"
+              android:orientation="horizontal"
+              android:background="@drawable/tbl_border"
+              android:layout_margin="8dp"
+              android:padding="4dp">
+
+            <TextView
+                android:id="@+id/lblLearningCardResult"
+                android:text="@string/learningCard_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="20"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:background="@color/Gray"
+                android:layout_gravity="center"
+                android:gravity="center"/>
         </LinearLayout>
     </LinearLayout>
 

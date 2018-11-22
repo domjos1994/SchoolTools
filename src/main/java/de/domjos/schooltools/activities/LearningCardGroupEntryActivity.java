@@ -305,7 +305,8 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
 
     private void initValidation() {
         this.validator = new Validator(this.getApplicationContext());
-        this.validator.addEmptyValidator(this.txtLearningCardTitle);
+        this.validator.addEmptyValidator(this.txtLearningCardGroupTitle);
+        this.validator.addEmptyValidator(this.txtLearningCardGroupDeadline);
     }
 
     private void loadCardGroup() {

@@ -1,8 +1,10 @@
 package de.domjos.schooltools.core.model.learningCard;
 
-public class LearningCardQueryResult {
+import de.domjos.schooltools.core.model.objects.BaseObject;
+
+public class LearningCardQueryResult extends BaseObject {
     private LearningCard learningCard;
-    private LearningCardQuery learningCardQuery;
+    private LearningCardQueryTraining training;
     private String try1;
     private String try2;
     private String try3;
@@ -12,8 +14,9 @@ public class LearningCardQueryResult {
     private double resultWhole;
 
     public LearningCardQueryResult() {
+        super();
+        this.training = null;
         this.learningCard = null;
-        this.learningCardQuery = null;
         this.try1 = "";
         this.try2 = "";
         this.try3 = "";
@@ -23,20 +26,20 @@ public class LearningCardQueryResult {
         this.resultWhole = 0.0;
     }
 
+    public LearningCardQueryTraining getTraining() {
+        return this.training;
+    }
+
+    public void setTraining(LearningCardQueryTraining training) {
+        this.training = training;
+    }
+
     public LearningCard getLearningCard() {
         return this.learningCard;
     }
 
     public void setLearningCard(LearningCard learningCard) {
         this.learningCard = learningCard;
-    }
-
-    public LearningCardQuery getLearningCardQuery() {
-        return this.learningCardQuery;
-    }
-
-    public void setLearningCardQuery(LearningCardQuery learningCardQuery) {
-        this.learningCardQuery = learningCardQuery;
     }
 
     public String getTry1() {

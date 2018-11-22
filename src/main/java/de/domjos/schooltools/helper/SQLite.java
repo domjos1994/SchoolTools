@@ -27,9 +27,7 @@ import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.Memory;
 import de.domjos.schooltools.core.model.Note;
 import de.domjos.schooltools.core.model.TimerEvent;
-import de.domjos.schooltools.core.model.learningCard.LearningCard;
-import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
-import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
+import de.domjos.schooltools.core.model.learningCard.*;
 import de.domjos.schooltools.core.model.timetable.PupilHour;
 import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.todo.ToDo;
@@ -88,7 +86,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.setVersion(newVersion);
 
             // add roomNumber
-            if(!this.columnExists(db, "timeTable", "roomNumber")) {
+            if(!this.columnExists(db)) {
                 db.execSQL("ALTER TABLE timeTable ADD COLUMN roomNumber VARCHAR(255) DEFAULT ''");
             }
 
@@ -104,11 +102,11 @@ public class SQLite extends SQLiteOpenHelper {
         }
     }
 
-    private boolean columnExists(SQLiteDatabase db, String table, String column) {
+    private boolean columnExists(SQLiteDatabase db) {
         boolean exists = false;
-        Cursor cursor = db.rawQuery("PRAGMA table_info('" + table + "')", null);
+        Cursor cursor = db.rawQuery("PRAGMA table_info('timeTable')", null);
         while (cursor.moveToNext()) {
-            if(cursor.getString(1).equals(column)) {
+            if(cursor.getString(1).equals("roomNumber")) {
                 exists = true;
                 break;
             }
@@ -162,7 +160,7 @@ public class SQLite extends SQLiteOpenHelper {
         return false;
     }
 
-    public boolean entryExists(@NonNull String table, int id) {
+    boolean entryExists(@NonNull String table, int id) {
         return this.entryExists(table, "ID=" + id);
     }
 
@@ -185,9 +183,7 @@ public class SQLite extends SQLiteOpenHelper {
         List<LearningCard> learningCards = new LinkedList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         try {
-            if(query.getWrongCardsOfQuery()!=null) {
-
-            } else {
+            if(query.getWrongCardsOfQuery()==null)  {
                 List<String> ls = new LinkedList<>();
                 if (query.getLearningCardGroup() != null) {
                     ls.add("cardGroup=" + query.getLearningCardGroup().getID());
@@ -787,7 +783,7 @@ public class SQLite extends SQLiteOpenHelper {
         return timeTables;
     }
 
-    public int insertOrUpdateTest(Test test) {
+    int insertOrUpdateTest(Test test) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.beginTransaction();
@@ -975,24 +971,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             List<Year> years = this.getYears("title='" + year + "'");
 
-            for(Subject tmpSubject : subjects) {
-                for(Year tmpYear : years) {
-                    SchoolYear schoolYear = new SchoolYear();
-                    schoolYear.setSubject(tmpSubject);
-                    schoolYear.setYear(tmpYear);
-                    Cursor cursor = db.rawQuery("SELECT test FROM schoolYears WHERE subject=? and [year]=?;", new String[]{String.valueOf(tmpSubject.getID()), String.valueOf(tmpYear.getID())});
-                    while (cursor.moveToNext()) {
-                        List<Test> tests = this.getTests("ID=" + cursor.getInt(0));
-                        if(tests!=null) {
-                            if(!tests.isEmpty()) {
-                                schoolYear.addTest(tests.get(0));
-                            }
-                        }
-                    }
-                    cursor.close();
-                    schoolYears.add(schoolYear);
-                }
-            }
+            schoolYears = this.getSchoolYear(subjects, years, db);
         } catch (Exception ex) {
             Helper.printException(this.context, ex);
         }
@@ -1006,27 +985,34 @@ public class SQLite extends SQLiteOpenHelper {
             List<Subject> subjects = this.getSubjects(where);
             List<Year> years = this.getYears("");
 
-            for(Subject tmpSubject : subjects) {
-                for(Year tmpYear : years) {
-                    SchoolYear schoolYear = new SchoolYear();
-                    schoolYear.setSubject(tmpSubject);
-                    schoolYear.setYear(tmpYear);
-                    Cursor cursor = db.rawQuery("SELECT test FROM schoolYears WHERE subject=? and [year]=?;", new String[]{String.valueOf(tmpSubject.getID()), String.valueOf(tmpYear.getID())});
-                    while (cursor.moveToNext()) {
-                        List<Test> tests = this.getTests("ID=" + cursor.getInt(0));
-                        if(tests!=null) {
-                            if(!tests.isEmpty()) {
-                                schoolYear.addTest(tests.get(0));
-                            }
-                        }
-                    }
-                    cursor.close();
-                    schoolYears.add(schoolYear);
-                }
-            }
+            schoolYears = this.getSchoolYear(subjects, years, db);
         } catch (Exception ex) {
             Helper.printException(this.context, ex);
         }
+        return schoolYears;
+    }
+
+    private List<SchoolYear> getSchoolYear(List<Subject> subjects, List<Year> years, SQLiteDatabase db) {
+        List<SchoolYear> schoolYears = new LinkedList<>();
+        for(Subject tmpSubject : subjects) {
+            for(Year tmpYear : years) {
+                SchoolYear schoolYear = new SchoolYear();
+                schoolYear.setSubject(tmpSubject);
+                schoolYear.setYear(tmpYear);
+                Cursor cursor = db.rawQuery("SELECT test FROM schoolYears WHERE subject=? and [year]=?;", new String[]{String.valueOf(tmpSubject.getID()), String.valueOf(tmpYear.getID())});
+                while (cursor.moveToNext()) {
+                    List<Test> tests = this.getTests("ID=" + cursor.getInt(0));
+                    if(tests!=null) {
+                        if(!tests.isEmpty()) {
+                            schoolYear.addTest(tests.get(0));
+                        }
+                    }
+                }
+                cursor.close();
+                schoolYears.add(schoolYear);
+            }
+        }
+
         return schoolYears;
     }
 
@@ -1487,7 +1473,7 @@ public class SQLite extends SQLiteOpenHelper {
             statement.bindLong(13, learningCardQuery.isShowNotesImmediately() ? 1 : 0);
 
             statement.execute();
-
+            statement.close();
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception ex) {
@@ -1537,6 +1523,115 @@ public class SQLite extends SQLiteOpenHelper {
         return learningCardQueries;
     }
 
+    public int insertOrUpdateLearningCardResult(LearningCardQueryResult learningCardQueryResult) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            SQLiteStatement statement;
+            if(learningCardQueryResult.getID()==0) {
+                statement = db.compileStatement("INSERT INTO learningCardQueryResults(learningCardQueryTraining, learningCard, answerTry1, resultTry1, answerTry2, resultTry2, answerTry3, resultTry3, resultWhole) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            } else {
+                statement = db.compileStatement("UPDATE learningCardQueryResults SET learningCardQueryTraining=?, learningCard=?, answerTry1=?, resultTry1=?, answerTry2=?, resultTry2=?, answerTry3=?, resultTry3=?, resultWhole=? WHERE ID=?");
+                statement.bindLong(10, learningCardQueryResult.getID());
+            }
+            statement.bindLong(1, learningCardQueryResult.getTraining().getID());
+            statement.bindLong(2,learningCardQueryResult.getLearningCard().getID());
+            statement.bindString(3,learningCardQueryResult.getTry1());
+            statement.bindLong(4, learningCardQueryResult.isResult1() ? 1 : 0);
+            statement.bindString(5,learningCardQueryResult.getTry2());
+            statement.bindLong(6, learningCardQueryResult.isResult2() ? 1 : 0);
+            statement.bindString(7,learningCardQueryResult.getTry3());
+            statement.bindLong(8, learningCardQueryResult.isResult3() ? 1 : 0);
+            if(learningCardQueryResult.getID()==0) {
+                learningCardQueryResult.setID((int) statement.executeInsert());
+            } else {
+                statement.execute();
+            }
+            statement.close();
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+        return learningCardQueryResult.getID();
+    }
+
+    public List<LearningCardQueryResult> getLearningCardResults(String where) {
+        List<LearningCardQueryResult> learningCardQueryResults = new LinkedList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            if (!where.isEmpty()) {
+                where = " WHERE " + where;
+            }
+
+            Cursor cursor = db.rawQuery("SELECT * FROM learningCardQueryResults" + where, null);
+            while (cursor.moveToNext()) {
+                LearningCardQueryResult learningCardQueryResult = new LearningCardQueryResult();
+                learningCardQueryResult.setID(cursor.getInt(0));
+                learningCardQueryResult.setLearningCard(this.getLearningCards("ID=" + cursor.getInt(2), db).get(0));
+                learningCardQueryResult.setTry1(cursor.getString(3));
+                learningCardQueryResult.setResult1(cursor.getInt(4)==1);
+                learningCardQueryResult.setTry2(cursor.getString(5));
+                learningCardQueryResult.setResult2(cursor.getInt(6)==1);
+                learningCardQueryResult.setTry3(cursor.getString(7));
+                learningCardQueryResult.setResult3(cursor.getInt(8)==1);
+                learningCardQueryResult.setResultWhole(cursor.getDouble(9));
+                learningCardQueryResults.add(learningCardQueryResult);
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+        return learningCardQueryResults;
+    }
+
+    public int insertOrUpdateLearningCardQueryTraining(LearningCardQueryTraining learningCardQueryTraining) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            SQLiteStatement statement;
+            if(learningCardQueryTraining.getID()==0) {
+                statement = db.compileStatement("INSERT INTO learningCardQueryTrainings(learningCardQuery) VALUES(?)");
+            } else {
+                statement = db.compileStatement("UPDATE learningCardQueryTrainings SET learningCardQuery=? WHERE ID=?");
+                statement.bindLong(2, learningCardQueryTraining.getID());
+            }
+            statement.bindLong(1, learningCardQueryTraining.getLearningCardQuery().getID());
+
+            if(learningCardQueryTraining.getID()==0) {
+                learningCardQueryTraining.setID((int) statement.executeInsert());
+            } else {
+                statement.execute();
+            }
+            statement.close();
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+        return learningCardQueryTraining.getID();
+    }
+
+    public List<LearningCardQueryTraining> getLearningCardQueryTraining(String where) {
+        List<LearningCardQueryTraining> learningCardQueryTrainings = new LinkedList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            if (!where.isEmpty()) {
+                where = " WHERE " + where;
+            }
+
+            Cursor cursor = db.rawQuery("SELECT * FROM learningCardQueryTrainings" + where, null);
+            while (cursor.moveToNext()) {
+                LearningCardQueryTraining learningCardQueryTraining = new LearningCardQueryTraining();
+                learningCardQueryTraining.setID(cursor.getInt(0));
+                learningCardQueryTraining.setLearningCardQuery(this.getLearningCardQueries("ID=" + cursor.getInt(1)).get(0));
+                learningCardQueryTrainings.add(learningCardQueryTraining);
+            }
+            cursor.close();
+
+            for(int i = 0; i<=learningCardQueryTrainings.size()-1; i++) {
+                learningCardQueryTrainings.get(i).setResults(this.getLearningCardResults("learningCardQueryTraining=" + learningCardQueryTrainings.get(i).getID()));
+            }
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+        return learningCardQueryTrainings;
+    }
+
     private void insertOrUpdateLearningCard(int learningCardGroupId, LearningCard learningCard, SQLiteDatabase db) {
         SQLiteStatement statement;
         if(learningCard.getID()==0) {
@@ -1554,6 +1649,7 @@ public class SQLite extends SQLiteOpenHelper {
         statement.bindLong(7, learningCard.getPriority());
         statement.bindLong(8, learningCardGroupId);
         statement.execute();
+        statement.close();
     }
 
     private List<LearningCard> getLearningCards(String where, SQLiteDatabase db) {
@@ -1576,7 +1672,7 @@ public class SQLite extends SQLiteOpenHelper {
             learningCard.setPriority(cursor.getInt(7));
             learningCards.add(learningCard);
         }
-        db.close();
+        cursor.close();
 
         return learningCards;
     }
