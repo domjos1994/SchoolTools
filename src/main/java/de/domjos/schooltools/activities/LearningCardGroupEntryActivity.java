@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2017-2018  Dominic Joas
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+
 package de.domjos.schooltools.activities;
 
 import android.os.Bundle;
@@ -284,16 +293,7 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
         this.lblLearningCardPriority = this.findViewById(R.id.lblLearningCardPriority);
         this.sbLearningCardPriority = this.findViewById(R.id.sbLearningCardPriority);
         this.lblLearningCardPriority.setText(String.valueOf(this.sbLearningCardPriority.getProgress()));
-        this.sbLearningCardPriority.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                lblLearningCardPriority.setText(String.valueOf(progress));
-            }
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
-        });
+        this.sbLearningCardPriority.setOnSeekBarChangeListener(Helper.getChangeListener(lblLearningCardPriority));
 
         this.txtLearningCardTitle = this.findViewById(R.id.txtLearningCardTitle);
         this.txtLearningCardCategory = this.findViewById(R.id.txtLearningCardCategory);

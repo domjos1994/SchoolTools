@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2017-2018  Dominic Joas
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+
 package de.domjos.schooltools.activities;
 
 import android.os.Bundle;
@@ -11,6 +20,7 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.LearningCardQueryAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
+import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
 
 import java.util.ArrayList;
@@ -128,16 +138,7 @@ public class LearningCardQueryActivity extends AppCompatActivity {
         this.chkLearningCardQueryShowNotesImmediately = this.findViewById(R.id.chkLearningCardQueryShowNotesImmediately);
         this.chkLearningCardQueryMustEqual = this.findViewById(R.id.chkLearningCardQueryMustEqual);
 
-        this.sbLearningCardQueryPriority.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                lblLearningCardQueryPriority.setText(String.valueOf(progress));
-            }
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
+        this.sbLearningCardQueryPriority.setOnSeekBarChangeListener(Helper.getChangeListener(lblLearningCardQueryPriority));
         this.sbLearningCardQueryPriority.setProgress(0);
 
         this.controlElements(false, true);

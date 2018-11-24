@@ -371,9 +371,11 @@
     <string name="whats_new">Neuigkeiten</string>
     <string name="whats_new_content">
         <![CDATA[
-            <h1>SchoolTools Version 0.1</h1>
+            <h1>SchoolTools Version 0.2</h1>
             <p>
-                Dies ist der erste offizielle Release der Applikation!
+                <ul>
+                    <li>Neues Modul Kartei-Karten</li>
+                </ul>
             </p>
         ]]>
     </string>

@@ -6,7 +6,7 @@
   ~ modify it under the terms of the GNU General Public License
   ~ as published by the Free Software Foundation; either version 3
   ~ of the License, or (at your option) any later version.
--->
+  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="de.domjos.schooltools">
@@ -42,9 +42,9 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                        android:host="dojodev.de"
-                        android:pathPattern="/schooltools"
-                        android:scheme="https"/>
+                    android:host="dojodev.de"
+                    android:pathPattern="/schooltools"
+                    android:scheme="https"/>
             </intent-filter>
         </activity>
         <activity

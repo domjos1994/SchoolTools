@@ -30,6 +30,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -47,9 +49,7 @@ import java.util.GregorianCalendar;
 import java.util.regex.Pattern;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.activities.TimeTableActivity;
 import de.domjos.schooltools.core.model.Note;
-import de.domjos.schooltools.widgets.TimeTableWidget;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -190,7 +190,7 @@ public class Helper {
     }
 
     public static String getStringFromFile(String path, Context context) {
-        StringBuilder fileContent = new StringBuilder("");
+        StringBuilder fileContent = new StringBuilder();
         try {
             File readableFile = new File(path);
             if(readableFile.exists() && readableFile.isFile()) {
@@ -214,7 +214,7 @@ public class Helper {
         Uri attachment =FileProvider.getUriForFile(context, context.getPackageName() + ".my.package.name.provider", file);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("vnd.android.cursor.dir/email");
-        String to[] = {email};
+        String[] to = {email};
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Intent.EXTRA_EMAIL, to);
         intent.putExtra(Intent.EXTRA_STREAM, attachment);
@@ -252,7 +252,6 @@ public class Helper {
         shiftingMode.setAccessible(false);
         for (int i = 0; i < menuView.getChildCount(); i++) {
             BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-            item.setShiftingMode(false);
             item.setChecked(item.getItemData().isChecked());
         }
     }
@@ -307,5 +306,24 @@ public class Helper {
                 appWidgetManager.notifyAppWidgetViewDataChanged(ids, id);
             }
         }
+    }
+
+    public static SeekBar.OnSeekBarChangeListener getChangeListener(final TextView lbl) {
+        return new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                lbl.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        };
     }
 }
