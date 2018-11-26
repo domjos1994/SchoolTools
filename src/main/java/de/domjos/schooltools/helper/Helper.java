@@ -245,7 +245,7 @@ public class Helper {
 
     @SuppressLint("RestrictedApi")
     public static void removeShiftMode(BottomNavigationView view) throws Exception {
-        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
+        /*BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
         Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
         shiftingMode.setAccessible(true);
         shiftingMode.setBoolean(menuView, false);
@@ -253,7 +253,7 @@ public class Helper {
         for (int i = 0; i < menuView.getChildCount(); i++) {
             BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
             item.setChecked(item.getItemData().isChecked());
-        }
+        }*/
     }
 
 
