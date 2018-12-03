@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.itextpdf.text.pdf.TextField;
 import de.domjos.schooltools.R;
 
 public class Validator {
@@ -112,6 +113,10 @@ public class Validator {
         });
     }
 
+    public void addNumberValidator(final EditText txt, int minimum, int maximum) {
+
+    }
+
     public void addIntegerValidator(final EditText txt) {
         states.put(txt.getId(), false);
         txt.setError(String.format(this.context.getString(R.string.message_validation_integer), txt.getHint()));
@@ -174,10 +179,7 @@ public class Validator {
     }
 
     public void addDateValidator(final EditText txt) {
-        if(!txt.getText().toString().equals("")) {
-            states.put(txt.getId(), false);
-            txt.setError(String.format(this.context.getString(R.string.message_validation_date), txt.getHint()));
-        }
+        this.validate(txt, R.string.message_validation_date, txt.getText().toString().equals(""));
 
         txt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -195,19 +197,15 @@ public class Validator {
                 if(!s.toString().equals("")) {
                     try {
                         if(Converter.convertStringToDate(txt.getText().toString())==null) {
-                            states.put(txt.getId(), false);
-                            txt.setError(String.format(context.getString(R.string.message_validation_date), txt.getHint()));
+                            validate(txt, R.string.message_validation_date, false);
                         } else {
-                            states.put(txt.getId(), true);
-                            txt.setError(null);
+                            validate(txt, 0, true);
                         }
                     } catch (Exception ex) {
-                        states.put(txt.getId(), false);
-                        txt.setError(String.format(context.getString(R.string.message_validation_date), txt.getHint()));
+                        validate(txt, R.string.message_validation_date, false);
                     }
                 } else {
-                    states.put(txt.getId(), true);
-                    txt.setError(null);
+                    validate(txt, 0, true);
                 }
             }
         });
@@ -220,5 +218,14 @@ public class Validator {
             }
         }
         return true;
+    }
+
+    private void validate(EditText txt, int resID, boolean state) {
+        states.put(txt.getId(), state);
+        if(state) {
+            txt.setError(null);
+        } else {
+            txt.setError(String.format(this.context.getString(resID), txt.getHint()));
+        }
     }
 }

@@ -16,11 +16,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.support.annotation.NonNull;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.sql.Types;
+import java.util.*;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
@@ -54,16 +52,35 @@ import de.domjos.schooltools.settings.MarkListSettings;
 public class SQLite extends SQLiteOpenHelper {
     private Context context;
 
+    /**
+     * Constructor with the name and version
+     * @param context current context of app
+     * @param name name of database
+     * @param version version of database
+     */
     public SQLite(Context context, String name, int version) {
         super(context, name, null, version);
         new GeneralSettings(context).setDatabaseVersion(version);
         this.context = context;
     }
 
+    /**
+     * Constructor only with context
+     * @see #SQLite(Context, String, int)
+     * @param context current context of app
+     */
     public SQLite(Context context) {
         super(context, "schoolTools.db", null, new GeneralSettings(context).getDatabaseVersion());
     }
 
+    /**
+     * Functions to initialize database at first start
+     *  - create database tables
+     *  - insert default subjects
+     * @see #createDatabase(int, SQLiteDatabase)
+     * @see #insertSubject(String, int, int, boolean, SQLiteDatabase)
+     * @param db the SQLite-Database
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
@@ -83,6 +100,15 @@ public class SQLite extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Function called on update of database
+     *  - create missing database tables
+     *  - execute table updates
+     * @see #onCreate(SQLiteDatabase)
+     * @param db the SQLite-Database
+     * @param oldVersion old version of database
+     * @param newVersion new version of database
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
@@ -90,9 +116,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.setVersion(newVersion);
 
             // add roomNumber
-            if(!this.columnExists(db)) {
-                db.execSQL("ALTER TABLE timeTable ADD COLUMN roomNumber VARCHAR(255) DEFAULT ''");
-            }
+            this.addColumnIfNotExists(db, "timeTable", "roomNumber", Types.VARCHAR, 255, "''");
 
             this.createDatabase(R.raw.update, db);
         } catch (Exception ex) {
@@ -100,6 +124,12 @@ public class SQLite extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Creates the database by executing queries from Raw-Resource
+     * @see de.domjos.schooltools.helper.Helper#readFileFromRaw(Context, int)
+     * @param resourceID the Resource-ID
+     * @param db the SQLite-Database
+     */
     private void createDatabase(int resourceID, SQLiteDatabase db) {
         String initContent = Helper.readFileFromRaw(this.context, resourceID);
         String[] tables = initContent.split(";");
@@ -110,6 +140,14 @@ public class SQLite extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Creates the default subject
+     * @param alias alias of subject
+     * @param title title-string-resource of subject
+     * @param color color of subject
+     * @param mainSubject is main-subject
+     * @param db the SQLite-Database
+     */
     private void insertSubject(String alias, int title, int color, boolean mainSubject, SQLiteDatabase db) {
         Subject subject = new Subject();
         subject.setAlias(alias);
@@ -125,19 +163,6 @@ public class SQLite extends SQLiteOpenHelper {
         if(this.getColumns("subjects", "title", " WHERE title='" + this.context.getString(title) + "' and alias='" + alias + "'", db).isEmpty()) {
             this.insertOrUpdateSubject(subject, db);
         }
-    }
-
-    private boolean columnExists(SQLiteDatabase db) {
-        boolean exists = false;
-        Cursor cursor = db.rawQuery("PRAGMA table_info('timeTable')", null);
-        while (cursor.moveToNext()) {
-            if(cursor.getString(1).equals("roomNumber")) {
-                exists = true;
-                break;
-            }
-        }
-        cursor.close();
-        return exists;
     }
 
     public void deleteEntry(String table, String column, int id, String where) {
@@ -1739,6 +1764,49 @@ public class SQLite extends SQLiteOpenHelper {
         }
         cursor.close();
         return null;
+    }
+
+    private void addColumnIfNotExists(SQLiteDatabase db, String table, String column, int type, int length, String defaultValue) {
+        try {
+            if(this.columnNotExists(db, table, column)) {
+                Map<Integer, String> types = this.getAllJdbcTypeNames();
+                String typeString = types.get(type);
+                if(typeString.toLowerCase().equals("varchar")) {
+                    typeString += "(" + length + ")";
+                }
+                if(!defaultValue.equals("")) {
+                    typeString += " DEFAULT " + defaultValue;
+                }
+
+                db.execSQL(String.format("ALTER TABLE %s ADD COLUMN %s %s", table, column, typeString));
+            }
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+    }
+
+    private Map<Integer, String> getAllJdbcTypeNames() throws  Exception {
+
+        Map<Integer, String> result = new LinkedHashMap<>();
+
+        for (Field field : Types.class.getFields()) {
+            result.put(field.getInt(null), field.getName());
+        }
+
+        return result;
+    }
+
+    private boolean columnNotExists(SQLiteDatabase db, String table, String column) {
+        boolean exists = false;
+        Cursor cursor = db.rawQuery("PRAGMA table_info(" + table + ")", null);
+        while (cursor.moveToNext()) {
+            if(cursor.getString(1).equals(column)) {
+                exists = true;
+                break;
+            }
+        }
+        cursor.close();
+        return !exists;
     }
 
     private int saveAndClose(int id, SQLiteDatabase db, SQLiteStatement statement) {

@@ -54,7 +54,11 @@ public class WhatsNewActivity extends AppCompatActivity {
 
         Intent newIntent=null;
         try {
-            newIntent = new Intent(WhatsNewActivity.this, Class.forName(className));
+            if(className!=null) {
+                newIntent = new Intent(WhatsNewActivity.this, Class.forName(className));
+            } else {
+                newIntent = new Intent(WhatsNewActivity.this, MainActivity.class);
+            }
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -97,6 +101,8 @@ public class WhatsNewActivity extends AppCompatActivity {
         try {
             if(!info.trim().isEmpty()) {
                 this.lblInfo.setText(this.getStringResourceByName(info));
+            } else {
+                this.lblInfo.setVisibility(View.GONE);
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

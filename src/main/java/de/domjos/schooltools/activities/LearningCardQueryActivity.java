@@ -147,6 +147,8 @@ public class LearningCardQueryActivity extends AppCompatActivity {
     private void initValidation() {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addEmptyValidator(this.txtLearningCardQueryTitle);
+        this.validator.addEmptyValidator(this.txtLearningCardQueryTries);
+        this.validator.addIntegerValidator(this.txtLearningCardQueryTries);
     }
 
     private void controlElements(boolean editMode, boolean reset) {
