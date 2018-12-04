@@ -1,7 +1,6 @@
 package de.domjos.schooltools.core.utils.fileUtils;
 
 import de.domjos.schooltools.helper.Converter;
-import de.domjos.schooltools.helper.Helper;
 
 import java.io.*;
 import java.lang.reflect.Method;
@@ -126,22 +125,24 @@ public final class ObjectFileConnector {
     }
 
     private static void setAttributeToMethod(Method method, Object object, String value) throws Exception {
-        Class<?> type = method.getParameterTypes()[0];
-        if(type==Date.class) {
-            method.invoke(object, Converter.convertStringToDate(value));
-        }
-        if(type==Integer.class || type==int.class) {
-            method.invoke(object, Integer.parseInt(value));
-        }
-        if(type==Double.class || type==double.class) {
-            method.invoke(object, Double.parseDouble(value));
-        }
-        if(type==Long.class || type==long.class) {
-            method.invoke(object, Long.parseLong(value));
-        }
-        if(type==String.class) {
-            method.invoke(object, value);
-        }
+        try {
+            Class<?> type = method.getParameterTypes()[0];
+            if(type==Date.class) {
+                method.invoke(object, Converter.convertStringToDate(value));
+            }
+            if(type==Integer.class || type==int.class) {
+                method.invoke(object, Integer.parseInt(value));
+            }
+            if(type==Double.class || type==double.class) {
+                method.invoke(object, Double.parseDouble(value));
+            }
+            if(type==Long.class || type==long.class) {
+                method.invoke(object, Long.parseLong(value));
+            }
+            if(type==String.class) {
+                method.invoke(object, value);
+            }
+        } catch (Exception ex) {}
     }
 
     private static Object setClassToObject(XMLElement element) throws Exception {
@@ -255,25 +256,21 @@ public final class ObjectFileConnector {
         String header = ObjectFileConnector.getHeaderFromClass(cls, separator);
         Map<String, List<String>> items = ObjectFileConnector.getLinesByHeaderKeys(header, content, separator);
         Map<String, Method> methodMap = ObjectFileConnector.getMethods(cls.newInstance(), "set");
-        if(items.values().size()==1) {
-            object = cls.newInstance();
-        } else {
-            object = new LinkedList<>();
-        }
+        object = cls.newInstance();
         for(Map.Entry<String, List<String>> item : items.entrySet()) {
             if(item.getValue().size()==1) {
-                if(item.getKey().startsWith("(") && item.getKey().endsWith(")")) {
-
+                if(item.getValue().get(0).startsWith("(") && item.getValue().get(0).endsWith(")")) {
+                    ObjectFileConnector.addObject(object, methodMap.get(item.getKey()), item.getKey(), item.getValue().get(0));
                 } else {
                     ObjectFileConnector.setAttributeToMethod(methodMap.get(item.getKey()), object, item.getValue().get(0));
                 }
-            } else {
+            } else if(item.getValue().size()>1) {
                 for(int i = 0; i<=item.getValue().size()-1; i++) {
                     if(((List)object).size()-1<i) {
                         ((List) object).add(cls.newInstance());
                     }
-                    if(item.getKey().startsWith("(") && item.getKey().endsWith(")")) {
-
+                    if(item.getValue().get(i).startsWith("(") && item.getValue().get(i).endsWith(")")) {
+                        ObjectFileConnector.addObject(object, methodMap.get(item.getKey()), item.getKey(), item.getValue().get(i));
                     } else {
                         ObjectFileConnector.setAttributeToMethod(methodMap.get(item.getKey()), ((List) object).get(i), item.getValue().get(i));
                     }
@@ -281,6 +278,47 @@ public final class ObjectFileConnector {
             }
         }
         return object;
+    }
+
+    private static void addObject(Object parent, Method setter, String key, String value) throws Exception {
+        Class<?> cls = ObjectFileConnector.findClassBySimpleName(key.endsWith("s")?key.substring(0, key.length()-1):key);
+        if(cls!=null) {
+            Object child = cls.newInstance();
+            Map<String, Method> methodMap = ObjectFileConnector.getMethods(child, "set");
+
+            value = value.substring(1, value.length()-1);
+            if(value.contains(")(")) {
+                child = new LinkedList<>();
+                for(String item : value.split("\\)\\(")) {
+                    Object obj = cls.newInstance();
+                    ObjectFileConnector.setData(key, item, child, methodMap);
+                    ((List) child).add(obj);
+                }
+                setter.invoke(parent, (List)child);
+            } else {
+                ObjectFileConnector.setData(key, value, child, methodMap);
+                setter.invoke(parent, child);
+            }
+        }
+    }
+
+    private static void setData(String key, String value, Object child, Map<String, Method> methodMap) throws Exception {
+        String[] parts = value.split("\\|");
+        int i = 0;
+        for(Method method : methodMap.values()) {
+            ObjectFileConnector.addMethods(method, key, parts[i], child);
+            i++;
+        }
+    }
+
+    private static void addMethods(Method method, String key, String value, Object object) throws Exception {
+        if(!value.trim().contains("_empty_")) {
+            if(value.startsWith("(") && value.endsWith(")")) {
+                ObjectFileConnector.addObject(object, method, key, value);
+            } else {
+                ObjectFileConnector.setAttributeToMethod(method, object, value);
+            }
+        }
     }
 
     private static Map<String, List<String>> getLinesByHeaderKeys(String header, String content, String separator) {
