@@ -1,6 +1,17 @@
+/*
+ * Copyright (C) 2017-2018  Dominic Joas
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+
 package de.domjos.schooltools.core.utils.fileUtils;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.support.test.InstrumentationRegistry;
 import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.learningCard.LearningCard;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
@@ -8,13 +19,9 @@ import de.domjos.schooltools.core.model.timetable.Teacher;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.Date;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-
-public class ObjectFileConnectorTest {
+public class FileBridgeTest {
     private LearningCardGroup group;
 
     @Before
@@ -64,20 +71,18 @@ public class ObjectFileConnectorTest {
     }
 
     @Test
-    public void testXML() throws Exception {
-        File xmlExportFile = new File("test.xml");
-        ObjectFileConnector.ObjectToFile(group, xmlExportFile, ';');
-        int oldID = group.getID();
-        group = (LearningCardGroup) ObjectFileConnector.FileToObject(xmlExportFile, LearningCardGroup.class, "");
-        assertEquals(group.getID(), oldID);
+    public void testObjectToFile() throws Exception {
+        FileBridge fileBridge = new FileBridge(this.group, "test.csv", this.getContext());
+        fileBridge.writeObjectToFile();
     }
 
     @Test
-    public void testCSV() throws Exception {
-        File xmlExportFile = new File("test.csv");
-        ObjectFileConnector.ObjectToFile(group, xmlExportFile, ';');
-        int oldID = group.getID();
-        group = (LearningCardGroup) ObjectFileConnector.FileToObject(xmlExportFile, LearningCardGroup.class, ";");
-        assertEquals(group.getID(), oldID);
+    public void testObjectFromFile() throws Exception {
+        FileBridge fileBridge = new FileBridge(null, "test.csv", this.getContext());
+        fileBridge.readObjectFromFile();
+    }
+
+    private Context getContext() {
+        return InstrumentationRegistry.getTargetContext();
     }
 }
