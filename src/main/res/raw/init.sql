@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS learningCardGroups(
     title VARCHAR(500) NOT NULL,
     description TEXT DEFAULT '',
     category VARCHAR(50) DEFAULT '',
-    deadline DATE NOT NULL,
+    deadline DATE DEFAULT NULL,
     subject INTEGER DEFAULT 0,
     teacher INTEGER DEFAULT 0,
     FOREIGN KEY(subject) REFERENCES subjects(ID) ON UPDATE CASCADE ON DELETE CASCADE,
