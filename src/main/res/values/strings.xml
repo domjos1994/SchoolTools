@@ -445,6 +445,8 @@
     <string name="message_validation_date" formatted="false">%s muss ein Datum im Format (dd-MM-yyyy) oder (dd.MM.yyyy)
         sein!
     </string>
+    <string name="message_validation_date_min" formatted="false">%s muss nach %s sein!</string>
+    <string name="message_validation_date_max" formatted="false">%s muss vor %s sein!</string>
     <string name="message_validator_length" formatted="false">%s darf nicht länger als %d Zeichen und nicht kürzer als
         %d Zeichen sein!
     </string>

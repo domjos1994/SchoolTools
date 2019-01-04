@@ -17,10 +17,10 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.itextpdf.text.pdf.TextField;
 import de.domjos.schooltools.R;
 
 public class Validator {
@@ -113,10 +113,6 @@ public class Validator {
         });
     }
 
-    public void addNumberValidator(final EditText txt, int minimum, int maximum) {
-
-    }
-
     public void addIntegerValidator(final EditText txt) {
         states.put(txt.getId(), false);
         txt.setError(String.format(this.context.getString(R.string.message_validation_integer), txt.getHint()));
@@ -194,21 +190,59 @@ public class Validator {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!s.toString().equals("")) {
-                    try {
-                        if(Converter.convertStringToDate(txt.getText().toString())==null) {
-                            validate(txt, R.string.message_validation_date, false);
-                        } else {
-                            validate(txt, 0, true);
-                        }
-                    } catch (Exception ex) {
-                        validate(txt, R.string.message_validation_date, false);
-                    }
-                } else {
-                    validate(txt, 0, true);
-                }
+                validateDate(txt, null, null);
             }
         });
+    }
+
+    public void addDateValidator(final EditText txt, final Date minDate, final Date maxDate) {
+        this.validate(txt, R.string.message_validation_date, txt.getText().toString().equals(""));
+
+        txt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validateDate(txt, minDate, maxDate);
+            }
+        });
+    }
+
+    private void validateDate(EditText txt, Date minDate, Date maxDate) {
+        try {
+            if(!txt.getText().toString().equals("")) {
+                Date dt = Converter.convertStringToDate(txt.getText().toString());
+                if(dt==null) {
+                    validate(txt, R.string.message_validation_date, false);
+                } else {
+                    validate(txt, 0, true);
+                    if(minDate!=null) {
+                        if(dt.before(minDate)) {
+                            validate(txt, String.format(context.getString(R.string.message_validation_date_min), txt.getHint(), Converter.convertDateToString(minDate)), false);
+                        } else {
+                            validate(txt, "", true);
+                        }
+                    }
+                    if(maxDate!=null) {
+                        if(dt.after(maxDate)) {
+                            validate(txt, String.format(context.getString(R.string.message_validation_date_max), txt.getHint(), Converter.convertDateToString(maxDate)), false);
+                        } else {
+                            validate(txt, "", true);
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            validate(txt, R.string.message_validation_date, false);
+        }
     }
 
     public boolean getState() {
@@ -226,6 +260,15 @@ public class Validator {
             txt.setError(null);
         } else {
             txt.setError(String.format(this.context.getString(resID), txt.getHint()));
+        }
+    }
+
+    private void validate(EditText txt, String message, boolean state) {
+        states.put(txt.getId(), state);
+        if(state) {
+            txt.setError(null);
+        } else {
+            txt.setError(message);
         }
     }
 }
