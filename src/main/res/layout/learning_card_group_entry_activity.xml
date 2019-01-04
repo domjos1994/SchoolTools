@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/sys_description"
                         android:inputType="textMultiLine"/>
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/txtLearningCardGroupCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                                     android:layout_height="wrap_content"
                                     android:hint="@string/sys_title"
                                     android:inputType="text"/>
-                            <EditText
+                            <AutoCompleteTextView
                                     android:id="@+id/txtLearningCardCategory"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"

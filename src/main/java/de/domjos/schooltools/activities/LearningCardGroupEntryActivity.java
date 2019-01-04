@@ -37,7 +37,8 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
     private LearningCardGroup learningCardGroup;
     private int cardPosition = 0;
 
-    private EditText txtLearningCardGroupTitle, txtLearningCardGroupDeadline, txtLearningCardGroupDescription, txtLearningCardGroupCategory;
+    private EditText txtLearningCardGroupTitle, txtLearningCardGroupDeadline, txtLearningCardGroupDescription;
+    private AutoCompleteTextView txtLearningCardGroupCategory;
     private Spinner spLearningCardGroupSubject, spLearningCardGroupTeacher;
     private ArrayAdapter<Subject> subjectAdapter;
     private ArrayAdapter<Teacher> teacherAdapter;
@@ -46,7 +47,8 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
     private List<LearningCard> learningCards;
     private TextView lblLearningCardPriority;
     private SeekBar sbLearningCardPriority;
-    private EditText txtLearningCardTitle, txtLearningCardCategory, txtLearningCardQuestion, txtLearningCardAnswer, txtLearningCardNote1, txtLearningCardNote2;
+    private EditText txtLearningCardTitle, txtLearningCardQuestion, txtLearningCardAnswer, txtLearningCardNote1, txtLearningCardNote2;
+    private AutoCompleteTextView txtLearningCardCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -301,6 +303,25 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
         this.txtLearningCardAnswer = this.findViewById(R.id.txtLearningCardAnswer);
         this.txtLearningCardNote1 = this.findViewById(R.id.txtLearningCardNote1);
         this.txtLearningCardNote2 = this.findViewById(R.id.txtLearningCardNote2);
+
+        List<LearningCardGroup> groups = MainActivity.globals.getSqLite().getLearningCardGroups("", true);
+        List<String> categories = new LinkedList<>();
+        for(LearningCardGroup group : groups) {
+            if(!categories.contains(group.getCategory().trim())) {
+                categories.add(group.getCategory().trim());
+            }
+
+            for(LearningCard card : group.getLearningCards()) {
+                if(!categories.contains(card.getCategory().trim())) {
+                    categories.add(card.getCategory().trim());
+                }
+            }
+        }
+
+        ArrayAdapter<String> groupAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, categories);
+        ArrayAdapter<String> cardAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, categories);
+        this.txtLearningCardGroupCategory.setAdapter(groupAdapter);
+        this.txtLearningCardCategory.setAdapter(cardAdapter);
     }
 
     private void initValidation() {
