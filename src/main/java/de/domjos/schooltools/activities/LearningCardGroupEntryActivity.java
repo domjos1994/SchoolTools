@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018  Dominic Joas
+ * Copyright (C) 2017-2019  Dominic Joas
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,6 +307,7 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addEmptyValidator(this.txtLearningCardGroupTitle);
         this.validator.addEmptyValidator(this.txtLearningCardGroupDeadline);
+        this.validator.addDateValidator(this.txtLearningCardGroupDeadline);
     }
 
     private void loadCardGroup() {
