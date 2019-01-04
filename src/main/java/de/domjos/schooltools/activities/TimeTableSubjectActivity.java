@@ -495,10 +495,13 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
     }
 
     private void reloadSubjects() {
+        int wholeHours = 0;
         this.subjectAdapter.clear();
         for(Subject subject : MainActivity.globals.getSqLite().getSubjects("")) {
+            wholeHours += subject.getHoursInWeek();
             this.subjectAdapter.add(subject);
         }
+        this.setTitle(getString(R.string.timetable_lesson) + " (" + wholeHours + "h)");
     }
 
     private String getSelectedName(int color) {

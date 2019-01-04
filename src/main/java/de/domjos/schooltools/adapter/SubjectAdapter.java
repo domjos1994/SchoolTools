@@ -49,7 +49,8 @@ public class SubjectAdapter extends ArrayAdapter<Subject> {
 
         if(entry!=null) {
             if(lblSubjectTitle!=null) {
-                lblSubjectTitle.setText(entry.getTitle());
+                String text = entry.getTitle() + " (" + entry.getHoursInWeek() + "h)";
+                lblSubjectTitle.setText(text);
             }
             if(lblSubjectAlias!=null) {
                 lblSubjectAlias.setText(entry.getAlias());
