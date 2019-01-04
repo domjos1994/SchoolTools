@@ -168,7 +168,7 @@
         </activity>
         <activity
                 android:name=".activities.ToDoActivity"
-                android:label="@string/main_nav_todo"
+                android:label="@string/todo_list"
                 android:parentActivityName=".activities.MainActivity"
                 tools:targetApi="jelly_bean">
             <meta-data
