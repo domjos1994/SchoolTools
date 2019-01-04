@@ -1409,8 +1409,10 @@ public class SQLite extends SQLiteOpenHelper {
                 learningCardGroup.setTitle(cursor.getString(1));
                 learningCardGroup.setCategory(cursor.getString(3));
                 String deadLine = cursor.getString(4);
-                if(!deadLine.equals("")) {
-                    learningCardGroup.setDeadLine(Converter.convertStringToDate(deadLine));
+                if(deadLine!=null) {
+                    if(!deadLine.equals("")) {
+                        learningCardGroup.setDeadLine(Converter.convertStringToDate(deadLine));
+                    }
                 }
                 int subjectID = cursor.getInt(5);
                 if(subjectID!=0) {

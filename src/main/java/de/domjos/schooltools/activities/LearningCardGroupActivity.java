@@ -11,6 +11,7 @@ package de.domjos.schooltools.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -63,8 +64,22 @@ public class LearningCardGroupActivity extends AppCompatActivity {
         this.lvLearnCardGroups.setAdapter(this.learningCardGroupAdapter);
         this.learningCardGroupAdapter.notifyDataSetChanged();
 
+        this.reloadGroups();
+    }
+
+    private void reloadGroups() {
+        this.learningCardGroupAdapter.clear();
         for(LearningCardGroup group : MainActivity.globals.getSqLite().getLearningCardGroups("", false)) {
             this.learningCardGroupAdapter.add(group);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode==RESULT_OK) {
+            if(requestCode==99) {
+                this.reloadGroups();
+            }
         }
     }
 }
