@@ -49,6 +49,7 @@ import java.util.GregorianCalendar;
 import java.util.regex.Pattern;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.HelpActivity;
 import de.domjos.schooltools.core.model.Note;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -325,5 +326,15 @@ public class Helper {
 
             }
         };
+    }
+
+    public static MenuItem showHelpMenu(MenuItem item, Context context) {
+        int id = item.getItemId();
+
+        if (id == R.id.menHelp) {
+            context.startActivity(new Intent(context, HelpActivity.class));
+        }
+
+        return item;
     }
 }
