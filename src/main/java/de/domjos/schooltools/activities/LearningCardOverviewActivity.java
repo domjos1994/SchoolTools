@@ -23,6 +23,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.support.v7.widget.Toolbar;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.LearningCardQueryFragmentAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
@@ -135,6 +136,17 @@ public class LearningCardOverviewActivity extends FragmentActivity {
 
         BottomNavigationView navigation = this.findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(listener);
+
+        // init Toolbar
+        Toolbar toolbar = this.findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.learningCard_overView);
+        toolbar.setNavigationIcon(R.drawable.home_as_up);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            }
+        });
 
         this.cmdLearningCardQueryStart = this.findViewById(R.id.cmdLearningCardQueryStart);
 
