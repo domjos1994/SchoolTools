@@ -150,7 +150,7 @@ public class ToDoEntryActivity extends AppCompatActivity {
         this.txtToDoDescription = this.findViewById(R.id.txtToDoDescription);
         this.txtToDoCategory = this.findViewById(R.id.txtToDoDCategory);
         this.rbToDoImportance = this.findViewById(R.id.rbToDoImportance);
-        this.rbToDoImportance.setNumStars(5);
+        //this.rbToDoImportance.setNumStars(5);
         this.chkToDoSolved = this.findViewById(R.id.chkToDoSolved);
         this.chkToDoMemory = this.findViewById(R.id.chkToDoMemory);
         this.txtToDoMemoryDate = this.findViewById(R.id.txtToDoMemoryDate);
