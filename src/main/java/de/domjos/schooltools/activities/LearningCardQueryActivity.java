@@ -35,7 +35,6 @@ public class LearningCardQueryActivity extends AppCompatActivity {
 
     private ListView lvLearningCardQueries;
     private EditText txtLearningCardQueryTitle, txtLearningCardQueryDescription, txtLearningCardQueryPeriod, txtLearningCardQueryTries;
-    private TextView lblLearningCardQueryPriority;
     private Spinner spLearningCardQueryCategory, spLearningCardQueryGroup, spLearningCardQueryWrong;
     private SeekBar sbLearningCardQueryPriority;
     private CheckBox chkLearningCardQueryUntilDeadline, chkLearningCardQueryShowNotes, chkLearningCardQueryShowNotesImmediately, chkLearningCardQueryMustEqual;
@@ -110,7 +109,7 @@ public class LearningCardQueryActivity extends AppCompatActivity {
         this.txtLearningCardQueryDescription = this.findViewById(R.id.txtLearningCardQueryDescription);
         this.txtLearningCardQueryPeriod = this.findViewById(R.id.txtLearningCardQueryPeriod);
         this.txtLearningCardQueryTries = this.findViewById(R.id.txtLearningCardQueryTries);
-        this.lblLearningCardQueryPriority = this.findViewById(R.id.lblLearningCardQueryPriority);
+        TextView lblLearningCardQueryPriority = this.findViewById(R.id.lblLearningCardQueryPriority);
 
         this.spLearningCardQueryCategory = this.findViewById(R.id.spLearningCardQueryCategory);
         List<String> categories = MainActivity.globals.getSqLite().getColumns("learningCards", "category", "GROUP BY category");

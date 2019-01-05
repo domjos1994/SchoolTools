@@ -45,7 +45,6 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
 
     private ListView lvLearningCards;
     private List<LearningCard> learningCards;
-    private TextView lblLearningCardPriority;
     private SeekBar sbLearningCardPriority;
     private EditText txtLearningCardTitle, txtLearningCardQuestion, txtLearningCardAnswer, txtLearningCardNote1, txtLearningCardNote2;
     private AutoCompleteTextView txtLearningCardCategory;
@@ -292,9 +291,9 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
         this.lvLearningCards.setAdapter(learningCardAdapter);
         learningCardAdapter.notifyDataSetChanged();
 
-        this.lblLearningCardPriority = this.findViewById(R.id.lblLearningCardPriority);
+        TextView lblLearningCardPriority = this.findViewById(R.id.lblLearningCardPriority);
         this.sbLearningCardPriority = this.findViewById(R.id.sbLearningCardPriority);
-        this.lblLearningCardPriority.setText(String.valueOf(this.sbLearningCardPriority.getProgress()));
+        lblLearningCardPriority.setText(String.valueOf(this.sbLearningCardPriority.getProgress()));
         this.sbLearningCardPriority.setOnSeekBarChangeListener(Helper.getChangeListener(lblLearningCardPriority));
 
         this.txtLearningCardTitle = this.findViewById(R.id.txtLearningCardTitle);

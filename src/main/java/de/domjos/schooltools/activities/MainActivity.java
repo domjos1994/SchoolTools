@@ -588,36 +588,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             Object[] a = todoMap.entrySet().toArray();
-            Arrays.sort(a, new Comparator() {
-                public int compare(Object o1, Object o2) {
-                    if(o2 instanceof Map.Entry && o1 instanceof Map.Entry) {
-                        Map.Entry entry1 = (Map.Entry) o1;
-                        Map.Entry entry2 = (Map.Entry) o2;
+            if(a!=null) {
+                Arrays.sort(a, new Comparator() {
+                    public int compare(Object o1, Object o2) {
+                        if(o2 instanceof Map.Entry && o1 instanceof Map.Entry) {
+                            Map.Entry entry1 = (Map.Entry) o1;
+                            Map.Entry entry2 = (Map.Entry) o2;
 
-                        if(entry1.getValue() instanceof Integer && entry2.getValue() instanceof Integer) {
-                            return ((Integer) entry1.getValue()).compareTo(((Integer) entry2.getValue()));
+                            if(entry1.getValue() instanceof Integer && entry2.getValue() instanceof Integer) {
+                                return ((Integer) entry1.getValue()).compareTo(((Integer) entry2.getValue()));
+                            }
+                        }
+                        return -1;
+                    }
+                });
+                toDos.clear();
+                for(Object obj : a) {
+                    if(obj instanceof Map.Entry) {
+                        Map.Entry entry = (Map.Entry) obj;
+                        if(entry.getKey() instanceof ToDo) {
+                            this.toDoAdapter.add((ToDo) entry.getKey());
                         }
                     }
-                    return -1;
-                }
-            });
-            toDos.clear();
-            for(Object obj : a) {
-                if(obj instanceof Map.Entry) {
-                    Map.Entry entry = (Map.Entry) obj;
-                    if(entry.getKey() instanceof ToDo) {
-                        this.toDoAdapter.add((ToDo) entry.getKey());
+
+                    if(this.toDoAdapter.getCount() % 5 == 0) {
+                        break;
                     }
                 }
-
-                if(this.toDoAdapter.getCount() % 5 == 0) {
-                    break;
+                if(this.toDoAdapter.isEmpty()) {
+                    ToDo toDo = new ToDo();
+                    toDo.setTitle(this.getString(R.string.main_noEntry));
+                    this.toDoAdapter.add(toDo);
                 }
-            }
-            if(this.toDoAdapter.isEmpty()) {
-                ToDo toDo = new ToDo();
-                toDo.setTitle(this.getString(R.string.main_noEntry));
-                this.toDoAdapter.add(toDo);
             }
         }
     }
@@ -745,7 +747,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    public static void initTimes(TableLayout grid) {
+    private static void initTimes(TableLayout grid) {
         Map<Double, Hour> times = new TreeMap<>();
         List<Hour> hours = MainActivity.globals.getSqLite().getHours("");
         for(Hour hour : hours) {
@@ -912,10 +914,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                                     timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getSubject()));
 
                                                     if(day.getPupilHour().size()-1>counter) {
-                                                        Hour hour = (Hour)day.getPupilHour().keySet().toArray()[counter+1];
-                                                        if(day.getPupilHour().values().toArray()[counter] instanceof PupilHour) {
-                                                            PupilHour mapEntry = (PupilHour) day.getPupilHour().values().toArray()[counter+1];
-                                                            timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, mapEntry.getSubject()));
+                                                        Object[] objects = day.getPupilHour().keySet().toArray();
+                                                        if(objects!=null) {
+                                                            Hour hour = (Hour)objects[counter+1];
+                                                            if(day.getPupilHour().values().toArray()[counter] instanceof PupilHour) {
+                                                                PupilHour mapEntry = (PupilHour) day.getPupilHour().values().toArray()[counter+1];
+                                                                timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, mapEntry.getSubject()));
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -937,10 +942,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                                     timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().getSubject()));
 
                                                     if(day.getTeacherHour().size()-1>counter) {
-                                                        Hour hour = (Hour)day.getTeacherHour().keySet().toArray()[counter+1];
-                                                        if(day.getTeacherHour().values().toArray()[counter+1] instanceof TeacherHour) {
-                                                            TeacherHour mapEntry = (TeacherHour) day.getTeacherHour().values().toArray()[counter+1];
-                                                            timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, mapEntry.getSubject()));
+                                                        Object[] objects = day.getTeacherHour().keySet().toArray();
+                                                        if(objects!=null) {
+                                                            Hour hour = (Hour)objects[counter+1];
+                                                            if(day.getTeacherHour().values().toArray()[counter+1] instanceof TeacherHour) {
+                                                                TeacherHour mapEntry = (TeacherHour) day.getTeacherHour().values().toArray()[counter+1];
+                                                                timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, mapEntry.getSubject()));
+                                                            }
                                                         }
                                                     }
                                                 }
