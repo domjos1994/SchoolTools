@@ -1416,11 +1416,22 @@ public class SQLite extends SQLiteOpenHelper {
                 }
                 int subjectID = cursor.getInt(5);
                 if(subjectID!=0) {
-                    learningCardGroup.setSubject(this.getSubjects("ID=" + subjectID).get(0));
+                    List<Subject> subjects = this.getSubjects("ID=" + subjectID);
+                    if(subjects!=null) {
+                        if(!subjects.isEmpty()) {
+                            learningCardGroup.setSubject(subjects.get(0));
+                        }
+                    }
+
                 }
                 int teacherID = cursor.getInt(6);
                 if(teacherID!=0) {
-                    learningCardGroup.setTeacher(this.getTeachers("ID=" + subjectID).get(0));
+                    List<Teacher> teachers = this.getTeachers("ID=" + subjectID);
+                    if(teachers!=null) {
+                        if(!teachers.isEmpty()) {
+                            learningCardGroup.setTeacher(teachers.get(0));
+                        }
+                    }
                 }
                 learningCardGroups.add(learningCardGroup);
             }
