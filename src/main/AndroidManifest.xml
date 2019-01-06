@@ -254,7 +254,6 @@
                 android:name=".activities.LearningCardGroupActivity"
                 android:label="@string/learningCard_groups"
                 android:parentActivityName=".activities.LearningCardOverviewActivity"
-                android:theme="@style/AppTheme.NoActionBar"
                 tools:targetApi="jelly_bean">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
@@ -264,7 +263,6 @@
                 android:name=".activities.LearningCardGroupEntryActivity"
                 android:label="@string/learningCard_groups"
                 android:parentActivityName=".activities.LearningCardGroupActivity"
-                android:theme="@style/AppTheme.NoActionBar"
                 tools:targetApi="jelly_bean">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
@@ -274,7 +272,6 @@
                 android:name=".activities.LearningCardQueryActivity"
                 android:label="@string/learningCard_query"
                 android:parentActivityName=".activities.LearningCardOverviewActivity"
-                android:theme="@style/AppTheme.NoActionBar"
                 tools:targetApi="jelly_bean">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
