@@ -135,7 +135,7 @@ public class MarkListActivity extends AppCompatActivity {
                         txtMarkListWithCreaseCustomMark.setText("");
                         txtMarkListWithCreaseCustomPoints.setText("");
                     } else {
-                        txtMarkListWithCreaseCustomMark.setText(String.valueOf(3.5));
+                        //txtMarkListWithCreaseCustomMark.setText(String.valueOf(3.5));
                         if(!txtMarkListMaxPoints.getText().toString().isEmpty()) {
                             txtMarkListWithCreaseCustomPoints.setText(String.valueOf(Integer.parseInt(txtMarkListMaxPoints.getText().toString())/2));
                         } else {
