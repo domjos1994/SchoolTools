@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import java.lang.reflect.Field;
@@ -82,19 +83,30 @@ public class SQLite extends SQLiteOpenHelper {
      * @param db the SQLite-Database
      */
     @Override
+    @SuppressWarnings("deprecation")
     public void onCreate(SQLiteDatabase db) {
         try {
             this.createDatabase(R.raw.init, db);
 
-            this.insertSubject("D", R.string.timetable_subject_d_name, R.color.Red, true, db);
-            this.insertSubject("M", R.string.timetable_subject_m_name, R.color.Blue, true, db);
-            this.insertSubject("Eng", R.string.timetable_subject_eng_name, R.color.Yellow, true, db);
-
-            this.insertSubject("Bio", R.string.timetable_subject_bio_name, R.color.Green, false, db);
-            this.insertSubject("Ph", R.string.timetable_subject_ph_name, R.color.Gray, false, db);
-            this.insertSubject("Ch", R.string.timetable_subject_ch_name, R.color.LightGrey, false, db);
-            this.insertSubject("Sp", R.string.timetable_subject_sp_name, R.color.DarkGray, false, db);
-            this.insertSubject("Rel", R.string.timetable_subject_rel_name, R.color.White, false, db);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                this.insertSubject("D", R.string.timetable_subject_d_name, this.context.getColor(R.color.Red), true, db);
+                this.insertSubject("M", R.string.timetable_subject_m_name, this.context.getColor(R.color.Blue), true, db);
+                this.insertSubject("Eng", R.string.timetable_subject_eng_name, this.context.getColor(R.color.Yellow), true, db);
+                this.insertSubject("Bio", R.string.timetable_subject_bio_name, this.context.getColor(R.color.Green), false, db);
+                this.insertSubject("Ph", R.string.timetable_subject_ph_name, this.context.getColor(R.color.Gray), false, db);
+                this.insertSubject("Ch", R.string.timetable_subject_ch_name, this.context.getColor(R.color.LightGrey), false, db);
+                this.insertSubject("Sp", R.string.timetable_subject_sp_name, this.context.getColor(R.color.DarkGray), false, db);
+                this.insertSubject("Rel", R.string.timetable_subject_rel_name, this.context.getColor(R.color.White), false, db);
+            } else {
+                this.insertSubject("D", R.string.timetable_subject_d_name, this.context.getResources().getColor(R.color.Red), true, db);
+                this.insertSubject("M", R.string.timetable_subject_m_name, this.context.getResources().getColor(R.color.Blue), true, db);
+                this.insertSubject("Eng", R.string.timetable_subject_eng_name, this.context.getResources().getColor(R.color.Yellow), true, db);
+                this.insertSubject("Bio", R.string.timetable_subject_bio_name, this.context.getResources().getColor(R.color.Green), false, db);
+                this.insertSubject("Ph", R.string.timetable_subject_ph_name, this.context.getResources().getColor(R.color.Gray), false, db);
+                this.insertSubject("Ch", R.string.timetable_subject_ch_name, this.context.getResources().getColor(R.color.LightGrey), false, db);
+                this.insertSubject("Sp", R.string.timetable_subject_sp_name, this.context.getResources().getColor(R.color.DarkGray), false, db);
+                this.insertSubject("Rel", R.string.timetable_subject_rel_name, this.context.getResources().getColor(R.color.White), false, db);
+            }
         } catch (Exception ex) {
             Helper.printException(this.context, ex);
         }
