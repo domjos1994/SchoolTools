@@ -29,11 +29,14 @@ import de.domjos.schooltools.core.marklist.de.GermanListWithCrease;
 import de.domjos.schooltools.core.model.Note;
 import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.TimerEvent;
+import de.domjos.schooltools.core.model.learningCard.LearningCard;
+import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.core.model.mark.SchoolYear;
 import de.domjos.schooltools.core.model.mark.Test;
 import de.domjos.schooltools.core.model.mark.Year;
 import de.domjos.schooltools.core.model.marklist.MarkListInterface;
 import de.domjos.schooltools.core.model.marklist.MarkListWithMarkMode;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
 import de.domjos.schooltools.core.model.timetable.PupilHour;
@@ -43,11 +46,7 @@ import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
-import de.domjos.schooltools.core.utils.fileUtils.CSVBridge;
-import de.domjos.schooltools.core.utils.fileUtils.CSVObject;
-import de.domjos.schooltools.core.utils.fileUtils.PDFBuilder;
-import de.domjos.schooltools.core.utils.fileUtils.XMLBuilder;
-import de.domjos.schooltools.core.utils.fileUtils.XMLElement;
+import de.domjos.schooltools.core.utils.fileUtils.*;
 import de.domjos.schooltools.settings.MarkListSettings;
 
 public class ApiHelper {
@@ -422,13 +421,8 @@ public class ApiHelper {
             for(int i = 1; i<=reader.size(); i++) {
                 SchoolYear schoolYear = new SchoolYear();
                 schoolYear.setID(reader.readIntegerValue(i, "id"));
-                List<CSVObject> csvObjects = reader.readObjectsValue(i, "subject", "|", "(", ")");
-                if(csvObjects!=null) {
-                    if(!csvObjects.isEmpty()) {
-                        schoolYear.setSubject(this.getSubjectFromCSVObject(csvObjects.get(0), "[", "]"));
-                    }
-                }
-                csvObjects = reader.readObjectsValue(i, "year", "|", "(", ")");
+                schoolYear.setSubject(this.getSubjectFromBridge(reader, i));
+                List<CSVObject> csvObjects = reader.readObjectsValue(i, "year", "|", "(", ")");
                 if(csvObjects!=null) {
                     if(!csvObjects.isEmpty()) {
                         schoolYear.setYear(this.getYearFromCSVObject(csvObjects.get(0)));
@@ -478,10 +472,7 @@ public class ApiHelper {
                         if(testElement.getSubElements()!=null) {
                             if(!testElement.getSubElements().isEmpty()) {
                                 for(XMLElement element : testElement.getSubElements()) {
-                                    Test test = new Test();
-                                    test.setID(this.getIntegerFromMap(element.getAttributes(), "id"));
-                                    test.setTitle(this.unescapeText(element.getAttributes().get("title")));
-                                    test.setDescription(this.unescapeText(element.getAttributes().get("description")));
+                                    Test test = (Test) this.getBaseDescriptionObject(element);
                                     test.setThemes(this.unescapeText(element.getAttributes().get("themes")));
                                     test.setMark(this.getDoubleFromMap(element.getAttributes(), "mark"));
                                     test.setAverage(this.getDoubleFromMap(element.getAttributes(), "average"));
@@ -1501,6 +1492,258 @@ public class ApiHelper {
         return true;
     }
 
+    public PDFBuilder exportLearningCardGroupToPDF(PDFBuilder pdfBuilder, LearningCardGroup learningCardGroup) throws Exception {
+        pdfBuilder.addTitle(learningCardGroup.getTitle(), "header", Paragraph.ALIGN_CENTER);
+        pdfBuilder.addTitle(this.context.getString(R.string.todo_category) + ": " + learningCardGroup.getCategory(), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
+        pdfBuilder.addTitle(this.context.getString(R.string.learningCard_group_deadline) + ": " + Converter.convertDateToString(learningCardGroup.getDeadLine()), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
+        if(learningCardGroup.getTeacher()!=null) {
+            String name = "";
+            if(learningCardGroup.getTeacher().getFirstName()!=null) {
+                if(!learningCardGroup.getTeacher().getFirstName().isEmpty()) {
+                    name = learningCardGroup.getTeacher().getFirstName() + " ";
+                }
+            }
+            name += learningCardGroup.getTeacher().getLastName();
+            pdfBuilder.addTitle(this.context.getString(R.string.timetable_teacher) + ": " + name, "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
+        }
+        if(learningCardGroup.getSubject()!=null) {
+            String subject = learningCardGroup.getSubject().getAlias() + " " + learningCardGroup.getSubject().getTitle();
+            pdfBuilder.addTitle(this.context.getString(R.string.timetable_subject_alias) + ": " + subject, "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
+        }
+        pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), learningCardGroup.getDescription(), "CONTENT_PARAM", "CONTENT_PARAM");
+        List<List<Map.Entry<String, BaseColor>>> rows = new LinkedList<>();
+        for(LearningCard learningCard : learningCardGroup.getLearningCards()) {
+            List<Map.Entry<String, BaseColor>> columns = new LinkedList<>();
+            columns.add(new AbstractMap.SimpleEntry<>(learningCard.getTitle(), BaseColor.WHITE));
+            columns.add(new AbstractMap.SimpleEntry<>(learningCard.getQuestion(), BaseColor.WHITE));
+            columns.add(new AbstractMap.SimpleEntry<>(learningCard.getAnswer(), BaseColor.WHITE));
+            columns.add(new AbstractMap.SimpleEntry<>(learningCard.getCategory(), BaseColor.WHITE));
+            columns.add(new AbstractMap.SimpleEntry<>(String.valueOf(learningCard.getPriority()), BaseColor.WHITE));
+            columns.add(new AbstractMap.SimpleEntry<>(learningCard.getNote1(), BaseColor.WHITE));
+            columns.add(new AbstractMap.SimpleEntry<>(learningCard.getNote2(), BaseColor.WHITE));
+            rows.add(columns);
+        }
+        List<String> header = new LinkedList<>();
+        header.add(this.context.getString(R.string.sys_title));
+        header.add(this.context.getString(R.string.learningCard_question));
+        header.add(this.context.getString(R.string.learningCard_answer));
+        header.add(this.context.getString(R.string.todo_category));
+        header.add(this.context.getString(R.string.learningCard_priority));
+        header.add(this.context.getString(R.string.learningCard_note1));
+        header.add(this.context.getString(R.string.learningCard_note2));
+        float[] sizes = {1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f};
+        pdfBuilder.addTable(header, sizes, rows);
+        pdfBuilder.newPage();
+        return pdfBuilder;
+    }
+
+    public String exportLearningCardGroupToTEXT(List<LearningCardGroup> learningCardGroups) {
+        CSVBridge writer = new CSVBridge(";", "id;title;category;description;deadline;subject;teacher;learningCards");
+        for(int i = 1; i<=learningCardGroups.size(); i++) {
+            try {
+                writer.writeValue(i, "id", learningCardGroups.get(i-1).getID());
+                writer.writeValue(i, "title", learningCardGroups.get(i-1).getTitle());
+                writer.writeValue(i, "category", learningCardGroups.get(i-1).getCategory());
+                writer.writeValue(i, "description", learningCardGroups.get(i-1).getDescription());
+                writer.writeValue(i, "deadline", learningCardGroups.get(i-1).getDeadLine());
+                writer.writeValue(i, "subject", this.getCSVObjectFromSubject(learningCardGroups.get(i-1).getSubject(), "|", "[", "]"), "(", ")");
+                writer.writeValue(i, "teacher", this.getCSVObjectFromTeacher(learningCardGroups.get(i-1).getTeacher(), "|"), "(", ")");
+                List<CSVObject> csvObjects = new LinkedList<>();
+                for(LearningCard learningCard : learningCardGroups.get(i-1).getLearningCards()) {
+                    CSVObject csvObject = new CSVObject("|", 8);
+                    csvObject.writeValue("1", learningCard.getID());
+                    csvObject.writeValue("2", learningCard.getTitle());
+                    csvObject.writeValue("3", learningCard.getQuestion());
+                    csvObject.writeValue("4", learningCard.getAnswer());
+                    csvObject.writeValue("5", learningCard.getCategory());
+                    csvObject.writeValue("6", learningCard.getPriority());
+                    csvObject.writeValue("7", learningCard.getNote1());
+                    csvObject.writeValue("8", learningCard.getNote2());
+                    csvObjects.add(csvObject);
+                }
+                writer.writeValue(i, "learningCards", csvObjects, "(", ")");
+                if(learningCardGroups.size()!=i) {
+                    writer.addNewLine();
+                }
+            } catch (Exception ex) {
+                if(this.cancelExport) {
+                    return ex.toString();
+                } else {
+                    writer.replaceWithNewLine();
+                }
+            }
+        }
+        return writer.toString();
+    }
+
+    public boolean exportLearningCardGroupToXML(String where, String path) throws Exception {
+        XMLBuilder builder = new XMLBuilder("LearningCardGroups", new File(path));
+        List<LearningCardGroup> learningCardGroups = this.sqLite.getLearningCardGroups(where, true);
+        if(learningCardGroups != null) {
+            if(!learningCardGroups.isEmpty()) {
+                for(LearningCardGroup learningCardGroup : learningCardGroups) {
+                    XMLElement element = new XMLElement("LearningCardGroup");
+                    element.addAttribute("id", String.valueOf(learningCardGroup.getID()));
+                    element.addAttribute("deadline", Converter.convertDateToString(learningCardGroup.getDeadLine()));
+                    element.addAttribute("title", this.escapeText(learningCardGroup.getTitle()));
+                    element.addAttribute("category", this.escapeText(learningCardGroup.getCategory()));
+                    element.addSubElement(this.getXMLElementFromSubject(learningCardGroup.getSubject()));
+                    element.addSubElement(this.getXMLElementFromTeacher(learningCardGroup.getTeacher()));
+                    element.setContent(this.escapeText(learningCardGroup.getDescription()));
+                    for(LearningCard learningCard : learningCardGroup.getLearningCards()) {
+                        XMLElement learningCardElement = new XMLElement("LearningCard");
+                        learningCardElement.addAttribute("id", String.valueOf(learningCard.getID()));
+                        learningCardElement.addAttribute("title", learningCard.getTitle());
+                        learningCardElement.addAttribute("category", learningCard.getCategory());
+                        learningCardElement.addAttribute("question", learningCard.getQuestion());
+                        learningCardElement.addAttribute("note1", learningCard.getNote1());
+                        learningCardElement.addAttribute("note2", learningCard.getNote2());
+                        learningCardElement.addAttribute("priority", String.valueOf(learningCard.getPriority()));
+                        learningCardElement.setContent(learningCard.getAnswer());
+                        element.addSubElement(learningCardElement);
+                    }
+                    builder.addElement(element);
+                }
+            }
+        }
+        builder.save();
+        return true;
+    }
+
+    public boolean importLearningCardGroupFromText(String content) {
+        if (!content.trim().contains(";")) {
+            return false;
+        } else {
+            CSVBridge reader = new CSVBridge(";", "", content.trim(), true);
+            for(int i = 1; i<=reader.size(); i++) {
+                LearningCardGroup learningCardGroup = new LearningCardGroup();
+                learningCardGroup.setID(reader.readIntegerValue(i, "id"));
+                learningCardGroup.setTitle(reader.readStringValue(i, "title"));
+                learningCardGroup.setCategory(reader.readStringValue(i, "category"));
+                learningCardGroup.setDescription(reader.readStringValue(i, "description"));
+                learningCardGroup.setDeadLine(reader.readDateValue(i, "deadline"));
+                List<CSVObject> csvObjects = reader.readObjectsValue(i, "subject", "|", "(", ")");
+                if(csvObjects!=null) {
+                    if(!csvObjects.isEmpty()) {
+                        learningCardGroup.setSubject(this.getSubjectFromCSVObject(csvObjects.get(0), "[", "]"));
+                    }
+                }
+                csvObjects = reader.readObjectsValue(i, "teacher", "|", "(", ")");
+                if(csvObjects!=null) {
+                    if(!csvObjects.isEmpty()) {
+                        learningCardGroup.setTeacher(this.getTeacherFromCSVObject(csvObjects.get(0)));
+                    }
+                }
+                csvObjects = reader.readObjectsValue(i, "learningCards", "|", "(", ")");
+                if(csvObjects!=null) {
+                    if (!csvObjects.isEmpty()) {
+                        for(CSVObject csvObject : csvObjects) {
+                            LearningCard learningCard = new LearningCard();
+                            learningCard.setID(csvObject.readIntegerValue("1"));
+                            learningCard.setTitle(csvObject.readStringValue("2"));
+                            learningCard.setQuestion(csvObject.readStringValue("3"));
+                            learningCard.setAnswer(csvObject.readStringValue("4"));
+                            learningCard.setCategory(csvObject.readStringValue("5"));
+                            learningCard.setPriority(csvObject.readIntegerValue("6"));
+                            learningCard.setNote1(csvObject.readStringValue("7"));
+                            learningCard.setNote2(csvObject.readStringValue("8"));
+                            learningCardGroup.getLearningCards().add(this.saveLearningCard(learningCard));
+                        }
+                    }
+                }
+
+                this.saveLearningCardGroup(learningCardGroup);
+            }
+        }
+        return true;
+    }
+
+    public boolean importLearningCardGroupFromXML(String path) throws Exception {
+        File file = new File(path);
+        if(file.exists() && file.isFile()) {
+            XMLBuilder builder = new XMLBuilder(file);
+            List<XMLElement> elements = builder.getElements("LearningCardGroups");
+            for(XMLElement xmlElement : elements.get(0).getSubElements()) {
+                LearningCardGroup learningCardGroup = new LearningCardGroup();
+                learningCardGroup.setID(this.getIntegerFromMap(xmlElement.getAttributes(), "id"));
+                String deadline = xmlElement.getAttributes().get("deadline");
+                if(deadline!=null) {
+                    if(!deadline.isEmpty()) {
+                        learningCardGroup.setDeadLine(Converter.convertStringToDate(deadline));
+                    }
+                }
+                learningCardGroup.setTitle(this.unescapeText(xmlElement.getAttributes().get("title")));
+                learningCardGroup.setCategory(this.unescapeText(xmlElement.getAttributes().get("category")));
+                for(XMLElement element : xmlElement.getSubElements()) {
+                    switch (element.getElement()) {
+                        case "Teacher":
+                            learningCardGroup.setTeacher(this.getTeacherFromXMLElement(element));
+                            break;
+                        case "Subject":
+                            learningCardGroup.setSubject(this.getSubjectFromXMLElement(element));
+                            break;
+                        default:
+                    }
+                }
+                learningCardGroup.setDescription(this.unescapeText(xmlElement.getContent()));
+                for(XMLElement subElement : xmlElement.getSubElements()) {
+                    LearningCard learningCard = new LearningCard();
+                    Map<String, String> attributes = subElement.getAttributes();
+                    if(attributes!=null) {
+                        String id = attributes.get("id");
+                        if(id!=null) {
+                            learningCard.setID(Integer.parseInt(id));
+                        }
+                        learningCard.setTitle(attributes.get("title"));
+                        learningCard.setCategory(attributes.get("category"));
+                        learningCard.setQuestion(attributes.get("question"));
+                        learningCard.setNote1(attributes.get("note1"));
+                        learningCard.setNote2(attributes.get("note2"));
+                        String priority = attributes.get("priority");
+                        if(priority!=null) {
+                            learningCard.setID(Integer.parseInt(priority));
+                        }
+                        learningCard.setAnswer(subElement.getContent());
+                        learningCardGroup.getLearningCards().add(this.saveLearningCard(learningCard));
+                    }
+                }
+                this.saveLearningCardGroup(learningCardGroup);
+            }
+        }
+        return true;
+    }
+
+    private LearningCard saveLearningCard(LearningCard learningCard) {
+        if(learningCard!=null) {
+            if(this.overrideEntry) {
+                if(this.sqLite.entryExists("learningCards", learningCard.getID())) {
+                    return learningCard;
+                } else {
+                    learningCard.setID(0);
+                }
+            } else {
+                learningCard.setID(0);
+            }
+        }
+        return learningCard;
+    }
+
+    private void saveLearningCardGroup(LearningCardGroup learningCardGroup) {
+        if(learningCardGroup!=null) {
+            if(this.overrideEntry) {
+                if(this.sqLite.entryExists("learningCardGroups", learningCardGroup.getID())) {
+                    this.sqLite.insertOrUpdateLearningCardGroup(learningCardGroup);
+                    return;
+                } else {
+                    learningCardGroup.setID(0);
+                }
+            } else {
+                learningCardGroup.setID(0);
+            }
+            this.sqLite.insertOrUpdateLearningCardGroup(learningCardGroup);
+        }
+    }
+
     public static String findExistingFolder(Context context) {
         File documentsFolder, downloadsFolder;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
@@ -1835,14 +2078,18 @@ public class ApiHelper {
 
     private XMLElement getXMLElementFromYear(Year year) {
         if(year!=null) {
-            XMLElement xmlElement = new XMLElement("Year");
-            xmlElement.addAttribute("id", String.valueOf(year.getID()));
-            xmlElement.addAttribute("title", this.escapeText(year.getTitle()));
-            xmlElement.addAttribute("description", this.escapeText(year.getDescription()));
-            return xmlElement;
+            return this.getDescriptionElement("Year", year.getID(), year.getTitle(), year.getDescription());
         } else {
             return null;
         }
+    }
+
+    private XMLElement getDescriptionElement(String name, int id, String title, String description) {
+        XMLElement element = new XMLElement(name);
+        element.addAttribute("id", String.valueOf(id));
+        element.addAttribute("title", this.escapeText(title));
+        element.addAttribute("description", this.escapeText(description));
+        return element;
     }
 
     private Year saveYear(Year year) {
@@ -2007,6 +2254,24 @@ public class ApiHelper {
         } else {
             return null;
         }
+    }
+
+    private Subject getSubjectFromBridge(CSVBridge reader, int i) {
+        List<CSVObject> csvObjects = reader.readObjectsValue(i, "subject", "|", "(", ")");
+        if(csvObjects!=null) {
+            if(!csvObjects.isEmpty()) {
+                return this.getSubjectFromCSVObject(csvObjects.get(0), "[", "]");
+            }
+        }
+        return null;
+    }
+
+    private BaseDescriptionObject getBaseDescriptionObject(XMLElement element) {
+        BaseDescriptionObject baseDescriptionObject = new BaseDescriptionObject();
+        baseDescriptionObject.setID(this.getIntegerFromMap(element.getAttributes(), "id"));
+        baseDescriptionObject.setTitle(this.unescapeText(element.getAttributes().get("title")));
+        baseDescriptionObject.setDescription(this.unescapeText(element.getAttributes().get("description")));
+        return baseDescriptionObject;
     }
 
     private Teacher saveTeacher(Teacher teacher) {

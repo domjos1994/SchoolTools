@@ -49,6 +49,7 @@ import de.domjos.schooltools.core.model.Memory;
 import de.domjos.schooltools.core.model.Note;
 import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.TimerEvent;
+import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.core.model.mark.SchoolYear;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.core.model.todo.ToDoList;
@@ -263,36 +264,17 @@ public class ApiActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        Intent intent;
-        switch (id) {
-            case R.id.menHelp:
-                intent = new Intent(this.getApplicationContext(), HelpActivity.class);
-                break;
-            default:
-               intent = null;
-        }
-
-        if(intent!=null) {
-            startActivity(intent);
-        }
-
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext()));
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode==RESULT_OK) {
-            switch(requestCode) {
-                case 9999:
-                    Uri uri = data.getData();
-                    if(uri!=null) {
-                        lblApiPath.setText(Converter.convertURIToStringPath(this.getApplicationContext(), uri));
-                    }
-                    break;
-                default:
-
+            if (requestCode == 9999) {
+                Uri uri = data.getData();
+                if (uri != null) {
+                    lblApiPath.setText(Converter.convertURIToStringPath(this.getApplicationContext(), uri));
+                }
             }
         }
     }
@@ -338,6 +320,7 @@ public class ApiActivity extends AppCompatActivity {
             if(type.equals(this.getString(R.string.main_nav_timetable))) return this.apiHelper.importTimeTableFromTEXT(content);
             if(type.equals(this.getString(R.string.main_nav_notes))) return this.apiHelper.importNoteFromTEXT(content);
             if(type.equals(this.getString(R.string.main_nav_todo))) return this.apiHelper.importToDoListFromText(content);
+            if(type.equals(this.getString(R.string.main_nav_learningCards))) return this.apiHelper.importLearningCardGroupFromText(content);
             if(type.equals(this.getString(R.string.main_nav_timer))) return this.apiHelper.importTimerEventFromTEXT(content);
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);
@@ -353,6 +336,7 @@ public class ApiActivity extends AppCompatActivity {
             if(type.equals(this.getString(R.string.main_nav_timetable))) return this.apiHelper.importTimeTableFromXML(path);
             if(type.equals(this.getString(R.string.main_nav_notes))) return this.apiHelper.importNoteFromXML(path);
             if(type.equals(this.getString(R.string.main_nav_todo))) return this.apiHelper.importToDoListFromXML(path);
+            if(type.equals(this.getString(R.string.main_nav_learningCards))) return this.apiHelper.importLearningCardGroupFromXML(path);
             if(type.equals(this.getString(R.string.main_nav_timer))) return this.apiHelper.importTimerEventFromXML(path);
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);
@@ -382,6 +366,8 @@ public class ApiActivity extends AppCompatActivity {
             content.append(this.apiHelper.exportNoteToTEXT(this.sqLite.getNotes(where)));
         } else if(type.equals(this.getString(R.string.main_nav_todo))) {
             content.append(this.apiHelper.exportToDoListToTEXT(this.sqLite.getToDoLists(where)));
+        } else if(type.equals(this.getString(R.string.main_nav_learningCards))) {
+            content.append(this.apiHelper.exportLearningCardGroupToTEXT(this.sqLite.getLearningCardGroups(where, true)));
         } else if(type.equals(this.getString(R.string.main_nav_timer))) {
             content.append(this.apiHelper.exportTimerEventToTEXT(this.sqLite.getTimerEvents(where)));
         }
@@ -403,6 +389,8 @@ public class ApiActivity extends AppCompatActivity {
                 return this.apiHelper.exportNoteToXML(where, exportPath);
             } else if(type.equals(this.getString(R.string.main_nav_todo))) {
                 return this.apiHelper.exportToDoListToXMLElement(where, exportPath);
+            } else if(type.equals(this.getString(R.string.main_nav_learningCards))) {
+                return this.apiHelper.exportLearningCardGroupToXML(where, exportPath);
             } else if(type.equals(this.getString(R.string.main_nav_timer))) {
                 return this.apiHelper.exportTimerEventToXML(where, exportPath);
             }
@@ -470,6 +458,12 @@ public class ApiActivity extends AppCompatActivity {
                 }
                 pdfBuilder.close();
                 return true;
+            } else if(type.equals(this.getString(R.string.main_nav_learningCards))) {
+                for(LearningCardGroup learningCardGroup : this.sqLite.getLearningCardGroups(where, true)) {
+                    pdfBuilder = this.apiHelper.exportLearningCardGroupToPDF(pdfBuilder, learningCardGroup);
+                }
+                pdfBuilder.close();
+                return true;
             } else if(type.equals(this.getString(R.string.main_nav_timer))) {
                 for(TimerEvent timerEvent : this.sqLite.getTimerEvents(where)) {
                     pdfBuilder = this.apiHelper.exportTimerEventToPDF(pdfBuilder, timerEvent);
@@ -520,6 +514,7 @@ public class ApiActivity extends AppCompatActivity {
         this.apiType.add(this.getString(R.string.main_nav_notes));
         this.apiType.add(this.getString(R.string.main_nav_timer));
         this.apiType.add(this.getString(R.string.main_nav_todo));
+        this.apiType.add(this.getString(R.string.main_nav_learningCards));
     }
 
     private void loadEntries() {
@@ -558,6 +553,11 @@ public class ApiActivity extends AppCompatActivity {
             if(selectedType.equals(this.getString(R.string.main_nav_todo))) {
                 for(ToDoList toDoList : sqLite.getToDoLists("")) {
                     this.apiEntry.add(String.format(unformattedString, toDoList.getID(), toDoList.getTitle()));
+                }
+            }
+            if(selectedType.equals(this.getString(R.string.main_nav_learningCards))) {
+                for(LearningCardGroup group : sqLite.getLearningCardGroups("", false)) {
+                    this.apiEntry.add(String.format(unformattedString, group.getID(), group.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.sys_memory))) {
