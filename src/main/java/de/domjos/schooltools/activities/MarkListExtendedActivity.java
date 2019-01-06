@@ -36,6 +36,7 @@ import com.jjoe64.graphview.series.Series;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map;
+import java.util.TreeMap;
 
 import de.domjos.schooltools.R;
 
@@ -359,7 +360,9 @@ public class MarkListExtendedActivity extends AppCompatActivity {
             }
             DataPoint[] dpArray = new DataPoint[mp.size()];
             int i = 0;
-            for(Map.Entry<Double, Double> entry : mp.entrySet()) {
+
+            Map<Double, Double> tmp = new TreeMap<>(mp);
+            for(Map.Entry<Double, Double> entry : tmp.entrySet()) {
                 DataPoint point = null;
 
                 if(this.markList instanceof ExtendedMarkList) {
@@ -400,7 +403,7 @@ public class MarkListExtendedActivity extends AppCompatActivity {
             this.graphView.getSeries().clear();
             this.graphView.addSeries(series);
             this.updateState(null, settings);
-        } catch (MarkListException ex) {
+        } catch (Exception ex) {
             this.updateState(ex, null);
         }
     }
