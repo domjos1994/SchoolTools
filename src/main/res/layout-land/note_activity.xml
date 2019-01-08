@@ -9,14 +9,14 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="de.domjos.schooltools.activities.NoteActivity"
-    android:background="@drawable/bg_water">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/container"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="de.domjos.schooltools.activities.NoteActivity"
+              android:background="@drawable/bg_water">
 
     <RelativeLayout
             android:id="@+id/content"
@@ -30,13 +30,14 @@
                 android:layout_height="match_parent"
                 android:layout_above="@+id/svControls"
                 android:divider="@color/Gray"
-                android:dividerHeight="2dp"/>
+                android:dividerHeight="2dp"
+                android:layout_margin="5dp"/>
 
         <ScrollView
                 android:id="@+id/svControls"
                 android:background="@drawable/tbl_border"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="100dp"
                 android:layout_alignParentBottom="true">
             <LinearLayout
                     android:layout_width="match_parent"
@@ -62,42 +63,42 @@
                             android:layout_weight="2"
                             android:src="@android:drawable/ic_btn_speak_now"/>
                 </LinearLayout>
-                <EditText
-                        android:id="@+id/txtNoteDescription"
-                        android:hint="@string/sys_description"
-                        android:layout_weight="10"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:inputType="textMultiLine"/>
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:weightSum="10">
+                    <EditText
+                            android:id="@+id/txtNoteDescription"
+                            android:hint="@string/sys_description"
+                            android:layout_weight="8"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"/>
                     <CheckBox
                             android:id="@+id/chkNoteMemory"
                             android:text="@string/sys_memory"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="4"/>
-                    <EditText
-                            android:id="@+id/txtNoteMemoryDate"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="6"
-                            android:hint="@string/mark_date"
-                            android:inputType="date"/>
+                            android:layout_weight="2"/>
                 </LinearLayout>
+                <EditText
+                        android:id="@+id/txtNoteMemoryDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="10"
+                        android:hint="@string/mark_date"
+                        android:inputType="date"/>
             </LinearLayout>
         </ScrollView>
 
     </RelativeLayout>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation_sys" />
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/navigation_sys" />
 
 </LinearLayout>
