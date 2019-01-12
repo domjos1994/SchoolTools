@@ -18,6 +18,7 @@ import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import de.domjos.schooltools.helper.SQLite;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,6 +38,7 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertNotEquals;
 
 
 /**
@@ -59,6 +61,21 @@ public class MainActivityTest {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putStringSet("lsShownModules", set);
         editor.commit();
+
+        SQLite sqLite = MainActivity.globals.getSqLite();
+        String[] tables = de.domjos.schooltools.helper.Helper.readFileFromRaw(context, R.raw.example).split(";");
+        for(String query : tables) {
+            if(!query.trim().equals("")) {
+                try {
+                    sqLite.getReadableDatabase().execSQL(query);
+                } catch (Exception ex) {}
+            }
+        }
+    }
+
+    @Test
+    public void loadExampleData() {
+        assertNotEquals(MainActivity.globals.getSqLite().getTeachers("").size(), 0);
     }
 
     @Test
