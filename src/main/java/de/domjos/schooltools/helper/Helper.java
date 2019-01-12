@@ -8,7 +8,6 @@
  */
 package de.domjos.schooltools.helper;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -18,8 +17,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -41,7 +38,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
@@ -243,20 +239,6 @@ public class Helper {
         }
         return permissions;
    }
-
-    @SuppressLint("RestrictedApi")
-    public static void removeShiftMode(BottomNavigationView view) throws Exception {
-        /*BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
-        Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
-        shiftingMode.setAccessible(true);
-        shiftingMode.setBoolean(menuView, false);
-        shiftingMode.setAccessible(false);
-        for (int i = 0; i < menuView.getChildCount(); i++) {
-            BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-            item.setChecked(item.getItemData().isChecked());
-        }*/
-    }
-
 
     public static void showMenuControls(boolean editMode, BottomNavigationView navigation) {
         if (editMode) {

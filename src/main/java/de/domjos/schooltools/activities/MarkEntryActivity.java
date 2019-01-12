@@ -224,7 +224,6 @@ public class MarkEntryActivity extends AppCompatActivity {
             navigation.setOnNavigationItemSelectedListener(listener);
             navigation.getMenu().removeItem(R.id.navTimeTableSubAdd);
             navigation.getMenu().removeItem(R.id.navTimeTableSubEdit);
-            Helper.removeShiftMode(navigation);
 
             // init other Controls
             this.lblTestSubject = this.findViewById(R.id.lblTestSubject);

@@ -189,7 +189,6 @@ public class TimeTableActivity extends AppCompatActivity {
             BottomNavigationView navigation = this.findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(navListener);
             navigation.setSelected(false);
-            Helper.removeShiftMode(navigation);
 
             // init other controls
             this.cmdTimeTableAdd = this.findViewById(R.id.cmdTimeTableAdd);
