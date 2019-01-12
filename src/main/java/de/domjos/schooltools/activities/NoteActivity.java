@@ -19,12 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +49,7 @@ public class NoteActivity extends AppCompatActivity {
     private EditText txtNoteTitle, txtNoteDescription, txtNoteMemoryDate;
     private ImageButton cmdNoteSpeak;
     private CheckBox chkNoteMemory;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +72,17 @@ public class NoteActivity extends AppCompatActivity {
                     fillNote(note);
                     changeControls(false, false, true);
                 }
+                menu.findItem(R.id.menDelete).setVisible(false);
+            }
+        });
+
+        this.lvNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if(menu!=null) {
+                    menu.findItem(R.id.menDelete).setVisible(true);
+                }
+                return false;
             }
         });
 
@@ -101,7 +108,8 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_help_only, menu);
+        getMenuInflater().inflate(R.menu.menu_note, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -113,6 +121,9 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.menHelp:
                 startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
                 break;
+            case R.id.menDelete:
+                deleteNote();
+                this.menu.findItem(R.id.menDelete).setVisible(false);
             default:
         }
 
@@ -173,8 +184,8 @@ public class NoteActivity extends AppCompatActivity {
     private void fillNote(Note note) {
         txtNoteTitle.setText(note.getTitle());
         txtNoteDescription.setText(note.getDescription());
-        chkNoteMemory.setChecked(true);
         txtNoteMemoryDate.setText(Converter.convertDateToString(note.getMemoryDate()));
+        chkNoteMemory.setChecked(!txtNoteMemoryDate.getText().toString().trim().equals(""));
     }
 
     private void initValidator() {
@@ -192,19 +203,19 @@ public class NoteActivity extends AppCompatActivity {
                 switch (Helper.checkMenuID(item)) {
                     case R.id.navTimeTableSubAdd:
                         changeControls(true, true, false);
+                        menu.findItem(R.id.menDelete).setVisible(false);
                         break;
                     case R.id.navTimeTableSubEdit:
                         changeControls(true, false, false);
+                        menu.findItem(R.id.menDelete).setVisible(false);
                         break;
                     case R.id.navTimeTableSubDelete:
-                        MainActivity.globals.getSqLite().deleteEntry("notes", "ID", currentID, "");
-                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID", currentID, "[table]='notes'");
-                        reloadNotes();
-                        changeControls(false, true, false);
-                        Helper.sendBroadCast(NoteActivity.this, NoteWidget.class);
+                        deleteNote();
+                        menu.findItem(R.id.menDelete).setVisible(false);
                         break;
                     case R.id.navTimeTableSubCancel:
                         changeControls(false, true, false);
+                        menu.findItem(R.id.menDelete).setVisible(false);
                         break;
                     case R.id.navTimeTableSubSave:
                         try {
@@ -220,9 +231,12 @@ public class NoteActivity extends AppCompatActivity {
                                 reloadNotes();
                                 changeControls(false, true, false);
                                 Helper.sendBroadCast(NoteActivity.this, NoteWidget.class);
+
                             }
                         } catch (Exception ex) {
                             Helper.printException(getApplicationContext(), ex);
+                        } finally {
+                            menu.findItem(R.id.menDelete).setVisible(false);
                         }
                         break;
                     default:
@@ -246,5 +260,13 @@ public class NoteActivity extends AppCompatActivity {
         this.noteAdapter = new NoteAdapter(NoteActivity.this, R.layout.note_item, new ArrayList<Note>());
         this.lvNotes.setAdapter(this.noteAdapter);
         this.noteAdapter.notifyDataSetChanged();
+    }
+
+    private void deleteNote() {
+        MainActivity.globals.getSqLite().deleteEntry("notes", "ID", this.currentID, "");
+        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID", this.currentID, "[table]='notes'");
+        reloadNotes();
+        changeControls(false, true, false);
+        Helper.sendBroadCast(NoteActivity.this, NoteWidget.class);
     }
 }
