@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.helper.Helper;
 
 public class WhatsNewActivity extends AppCompatActivity {
     public final static String isShownAlways = "isShownAlways";
@@ -100,16 +101,12 @@ public class WhatsNewActivity extends AppCompatActivity {
     private void fillContent(String content, String info) {
         try {
             if(!info.trim().isEmpty()) {
-                this.lblInfo.setText(this.getStringResourceByName(info));
+                Helper.showHTMLInTextView(getApplicationContext(), info, this.lblInfo);
             } else {
                 this.lblInfo.setVisibility(View.GONE);
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                lblContent.setText(Html.fromHtml(this.getStringResourceByName(content), Html.FROM_HTML_MODE_COMPACT));
-            } else {
-                lblContent.setText(Html.fromHtml(this.getStringResourceByName(content)));
-            }
+            Helper.showHTMLInTextView(getApplicationContext(), content, this.lblContent);
         } catch (Exception ex) {
             setResult(RESULT_OK);
             finish();

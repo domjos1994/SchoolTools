@@ -490,8 +490,7 @@ public class MarkListActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.menMainHelp:
-                Intent intent = new Intent(this.getApplicationContext(), HelpActivity.class);
-                startActivity(intent);
+                super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_marklist"));
                 break;
             default:
         }

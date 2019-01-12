@@ -10,15 +10,18 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
 import java.io.File;
 
+import android.widget.TextView;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.helper.Helper;
 
@@ -97,8 +100,18 @@ public class HelpActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        WebView lblContent = this.findViewById(R.id.lblContent);
-        String content = Helper.readFileFromRaw(this.getApplicationContext(), R.raw.help).replace("\n","").replace("\t","");
-        lblContent.loadData(content, "", "utf-8");
+        Intent intent = this.getIntent();
+        String id = "help_start";
+        if(intent!=null) {
+            String tmp = intent.getStringExtra("helpId");
+            if(tmp!=null) {
+                if(!tmp.equals("")) {
+                    id = tmp;
+                }
+            }
+        }
+
+        TextView lblContent = this.findViewById(R.id.lblContent);
+        Helper.showHTMLInTextView(getApplicationContext(), id, lblContent);
     }
 }

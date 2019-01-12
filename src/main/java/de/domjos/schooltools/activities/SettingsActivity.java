@@ -26,10 +26,12 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.helper.Helper;
 
 import java.util.HashSet;
 import java.util.List;
@@ -134,6 +136,17 @@ public class SettingsActivity extends SettingsAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_help_only, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_settings"));
     }
 
     /**

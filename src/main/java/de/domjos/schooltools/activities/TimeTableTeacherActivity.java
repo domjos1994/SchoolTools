@@ -76,7 +76,7 @@ public class TimeTableTeacherActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext()));
+        return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_timetable"));
     }
 
 

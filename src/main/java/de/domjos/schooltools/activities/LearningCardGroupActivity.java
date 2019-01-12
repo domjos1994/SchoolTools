@@ -14,12 +14,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.LearningCardGroupAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
+import de.domjos.schooltools.helper.Helper;
 
 import java.util.ArrayList;
 
@@ -72,6 +75,28 @@ public class LearningCardGroupActivity extends AppCompatActivity {
         for(LearningCardGroup group : MainActivity.globals.getSqLite().getLearningCardGroups("", false)) {
             this.learningCardGroupAdapter.add(group);
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_help_only, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.menHelp:
+                super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_learning_cards"));
+                break;
+            default:
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

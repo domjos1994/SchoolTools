@@ -15,12 +15,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -310,13 +312,22 @@ public class Helper {
         };
     }
 
-    public static MenuItem showHelpMenu(MenuItem item, Context context) {
-        int id = item.getItemId();
-
-        if (id == R.id.menHelp) {
-            context.startActivity(new Intent(context, HelpActivity.class));
-        }
+    public static MenuItem showHelpMenu(MenuItem item, Context context, String help_id) {
+        Intent intent = new Intent(context, HelpActivity.class);
+        intent.putExtra("helpId", help_id);
+        context.startActivity(intent);
 
         return item;
+    }
+
+    public static void showHTMLInTextView(Context context, String resource, TextView txt) {
+        String packageName = context.getPackageName();
+        int resId = context.getResources().getIdentifier(resource, "string", packageName);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            txt.setText(Html.fromHtml(context.getString(resId), Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            txt.setText(Html.fromHtml(context.getString(resId)));
+        }
     }
 }

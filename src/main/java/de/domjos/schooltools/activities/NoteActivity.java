@@ -119,7 +119,7 @@ public class NoteActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.menHelp:
-                startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
+                super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_notes"));
                 break;
             case R.id.menDelete:
                 deleteNote();
