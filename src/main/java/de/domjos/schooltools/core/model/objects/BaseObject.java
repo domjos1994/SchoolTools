@@ -14,8 +14,12 @@ public class BaseObject {
     private String title;
 
     public BaseObject() {
-        this.ID = 0;
-        this.title = "";
+        this(0, "");
+    }
+
+    public BaseObject(int id, String title) {
+        this.ID = id;
+        this.title = title;
     }
 
     public int getID() {

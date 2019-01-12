@@ -19,7 +19,6 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +50,7 @@ import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.TimerEvent;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.core.model.mark.SchoolYear;
+import de.domjos.schooltools.core.model.objects.BaseObject;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.core.model.todo.ToDoList;
 import de.domjos.schooltools.core.utils.fileUtils.PDFBuilder;
@@ -71,7 +71,8 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 public class ApiActivity extends AppCompatActivity {
     private SQLite sqLite;
     private Spinner spApiChoice, spApiType, spApiEntryType, spApiEntry, spApiFormat;
-    private ArrayAdapter<String> apiChoice, apiType, apiEntryType, apiEntry, apiFormat;
+    private ArrayAdapter<String> apiChoice, apiType, apiEntryType, apiFormat;
+    private ArrayAdapter<BaseObject> apiEntry;
     private TextView lblApiPath;
     private Button cmdApiPath;
     private ImageButton cmdApiSave;
@@ -520,49 +521,48 @@ public class ApiActivity extends AppCompatActivity {
     private void loadEntries() {
         SQLite sqLite = MainActivity.globals.getSqLite();
         this.apiEntry.clear();
-        String unformattedString = "%s: %s";
 
         String selectedType = this.apiType.getItem(this.spApiType.getSelectedItemPosition());
         if(selectedType!=null) {
             if(selectedType.equals(this.getString(R.string.main_nav_mark_list))) {
                 for(String name : sqLite.listMarkLists()) {
                     MarkListSettings settings = sqLite.getMarkList(name);
-                    this.apiEntry.add(String.format(unformattedString, settings.getId(), settings.getTitle()));
+                    this.apiEntry.add(new BaseObject(settings.getId(), settings.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_calculateMark))) {
                 for(Subject subject : sqLite.getSubjects("")) {
-                    this.apiEntry.add(String.format(unformattedString, subject.getID(), subject.getTitle()));
+                    this.apiEntry.add(new BaseObject(subject.getID(), subject.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_timetable))) {
                 for(TimeTable timeTable : sqLite.getTimeTables("")) {
-                    this.apiEntry.add(String.format(unformattedString, timeTable.getID(), timeTable.getTitle()));
+                    this.apiEntry.add(new BaseObject(timeTable.getID(), timeTable.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_notes))) {
                 for(Note note : sqLite.getNotes("")) {
-                    this.apiEntry.add(String.format(unformattedString, note.getID(), note.getTitle()));
+                    this.apiEntry.add(new BaseObject(note.getID(), note.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_timer))) {
                 for(TimerEvent timerEvent : sqLite.getTimerEvents("")) {
-                    this.apiEntry.add(String.format(unformattedString, timerEvent.getID(), timerEvent.getTitle()));
+                    this.apiEntry.add(new BaseObject(timerEvent.getID(), timerEvent.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_todo))) {
                 for(ToDoList toDoList : sqLite.getToDoLists("")) {
-                    this.apiEntry.add(String.format(unformattedString, toDoList.getID(), toDoList.getTitle()));
+                    this.apiEntry.add(new BaseObject(toDoList.getID(), toDoList.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_learningCards))) {
                 for(LearningCardGroup group : sqLite.getLearningCardGroups("", false)) {
-                    this.apiEntry.add(String.format(unformattedString, group.getID(), group.getTitle()));
+                    this.apiEntry.add(new BaseObject(group.getID(), group.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.sys_memory))) {
                 for(Memory memory : sqLite.getCurrentMemories()) {
-                    this.apiEntry.add(String.format(unformattedString, memory.getID(), memory.getTitle()));
+                    this.apiEntry.add(new BaseObject(memory.getID(), memory.getTitle()));
                 }
             }
         }
@@ -605,10 +605,9 @@ public class ApiActivity extends AppCompatActivity {
         if(entryType.equals(this.getString(R.string.api_entry_single))) {
             if(!apiEntry.isEmpty()) {
                 if(spApiEntry.getSelectedItemPosition()!=-1) {
-                    String selectedEntry = apiEntry.getItem(spApiEntry.getSelectedItemPosition());
+                    BaseObject selectedEntry = apiEntry.getItem(spApiEntry.getSelectedItemPosition());
                     if(selectedEntry!=null) {
-                        String[] splitContent = selectedEntry.split(":");
-                        where = "ID=" + splitContent[0].trim();
+                        where = "ID=" + selectedEntry.getID();
                     }
                 }
             }
@@ -655,14 +654,6 @@ public class ApiActivity extends AppCompatActivity {
 
     private void initControls() {
         this.sqLite = MainActivity.globals.getSqLite();
-        // init Toolbar
-        Toolbar toolbar = this.findViewById(R.id.toolbar);
-        this.setSupportActionBar(toolbar);
-
-        // init home as up
-        if(this.getSupportActionBar()!=null) {
-            this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
         // init other controls
         this.spApiChoice = this.findViewById(R.id.spApiChoice);
@@ -683,7 +674,7 @@ public class ApiActivity extends AppCompatActivity {
         this.spApiEntryType.setEnabled(false);
 
         this.spApiEntry = this.findViewById(R.id.spApiEntry);
-        this.apiEntry = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, new ArrayList<String>());
+        this.apiEntry = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, new ArrayList<BaseObject>());
         this.spApiEntry.setAdapter(this.apiEntry);
         this.apiEntry.notifyDataSetChanged();
         this.spApiEntry.setEnabled(false);

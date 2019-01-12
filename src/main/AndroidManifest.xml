@@ -70,7 +70,6 @@
                 android:name=".activities.ApiActivity"
                 android:label="@string/main_menu_export"
                 android:parentActivityName=".activities.MainActivity"
-                android:theme="@style/AppTheme.NoActionBar"
                 tools:targetApi="jelly_bean">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
