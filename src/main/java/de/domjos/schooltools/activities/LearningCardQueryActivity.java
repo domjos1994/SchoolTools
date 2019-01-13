@@ -114,6 +114,7 @@ public class LearningCardQueryActivity extends AppCompatActivity {
 
         this.spLearningCardQueryCategory = this.findViewById(R.id.spLearningCardQueryCategory);
         List<String> categories = MainActivity.globals.getSqLite().getColumns("learningCards", "category", "GROUP BY category");
+        categories.add(0, "");
         this.categoryAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         this.spLearningCardQueryCategory.setAdapter(this.categoryAdapter);
         this.categoryAdapter.notifyDataSetChanged();
