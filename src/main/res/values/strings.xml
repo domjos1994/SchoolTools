@@ -271,6 +271,8 @@
     <string name="todo_priority">Priorität</string>
 
     <string name="note_header">Notiz</string>
+    <string name="note_convert_to_todo">Konvertiere Notiz zu ToDo!</string>
+    <string name="note_convert">Konvertieren</string>
 
     <string name="learningCard_questions">Fragen</string>
     <string name="learningCard_group_deadline">Stichtag</string>

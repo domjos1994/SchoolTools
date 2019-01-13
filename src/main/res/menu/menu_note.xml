@@ -12,6 +12,13 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menToDo"
+        android:icon="@drawable/ic_done_all_black_24dp"
+        android:title="@string/note_convert_to_todo"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
+
+    <item
         android:id="@+id/menDelete"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/sys_delete"

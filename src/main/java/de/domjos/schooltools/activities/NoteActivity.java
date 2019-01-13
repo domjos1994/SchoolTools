@@ -9,6 +9,7 @@
 
 package de.domjos.schooltools.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -19,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.*;
 
 import java.util.ArrayList;
@@ -27,6 +29,9 @@ import java.util.List;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.NoteAdapter;
 import de.domjos.schooltools.core.model.Note;
+import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
+import de.domjos.schooltools.core.model.todo.ToDo;
+import de.domjos.schooltools.core.model.todo.ToDoList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
@@ -74,16 +79,22 @@ public class NoteActivity extends AppCompatActivity {
                     changeControls(false, false, true);
                 }
                 menu.findItem(R.id.menDelete).setVisible(false);
+                menu.findItem(R.id.menToDo).setVisible(false);
             }
         });
 
         this.lvNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Note note = noteAdapter.getItem(position);
+                if(note!=null) {
+                    currentID = note.getID();
+                }
                 if(menu!=null) {
                     menu.findItem(R.id.menDelete).setVisible(true);
+                    menu.findItem(R.id.menToDo).setVisible(true);
                 }
-                return false;
+                return true;
             }
         });
 
@@ -125,6 +136,50 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.menDelete:
                 deleteNote();
                 this.menu.findItem(R.id.menDelete).setVisible(false);
+                this.menu.findItem(R.id.menToDo).setVisible(false);
+            case R.id.menToDo:
+                final Dialog dialog = new Dialog(NoteActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.note_convert_dialog);
+                dialog.setCancelable(true);
+
+
+                final Spinner spNotesConvertToToDo = dialog.findViewById(R.id.spNotesConvertToToDo);
+                final ArrayAdapter<ToDoList> notesConvertToToDo = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.globals.getSqLite().getToDoLists(""));
+                spNotesConvertToToDo.setAdapter(notesConvertToToDo);
+                notesConvertToToDo.notifyDataSetChanged();
+
+                final Button btnStart = dialog.findViewById(R.id.cmdStart);
+                btnStart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            Note note = MainActivity.globals.getSqLite().getNotes("ID=" + currentID).get(0);
+                            ToDoList toDoList = notesConvertToToDo.getItem(spNotesConvertToToDo.getSelectedItemPosition());
+
+                            if(note!=null) {
+                                if(toDoList!=null) {
+                                    ToDo toDo = new ToDo();
+                                    toDo.setTitle(note.getTitle());
+                                    toDo.setDescription(note.getDescription());
+                                    toDo.setCategory(getString(R.string.main_nav_notes));
+                                    toDo.setMemoryDate(note.getMemoryDate());
+                                    MainActivity.globals.getSqLite().insertOrUpdateToDo(toDo, toDoList.getTitle());
+                                    MainActivity.globals.getSqLite().deleteEntry("notes", "ID=" + currentID);
+                                    reloadNotes();
+                                    changeControls(false, true, false);
+                                }
+                            }
+                            dialog.dismiss();
+                        } catch (Exception ex) {
+                            Helper.createToast(getApplicationContext(), ex.getMessage());
+                        }
+                    }
+                });
+                dialog.show();
+
+                this.menu.findItem(R.id.menDelete).setVisible(false);
+                this.menu.findItem(R.id.menToDo).setVisible(false);
             default:
         }
 
@@ -205,18 +260,22 @@ public class NoteActivity extends AppCompatActivity {
                     case R.id.navTimeTableSubAdd:
                         changeControls(true, true, false);
                         menu.findItem(R.id.menDelete).setVisible(false);
+                        menu.findItem(R.id.menToDo).setVisible(false);
                         break;
                     case R.id.navTimeTableSubEdit:
                         changeControls(true, false, false);
                         menu.findItem(R.id.menDelete).setVisible(false);
+                        menu.findItem(R.id.menToDo).setVisible(false);
                         break;
                     case R.id.navTimeTableSubDelete:
                         deleteNote();
                         menu.findItem(R.id.menDelete).setVisible(false);
+                        menu.findItem(R.id.menToDo).setVisible(false);
                         break;
                     case R.id.navTimeTableSubCancel:
                         changeControls(false, true, false);
                         menu.findItem(R.id.menDelete).setVisible(false);
+                        menu.findItem(R.id.menToDo).setVisible(false);
                         break;
                     case R.id.navTimeTableSubSave:
                         try {
@@ -238,6 +297,7 @@ public class NoteActivity extends AppCompatActivity {
                             Helper.printException(getApplicationContext(), ex);
                         } finally {
                             menu.findItem(R.id.menDelete).setVisible(false);
+                            menu.findItem(R.id.menToDo).setVisible(false);
                         }
                         break;
                     default:
