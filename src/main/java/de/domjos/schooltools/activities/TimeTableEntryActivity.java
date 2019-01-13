@@ -314,7 +314,11 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                     String roomNumber = entry.getValue().getRoomNumber();
 
                                     txtColumn.setText(subject.getAlias());
-                                    txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
+                                    if(subject.getBackgroundColor()!=null) {
+                                        if(!subject.getBackgroundColor().isEmpty()) {
+                                            txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
+                                        }
+                                    }
                                     if(teacher!=null) {
                                         txtColumn.setTag(subject.getID() + " - " + teacher.getID());
                                     } else {
@@ -346,7 +350,11 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                     String roomNumber = entry.getValue().getRoomNumber();
 
                                     txtColumn.setText(subject.getAlias());
-                                    txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
+                                    if(subject.getBackgroundColor()!=null) {
+                                        if(!subject.getBackgroundColor().isEmpty()) {
+                                            txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
+                                        }
+                                    }
                                     if(schoolClass!=null) {
                                         txtColumn.setTag(subject.getID() + " - " + schoolClass.getID());
                                     } else {

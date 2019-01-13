@@ -68,7 +68,7 @@ public class MainActivityTest {
             if(!query.trim().equals("")) {
                 try {
                     sqLite.getReadableDatabase().execSQL(query);
-                } catch (Exception ex) {}
+                } catch (Exception ex) { }
             }
         }
     }

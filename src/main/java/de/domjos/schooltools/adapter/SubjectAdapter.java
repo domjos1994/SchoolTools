@@ -56,7 +56,11 @@ public class SubjectAdapter extends ArrayAdapter<Subject> {
                 lblSubjectAlias.setText(entry.getAlias());
             }
             if(ll!=null) {
-                ll.setBackgroundColor(Integer.parseInt(entry.getBackgroundColor()));
+                if(entry.getBackgroundColor()!=null) {
+                    if(!entry.getBackgroundColor().isEmpty()) {
+                        ll.setBackgroundColor(Integer.parseInt(entry.getBackgroundColor()));
+                    }
+                }
             }
         }
 
