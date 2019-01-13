@@ -31,6 +31,8 @@ import de.domjos.schooltools.core.model.learningCard.LearningCardQueryResult;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQueryTraining;
 import de.domjos.schooltools.helper.Helper;
 
+import java.util.List;
+
 public class LearningCardOverviewActivity extends FragmentActivity {
     private ViewPager viewPager;
     private LearningCardQueryFragmentAdapter fragmentAdapter;
@@ -63,45 +65,46 @@ public class LearningCardOverviewActivity extends FragmentActivity {
                     btnStartSop.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            learningCardQueryTraining.setLearningCardQuery(learningCardQueries.getItem(spLearningCardQuery.getSelectedItemPosition()));
-                            learningCardQueryTraining.setID(MainActivity.globals.getSqLite().insertOrUpdateLearningCardQueryTraining(learningCardQueryTraining));
-                            cmdLearningCardQueryStart.setText(getString(R.string.learningCard_query_end));
-                            fragmentAdapter.setQuery(learningCardQueryTraining);
-                            viewPager.setAdapter(fragmentAdapter);
+                            loadLearningCardQuery(learningCardQueries.getItem(spLearningCardQuery.getSelectedItemPosition()));
                             dialog.dismiss();
                         }
                     });
                     dialog.show();
                 } else {
                     int wrongCards = 0, rightCards = 0, firstTry = 0, secondTry = 0, thirdTry = 0;
-                    LearningCardQueryTraining reloadedTraining = MainActivity.globals.getSqLite().getLearningCardQueryTraining("ID=" + learningCardQueryTraining.getID()).get(0);
-                    for(LearningCardQueryResult result : reloadedTraining.getResults()) {
-                        if(result.isResult1() || result.isResult2() || result.isResult3()) {
-                            rightCards++;
-                            if(result.isResult1()) {
-                                firstTry++;
-                            } else if(result.isResult2()) {
-                                secondTry++;
-                            } else {
-                                thirdTry++;
+                    List<LearningCardQueryTraining> trainings = MainActivity.globals.getSqLite().getLearningCardQueryTraining("ID=" + learningCardQueryTraining.getID());
+                    if(trainings!=null) {
+                        if(!trainings.isEmpty()) {
+                            LearningCardQueryTraining reloadedTraining = trainings.get(0);
+                            for(LearningCardQueryResult result : reloadedTraining.getResults()) {
+                                if(result.isResult1() || result.isResult2() || result.isResult3()) {
+                                    rightCards++;
+                                    if(result.isResult1()) {
+                                        firstTry++;
+                                    } else if(result.isResult2()) {
+                                        secondTry++;
+                                    } else {
+                                        thirdTry++;
+                                    }
+                                } else {
+                                    wrongCards++;
+                                }
                             }
-                        } else {
-                            wrongCards++;
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LearningCardOverviewActivity.this);
+                            alertDialogBuilder.setTitle(R.string.learningCard_result);
+                            String content =
+                                    String.format(
+                                            "%s %s%n%s %s%n%s %s%n%s %s%n%s %s%n",
+                                            getString(R.string.learningCard_result_right), rightCards,
+                                            getString(R.string.learningCard_result_wrong), wrongCards,
+                                            getString(R.string.learningCard_result_firstTry), firstTry,
+                                            getString(R.string.learningCard_result_secondTry), secondTry,
+                                            getString(R.string.learningCard_result_thirdTry), thirdTry
+                                    );
+                            alertDialogBuilder.setMessage(content);
+                            alertDialogBuilder.create().show();
                         }
                     }
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LearningCardOverviewActivity.this);
-                    alertDialogBuilder.setTitle(R.string.learningCard_result);
-                    String content =
-                        String.format(
-                            "%s %s%n%s %s%n%s %s%n%s %s%n%s %s%n",
-                                getString(R.string.learningCard_result_right), rightCards,
-                                getString(R.string.learningCard_result_wrong), wrongCards,
-                                getString(R.string.learningCard_result_firstTry), firstTry,
-                                getString(R.string.learningCard_result_secondTry), secondTry,
-                                getString(R.string.learningCard_result_thirdTry), thirdTry
-                        );
-                    alertDialogBuilder.setMessage(content);
-                    alertDialogBuilder.create().show();
 
                     cmdLearningCardQueryStart.setText(getString(R.string.learningCard_query));
                     fragmentAdapter.setQuery(null);
@@ -155,5 +158,24 @@ public class LearningCardOverviewActivity extends FragmentActivity {
         this.fragmentAdapter = new LearningCardQueryFragmentAdapter(this.getSupportFragmentManager(), this.getApplicationContext(), null);
         this.viewPager = this.findViewById(R.id.pager);
         this.viewPager.setAdapter(this.fragmentAdapter);
+
+        int id = this.getIntent().getIntExtra("queryID", 0);
+        if(id!=0) {
+            List<LearningCardQuery> learningCardQueries = MainActivity.globals.getSqLite().getLearningCardQueries("ID=" + id);
+            if(learningCardQueries!=null) {
+                if(!learningCardQueries.isEmpty()) {
+                    this.loadLearningCardQuery(learningCardQueries.get(0));
+                }
+            }
+        }
+    }
+
+    private void loadLearningCardQuery(LearningCardQuery learningCardQuery) {
+        LearningCardQueryTraining training = new LearningCardQueryTraining();
+        training.setLearningCardQuery(learningCardQuery);
+        training.setID(MainActivity.globals.getSqLite().insertOrUpdateLearningCardQueryTraining(training));
+        cmdLearningCardQueryStart.setText(getString(R.string.learningCard_query_end));
+        fragmentAdapter.setQuery(training);
+        viewPager.setAdapter(fragmentAdapter);
     }
 }

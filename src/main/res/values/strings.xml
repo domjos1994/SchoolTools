@@ -299,6 +299,7 @@
     <string name="learningCard_query_check">Antwort korrigieren</string>
     <string name="learningCard_query_answer_right">Antwort korrekt!</string>
     <string name="learningCard_query_answer_wrong">Antwort falsch!</string>
+    <string name="learningCard_query_memory">Wie wäre es heute mit der Abfrage: </string>
     <string name="learningCard_result">Ergebnis</string>
     <string name="learningCard_result_wrong">Falsche Antworten:</string>
     <string name="learningCard_result_right">Richtige Antworten:</string>

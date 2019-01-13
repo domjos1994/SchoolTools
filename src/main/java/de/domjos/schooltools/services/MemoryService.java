@@ -16,14 +16,18 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat.Builder;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.activities.MainActivity;
-import de.domjos.schooltools.activities.MarkEntryActivity;
-import de.domjos.schooltools.activities.NoteActivity;
-import de.domjos.schooltools.activities.TimerActivity;
-import de.domjos.schooltools.activities.ToDoActivity;
+import de.domjos.schooltools.activities.*;
 import de.domjos.schooltools.core.model.Memory;
+import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
+import de.domjos.schooltools.core.model.learningCard.LearningCardQueryTraining;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MemoryService extends IntentService {
 
@@ -80,5 +84,49 @@ public class MemoryService extends IntentService {
             }
         }
 
+        for(LearningCardQuery query : this.loadPeriodicLearningCardQueries()) {
+            Builder builder = new Builder(this.getApplicationContext(), "default");
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setLights(0xFFff0000, 501, 501);
+            builder.setContentTitle(query.getTitle());
+            builder.setContentText(getApplicationContext().getString(R.string.learningCard_query_memory) + query.getTitle());
+            Intent overViewIntent = new Intent(this.getApplicationContext(), LearningCardOverviewActivity.class);
+            overViewIntent.putExtra("queryID", query.getID());
+            builder.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 99, intent, PendingIntent.FLAG_UPDATE_CURRENT));
+            if(notificationManager!=null) {
+                notificationManager.notify(id, builder.build());
+            }
+        }
+    }
+
+    private List<LearningCardQuery> loadPeriodicLearningCardQueries() {
+        List<LearningCardQuery> learningCardQueries = new LinkedList<>();
+        List<LearningCardQuery> allQueries = MainActivity.globals.getSqLite().getLearningCardQueries("");
+        for(LearningCardQuery learningCardQuery : allQueries) {
+            if(learningCardQuery.isPeriodic()) {
+                int days = learningCardQuery.getPeriod();
+
+                Calendar start = Calendar.getInstance();
+                start.setTime(new Date());
+                start.add(Calendar.DAY_OF_WEEK, days * -1);
+                start.set(start.get(Calendar.YEAR), start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+
+                Calendar end = Calendar.getInstance();
+                end.setTime(new Date());
+                end.add(Calendar.DAY_OF_WEEK, days * -1);
+                end.set(end.get(Calendar.YEAR), end.get(Calendar.MONTH), end.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+
+
+                List<LearningCardQueryTraining> learningCardQueryTrainings = MainActivity.globals.getSqLite().getLearningCardQueryTraining("current_date>" + start.getTimeInMillis() + " AND current_date<=" + end.getTimeInMillis());
+                for(LearningCardQueryTraining training : learningCardQueryTrainings) {
+                    if(training.getLearningCardQuery()!=null) {
+                        if(training.getLearningCardQuery().getID()==learningCardQuery.getID()) {
+                            learningCardQueries.add(learningCardQuery);
+                        }
+                    }
+                }
+            }
+        }
+        return learningCardQueries;
     }
 }
