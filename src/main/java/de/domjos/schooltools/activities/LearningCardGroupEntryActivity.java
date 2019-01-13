@@ -348,19 +348,22 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
         }
 
         Subject subject = this.learningCardGroup.getSubject();
-        if(subject!=null) {
-            this.spLearningCardGroupSubject.setSelection(this.subjectAdapter.getPosition(subject));
-        } else {
-            for(int i = 0; i<=this.subjectAdapter.getCount()-1; i++) {
-                Subject tmp = this.subjectAdapter.getItem(i);
-                if(tmp!=null) {
+        for(int i = 0; i<=this.subjectAdapter.getCount()-1; i++) {
+            Subject tmp = this.subjectAdapter.getItem(i);
+            if(tmp!=null) {
+                if(subject!=null) {
+                    if(tmp.getID()==subject.getID()) {
+                        this.spLearningCardGroupSubject.setSelection(i);
+                        break;
+                    }
+                } else {
                     if(tmp.getID()==0) {
                         this.spLearningCardGroupSubject.setSelection(i);
                         break;
                     }
                 }
-
             }
+
         }
 
         Teacher teacher = this.learningCardGroup.getTeacher();
