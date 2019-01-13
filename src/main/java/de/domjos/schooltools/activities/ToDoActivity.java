@@ -19,10 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.*;
 
 import java.util.ArrayList;
 
@@ -44,6 +41,8 @@ public class ToDoActivity extends AppCompatActivity {
     private FloatingActionButton cmdToDoAdd;
     private ToDoAdapter toDoAdapter;
     private ArrayAdapter<String> toDoListAdapter;
+    private TextView lblState;
+    private SeekBar sbState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +87,24 @@ public class ToDoActivity extends AppCompatActivity {
                 intent.putExtra("id", 0);
                 intent.putExtra("list", spToDoList.getSelectedItem().toString());
                 startActivityForResult(intent, 98);
+            }
+        });
+
+        this.sbState.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                String percent = (100 / seekBar.getMax()) * seekBar.getProgress() + "%";
+                lblState.setText(percent);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }
@@ -167,6 +184,17 @@ public class ToDoActivity extends AppCompatActivity {
         } else {
             cmdToDoAdd.setVisibility(View.GONE);
         }
+
+        int max = 0, current = 0;
+        for(int i = 0; i<=this.toDoAdapter.getCount()-1; i++) {
+            ToDo toDo = this.toDoAdapter.getItem(i);
+            if(toDo!=null) {
+                max += toDo.getImportance();
+                current += (toDo.isSolved() ? toDo.getImportance() : 0);
+            }
+        }
+        sbState.setMax(max);
+        sbState.setProgress(current);
     }
 
     private void initControls() {
@@ -198,5 +226,11 @@ public class ToDoActivity extends AppCompatActivity {
         this.toDoAdapter = new ToDoAdapter(ToDoActivity.this, R.layout.todo_item, new ArrayList<ToDo>());
         this.lvToDos.setAdapter(this.toDoAdapter);
         this.toDoAdapter.notifyDataSetChanged();
+
+        this.lblState = this.findViewById(R.id.lblState);
+        this.sbState = this.findViewById(R.id.sbState);
+        this.sbState.setEnabled(false);
+        this.sbState.setMax(100);
+        this.sbState.setProgress(0);
     }
 }

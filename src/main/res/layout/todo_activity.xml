@@ -48,10 +48,35 @@
                     android:layout_weight="6"
                     android:padding="4dp"/>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llState"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:weightSum="20"
+                android:background="@drawable/tbl_border"
+                android:layout_below="@+id/pnlChoice">
+                <SeekBar
+                    android:id="@+id/sbState"
+                    android:enabled="false"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="16"
+                    android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:id="@+id/lblState"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/lvToDos"
-                android:layout_below="@+id/pnlChoice"
+                android:layout_below="@+id/llState"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
@@ -76,5 +101,4 @@
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation_todo" />
-
 </LinearLayout>
