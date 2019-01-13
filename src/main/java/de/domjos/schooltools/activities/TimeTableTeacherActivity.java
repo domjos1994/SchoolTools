@@ -51,6 +51,7 @@ public class TimeTableTeacherActivity extends AppCompatActivity {
         this.initControls();
         this.initValidation();
         Helper.closeSoftKeyboard(TimeTableTeacherActivity.this);
+        Helper.setBackgroundToActivity(this);
 
         this.lvTeachers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

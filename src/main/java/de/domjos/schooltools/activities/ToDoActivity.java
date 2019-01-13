@@ -52,6 +52,7 @@ public class ToDoActivity extends AppCompatActivity {
         this.initControls();
         this.reloadToDoLists();
         this.reloadToDos();
+        Helper.setBackgroundToActivity(this);
 
         this.spToDoList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

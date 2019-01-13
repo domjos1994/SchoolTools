@@ -14,6 +14,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,10 +46,12 @@ import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.HelpActivity;
+import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.Note;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -313,13 +317,17 @@ public class Helper {
     }
 
     public static MenuItem showHelpMenu(MenuItem item, Context context, String help_id) {
-        Intent intent = new Intent(context, HelpActivity.class);
-        intent.putExtra("helpId", help_id);
-        context.startActivity(intent);
+        int id = item.getItemId();
+        if(id==R.id.menMainHelp || id==R.id.menHelp) {
+            Intent intent = new Intent(context, HelpActivity.class);
+            intent.putExtra("helpId", help_id);
+            context.startActivity(intent);
+        }
 
         return item;
     }
 
+    @SuppressWarnings("deprecation")
     public static void showHTMLInTextView(Context context, String resource, TextView txt) {
         String packageName = context.getPackageName();
         int resId = context.getResources().getIdentifier(resource, "string", packageName);
@@ -329,5 +337,21 @@ public class Helper {
         } else {
             txt.setText(Html.fromHtml(context.getString(resId)));
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void setBackgroundToActivity(Activity activity) {
+        Map.Entry<String, byte[]> entry = MainActivity.globals.getSqLite().getSetting("background");
+        if(entry!=null) {
+            if(!entry.getKey().equals("")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    activity.getWindow().getDecorView().getRootView().setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
+                } else {
+                    activity.getWindow().getDecorView().getRootView().setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
+                }
+                return;
+            }
+        }
+        activity.getWindow().getDecorView().getRootView().setBackgroundResource(R.drawable.bg_water);
     }
 }

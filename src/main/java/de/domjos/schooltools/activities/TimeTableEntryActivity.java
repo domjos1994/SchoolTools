@@ -10,7 +10,6 @@
 package de.domjos.schooltools.activities;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -70,6 +69,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         this.initControls();
         this.initGrid();
         Helper.closeSoftKeyboard(TimeTableEntryActivity.this);
+        Helper.setBackgroundToActivity(this);
     }
 
     private void initControls() {
@@ -138,8 +138,8 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                             if(txtCurrent.getTag()!=null) {
                                                 if(!MainActivity.globals.getUserSettings().isTimeTableMode()) {
                                                     if(txtCurrent.getTag().toString().contains(" - ")) {
-                                                        String rows[] = txtCurrent.getTag().toString().split("\n");
-                                                        String spl[] = rows[0].trim().split(" - ");
+                                                        String[] rows = txtCurrent.getTag().toString().split("\n");
+                                                        String[] spl = rows[0].trim().split(" - ");
                                                         Subject subject = MainActivity.globals.getSqLite().getSubjects("ID=" + spl[0].trim()).get(0);
                                                         Teacher teacher = null;
                                                         if(!spl[1].trim().equals("0")) {
@@ -153,8 +153,8 @@ public class TimeTableEntryActivity extends AppCompatActivity {
                                                     }
                                                 } else {
                                                     if(txtCurrent.getTag().toString().contains(" - ")) {
-                                                        String rows[] = txtCurrent.getTag().toString().split("\n");
-                                                        String spl[] = rows[0].trim().split(" - ");
+                                                        String[] rows = txtCurrent.getTag().toString().trim().split("\n");
+                                                        String[] spl = rows[0].trim().split(" - ");
                                                         Subject subject = MainActivity.globals.getSqLite().getSubjects("ID=" + spl[0].trim()).get(0);
                                                         SchoolClass schoolClass = null;
                                                         if(!spl[1].trim().equals("0")) {
@@ -264,16 +264,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menHelp:
-                startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
-                break;
-            default:
-        }
-
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(Helper.showHelpMenu(item, getApplicationContext(), "help_timetable"));
     }
 
     private void initValidation() {
@@ -300,7 +291,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         this.navigation.getMenu().getItem(2).setEnabled(editMode);
     }
 
-    public static void loadTimeTable(TimeTable currentItem, TableLayout gridContent, Map<String, Integer> mpSubjects) {
+    static void loadTimeTable(TimeTable currentItem, TableLayout gridContent, Map<String, Integer> mpSubjects) {
         for(Day day : currentItem.getDays()) {
             if(day!=null) {
                 for(int row = 1; row<=gridContent.getChildCount()-1; row++) {

@@ -29,6 +29,7 @@ import de.domjos.schooltools.adapter.LearningCardQueryFragmentAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQueryResult;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQueryTraining;
+import de.domjos.schooltools.helper.Helper;
 
 public class LearningCardOverviewActivity extends FragmentActivity {
     private ViewPager viewPager;
@@ -40,6 +41,7 @@ public class LearningCardOverviewActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.learning_card_overview_activity);
         this.initControls();
+        Helper.setBackgroundToActivity(this);
 
         this.cmdLearningCardQueryStart.setOnClickListener(new View.OnClickListener() {
             @Override

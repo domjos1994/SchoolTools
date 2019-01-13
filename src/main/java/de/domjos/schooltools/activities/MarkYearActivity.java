@@ -47,6 +47,7 @@ public class MarkYearActivity extends AppCompatActivity {
         setContentView(R.layout.mark_year_activity);
         this.initControls();
         this.reloadYears();
+        Helper.setBackgroundToActivity(this);
 
         this.lvYear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

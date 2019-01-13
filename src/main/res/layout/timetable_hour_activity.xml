@@ -15,8 +15,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="de.domjos.schooltools.activities.TimeTableHourActivity"
-    android:background="@drawable/bg_water">
+    tools:context="de.domjos.schooltools.activities.TimeTableHourActivity">
 
     <RelativeLayout
         android:id="@+id/content"

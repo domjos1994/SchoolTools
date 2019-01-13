@@ -58,6 +58,7 @@ public class TimerActivity extends AppCompatActivity {
         this.initControls();
         this.reloadEvents();
         this.changeDate();
+        Helper.setBackgroundToActivity(this);
 
         this.ivTimerPrevious.setOnClickListener(new View.OnClickListener() {
             @Override

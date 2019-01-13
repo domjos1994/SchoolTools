@@ -20,7 +20,6 @@
         android:id="@+id/scrollLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_water"
         android:layout_above="@+id/lvSearchResults">
 
         <RelativeLayout

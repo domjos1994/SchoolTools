@@ -14,23 +14,21 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
+import android.preference.*;
 import android.support.v7.app.ActionBar;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 
 import java.util.HashSet;
@@ -207,22 +205,62 @@ public class SettingsActivity extends SettingsAppCompatActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
+        static int PICK_IMAGE = 99;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
 
+            final SwitchPreference switchPreference = (SwitchPreference) this.findPreference("swtCustomBackground");
+            switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((boolean)newValue) {
+                        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                        getIntent.setType("image/*");
+                        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        pickIntent.setType("image/*");
+                        Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.settings_general_custom_background_select));
+                        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+                        startActivityForResult(chooserIntent, GeneralPreferenceFragment.PICK_IMAGE);
+                    } else {
+                        MainActivity.globals.getSqLite().addSetting("background", "", null);
+                    }
+                    return true;
+                }
+            });
         }
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
-                return true;
-            }
+
             return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            try {
+                if (requestCode == GeneralPreferenceFragment.PICK_IMAGE && resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
+                    if(uri!=null) {
+                        Bitmap bitmap = Converter.convertUriToBitmap(getActivity(), uri);
+                        if(bitmap!=null) {
+                            byte[] bytes = Converter.convertBitmapToByteArray(bitmap);
+                            if(bytes!=null) {
+                                MainActivity.globals.getSqLite().addSetting("background", uri.getPath(), bytes);
+                            }
+                        }
+                    }
+                } else {
+                    ((SwitchPreference)this.findPreference("swtCustomBackground")).setChecked(false);
+                    MainActivity.globals.getSqLite().addSetting("background", "", null);
+                }
+            } catch (Exception ex) {
+                Helper.createToast(getActivity(), ex.getMessage());
+            }
         }
     }
 

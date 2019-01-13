@@ -68,6 +68,7 @@ public class LearningCardGroupActivity extends AppCompatActivity {
         this.learningCardGroupAdapter.notifyDataSetChanged();
 
         this.reloadGroups();
+        Helper.setBackgroundToActivity(this);
     }
 
     private void reloadGroups() {
@@ -87,16 +88,7 @@ public class LearningCardGroupActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menHelp:
-                super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_learning_cards"));
-                break;
-            default:
-        }
-
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_learning_cards"));
     }
 
     @Override

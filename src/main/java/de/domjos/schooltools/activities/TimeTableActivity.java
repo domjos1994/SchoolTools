@@ -49,6 +49,7 @@ public class TimeTableActivity extends AppCompatActivity {
         this.initControls();
         this.reloadTimeTables();
         this.openDescription();
+        Helper.setBackgroundToActivity(this);
 
         this.cmdTimeTableAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,16 +132,7 @@ public class TimeTableActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menHelp:
-                super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_timetable"));
-                break;
-            default:
-        }
-
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_timetable"));
     }
 
     @Override

@@ -15,8 +15,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activities.LearningCardQueryActivity"
-        android:background="@drawable/bg_water">
+        tools:context=".activities.LearningCardQueryActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

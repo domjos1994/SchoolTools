@@ -50,6 +50,7 @@ public class LearningCardQueryActivity extends AppCompatActivity {
         setContentView(R.layout.learning_card_query_activity);
         this.initControls();
         this.initValidation();
+        Helper.setBackgroundToActivity(this);
 
         this.lvLearningCardQueries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

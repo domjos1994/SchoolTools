@@ -9,7 +9,6 @@
 
 package de.domjos.schooltools.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -63,6 +62,7 @@ public class TimerEntryActivity extends AppCompatActivity {
         this.reloadComboBoxes();
         this.initValidator();
         this.fillData();
+        Helper.setBackgroundToActivity(this);
 
         this.chkTimerMemory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -85,16 +85,7 @@ public class TimerEntryActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menHelp:
-                startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
-                break;
-            default:
-        }
-
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(Helper.showHelpMenu(item,getApplicationContext(),"help_timer"));
     }
 
     private void fillData() {

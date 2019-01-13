@@ -85,6 +85,7 @@ public class ApiActivity extends AppCompatActivity {
         setContentView(R.layout.api_activity);
         this.apiHelper = new ApiHelper(this.getApplicationContext());
         this.initControls();
+        Helper.setBackgroundToActivity(this);
         this.loadTypes();
 
 

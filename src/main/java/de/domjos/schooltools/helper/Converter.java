@@ -12,12 +12,18 @@ package de.domjos.schooltools.helper;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -136,5 +142,17 @@ public class Converter {
             return stream.toByteArray();
         }
         return null;
+    }
+
+    public static Bitmap convertUriToBitmap(Context context, Uri uri) throws Exception {
+        return MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+    }
+
+    public static byte[] convertBitmapToByteArray(Bitmap bmp) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        bmp.recycle();
+        return byteArray;
     }
 }

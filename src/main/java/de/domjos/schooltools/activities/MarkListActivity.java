@@ -113,6 +113,7 @@ public class MarkListActivity extends AppCompatActivity {
         this.setValues("");
         this.openMarkList(this.getIntent().getIntExtra("id", 0));
         Helper.closeSoftKeyboard(MarkListActivity.this);
+        Helper.setBackgroundToActivity(this);
 
         this.cmdMarkListOpenSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,22 +171,18 @@ public class MarkListActivity extends AppCompatActivity {
             }
         });
 
-        this.txtMarkListMaxPoints.addTextChangedListener(new TextWatcher() {
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                calculateMarkList();
-            }
-        });
+            public void afterTextChanged(Editable s) { calculateMarkList();}
+        };
+
+        this.txtMarkListMaxPoints.addTextChangedListener(textWatcher);
 
         this.rbMarkListSimpleTenthMarks.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -276,73 +273,10 @@ public class MarkListActivity extends AppCompatActivity {
             }
         });
 
-        this.txtMarkListWithCreaseCustomMark.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                calculateMarkList();
-            }
-        });
-
-        this.txtMarkListWithCreaseCustomPoints.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                calculateMarkList();
-            }
-        });
-
-        this.txtMarkListWithCreaseBestMarkAt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                calculateMarkList();
-            }
-        });
-
-        this.txtMarkListWithCreaseWorstMarkTo.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                calculateMarkList();
-            }
-        });
+        this.txtMarkListWithCreaseCustomMark.addTextChangedListener(textWatcher);
+        this.txtMarkListWithCreaseCustomPoints.addTextChangedListener(textWatcher);
+        this.txtMarkListWithCreaseBestMarkAt.addTextChangedListener(textWatcher);
+        this.txtMarkListWithCreaseWorstMarkTo.addTextChangedListener(textWatcher);
 
         this.lblMarkListState.setOnClickListener(new View.OnClickListener() {
             @Override

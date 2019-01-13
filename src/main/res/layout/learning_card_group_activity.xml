@@ -14,8 +14,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activities.LearningCardGroupActivity"
-        android:background="@drawable/bg_water">
+        tools:context=".activities.LearningCardGroupActivity">
 
     <ListView
         android:id="@+id/lvLearningCardGroups"

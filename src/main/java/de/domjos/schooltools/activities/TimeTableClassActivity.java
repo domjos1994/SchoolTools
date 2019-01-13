@@ -9,7 +9,6 @@
 
 package de.domjos.schooltools.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -50,6 +49,7 @@ public class TimeTableClassActivity extends AppCompatActivity {
         this.initControls();
         this.initValidation();
         Helper.closeSoftKeyboard(TimeTableClassActivity.this);
+        Helper.setBackgroundToActivity(this);
 
         this.lvSchoolClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -75,16 +75,7 @@ public class TimeTableClassActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menHelp:
-                startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
-                break;
-            default:
-        }
-
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(Helper.showHelpMenu(item, getApplicationContext(), "help_timetable"));
     }
 
     private void initControls() {

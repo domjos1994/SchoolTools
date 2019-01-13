@@ -55,6 +55,7 @@ public class TimeTableHourActivity extends AppCompatActivity {
         setContentView(R.layout.timetable_hour_activity);
         this.initControls();
         Helper.closeSoftKeyboard(TimeTableHourActivity.this);
+        Helper.setBackgroundToActivity(this);
 
         this.lvHours.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

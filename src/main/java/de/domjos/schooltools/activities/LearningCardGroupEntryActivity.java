@@ -56,6 +56,7 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
         this.initControls();
         this.initValidation();
         this.loadCardGroup();
+        Helper.setBackgroundToActivity(this);
 
         this.lvLearningCards.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

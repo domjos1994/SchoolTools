@@ -791,12 +791,24 @@ public class SQLite extends SQLiteOpenHelper {
                     String roomNumber = cursor.getString(7);
 
                     if(teacher!=null) {
-                        day.addPupilHour(hours.get(0), subjects.get(0), teacher, roomNumber);
+                        if(!hours.isEmpty()) {
+                            if(!subjects.isEmpty()) {
+                                day.addPupilHour(hours.get(0), subjects.get(0), teacher, roomNumber);
+                            }
+                        }
                     } else if(schoolClass!=null) {
-                        day.addTeacherHour(hours.get(0), subjects.get(0), schoolClass, roomNumber);
+                        if(!hours.isEmpty()) {
+                            if(!subjects.isEmpty()) {
+                                day.addTeacherHour(hours.get(0), subjects.get(0), schoolClass, roomNumber);
+                            }
+                        }
                     } else {
-                        day.addPupilHour(hours.get(0), subjects.get(0), null, roomNumber);
-                        day.addTeacherHour(hours.get(0), subjects.get(0), null, roomNumber);
+                        if(!hours.isEmpty()) {
+                            if (!subjects.isEmpty()) {
+                                day.addPupilHour(hours.get(0), subjects.get(0), null, roomNumber);
+                                day.addTeacherHour(hours.get(0), subjects.get(0), null, roomNumber);
+                            }
+                        }
                     }
                 }
                 timeTables.get(i).addDay(day);
@@ -1751,6 +1763,51 @@ public class SQLite extends SQLiteOpenHelper {
             Helper.printException(this.context, ex);
         }
         return memories;
+    }
+
+    public void addSetting(String key, String value, byte[] content) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            int id = 0;
+            Cursor cursor = db.rawQuery("SELECT ID FROM settings WHERE alias=?", new String[]{key});
+            while (cursor.moveToNext()) {
+                id = cursor.getInt(0);
+            }
+            cursor.close();
+
+            SQLiteStatement sqLiteStatement;
+            if(id==0) {
+                sqLiteStatement = db.compileStatement("INSERT INTO settings(alias, byteContent, stringContent) VALUES(?,?,?)");
+            } else {
+                sqLiteStatement = db.compileStatement("UPDATE settings SET alias=?, byteContent=?, stringContent=? WHERE ID=?");
+                sqLiteStatement.bindLong(4, id);
+            }
+            sqLiteStatement.bindString(1, key);
+            if(content!=null) {
+                sqLiteStatement.bindBlob(2, content);
+            } else {
+                sqLiteStatement.bindNull(2);
+            }
+            sqLiteStatement.bindString(3, value);
+            sqLiteStatement.execute();
+        } catch (Exception ex) {
+            Helper.createToast(this.context, ex.getMessage());
+        }
+    }
+
+    public Map.Entry<String, byte[]> getSetting(String key) {
+        Map.Entry<String, byte[]> entry = new AbstractMap.SimpleEntry<>("", null);
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            Cursor cursor = db.rawQuery("SELECT byteContent, stringContent FROM settings WHERE alias=?", new String[]{key});
+            while (cursor.moveToNext()) {
+                entry = new AbstractMap.SimpleEntry<>(cursor.getString(1), cursor.getBlob(0));
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            Helper.createToast(this.context, ex.getMessage());
+        }
+        return entry;
     }
 
     private boolean showNotification(String date) throws Exception {

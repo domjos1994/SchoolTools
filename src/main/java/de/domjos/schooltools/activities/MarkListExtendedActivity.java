@@ -70,6 +70,7 @@ public class MarkListExtendedActivity extends AppCompatActivity {
         this.initControls();
         this.initDefaultValues();
         Helper.closeSoftKeyboard(MarkListExtendedActivity.this);
+        Helper.setBackgroundToActivity(this);
 
         this.sbMaximumPoints.setOnChangeListener(new Runnable() {
             @Override

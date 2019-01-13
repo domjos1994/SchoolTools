@@ -62,6 +62,7 @@ public class NoteActivity extends AppCompatActivity {
         this.changeControls(false, true, false);
         this.getNoteFromExtra();
         this.txtNoteTitle.setError(null);
+        Helper.setBackgroundToActivity(this);
 
         this.lvNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

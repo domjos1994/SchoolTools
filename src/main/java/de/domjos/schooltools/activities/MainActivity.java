@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.initServices();
         this.hideButtons();
         this.openStartModule();
+        Helper.setBackgroundToActivity(this);
         this.hideWidgets();
         this.addEvents();
         this.addNotes();
@@ -299,6 +300,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.initCurrentTimeTableEvent();
             this.openStartModule();
             this.hideWidgets();
+            Helper.setBackgroundToActivity(this);
         }
     }
 

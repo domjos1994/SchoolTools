@@ -75,6 +75,7 @@ public class MarkActivity extends AppCompatActivity {
                 }
             }
         }
+        Helper.setBackgroundToActivity(this);
 
         this.cmdTestAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +104,7 @@ public class MarkActivity extends AppCompatActivity {
             }
         });
 
-        this.spMarkYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        AdapterView.OnItemSelectedListener selectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 year = yearAdapter.getItem(position);
@@ -114,20 +115,10 @@ public class MarkActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
                 year = "";
             }
-        });
+        };
 
-        this.spMarkSubject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                subject = subjectAdapter.getItem(position);
-                reloadTests();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                subject = "";
-            }
-        });
+        this.spMarkYear.setOnItemSelectedListener(selectedListener);
+        this.spMarkSubject.setOnItemSelectedListener(selectedListener);
     }
 
     @Override
@@ -138,17 +129,7 @@ public class MarkActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menHelp:
-                super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_calculate_mark"));
-                break;
-            default:
-
-        }
-
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_calculate_mark"));
     }
 
     @Override

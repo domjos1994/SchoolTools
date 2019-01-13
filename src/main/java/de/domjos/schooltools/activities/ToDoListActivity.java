@@ -57,6 +57,7 @@ public class ToDoListActivity extends AppCompatActivity {
         this.reloadItems();
         this.changeControls(false, true, false);
         this.getListFromExtra();
+        Helper.setBackgroundToActivity(this);
 
         this.lvToDoLists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

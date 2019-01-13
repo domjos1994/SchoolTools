@@ -17,6 +17,12 @@
         android:summary="@string/settings_general_notifications_summary"/>
 
     <SwitchPreference
+        android:key="swtCustomBackground"
+        android:defaultValue="false"
+        android:title="@string/settings_general_custom_background_title"
+        android:summary="@string/settings_general_custom_background_summary"/>
+
+    <SwitchPreference
         android:key="swtWhatsNew"
         android:defaultValue="false"
         android:title="@string/settings_general_whatsNew_title"
