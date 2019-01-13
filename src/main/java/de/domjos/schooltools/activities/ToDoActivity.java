@@ -43,6 +43,8 @@ public class ToDoActivity extends AppCompatActivity {
     private ArrayAdapter<String> toDoListAdapter;
     private TextView lblState;
     private SeekBar sbState;
+    private MenuItem menSolveToDo;
+    private int intPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,15 @@ public class ToDoActivity extends AppCompatActivity {
             }
         });
 
+        this.lvToDos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                menSolveToDo.setVisible(true);
+                intPosition = position;
+                return true;
+            }
+        });
+
         this.cmdToDoAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +122,8 @@ public class ToDoActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_help_only, menu);
+        getMenuInflater().inflate(R.menu.menu_todo, menu);
+        this.menSolveToDo = menu.findItem(R.id.menSolveToDo);
         return true;
     }
 
@@ -122,6 +134,25 @@ public class ToDoActivity extends AppCompatActivity {
         switch (id) {
             case R.id.menHelp:
                 super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_todo"));
+                break;
+            case R.id.menSolveToDo:
+                ToDo toDo = toDoAdapter.getItem(intPosition);
+                if(toDo!=null) {
+                    toDo.setSolved(!toDo.isSolved());
+
+                    String list = "";
+                    for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("")) {
+                        for(ToDo tmp : toDoList.getToDos()) {
+                            if(tmp.getID() == toDo.getID()) {
+                                list = toDoList.getTitle();
+                                break;
+                            }
+                        }
+                    }
+                    MainActivity.globals.getSqLite().insertOrUpdateToDo(toDo, list);
+                    reloadToDos();
+                }
+                this.menSolveToDo.setVisible(false);
                 break;
             default:
         }
@@ -140,6 +171,7 @@ public class ToDoActivity extends AppCompatActivity {
                     this.reloadToDos();
                 }
                 Helper.sendBroadCast(ToDoActivity.this, ToDoWidget.class);
+                this.menSolveToDo.setVisible(false);
             }
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);
