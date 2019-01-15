@@ -39,7 +39,7 @@ android {
         applicationId "de.domjos.schooltools"
         minSdkVersion 15
         targetSdkVersion "${sdkVersion}"
-        versionCode 10
+        versionCode 11
         versionName "${appVersion}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true

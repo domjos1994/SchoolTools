@@ -385,12 +385,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        this.lvSearchResults.setVisibility(View.GONE);
-    }
-
     private void initServices() {
         try {
             if(MainActivity.globals.getUserSettings().isNotificationsShown()) {
@@ -498,8 +492,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lvImportantToDos.setOnTouchListener(this.addOnTouchListenerForScrolling());
         lvEvents.setOnTouchListener(this.addOnTouchListenerForScrolling());
     }
-
-
 
     private View.OnTouchListener addOnTouchListenerForScrolling() {
         return new View.OnTouchListener() {
