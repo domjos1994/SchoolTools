@@ -94,8 +94,8 @@ public class SQLite extends SQLiteOpenHelper {
                 this.insertSubject("Eng", R.string.timetable_subject_eng_name, this.context.getColor(R.color.Yellow), true, db);
                 this.insertSubject("Bio", R.string.timetable_subject_bio_name, this.context.getColor(R.color.Green), false, db);
                 this.insertSubject("Ph", R.string.timetable_subject_ph_name, this.context.getColor(R.color.Gray), false, db);
-                this.insertSubject("Ch", R.string.timetable_subject_ch_name, this.context.getColor(R.color.LightGrey), false, db);
-                this.insertSubject("Sp", R.string.timetable_subject_sp_name, this.context.getColor(R.color.DarkGray), false, db);
+                this.insertSubject("Ch", R.string.timetable_subject_ch_name, this.context.getColor(R.color.Orange), false, db);
+                this.insertSubject("Sp", R.string.timetable_subject_sp_name, this.context.getColor(R.color.Black), false, db);
                 this.insertSubject("Rel", R.string.timetable_subject_rel_name, this.context.getColor(R.color.White), false, db);
             } else {
                 this.insertSubject("D", R.string.timetable_subject_d_name, this.context.getResources().getColor(R.color.Red), true, db);
@@ -103,8 +103,8 @@ public class SQLite extends SQLiteOpenHelper {
                 this.insertSubject("Eng", R.string.timetable_subject_eng_name, this.context.getResources().getColor(R.color.Yellow), true, db);
                 this.insertSubject("Bio", R.string.timetable_subject_bio_name, this.context.getResources().getColor(R.color.Green), false, db);
                 this.insertSubject("Ph", R.string.timetable_subject_ph_name, this.context.getResources().getColor(R.color.Gray), false, db);
-                this.insertSubject("Ch", R.string.timetable_subject_ch_name, this.context.getResources().getColor(R.color.LightGrey), false, db);
-                this.insertSubject("Sp", R.string.timetable_subject_sp_name, this.context.getResources().getColor(R.color.DarkGray), false, db);
+                this.insertSubject("Ch", R.string.timetable_subject_ch_name, this.context.getResources().getColor(R.color.Orange), false, db);
+                this.insertSubject("Sp", R.string.timetable_subject_sp_name, this.context.getResources().getColor(R.color.Black), false, db);
                 this.insertSubject("Rel", R.string.timetable_subject_rel_name, this.context.getResources().getColor(R.color.White), false, db);
             }
         } catch (Exception ex) {

@@ -17,7 +17,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 apply plugin: 'com.android.application'
@@ -29,7 +29,6 @@ def andVersion = '28.0.0'
 def espressoVersion = '2.2.2'
 def testRulesVersion = '0.5'
 
-def appPhase = 'alpha'
 def appVersion = '0.3'
 
 android {
@@ -49,35 +48,6 @@ android {
         checkReleaseBuilds false
         abortOnError false
         return void
-    }
-
-    buildTypes {
-        applicationVariants.all { variant ->
-            variant.outputs.each { output ->
-                new File(output.outputFile.getParent()).mkdirs()
-                def count = new File(output.outputFile.getParent()).listFiles().size()
-                def version = String.format("%d", count + 1)
-
-                output.outputFileName = new File(
-                        output.outputFile.name.replace("SchoolTools-release", "schooltools_" + appVersion + "." + appPhase + "." + version)
-                )
-            }
-        }
-
-        release {
-            minifyEnabled
-            shrinkResources
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            resValue "string", "appPhase", "${appPhase}"
-            resValue "string", "appVersion", "${appVersion}"
-            return void
-        }
-        debug {
-            resValue "string", "appPhase", "${appPhase}"
-            resValue "string", "appVersion", "${appVersion}"
-            return void
-        }
     }
 }
 
