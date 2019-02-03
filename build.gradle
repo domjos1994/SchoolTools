@@ -17,7 +17,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -30,7 +30,7 @@ def espressoVersion = '2.2.2'
 def testRulesVersion = '0.5'
 
 def appPhase = 'alpha'
-def appVersion = '0.2'
+def appVersion = '0.3'
 
 android {
     compileSdkVersion 28
@@ -39,7 +39,7 @@ android {
         applicationId "de.domjos.schooltools"
         minSdkVersion 15
         targetSdkVersion "${sdkVersion}"
-        versionCode 11
+        versionCode 12
         versionName "${appVersion}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
