@@ -23,6 +23,12 @@
         android:summary="@string/settings_general_custom_background_summary"/>
 
     <SwitchPreference
+        android:key="swtCustomAppBarBackground"
+        android:defaultValue="false"
+        android:title="@string/settings_general_custom_app_bar_title"
+        android:summary="@string/settings_general_custom_app_bar_summary"/>
+
+    <SwitchPreference
         android:key="swtWhatsNew"
         android:defaultValue="false"
         android:title="@string/settings_general_whatsNew_title"

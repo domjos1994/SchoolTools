@@ -104,6 +104,8 @@
     <string name="settings_general_notifications_summary">Notifikationen von aktuellen Erinnerungen anzeigen!</string>
     <string name="settings_general_custom_background_title">Eigenes Hintergrundbild</string>
     <string name="settings_general_custom_background_summary">App-Hintergrundbild durch eigenes Bild ersetzen!</string>
+    <string name="settings_general_custom_app_bar_title">Eigenes Hintergrundbild der App-Bar</string>
+    <string name="settings_general_custom_app_bar_summary">App-Bar-Hintergrundbild durch eigenes Bild ersetzen!</string>
     <string name="settings_general_custom_background_select">Bilder auswählen</string>
     <string name="settings_general_whatsNew_title">Neuigkeiten erneut anzeigen</string>
     <string name="settings_general_whatsNew_summary">Den Neuigkeiten Bildschirm erneut anzeigen</string>

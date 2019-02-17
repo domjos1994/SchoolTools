@@ -205,7 +205,6 @@ public class SettingsActivity extends SettingsAppCompatActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
-        static int PICK_IMAGE = 99;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -218,19 +217,36 @@ public class SettingsActivity extends SettingsAppCompatActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if((boolean)newValue) {
-                        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                        getIntent.setType("image/*");
-                        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        pickIntent.setType("image/*");
-                        Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.settings_general_custom_background_select));
-                        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-                        startActivityForResult(chooserIntent, GeneralPreferenceFragment.PICK_IMAGE);
+                        startChooser(98);
                     } else {
                         MainActivity.globals.getSqLite().addSetting("background", "", null);
                     }
                     return true;
                 }
             });
+
+            final SwitchPreference switchAppBarPreference = (SwitchPreference) this.findPreference("swtCustomAppBarBackground");
+            switchAppBarPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((boolean)newValue) {
+                        startChooser(99);
+                    } else {
+                        MainActivity.globals.getSqLite().addSetting("app_bar_background", "", null);
+                    }
+                    return true;
+                }
+            });
+        }
+
+        private void startChooser(int id) {
+            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            getIntent.setType("image/*");
+            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickIntent.setType("image/*");
+            Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.settings_general_custom_background_select));
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+            startActivityForResult(chooserIntent, id);
         }
 
         @Override
@@ -243,7 +259,7 @@ public class SettingsActivity extends SettingsAppCompatActivity {
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             try {
-                if (requestCode == GeneralPreferenceFragment.PICK_IMAGE && resultCode == RESULT_OK) {
+                if (requestCode == 98 && resultCode == RESULT_OK) {
                     Uri uri = data.getData();
                     if(uri!=null) {
                         Bitmap bitmap = Converter.convertUriToBitmap(getActivity(), uri);
@@ -254,9 +270,21 @@ public class SettingsActivity extends SettingsAppCompatActivity {
                             }
                         }
                     }
+                } else if (requestCode == 99 && resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
+                    if(uri!=null) {
+                        Bitmap bitmap = Converter.convertUriToBitmap(getActivity(), uri);
+                        if(bitmap!=null) {
+                            byte[] bytes = Converter.convertBitmapToByteArray(bitmap);
+                            if(bytes!=null) {
+                                MainActivity.globals.getSqLite().addSetting("app_bar_background", uri.getPath(), bytes);
+                            }
+                        }
+                    }
                 } else {
                     ((SwitchPreference)this.findPreference("swtCustomBackground")).setChecked(false);
                     MainActivity.globals.getSqLite().addSetting("background", "", null);
+                    MainActivity.globals.getSqLite().addSetting("app_bar_background", "", null);
                 }
             } catch (Exception ex) {
                 Helper.createToast(getActivity(), ex.getMessage());

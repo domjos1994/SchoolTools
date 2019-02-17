@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -353,5 +354,21 @@ public class Helper {
             }
         }
         activity.getWindow().getDecorView().getRootView().setBackgroundResource(R.drawable.bg_water);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void setBackgroundAppBarToActivity(NavigationView navigationView, Activity activity) {
+        Map.Entry<String, byte[]> entry = MainActivity.globals.getSqLite().getSetting("app_bar_background");
+        if(entry!=null) {
+            if(!entry.getKey().equals("")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    navigationView.setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
+                } else {
+                    navigationView.setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
+                }
+                return;
+            }
+        }
+        navigationView.setBackgroundResource(R.drawable.bg_ice);
     }
 }

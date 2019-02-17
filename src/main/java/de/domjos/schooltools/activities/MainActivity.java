@@ -17,7 +17,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -118,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.hideButtons();
         this.openStartModule();
         Helper.setBackgroundToActivity(this);
+        Helper.setBackgroundAppBarToActivity(this.navigationView, MainActivity.this);
         this.hideWidgets();
         this.addEvents();
         this.addNotes();
@@ -301,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.openStartModule();
             this.hideWidgets();
             Helper.setBackgroundToActivity(this);
+            Helper.setBackgroundAppBarToActivity(this.navigationView, MainActivity.this);
         }
     }
 
