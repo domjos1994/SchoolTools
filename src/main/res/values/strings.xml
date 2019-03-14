@@ -77,6 +77,10 @@
         <item>Notenpunkte (0–15)</item>
         <item>normale Noten mit Zeichen</item>
     </string-array>
+    <string-array name="marklist_search">
+        <item>Pkt/F</item>
+        <item>Note</item>
+    </string-array>
     <string name="marklist_settings_save_title">Einstellungen speichern als</string>
     <string name="marklist_settings_open_title">Einstellungen öffnen</string>
     <string name="marklist_extended_show_steps">Stufen anzeigen</string>

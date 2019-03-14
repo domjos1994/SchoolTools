@@ -17,7 +17,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
     }
 }
 apply plugin: 'com.android.application'
@@ -58,7 +58,7 @@ dependencies {
     // android libraries
     implementation "com.android.support:design:${andVersion}"
     implementation "com.android.support:support-vector-drawable:${andVersion}"
-    implementation "com.android.support:appcompat-v7:${andVersion}"
+    //implementation "com.android.support:appcompat-v7:${andVersion}"
     implementation "com.android.support:design:${andVersion}"
     implementation "com.android.support:support-v4:${andVersion}"
     implementation "com.android.support:support-vector-drawable:${andVersion}"

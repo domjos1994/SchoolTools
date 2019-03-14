@@ -9,19 +9,17 @@
 
 package de.domjos.schooltools.activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextThemeWrapper;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,12 +28,10 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -71,16 +67,15 @@ public class MarkListActivity extends AppCompatActivity {
 
     private ScrollView grdControls;
 
+    private ListView lvMarkList;
     private Spinner spMarkListType;
     private TextView lblMarkListState;
     private String detailedErrorMessage = "";
+
     private ImageView ivMarkListState;
 
-    private ListView lvMarkList;
-    private Snackbar searchSnackBar;
-
     private EditText txtMarkListMaxPoints;
-    private ImageButton cmdSearch;
+    private SearchView cmdSearch;
 
     private RadioButton rbMarkListSimpleQuarterMarks, rbMarkListSimpleTenthMarks;
     private CheckBox chkMarkListSimpleHalfPoints, chkMarkListSimpleDictatMode;
@@ -91,10 +86,6 @@ public class MarkListActivity extends AppCompatActivity {
     private EditText txtMarkListWithCreaseBestMarkAt, txtMarkListWithCreaseWorstMarkTo;
 
     private FloatingActionButton cmdMarkListOpenSettings;
-    private View snackView;
-    private RadioButton rbMarkListSearchMark;
-    private EditText txtMarkListSearch;
-
     private MarkListAdapter markListAdapter;
 
     private Validator baseValidator, withCreaseValidator;
@@ -108,12 +99,39 @@ public class MarkListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.marklist_activity);
         this.initControls();
-        this.initSearchControls();
         this.initValidator();
         this.setValues("");
         this.openMarkList(this.getIntent().getIntExtra("id", 0));
         Helper.closeSoftKeyboard(MarkListActivity.this);
         Helper.setBackgroundToActivity(this);
+
+        this.lvMarkList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Map.Entry<Double, Double> entry = markListAdapter.getItem(position);
+
+                if(entry!=null) {
+                    String text;
+                    if(curSettings.getViewMode()==0 || curSettings.getViewMode()==1) {
+                        int percentage = (int) (entry.getValue() / (curSettings.getMaxPoints() / 100.0f));
+                        if(curSettings.isDictatMode()) {
+                            text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getKey(), getString(R.string.marklist_failures), entry.getValue(), percentage);
+                        } else {
+                            text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getKey(), getString(R.string.marklist_points), entry.getValue(), percentage);
+                        }
+                    } else {
+                        int percentage = (int) (entry.getKey() / (curSettings.getMaxPoints() / 100.0f));
+                        if(curSettings.isDictatMode()) {
+                            text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getValue(), getString(R.string.marklist_failures), entry.getKey(), percentage);
+                        } else {
+                            text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getValue(), getString(R.string.marklist_points), entry.getKey(), percentage);
+                        }
+                    }
+
+                    Helper.createToast(MarkListActivity.this, text);
+                }
+            }
+        });
 
         this.cmdMarkListOpenSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,24 +168,25 @@ public class MarkListActivity extends AppCompatActivity {
             }
         });
 
-        this.cmdSearch.setOnClickListener(new View.OnClickListener() {
+        this.cmdSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                try {
-                    if(searchSnackBar!=null) {
-                        searchSnackBar.dismiss();
-                        searchSnackBar = null;
-                    } else {
-                        searchSnackBar = Snackbar.make(lvMarkList, "", Snackbar.LENGTH_INDEFINITE);
-                        searchSnackBar.getView().setPadding(0,0,0,0);
-                        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) searchSnackBar.getView();
-                        initSearchControls();
-                        layout.addView(snackView, 0);
-                        searchSnackBar.show();
-                    }
-                } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
-                }
+            public boolean onQueryTextSubmit(String s) {
+                findItem(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        this.cmdSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                markListAdapter.findItem(-1);
+                calculateMarkList();
+                return false;
             }
         });
 
@@ -443,6 +462,7 @@ public class MarkListActivity extends AppCompatActivity {
 
         // init scale-factor
         this.scale = getApplicationContext().getResources().getDisplayMetrics().density;
+        this.cmdMarkListOpenSettings = this.findViewById(R.id.cmdMarkListOpenSearch);
 
         // init layouts
         this.grdControls = this.findViewById(R.id.grdControls);
@@ -460,7 +480,7 @@ public class MarkListActivity extends AppCompatActivity {
         // init mark-list
         this.lvMarkList = this.findViewById(R.id.lvMarkList);
         this.markListAdapter = new MarkListAdapter(MarkListActivity.this, R.layout.marklist_item, new ArrayList<Map.Entry<Double, Double>>());
-        lvMarkList.setAdapter(this.markListAdapter);
+        this.lvMarkList.setAdapter(this.markListAdapter);
         this.markListAdapter.notifyDataSetChanged();
 
         // init maxPoints
@@ -482,75 +502,6 @@ public class MarkListActivity extends AppCompatActivity {
         this.txtMarkListWithCreaseCustomPoints = this.findViewById(R.id.txtMarkListWithCreaseCustomPoints);
         this.txtMarkListWithCreaseBestMarkAt = this.findViewById(R.id.txtMarkListWithCreaseBestMarkAt);
         this.txtMarkListWithCreaseWorstMarkTo = this.findViewById(R.id.txtMarkListWithCreaseWorstMarkTo);
-    }
-
-    private void initSearchControls() {
-        // init search
-        LayoutInflater objLayoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if(objLayoutInflater!=null) {
-            this.snackView = objLayoutInflater.inflate(R.layout.marklist_search, (RelativeLayout) this.findViewById(R.id.grdAll), false);
-        }
-        this.cmdMarkListOpenSettings = this.findViewById(R.id.cmdMarkListOpenSearch);
-        this.rbMarkListSearchMark = this.snackView.findViewById(R.id.rbMarkListSearchMark);
-        this.txtMarkListSearch = this.snackView.findViewById(R.id.txtMarkListSearch);
-        ImageButton cmdMarkListSearch = this.snackView.findViewById(R.id.cmdMarkListSearch);
-
-        final Validator searchValidator = new Validator(this.getApplicationContext());
-        searchValidator.addDoubleValidator(this.txtMarkListSearch);
-
-        cmdMarkListSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(searchValidator.getState()) {
-                    boolean isInKey;
-                    if(MainActivity.globals.getUserSettings().isExpertMode()) {
-                        if(rbMarkListSearchMark.isChecked()) {
-                            isInKey = spMarkListExpertMarkMode.getSelectedItemPosition() == 0 || spMarkListExpertMarkMode.getSelectedItemPosition() == 1;
-                        } else {
-                            isInKey = !(spMarkListExpertMarkMode.getSelectedItemPosition() == 0 || spMarkListExpertMarkMode.getSelectedItemPosition() == 1);
-                        }
-                    } else {
-                        isInKey = !rbMarkListSearchMark.isChecked();
-                    }
-
-                    double search = Double.parseDouble(txtMarkListSearch.getText().toString().trim());
-
-                    for(int i = 0; i<=markListAdapter.getCount()-1; i++) {
-                        Map.Entry<Double, Double> entry = markListAdapter.getItem(i);
-                        if(entry!=null) {
-                            if(isInKey) {
-                                if(entry.getValue()==search) {
-                                    String message;
-                                    if(rbMarkListSearchMark.isChecked()) {
-                                        message = String.format(getString(R.string.message_marklist_search_mark), txtMarkListSearch.getText().toString(), String.valueOf(entry.getKey()));
-                                    } else {
-                                        message = String.format(getString(R.string.message_marklist_search_points), txtMarkListSearch.getText().toString(), String.valueOf(entry.getKey()));
-                                    }
-                                    Helper.createToast(getApplicationContext(), message);
-                                    break;
-                                }
-                            } else {
-                                if(entry.getKey()==search) {
-                                    String message;
-                                    if(rbMarkListSearchMark.isChecked()) {
-                                        message = String.format(getString(R.string.message_marklist_search_mark), txtMarkListSearch.getText().toString(), String.valueOf(entry.getValue()));
-                                    } else {
-                                        message = String.format(getString(R.string.message_marklist_search_points), txtMarkListSearch.getText().toString(), String.valueOf(entry.getValue()));
-                                    }
-                                    Helper.createToast(getApplicationContext(), message);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if(searchSnackBar!=null) {
-                        searchSnackBar.dismiss();
-                        searchSnackBar = null;
-                    }
-                    Helper.closeSoftKeyboard(MarkListActivity.this);
-                }
-            }
-        });
     }
 
     private void initValidator() {
@@ -773,6 +724,110 @@ public class MarkListActivity extends AppCompatActivity {
             if(!titles.isEmpty()) {
                 this.setValues(titles.get(0));
             }
+        }
+    }
+
+    private void findItem(String text) {
+        if(text!=null) {
+            if(!text.trim().isEmpty()) {
+                text = text.trim().toLowerCase();
+                boolean isPoints = false;
+                double number = 0.0;
+                try {
+                    number = Double.parseDouble(text);
+                    isPoints = true;
+                } catch (Exception ex) {
+                    try {
+                        if(text.endsWith("pkt") || text.endsWith("punkte") || text.endsWith("p") || text.endsWith("pt") || text.endsWith("f") || text.endsWith("fehler")) {
+                            isPoints = true;
+                            number = this.findValue(number, text, "pkt");
+                            number = this.findValue(number, text, "punkte");
+                            number = this.findValue(number, text, "p");
+                            number = this.findValue(number, text, "pt");
+                            number = this.findValue(number, text, "f");
+                            number = this.findValue(number, text, "fehler");
+                        } else if(text.endsWith("n") || text.endsWith("note")) {
+                            number = this.findValue(number, text, "n");
+                            number = this.findValue(number, text, "note");
+                        }
+
+                        if(number!=0.0) {
+                            MarkListInterface.ViewMode viewMode = markListAdapter.getViewMode();
+                            int position = 0;
+                            boolean found = false;
+                            switch (viewMode) {
+                                case bestMarkFirst:
+                                case worstMarkFirst:
+                                    if(isPoints) {
+                                        for(;position<=markListAdapter.getCount()-1; position++) {
+                                            Map.Entry<Double, Double> entry = markListAdapter.getItem(position);
+                                            if(entry!=null) {
+                                                if (entry.getValue() == number) {
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        for(;position<=markListAdapter.getCount()-1; position++) {
+                                            Map.Entry<Double, Double> entry = markListAdapter.getItem(position);
+                                            if(entry!=null) {
+                                                if (entry.getKey() == number) {
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case lowestPointsFirst:
+                                case highestPointsFirst:
+                                    if(isPoints) {
+                                        for(;position<=markListAdapter.getCount()-1; position++) {
+                                            Map.Entry<Double, Double> entry = markListAdapter.getItem(position);
+                                            if(entry!=null) {
+                                                if (entry.getKey() == number) {
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        for(;position<=markListAdapter.getCount()-1; position++) {
+                                            Map.Entry<Double, Double> entry = markListAdapter.getItem(position);
+                                            if(entry!=null) {
+                                                if (entry.getValue() == number) {
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    break;
+                            }
+
+                            if(found) {
+                                this.markListAdapter.findItem(position);
+                                this.calculateMarkList();
+
+                                this.lvMarkList.smoothScrollToPosition(0);
+                                this.lvMarkList.setSelection(position);
+                                this.lvMarkList.smoothScrollToPositionFromTop(position, 0, 1000);
+                            }
+                        }
+                    } catch(Exception e) {
+                        Helper.printException(getApplicationContext(), e);
+                    }
+                }
+            }
+        }
+    }
+
+    private double findValue(double value, String text, String part) {
+        if(text.endsWith(part)) {
+            return Double.parseDouble(text.replace(part, "").trim());
+        } else {
+            return value;
         }
     }
 }

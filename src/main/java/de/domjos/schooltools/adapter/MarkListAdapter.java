@@ -11,10 +11,12 @@
 package de.domjos.schooltools.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import de.domjos.schooltools.helper.Helper;
 public class MarkListAdapter extends ArrayAdapter<Map.Entry<Double, Double>> {
     private Context context;
     private boolean dictatMode;
+    private int foundPosition = -1;
     private MarkListInterface.ViewMode viewMode;
 
     public MarkListAdapter(Context context, int resource, ArrayList<Map.Entry<Double, Double>> objects) {
@@ -48,6 +51,14 @@ public class MarkListAdapter extends ArrayAdapter<Map.Entry<Double, Double>> {
         this.viewMode = viewMode;
     }
 
+    public MarkListInterface.ViewMode getViewMode() {
+        return this.viewMode;
+    }
+
+    public void findItem(int position) {
+        this.foundPosition = position;
+    }
+
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -56,6 +67,13 @@ public class MarkListAdapter extends ArrayAdapter<Map.Entry<Double, Double>> {
 
         TextView lblFirstColumn = rowView.findViewById(R.id.lblFirstColumn);
         TextView lblLastColumn = rowView.findViewById(R.id.lblLastColumn);
+
+        if(position==this.foundPosition) {
+            lblFirstColumn.setTextColor(this.context.getResources().getColor(R.color.DarkRed));
+            lblFirstColumn.setTypeface(null, Typeface.BOLD_ITALIC);
+            lblLastColumn.setTextColor(this.context.getResources().getColor(R.color.DarkRed));
+            lblLastColumn.setTypeface(null, Typeface.BOLD_ITALIC);
+        }
 
         String points = this.context.getString(R.string.marklist_points);
         String mark = this.context.getString(R.string.marklist_mark);

@@ -27,6 +27,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,6 +74,26 @@ public class Helper {
         Helper.createToast(context, msg, true);
     }
 
+    public static void createToast(Activity activity, String msg) {
+        Helper.createToast(activity, msg, true);
+    }
+
+    private static void createToast(Activity activity, String msg, boolean log) {
+        if(log) {
+            Log4JHelper.getLogger(activity.getPackageName()).info(msg);
+        }
+
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) activity.findViewById(R.id.custom_toast_container));
+        TextView text = layout.findViewById(R.id.text);
+        text.setText(msg);
+        Toast toast = new Toast(activity);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
     private static void createToast(Context context, String msg, boolean log) {
         if(log) {
             Log4JHelper.getLogger(context.getPackageName()).info(msg);
@@ -88,6 +109,16 @@ public class Helper {
         Log.e("Exception", message.toString(), ex);
         Log4JHelper.getLogger(context.getPackageName()).error("Exception", ex);
         Helper.createToast(context, ex.getLocalizedMessage(), false);
+    }
+
+    public static void printException(Activity activity, Throwable ex) {
+        StringBuilder message = new StringBuilder(ex.getMessage() + "\n" + ex.toString());
+        for(StackTraceElement element : ex.getStackTrace()) {
+            message.append(element.getFileName()).append(":").append(element.getClassName()).append(":").append(element.getMethodName()).append(":").append(element.getLineNumber());
+        }
+        Log.e("Exception", message.toString(), ex);
+        Log4JHelper.getLogger(activity.getPackageName()).error("Exception", ex);
+        Helper.createToast(activity, ex.getLocalizedMessage(), false);
     }
 
     public static String readFileFromRaw(Context context, int id) {
@@ -215,7 +246,7 @@ public class Helper {
     }
 
     public static void sendMailWithAttachment(String email, String subject, File file, Context context) {
-        Uri attachment =FileProvider.getUriForFile(context, context.getPackageName() + ".my.package.name.provider", file);
+        Uri attachment = FileProvider.getUriForFile(context, context.getPackageName() + ".my.package.name.provider", file);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("vnd.android.cursor.dir/email");
         String[] to = {email};
