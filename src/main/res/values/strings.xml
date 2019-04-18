@@ -22,6 +22,7 @@
     <string name="main_nav_todo">ToDo</string>
     <string name="main_nav_learn">Lernen</string>
     <string name="main_nav_learningCards">Kartei-Karten</string>
+    <string name="main_nav_bookmarks">Lesezeichen</string>
     <string name="main_speech">Sprachbefehl</string>
 
     <string name="main_menu_export">Export/Import</string>
@@ -33,6 +34,7 @@
     <string name="main_today_timetable">Aktuelle Fächer</string>
     <string name="main_top5Notes">Top 5 Notizen</string>
     <string name="main_importantToDos">5 Wichtigste ToDos</string>
+    <string name="main_taggedBookMarks">Getagte Lesezeichen</string>
     <string name="main_importantToDos_onlyNotSolved">nur nicht gelöste</string>
     <string name="main_savedTimeTables">Gespeicherte Stundenpläne</string>
     <string name="main_savedMarkList">Gespeicherte Notenliste</string>
@@ -106,6 +108,7 @@
     <string name="settings_general">Allgemein</string>
     <string name="settings_general_notifications_title">Notifikationen anzeigen</string>
     <string name="settings_general_notifications_summary">Notifikationen von aktuellen Erinnerungen anzeigen!</string>
+    <string name="settings_general_background">Hinntergründe</string>
     <string name="settings_general_custom_background_title">Eigenes Hintergrundbild</string>
     <string name="settings_general_custom_background_summary">App-Hintergrundbild durch eigenes Bild ersetzen!</string>
     <string name="settings_general_custom_app_bar_title">Eigenes Hintergrundbild der App-Bar</string>
@@ -129,6 +132,7 @@
         <item>@string/main_importantToDos</item>
         <item>@string/main_savedTimeTables</item>
         <item>@string/main_savedMarkList</item>
+        <item>@string/main_taggedBookMarks</item>
         <item>@string/main_nav_buttons</item>
     </string-array>
     <string-array name="settings_start_start_default">
@@ -147,6 +151,7 @@
         <item>@string/main_nav_notes</item>
         <item>@string/main_nav_timer</item>
         <item>@string/main_nav_learningCards</item>
+        <item>@string/main_nav_bookmarks</item>
     </string-array>
     <string name="settings_start_start_module_header">Start-Modul wählen</string>
     <string name="settings_start_start_module_summary">Bitte wählen Sie das Start-Modul aus!</string>
@@ -159,6 +164,7 @@
         <item>@string/main_nav_notes</item>
         <item>@string/main_nav_timer</item>
         <item>@string/main_nav_learningCards</item>
+        <item>@string/main_nav_bookmarks</item>
     </string-array>
     <string name="settings_school">Thematische Einstellungen</string>
     <string name="settings_school_expert_header">Experten-Modus (Notenliste)</string>
@@ -313,6 +319,11 @@
     <string name="learningCard_result_secondTry">Im zweiten Versuch:</string>
     <string name="learningCard_result_thirdTry">Im dritten Versuch:</string>
 
+    <string name="bookmark_link">Link</string>
+    <string name="bookmark_tags">Tags</string>
+    <string name="bookmark_saveAsWebsite">URL als Bookmark speichern!</string>
+    <string name="bookmark_import">Daten Importieren</string>
+
     <string name="api_choice">Im- oder Export?</string>
     <string name="api_type">Modul</string>
     <string name="api_type_entry_type">Einträge wählen</string>
@@ -363,7 +374,7 @@
             <h1>Über SchoolTools</h1>
             <h2>Copyright</h2>
             <hr/>
-            <p>Copyright © 2017-2018 Dominic Joas<br/>
+            <p>Copyright © 2017-2019 Dominic Joas<br/>
             This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.</p>
             <h2>Externe Bibliotheken</h2>
             <hr/>
@@ -397,6 +408,8 @@
     <string name="sys_open">Öffnen</string>
     <string name="sys_edit">Bearbeiten</string>
     <string name="sys_delete">Löschen</string>
+    <string name="sys_deleted">Gelöscht</string>
+    <string name="sys_undo">Rückgängig</string>
     <string name="sys_save">Speichern</string>
     <string name="sys_cancel">Abbrechen</string>
     <string name="sys_description">Beschreibung</string>
@@ -468,4 +481,8 @@
     <string name="message_file_format_unknown">Das Format ist nicht bekannt!</string>
     <string name="message_file_not_exists">Die Datei existiert nicht!</string>
     <string name="message_wrong_method">Falsche Methode wurde benutzt!</string>
+    <string name="title_activity_bookmark">BookmarkActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

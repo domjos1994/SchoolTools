@@ -9,6 +9,7 @@
 
 package de.domjos.schooltools.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -42,6 +43,7 @@ public class TimeTableClassActivity extends AppCompatActivity {
 
     private Validator validator;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,8 @@ public class TimeTableClassActivity extends AppCompatActivity {
         this.initValidation();
         Helper.closeSoftKeyboard(TimeTableClassActivity.this);
         Helper.setBackgroundToActivity(this);
+        Helper.setSwipeDeleteListener(lvSchoolClass, classAdapter, "classes");
+
 
         this.lvSchoolClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

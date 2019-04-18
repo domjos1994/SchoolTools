@@ -291,7 +291,7 @@ public class TimeTableEntryActivity extends AppCompatActivity {
         this.navigation.getMenu().getItem(2).setEnabled(editMode);
     }
 
-    static void loadTimeTable(TimeTable currentItem, TableLayout gridContent, Map<String, Integer> mpSubjects) {
+    public static void loadTimeTable(TimeTable currentItem, TableLayout gridContent, Map<String, Integer> mpSubjects) {
         for(Day day : currentItem.getDays()) {
             if(day!=null) {
                 for(int row = 1; row<=gridContent.getChildCount()-1; row++) {

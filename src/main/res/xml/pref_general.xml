@@ -16,17 +16,21 @@
         android:title="@string/settings_general_notifications_title"
         android:summary="@string/settings_general_notifications_summary"/>
 
-    <SwitchPreference
-        android:key="swtCustomBackground"
-        android:defaultValue="false"
-        android:title="@string/settings_general_custom_background_title"
-        android:summary="@string/settings_general_custom_background_summary"/>
-
-    <SwitchPreference
-        android:key="swtCustomAppBarBackground"
-        android:defaultValue="false"
-        android:title="@string/settings_general_custom_app_bar_title"
-        android:summary="@string/settings_general_custom_app_bar_summary"/>
+    <PreferenceCategory
+        android:title="@string/settings_general_background"
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:layout="@android:layout/preference_category">
+        <SwitchPreference
+            android:key="swtCustomBackground"
+            android:defaultValue="false"
+            android:title="@string/settings_general_custom_background_title"
+            android:summary="@string/settings_general_custom_background_summary"/>
+        <SwitchPreference
+            android:key="swtCustomAppBarBackground"
+            android:defaultValue="false"
+            android:title="@string/settings_general_custom_app_bar_title"
+            android:summary="@string/settings_general_custom_app_bar_summary"/>
+    </PreferenceCategory>
 
     <SwitchPreference
         android:key="swtWhatsNew"

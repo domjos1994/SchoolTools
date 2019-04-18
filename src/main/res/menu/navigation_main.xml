@@ -49,6 +49,10 @@
                 android:id="@+id/navMainLearningCards"
                 android:icon="@drawable/ic_collections_bookmark_black_24dp"
                 android:title="@string/main_nav_learningCards"/>
+            <item
+                android:id="@+id/navMainBookMarks"
+                android:icon="@drawable/ic_bookmark_black_24dp"
+                android:title="@string/main_nav_bookmarks"/>
         </menu>
     </item>
 </menu>

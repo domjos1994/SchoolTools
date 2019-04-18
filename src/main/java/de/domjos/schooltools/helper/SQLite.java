@@ -23,10 +23,13 @@ import java.util.*;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
+import de.domjos.schooltools.core.model.Bookmark;
 import de.domjos.schooltools.core.model.Memory;
 import de.domjos.schooltools.core.model.Note;
 import de.domjos.schooltools.core.model.TimerEvent;
 import de.domjos.schooltools.core.model.learningCard.*;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
+import de.domjos.schooltools.core.model.objects.BaseObject;
 import de.domjos.schooltools.core.model.timetable.PupilHour;
 import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.todo.ToDo;
@@ -198,6 +201,19 @@ public class SQLite extends SQLiteOpenHelper {
             }
 
             db.execSQL("DELETE FROM " + table + where + ";");
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+    }
+
+    public void deleteEntry(String table, Object object) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            if(object instanceof BaseDescriptionObject) {
+                db.execSQL("DELETE FROM " + table + " WHERE ID=" + ((BaseDescriptionObject)object).getID() + ";");
+            } else if(object instanceof BaseObject) {
+                db.execSQL("DELETE FROM " + table + " WHERE ID=" + ((BaseObject)object).getID() + ";");
+            }
         } catch (Exception ex) {
             Helper.printException(this.context, ex);
         }
@@ -1718,6 +1734,75 @@ public class SQLite extends SQLiteOpenHelper {
         cursor.close();
 
         return learningCards;
+    }
+
+    public void insertOrUpdateBookmark(Bookmark bookmark) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            SQLiteStatement statement;
+            if(bookmark.getID()==0) {
+                statement = db.compileStatement("INSERT INTO bookmarks(title,tags,link,themes,subject,description,preview,contentData) VALUES(?,?,?,?,?,?,?,?);");
+            } else {
+                statement = db.compileStatement("UPDATE bookmarks SET title=?,tags=?,link=?,themes=?,subject=?,description=?,preview=?,contentData=? WHERE ID=?");
+                statement.bindLong(9, bookmark.getID());
+            }
+            statement.bindString(1, bookmark.getTitle());
+            statement.bindString(2, bookmark.getTags());
+            statement.bindString(3, bookmark.getLink());
+            statement.bindString(4, bookmark.getThemes());
+            if(bookmark.getSubject()!=null) {
+                statement.bindLong(5, bookmark.getSubject().getID());
+            } else {
+                statement.bindNull(5);
+            }
+            statement.bindString(6, bookmark.getDescription());
+            if(bookmark.getPreview()!=null) {
+                statement.bindBlob(7, bookmark.getPreview());
+            } else {
+                statement.bindNull(7);
+            }
+            if(bookmark.getData()!=null) {
+                statement.bindBlob(8, bookmark.getData());
+            } else {
+                statement.bindNull(8);
+            }
+            statement.execute();
+            statement.close();
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+    }
+
+    public List<Bookmark> getBookmarks(String where) {
+        List<Bookmark> bookmarks = new LinkedList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            if (!where.isEmpty()) {
+                where = " WHERE " + where;
+            }
+
+            Cursor cursor = db.rawQuery("SELECT * FROM bookmarks" + where, null);
+            while (cursor.moveToNext()) {
+                Bookmark bookmark = new Bookmark();
+                bookmark.setID(cursor.getInt(0));
+                bookmark.setTitle(cursor.getString(1));
+                bookmark.setTags(cursor.getString(2));
+                bookmark.setLink(cursor.getString(3));
+                bookmark.setThemes(cursor.getString(4));
+                int subject_id = cursor.getInt(5);
+                if(subject_id!=0) {
+                    bookmark.setSubject(this.getSubjects("ID=" + subject_id).get(0));
+                }
+                bookmark.setDescription(cursor.getString(6));
+                bookmark.setPreview(cursor.getBlob(7));
+                bookmark.setData(cursor.getBlob(8));
+                bookmarks.add(bookmark);
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            Helper.printException(this.context, ex);
+        }
+        return bookmarks;
     }
 
     public List<Memory> getCurrentMemories() {

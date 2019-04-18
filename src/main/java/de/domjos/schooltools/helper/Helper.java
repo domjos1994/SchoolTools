@@ -8,6 +8,7 @@
  */
 package de.domjos.schooltools.helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -30,12 +31,21 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
+import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hudomju.swipe.SwipeToDismissTouchListener;
+import com.hudomju.swipe.adapter.ListViewAdapter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -55,6 +65,7 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.HelpActivity;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.Note;
+import de.domjos.schooltools.core.model.objects.BaseObject;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -153,9 +164,12 @@ public class Helper {
     }
 
     public static void closeSoftKeyboard(Activity activity) {
-        activity.getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-        );
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public static View getRowView(Context context, ViewGroup parent, int layout) {
@@ -401,5 +415,40 @@ public class Helper {
             }
         }
         navigationView.setBackgroundResource(R.drawable.bg_ice);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public static void setSwipeDeleteListener(ListView lv, final ArrayAdapter adapter, final String table) {
+        ListViewAdapter listViewAdapter = new ListViewAdapter(lv);
+        final SwipeToDismissTouchListener<ListViewAdapter> touchListener = new SwipeToDismissTouchListener<>(
+                listViewAdapter,
+                new SwipeToDismissTouchListener.DismissCallbacks<ListViewAdapter>() {
+                    @Override
+                    public boolean canDismiss(int position) {
+                        return true;
+                    }
+
+                    @Override
+                    public void onDismiss(ListViewAdapter recyclerView, int position) {
+                        Object object = adapter.getItem(position);
+                        MainActivity.globals.getSqLite().deleteEntry(table, object);
+                        adapter.remove(object);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+        lv.setOnTouchListener(touchListener);
+        lv.setOnScrollListener((AbsListView.OnScrollListener) touchListener.makeScrollListener());
+    }
+
+
+    public static View.OnTouchListener addOnTouchListenerForScrolling() {
+        return new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return v.performClick();
+            }
+        };
     }
 }

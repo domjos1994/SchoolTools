@@ -8,28 +8,65 @@
   ~ of the License, or (at your option) any later version.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:weightSum="10">
+    android:layout_height="wrap_content"
+    android:id="@+id/lyt_container"
+    android:background="@color/colorPrimary">
 
-    <android.support.v7.widget.AppCompatImageView
-        app:srcCompat="@drawable/ic_people_black_24dp"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
-        android:layout_margin="2dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:weightSum="10">
+        <android.support.v7.widget.AppCompatImageView
+            app:srcCompat="@drawable/ic_people_black_24dp"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_margin="2dp"/>
 
-    <TextView
-        android:id="@+id/lblSchoolClass"
-        android:layout_weight="10"
-        android:layout_width="0dp"
-        android:layout_height="34dp"
-        android:layout_margin="8dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:gravity="center"/>
-</LinearLayout>
+        <TextView
+            android:id="@+id/lblSchoolClass"
+            android:layout_weight="10"
+            android:layout_width="0dp"
+            android:layout_height="34dp"
+            android:layout_margin="8dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="3"
+        android:height="30dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/txt_delete"
+            android:gravity="center_vertical"
+            android:text="@string/sys_deleted"
+            android:clickable="false"
+            android:layout_weight="2"
+            android:hapticFeedbackEnabled="true"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:id="@+id/txt_undo"
+            android:text="@string/sys_undo"
+            android:clickable="false"
+            android:layout_weight="1"
+            android:textColor="@color/Yellow"/>
+
+    </LinearLayout>
+</FrameLayout>
