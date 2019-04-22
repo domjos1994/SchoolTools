@@ -172,6 +172,18 @@
     <string name="settings_school_extended_max_header">Maximale Punktzahl (Notenliste)</string>
     <string name="settings_school_extended_max_summary">Maximale Punktzahl beim Diagram im erweiterten Modus!</string>
     <string name="settings_school_extended_max_default">100</string>
+    <string name="settings_school_extended_line_color_header">Farbe der Linie</string>
+    <string name="settings_school_extended_line_color_summary">Farbe des Liniendiagramms im erweiterten Modus wählen!</string>
+    <string name="settings_school_extended_line_color_default">weiß</string>
+    <string name="settings_school_extended_diagram_view_header">Aussehen des Diagramms</string>
+    <string name="settings_school_extended_diagram_view_summary">Aussehen des Diagramms wählen!</string>
+    <string-array name="settings_school_extended_diagram_view_default">
+        <item>Linien-Diagramm</item>
+    </string-array>
+    <string-array name="settings_school_extended_diagram_view_entries">
+        <item>Linien-Diagramm</item>
+        <item>Balken-Diagramm</item>
+    </string-array>
     <string name="settings_school_timer_notification_header">Erinnerung x Tage vorher!</string>
     <string name="settings_school_timer_notification_summary">Anzahl der Tage für die Erinnerung festlegen</string>
     <string name="settings_school_timer_notification_default">7</string>
@@ -195,8 +207,16 @@
     </string>
     <string name="settings_api_cancel_export_header">Export abbrechen</string>
     <string name="settings_api_cancel_export_summary_on">Export abbrechen, sobald eine Zeile fehlerhaft!</string>
-    <string name="settings_api_cancel_export_summary_of">Export erst abbrechen, sobald komplette Datei fehlerhaft!
-    </string>
+    <string name="settings_api_cancel_export_summary_of">Export erst abbrechen, sobald komplette Datei fehlerhaft!</string>
+
+    <string name="settings_cloud">Cloud-Zugang</string>
+    <string name="settings_cloud_nextCloud">NextCloud-Zugang</string>
+    <string name="settings_cloud_nextCloud_host_header">URL zur Nextcloud</string>
+    <string name="settings_cloud_nextCloud_host_summary">Hier die URL zur Nextcloud eingeben</string>
+    <string name="settings_cloud_nextCloud_user_header">Benutzername für die Nextcloud</string>
+    <string name="settings_cloud_nextCloud_user_summary">Hier den Benutzername für die Nextcloud eingeben</string>
+    <string name="settings_cloud_nextCloud_pwd_header">Passwort für die Nextcloud</string>
+    <string name="settings_cloud_nextCloud_pwd_summary">Hier das Passwort für die Nextcloud eingeben</string>
 
     <string name="timetable_content">
         <![CDATA[

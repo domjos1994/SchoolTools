@@ -80,7 +80,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="5"/>
 
-                <de.domjos.schooltools.helper.custom.LabelledSeekBar
+                <de.domjos.schooltools.custom.LabelledSeekBar
                     android:id="@+id/sbMaximumPoints"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
@@ -101,7 +101,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="5"/>
 
-                <de.domjos.schooltools.helper.custom.LabelledSeekBar
+                <de.domjos.schooltools.custom.LabelledSeekBar
                     android:id="@+id/sbCustomMark"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
@@ -122,7 +122,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="5"/>
 
-                <de.domjos.schooltools.helper.custom.LabelledSeekBar
+                <de.domjos.schooltools.custom.LabelledSeekBar
                     android:id="@+id/sbCustomPoints"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
@@ -143,7 +143,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="5"/>
 
-                <de.domjos.schooltools.helper.custom.LabelledSeekBar
+                <de.domjos.schooltools.custom.LabelledSeekBar
                     android:id="@+id/sbBestMarkFirst"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
@@ -164,7 +164,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="5"/>
 
-                <de.domjos.schooltools.helper.custom.LabelledSeekBar
+                <de.domjos.schooltools.custom.LabelledSeekBar
                     android:id="@+id/sbWorstMarkTo"
                     android:layout_width="0dp"
                     android:layout_height="40dp"

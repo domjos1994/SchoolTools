@@ -19,12 +19,32 @@
             android:defaultValue="false"
             android:title="@string/settings_school_expert_header"
             android:summary="@string/settings_school_expert_summary"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/marklist_menu_extended"
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:layout="@android:layout/preference_category">
         <EditTextPreference
             android:key="txtSchoolMarkListExtendedMax"
             android:defaultValue="@string/settings_school_extended_max_default"
             android:inputType="numberSigned"
             android:title="@string/settings_school_extended_max_header"
             android:summary="@string/settings_school_extended_max_summary"/>
+        <ListPreference
+            android:key="lsSchoolMarkListExtendedColor"
+            android:title="@string/settings_school_extended_line_color_header"
+            android:summary="@string/settings_school_extended_line_color_summary"
+            android:entries="@array/colorNames"
+            android:entryValues="@array/colorNames"
+            android:defaultValue="@string/settings_school_extended_line_color_default"/>
+        <MultiSelectListPreference
+            android:key="lsSchoolMarkListExtendedDiagram"
+            android:title="@string/settings_school_extended_diagram_view_header"
+            android:summary="@string/settings_school_extended_diagram_view_summary"
+            android:entries="@array/settings_school_extended_diagram_view_entries"
+            android:entryValues="@array/settings_school_extended_diagram_view_entries"
+            android:defaultValue="@array/settings_school_extended_diagram_view_default"/>
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/settings_cloud_nextCloud"
+        android:icon="@drawable/ic_cloud_black_24dp"
+        android:layout="@android:layout/preference_category">
+        <EditTextPreference
+            android:key="txtNextCloudHost"
+            android:title="@string/settings_cloud_nextCloud_host_header"
+            android:summary="@string/settings_cloud_nextCloud_host_summary"/>
+        <EditTextPreference
+            android:key="txtNextCloudUser"
+            android:title="@string/settings_cloud_nextCloud_user_header"
+            android:summary="@string/settings_cloud_nextCloud_user_summary"/>
+        <EditTextPreference
+            android:key="txtNextCloudPwd"
+            android:title="@string/settings_cloud_nextCloud_pwd_header"
+            android:summary="@string/settings_cloud_nextCloud_pwd_summary"/>
+    </PreferenceCategory>
+</PreferenceScreen>

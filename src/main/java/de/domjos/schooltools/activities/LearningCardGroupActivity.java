@@ -10,10 +10,8 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,21 +20,22 @@ import android.widget.ListView;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.LearningCardGroupAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 
 import java.util.ArrayList;
 
-public class LearningCardGroupActivity extends AppCompatActivity {
+public final class LearningCardGroupActivity extends AbstractActivity {
     private FloatingActionButton cmdLearningCardGroupAdd;
     private ListView lvLearnCardGroups;
     private LearningCardGroupAdapter learningCardGroupAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.learning_card_group_activity);
-        this.initControls();
+    public LearningCardGroupActivity() {
+        super(R.layout.learning_card_group_activity);
+    }
 
+    @Override
+    protected void initActions() {
         this.cmdLearningCardGroupAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +58,8 @@ public class LearningCardGroupActivity extends AppCompatActivity {
         });
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         this.cmdLearningCardGroupAdd = this.findViewById(R.id.cmdLearningCardGroupAdd);
 
         this.learningCardGroupAdapter = new LearningCardGroupAdapter(this.getApplicationContext(), R.layout.learning_card_group_item, new ArrayList<LearningCardGroup>());

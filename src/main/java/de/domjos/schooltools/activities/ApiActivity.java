@@ -14,11 +14,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +52,7 @@ import de.domjos.schooltools.core.model.objects.BaseObject;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.core.model.todo.ToDoList;
 import de.domjos.schooltools.core.utils.fileUtils.PDFBuilder;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.ApiHelper;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.EventHelper;
@@ -68,7 +67,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
  * @author Dominic Joas
  * @version 1.0
  */
-public class ApiActivity extends AppCompatActivity {
+public final class ApiActivity extends AbstractActivity {
     private SQLite sqLite;
     private Spinner spApiChoice, spApiType, spApiEntryType, spApiEntry, spApiFormat;
     private ArrayAdapter<String> apiChoice, apiType, apiEntryType, apiFormat;
@@ -79,13 +78,13 @@ public class ApiActivity extends AppCompatActivity {
     private FilePickerDialog dialog;
     private ApiHelper apiHelper;
 
+    public ApiActivity() {
+        super(R.layout.api_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.api_activity);
+    protected void initActions() {
         this.apiHelper = new ApiHelper(this.getApplicationContext());
-        this.initControls();
-        Helper.setBackgroundToActivity(this);
         this.loadTypes();
 
 
@@ -653,7 +652,8 @@ public class ApiActivity extends AppCompatActivity {
         return false;
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         this.sqLite = MainActivity.globals.getSqLite();
 
         // init other controls

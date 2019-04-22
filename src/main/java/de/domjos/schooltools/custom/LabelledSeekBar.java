@@ -7,7 +7,7 @@
  * of the License, or (at your option) any later version.
  */
 
-package de.domjos.schooltools.helper.custom;
+package de.domjos.schooltools.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;

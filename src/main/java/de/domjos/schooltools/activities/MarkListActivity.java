@@ -11,10 +11,8 @@ package de.domjos.schooltools.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -51,6 +49,7 @@ import de.domjos.schooltools.core.marklist.de.GermanListWithCrease;
 import de.domjos.schooltools.core.model.marklist.MarkList;
 import de.domjos.schooltools.core.model.marklist.MarkListInterface;
 import de.domjos.schooltools.core.model.marklist.MarkListWithMarkMode;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.schooltools.helper.Validator;
@@ -61,7 +60,7 @@ import de.domjos.schooltools.settings.MarkListSettings;
  * @author Dominic Joas
  * @version 1.0
  */
-public class MarkListActivity extends AppCompatActivity {
+public final class MarkListActivity extends AbstractActivity {
     // controls of layout
     private TableLayout grdMarkListSimple, grdMarkListExpert, grdMarkListWithCrease;
 
@@ -94,16 +93,15 @@ public class MarkListActivity extends AppCompatActivity {
 
     private MarkListSettings curSettings;
 
+    public MarkListActivity() {
+        super(R.layout.marklist_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.marklist_activity);
-        this.initControls();
-        this.initValidator();
+    protected void initActions() {
         this.setValues("");
         this.openMarkList(this.getIntent().getIntExtra("id", 0));
         Helper.closeSoftKeyboard(MarkListActivity.this);
-        Helper.setBackgroundToActivity(this);
 
         this.lvMarkList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -450,7 +448,8 @@ public class MarkListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init Toolbar
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
@@ -504,7 +503,8 @@ public class MarkListActivity extends AppCompatActivity {
         this.txtMarkListWithCreaseWorstMarkTo = this.findViewById(R.id.txtMarkListWithCreaseWorstMarkTo);
     }
 
-    private void initValidator() {
+    @Override
+    protected void initValidator() {
         this.baseValidator = new Validator(this.getApplicationContext());
         this.baseValidator.addIntegerValidator(this.txtMarkListMaxPoints);
 

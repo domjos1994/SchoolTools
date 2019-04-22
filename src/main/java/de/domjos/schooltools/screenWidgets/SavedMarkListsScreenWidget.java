@@ -1,4 +1,13 @@
-package de.domjos.schooltools.widgets.main;
+/*
+ * Copyright (C) 2017-2019  Dominic Joas
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+
+package de.domjos.schooltools.screenWidgets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -16,6 +25,7 @@ import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.adapter.MarkListAdapter;
 import de.domjos.schooltools.core.exceptions.MarkListException;
 import de.domjos.schooltools.core.marklist.de.GermanListWithCrease;
+import de.domjos.schooltools.custom.ScreenWidget;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.settings.MarkListSettings;
 

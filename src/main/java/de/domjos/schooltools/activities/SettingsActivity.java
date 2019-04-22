@@ -196,7 +196,8 @@ public class SettingsActivity extends SettingsAppCompatActivity {
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName)
                 || SchoolPreferenceFragment.class.getName().equals(fragmentName)
                 || ApiPreferenceFragment.class.getName().equals(fragmentName)
-                || StartPreferenceFragment.class.getName().equals(fragmentName);
+                || StartPreferenceFragment.class.getName().equals(fragmentName)
+                || CloudPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -332,6 +333,8 @@ public class SettingsActivity extends SettingsAppCompatActivity {
             addPreferencesFromResource(R.xml.pref_school);
             setHasOptionsMenu(true);
 
+            bindPreferenceSummaryToValue(findPreference("lsSchoolMarkListExtendedColor"));
+            bindPreferenceSummaryToValueSet(findPreference("lsSchoolMarkListExtendedDiagram"));
         }
 
         @Override
@@ -355,6 +358,31 @@ public class SettingsActivity extends SettingsAppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_api);
+            setHasOptionsMenu(true);
+
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * This fragment shows menu_markList preferences only. It is used when the
+     * activity is showing a two-pane settings UI.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class CloudPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_cloud);
             setHasOptionsMenu(true);
 
         }

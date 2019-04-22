@@ -1,4 +1,13 @@
-package de.domjos.schooltools.widgets.main;
+/*
+ * Copyright (C) 2017-2019  Dominic Joas
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+
+package de.domjos.schooltools.screenWidgets;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,6 +34,7 @@ import de.domjos.schooltools.activities.SettingsActivity;
 import de.domjos.schooltools.activities.TimeTableActivity;
 import de.domjos.schooltools.activities.TimerActivity;
 import de.domjos.schooltools.activities.ToDoActivity;
+import de.domjos.schooltools.custom.ScreenWidget;
 
 public final class ButtonScreenWidget extends ScreenWidget {
     private TableRow trMarkList, trMark, trTimeTable, trNotes, trTimer, trTodo, trExport, trSettings, trHelp, trLearningCards, trBookMarks;

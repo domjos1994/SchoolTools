@@ -6,11 +6,9 @@ import android.content.ActivityNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -39,6 +37,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,13 +45,15 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.BookmarkAdapter;
 import de.domjos.schooltools.core.model.Bookmark;
 import de.domjos.schooltools.core.model.Subject;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.ApiHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.IntentHelper;
 import de.domjos.schooltools.helper.Validator;
-import de.domjos.schooltools.helper.custom.CommaTokenizer;
+import de.domjos.schooltools.custom.CommaTokenizer;
+import de.domjos.schooltools.webservices.nextcloud.BookmarkWebservice;
 
-public class BookmarkActivity extends AppCompatActivity {
+public final class BookmarkActivity extends AbstractActivity {
     private BottomNavigationView navigation;
     private Spinner spBookmarksFilterSubject, spBookmarksSubject;
     private ArrayAdapter<Subject> bookmarksFilterSubjectAdapter, bookmarksSubjectAdapter;
@@ -71,19 +72,14 @@ public class BookmarkActivity extends AppCompatActivity {
     private Validator validator;
     private int subjectID = 0;
 
+    public BookmarkActivity() {
+        super(R.layout.bookmark_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.bookmark_activity);
-        this.initControls();
-        this.initValidator();
-        Helper.setBackgroundToActivity(this);
+    protected void initActions() {
         this.changeControls(false, true);
         this.getItemFromOutSide();
-
-        if(getIntent().getData()!=null) {
-            Helper.createToast(BookmarkActivity.this, getIntent().getData().toString());
-        }
 
         this.cmdBookmarkLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,7 +253,8 @@ public class BookmarkActivity extends AppCompatActivity {
         }
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init Toolbar
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
@@ -284,6 +281,7 @@ public class BookmarkActivity extends AppCompatActivity {
         this.bookmarkAdapter = new BookmarkAdapter(this.getApplicationContext(), new LinkedList<Bookmark>());
         this.lvBookmarks.setAdapter(this.bookmarkAdapter);
         this.bookmarkAdapter.notifyDataSetChanged();
+        this.openNextCloudSync();
         this.reloadBookmarks("");
 
         this.wvPreview = this.findViewById(R.id.wvPreview);
@@ -365,9 +363,12 @@ public class BookmarkActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
     }
 
-    private void initValidator() {
+    @Override
+    protected void initValidator() {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addEmptyValidator(this.txtBookmarkTitle);
         this.validator.addEmptyValidator(this.txtBookmarkLink);
@@ -518,6 +519,16 @@ public class BookmarkActivity extends AppCompatActivity {
             if(currentBookmark.getSubject()!=null) {
                 spBookmarksSubject.setSelection(bookmarksSubjectAdapter.getPosition(currentBookmark.getSubject()));
             }
+        }
+    }
+
+    private void openNextCloudSync() {
+        try {
+            if(MainActivity.globals.getUserSettings().isNextCloud()) {
+                new BookmarkWebservice(BookmarkActivity.this).execute(new URL(MainActivity.globals.getUserSettings().getNextCloudHost()));
+            }
+        } catch (Exception ex) {
+            Helper.printException(this.getApplicationContext(), ex);
         }
     }
 }

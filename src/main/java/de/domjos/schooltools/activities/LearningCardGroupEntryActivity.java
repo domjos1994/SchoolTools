@@ -9,10 +9,8 @@
 
 package de.domjos.schooltools.activities;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -24,6 +22,7 @@ import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.learningCard.LearningCard;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.core.model.timetable.Teacher;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
@@ -32,7 +31,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LearningCardGroupEntryActivity extends AppCompatActivity {
+public final class LearningCardGroupEntryActivity extends AbstractActivity {
     private Validator validator;
     private LearningCardGroup learningCardGroup;
     private int cardPosition = 0;
@@ -49,14 +48,13 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
     private EditText txtLearningCardTitle, txtLearningCardQuestion, txtLearningCardAnswer, txtLearningCardNote1, txtLearningCardNote2;
     private AutoCompleteTextView txtLearningCardCategory;
 
+    public LearningCardGroupEntryActivity() {
+        super(R.layout.learning_card_group_entry_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.learning_card_group_entry_activity);
-        this.initControls();
-        this.initValidation();
+    protected void initActions() {
         this.loadCardGroup();
-        Helper.setBackgroundToActivity(this);
 
         this.lvLearningCards.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -224,7 +222,8 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
     }
 
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         BottomNavigationView navigation = this.findViewById(R.id.navigation);
 
         BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -324,7 +323,8 @@ public class LearningCardGroupEntryActivity extends AppCompatActivity {
         this.txtLearningCardCategory.setAdapter(cardAdapter);
     }
 
-    private void initValidation() {
+    @Override
+    protected void initValidator() {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addEmptyValidator(this.txtLearningCardGroupTitle);
         this.validator.addDateValidator(this.txtLearningCardGroupDeadline, new Date(), null);

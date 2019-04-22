@@ -1,4 +1,13 @@
-package de.domjos.schooltools.widgets.main;
+/*
+ * Copyright (C) 2017-2019  Dominic Joas
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+
+package de.domjos.schooltools.screenWidgets;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -22,6 +31,7 @@ import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.activities.TimeTableEntryActivity;
 import de.domjos.schooltools.core.model.timetable.Hour;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
+import de.domjos.schooltools.custom.ScreenWidget;
 
 public final class SavedTimeTablesScreenWidget extends ScreenWidget {
     private Spinner cmbSavedTimeTables;

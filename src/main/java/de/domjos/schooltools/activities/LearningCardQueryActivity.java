@@ -9,10 +9,8 @@
 
 package de.domjos.schooltools.activities;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
@@ -20,6 +18,7 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.LearningCardQueryAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
 
@@ -28,7 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class LearningCardQueryActivity extends AppCompatActivity {
+public final class LearningCardQueryActivity extends AbstractActivity {
     private Validator validator;
     private LearningCardQuery learningCardQuery;
     private BottomNavigationView navigation;
@@ -44,13 +43,12 @@ public class LearningCardQueryActivity extends AppCompatActivity {
     private ArrayAdapter<String> categoryAdapter;
     private LearningCardQueryAdapter learningCardQueryAdapter;
 
+    public LearningCardQueryActivity() {
+        super(R.layout.learning_card_query_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.learning_card_query_activity);
-        this.initControls();
-        this.initValidation();
-        Helper.setBackgroundToActivity(this);
+    protected void initActions() {
 
         this.lvLearningCardQueries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -62,8 +60,8 @@ public class LearningCardQueryActivity extends AppCompatActivity {
         });
     }
 
-
-    private void initControls() {
+    @Override
+    protected void initControls() {
         this.navigation = this.findViewById(R.id.navigation);
         BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -145,7 +143,8 @@ public class LearningCardQueryActivity extends AppCompatActivity {
         this.controlElements(false, true);
     }
 
-    private void initValidation() {
+    @Override
+    protected void initValidator() {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addEmptyValidator(this.txtLearningCardQueryTitle);
         this.validator.addEmptyValidator(this.txtLearningCardQueryTries);

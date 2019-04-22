@@ -9,12 +9,11 @@
 
 package de.domjos.schooltools.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +33,7 @@ import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.mark.SchoolYear;
 import de.domjos.schooltools.core.model.mark.Test;
 import de.domjos.schooltools.core.model.mark.Year;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 
 /**
@@ -41,7 +41,7 @@ import de.domjos.schooltools.helper.Helper;
  * @author Dominic Joas
  * @version 1.0
  */
-public class MarkActivity extends AppCompatActivity {
+public final class MarkActivity extends AbstractActivity {
     private String subject = "", year = "";
     private FloatingActionButton cmdTestAdd;
 
@@ -51,11 +51,12 @@ public class MarkActivity extends AppCompatActivity {
     private ArrayAdapter<String> yearAdapter, subjectAdapter;
     private TestAdapter testAdapter;
 
+    public MarkActivity() {
+        super(R.layout.mark_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.mark_activity);
-        this.initControls();
+    protected void initActions() {
         this.reloadSubject();
         this.reloadYear();
         this.reloadTests();
@@ -177,6 +178,7 @@ public class MarkActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private void reloadTests() {
         this.cmdTestAdd.setVisibility(View.VISIBLE);
         if(this.yearAdapter.isEmpty()) {
@@ -211,7 +213,8 @@ public class MarkActivity extends AppCompatActivity {
         }
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init BottomNavigation
         BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

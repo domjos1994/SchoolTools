@@ -13,8 +13,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +25,7 @@ import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -36,11 +35,11 @@ import com.jjoe64.graphview.series.Series;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import de.domjos.schooltools.R;
 
-import de.domjos.schooltools.core.exceptions.MarkListException;
 import de.domjos.schooltools.core.marklist.de.GermanExponentialList;
 import de.domjos.schooltools.core.marklist.de.GermanIHKList;
 import de.domjos.schooltools.core.marklist.de.GermanLinearList;
@@ -48,12 +47,13 @@ import de.domjos.schooltools.core.marklist.de.GermanListWithCrease;
 import de.domjos.schooltools.core.model.marklist.ExtendedMarkList;
 import de.domjos.schooltools.core.model.marklist.MarkList;
 import de.domjos.schooltools.core.model.marklist.MarkListInterface;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.ApiHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Log4JHelper;
-import de.domjos.schooltools.helper.custom.LabelledSeekBar;
+import de.domjos.schooltools.custom.LabelledSeekBar;
 
-public class MarkListExtendedActivity extends AppCompatActivity {
+public final class MarkListExtendedActivity extends AbstractActivity {
     private int type = 1;
     private GraphView graphView;
     private LabelledSeekBar sbMaximumPoints, sbCustomMark, sbCustomPoints, sbBestMarkFirst, sbWorstMarkTo;
@@ -63,14 +63,14 @@ public class MarkListExtendedActivity extends AppCompatActivity {
     private ImageView ivMarkListState;
     private String detailedErrorMessage = "";
 
+    public MarkListExtendedActivity() {
+        super(R.layout.marklist_extended_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.marklist_extended_activity);
-        this.initControls();
+    protected void initActions() {
         this.initDefaultValues();
         Helper.closeSoftKeyboard(MarkListExtendedActivity.this);
-        Helper.setBackgroundToActivity(this);
 
         this.sbMaximumPoints.setOnChangeListener(new Runnable() {
             @Override
@@ -223,7 +223,8 @@ public class MarkListExtendedActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         try {
 
             if(this.getSupportActionBar()!=null) {
@@ -391,18 +392,43 @@ public class MarkListExtendedActivity extends AppCompatActivity {
                 i++;
             }
 
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dpArray);
-            series.setColor(Color.WHITE);
-            series.setDrawAsPath(false);
-            series.setOnDataPointTapListener(new OnDataPointTapListener() {
-                @Override
-                public void onTap(Series series, DataPointInterface dataPoint) {
-                    Helper.createToast(getApplicationContext(), getString(R.string.marklist_points) + ": " + dataPoint.getX() + "\n" + getString(R.string.marklist_mark) + ": " + dataPoint.getY());
-                }
-            });
-
             this.graphView.getSeries().clear();
-            this.graphView.addSeries(series);
+            Set<String> stringSet = MainActivity.globals.getUserSettings().getDiagramView();
+            String[] values = this.getResources().getStringArray(R.array.settings_school_extended_diagram_view_entries);
+            if(stringSet.contains(values[0])) {
+                LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dpArray);
+                int extendedColor = MainActivity.globals.getUserSettings().getExtendedColor();
+                if(extendedColor!=0) {
+                    series.setColor(extendedColor);
+                } else {
+                    series.setColor(Color.WHITE);
+                }
+                series.setDrawAsPath(true);
+                series.setOnDataPointTapListener(new OnDataPointTapListener() {
+                    @Override
+                    public void onTap(Series series, DataPointInterface dataPoint) {
+                        Helper.createToast(getApplicationContext(), getString(R.string.marklist_points) + ": " + dataPoint.getX() + "\n" + getString(R.string.marklist_mark) + ": " + dataPoint.getY());
+                    }
+                });
+                this.graphView.addSeries(series);
+            }
+            if(stringSet.contains(values[1])) {
+                BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dpArray);
+                int extendedColor = MainActivity.globals.getUserSettings().getExtendedColor();
+                if(extendedColor!=0) {
+                    series.setColor(extendedColor);
+                } else {
+                    series.setColor(Color.WHITE);
+                }
+                series.setOnDataPointTapListener(new OnDataPointTapListener() {
+                    @Override
+                    public void onTap(Series series, DataPointInterface dataPoint) {
+                        Helper.createToast(getApplicationContext(), getString(R.string.marklist_points) + ": " + dataPoint.getX() + "\n" + getString(R.string.marklist_mark) + ": " + dataPoint.getY());
+                    }
+                });
+                this.graphView.addSeries(series);
+            }
+
             this.updateState(null, settings);
         } catch (Exception ex) {
             this.updateState(ex, null);

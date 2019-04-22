@@ -33,7 +33,7 @@ import de.domjos.schooltools.helper.Helper;
 
 import java.util.List;
 
-public class LearningCardOverviewActivity extends FragmentActivity {
+public final class LearningCardOverviewActivity extends FragmentActivity {
     private ViewPager viewPager;
     private LearningCardQueryFragmentAdapter fragmentAdapter;
     private Button cmdLearningCardQueryStart;

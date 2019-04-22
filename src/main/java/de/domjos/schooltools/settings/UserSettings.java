@@ -32,7 +32,7 @@ import de.domjos.schooltools.activities.TimeTableActivity;
 import de.domjos.schooltools.activities.TimerActivity;
 import de.domjos.schooltools.activities.ToDoActivity;
 import de.domjos.schooltools.helper.Log4JHelper;
-import de.domjos.schooltools.widgets.main.ButtonScreenWidget;
+import de.domjos.schooltools.screenWidgets.ButtonScreenWidget;
 
 /**
  * Class which gets the settings from the SettingsActivity
@@ -78,23 +78,11 @@ public class UserSettings {
     }
 
     public int getMarkListMax() {
-        String content = this.sharedPreferences.getString("txtSchoolMarkListExtendedMax", "200");
-        try {
-            return Integer.parseInt(content);
-        } catch (Exception ex) {
-            Log4JHelper.getLogger("warning").error(ex.getMessage(), ex);
-            return 100;
-        }
+        return this.getPreference("txtSchoolMarkListExtendedMax", 200);
     }
 
     public int getBreakTime() {
-        String content = this.sharedPreferences.getString("txtSchoolTimeTableBreakTime", "20");
-        try {
-            return Integer.parseInt(content);
-        } catch (Exception ex) {
-            Log4JHelper.getLogger("warning").error(ex.getMessage(), ex);
-            return 100;
-        }
+        return this.getPreference("txtSchoolTimeTableBreakTime", 20);
     }
 
     public boolean isAutomaticallySubjects() {
@@ -102,13 +90,7 @@ public class UserSettings {
     }
 
     public int getTimerNotificationDistance() {
-        String content = this.sharedPreferences.getString("txtSchoolTimerNotification", "7");
-        try {
-            return Integer.parseInt(content);
-        } catch (Exception ex) {
-            Log4JHelper.getLogger("warning").error(ex.getMessage(), ex);
-            return 7;
-        }
+        return this.getPreference("txtSchoolTimerNotification", 7);
     }
 
     public boolean isDeleteToDoAfterDeadline() {
@@ -143,10 +125,47 @@ public class UserSettings {
         return this.sharedPreferences.getStringSet("lsShownModules", set);
     }
 
-    public String getStartModule() {
+    private String getStartModule() {
         return this.sharedPreferences.getString("lsStartModule", context.getString(R.string.main_nav_main));
     }
 
+    public int getExtendedColor() {
+        String strColor = this.sharedPreferences.getString("lsSchoolMarkListExtendedColor", this.context.getString(R.string.settings_school_extended_line_color_default));
+        String[] colorNames = this.context.getResources().getStringArray(R.array.colorNames);
+        int[] colors = this.context.getResources().getIntArray(R.array.colors);
+
+        int color = 0;
+        if(strColor!=null) {
+            for(int i = 0; i<=colorNames.length-1; i++) {
+                if(strColor.equals(colorNames[i])) {
+                    color =  colors[i];
+                    break;
+                }
+            }
+        }
+        return color;
+    }
+
+    public String getNextCloudHost() {
+        return this.sharedPreferences.getString("txtNextCloudHost", "");
+    }
+
+    public String getNextCloudUser() {
+        return this.sharedPreferences.getString("txtNextCloudUser", "");
+    }
+
+    public String getNextCloudPwd() {
+        return this.sharedPreferences.getString("txtNextCloudPwd", "");
+    }
+
+    public boolean isNextCloud() {
+        return !this.getNextCloudHost().trim().equals("") && !this.getNextCloudUser().trim().equals("") && !this.getNextCloudPwd().trim().equals("");
+    }
+
+    public Set<String> getDiagramView() {
+        Set<String> set = new HashSet<>(Arrays.asList(context.getResources().getStringArray(R.array.settings_school_extended_diagram_view_entries)));
+        return this.sharedPreferences.getStringSet("lsSchoolMarkListExtendedDiagram", set);
+    }
 
     public void hideMenuItems(NavigationView navigationView) {
         navigationView.getMenu().findItem(R.id.navMainMarkList).setVisible(false);
@@ -213,5 +232,17 @@ public class UserSettings {
         if(content.equals(this.context.getString(id))) {
             menu.findItem(menu_id).setVisible(true);
         }
+    }
+
+    private int getPreference(String key, int defaultValue) {
+        String content = this.sharedPreferences.getString(key, String.valueOf(defaultValue));
+        if(content!=null) {
+            try {
+                return Integer.parseInt(content);
+            } catch (Exception ex) {
+                Log4JHelper.getLogger("warning").error(ex.getMessage(), ex);
+            }
+        }
+        return defaultValue;
     }
 }

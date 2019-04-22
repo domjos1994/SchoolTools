@@ -29,4 +29,8 @@
         android:fragment="de.domjos.schooltools.activities.SettingsActivity$ApiPreferenceFragment"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/main_menu_export" />
+    <header
+        android:fragment="de.domjos.schooltools.activities.SettingsActivity$CloudPreferenceFragment"
+        android:icon="@drawable/ic_cloud_black_24dp"
+        android:title="@string/settings_cloud" />
 </preference-headers>

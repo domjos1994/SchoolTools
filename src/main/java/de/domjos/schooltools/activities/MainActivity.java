@@ -14,14 +14,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -47,6 +45,7 @@ import de.domjos.schooltools.core.model.timetable.Teacher;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Log4JHelper;
@@ -56,21 +55,21 @@ import de.domjos.schooltools.settings.GeneralSettings;
 import de.domjos.schooltools.settings.Globals;
 import de.domjos.schooltools.settings.MarkListSettings;
 import de.domjos.schooltools.settings.UserSettings;
-import de.domjos.schooltools.widgets.main.ButtonScreenWidget;
-import de.domjos.schooltools.widgets.main.ImportantToDoScreenWidget;
-import de.domjos.schooltools.widgets.main.SavedMarkListsScreenWidget;
-import de.domjos.schooltools.widgets.main.SavedTimeTablesScreenWidget;
-import de.domjos.schooltools.widgets.main.TaggedBookMarksScreenWidget;
-import de.domjos.schooltools.widgets.main.TimeTableEventScreenWidget;
-import de.domjos.schooltools.widgets.main.TodayScreenWidget;
-import de.domjos.schooltools.widgets.main.Top5NotesScreenWidget;
+import de.domjos.schooltools.screenWidgets.ButtonScreenWidget;
+import de.domjos.schooltools.screenWidgets.ImportantToDoScreenWidget;
+import de.domjos.schooltools.screenWidgets.SavedMarkListsScreenWidget;
+import de.domjos.schooltools.screenWidgets.SavedTimeTablesScreenWidget;
+import de.domjos.schooltools.screenWidgets.TaggedBookMarksScreenWidget;
+import de.domjos.schooltools.screenWidgets.TimeTableEventScreenWidget;
+import de.domjos.schooltools.screenWidgets.TodayScreenWidget;
+import de.domjos.schooltools.screenWidgets.Top5NotesScreenWidget;
 
 /**
  * Activity For the Main-Screen
  * @author Dominic Joas
  * @version 1.0
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public final class MainActivity extends AbstractActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
@@ -91,18 +90,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TimeTableEventScreenWidget timeTableEventScreenWidget;
     private TaggedBookMarksScreenWidget taggedBookMarksScreenWidget;
 
+    public MainActivity() {
+        super(R.layout.main_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.main_activity);
+    protected void initActions() {
         Log4JHelper.configure(MainActivity.this);
         MainActivity.globals.setUserSettings(new UserSettings(this.getApplicationContext()));
         MainActivity.globals.setGeneralSettings(new GeneralSettings(this.getApplicationContext()));
-        this.initControls();
         this.resetDatabase();
         this.initDatabase();
         this.initServices();
-        Helper.setBackgroundToActivity(this);
         Helper.setBackgroundAppBarToActivity(this.navigationView, MainActivity.this);
 
         this.buttonScreenWidget.init();
@@ -306,8 +305,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
     @SuppressLint("ClickableViewAccessibility")
-    private void initControls() {
+    protected void initControls() {
         // init Toolbar
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);

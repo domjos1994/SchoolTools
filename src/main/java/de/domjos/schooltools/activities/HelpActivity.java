@@ -10,19 +10,15 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebView;
 
 import java.io.File;
 
 import android.widget.TextView;
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 
 /**
@@ -30,15 +26,15 @@ import de.domjos.schooltools.helper.Helper;
  * @author Dominic Joas
  * @version 1.0
  */
-public class HelpActivity extends AppCompatActivity {
+public final class HelpActivity extends AbstractActivity {
     private File logFile;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.help_activity);
-        this.initControls();
+    public HelpActivity() {
+        super(R.layout.help_activity);
     }
+
+    @Override
+    protected void initActions() {}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,7 +80,8 @@ public class HelpActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         try {
             this.logFile = new File(MainActivity.globals.getLogFile());
         } catch (Exception ex) {

@@ -1,4 +1,4 @@
-package de.domjos.schooltools.helper.custom;
+package de.domjos.schooltools.custom;
 
 import android.text.SpannableString;
 import android.text.Spanned;
