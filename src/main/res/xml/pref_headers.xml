@@ -30,7 +30,7 @@
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/main_menu_export" />
     <header
-        android:fragment="de.domjos.schooltools.activities.SettingsActivity$CloudPreferenceFragment"
-        android:icon="@drawable/ic_cloud_black_24dp"
-        android:title="@string/settings_cloud" />
+        android:fragment="de.domjos.schooltools.activities.SettingsActivity$SyncPreferenceFragment"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:title="@string/settings_sync" />
 </preference-headers>

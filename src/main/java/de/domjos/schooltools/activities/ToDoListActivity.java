@@ -33,8 +33,6 @@ import de.domjos.schooltools.core.model.todo.ToDoList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
-import de.domjos.schooltools.webservices.nextcloud.BookmarkWebservice;
-import de.domjos.schooltools.webservices.nextcloud.DavWebservice;
 
 /**
  * Activity For the List-Screen
@@ -57,7 +55,6 @@ public class ToDoListActivity extends AppCompatActivity {
         setContentView(R.layout.todo_list_activity);
         this.initControls();
         this.initValidator();
-        this.openNextCloudSync();
         this.reloadItems();
         this.changeControls(false, true, false);
         this.getListFromExtra();
@@ -211,15 +208,5 @@ public class ToDoListActivity extends AppCompatActivity {
         this.txtToDoListTitle = this.findViewById(R.id.txtToDoListTitle);
         this.txtToDoListDescription = this.findViewById(R.id.txtToDoListDescription);
         this.txtToDoListDate = this.findViewById(R.id.txtToDoListDate);
-    }
-
-    private void openNextCloudSync() {
-        try {
-            if(MainActivity.globals.getUserSettings().isNextCloud()) {
-                new DavWebservice(ToDoListActivity.this).execute(new URL(MainActivity.globals.getUserSettings().getNextCloudHost()));
-            }
-        } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
-        }
     }
 }

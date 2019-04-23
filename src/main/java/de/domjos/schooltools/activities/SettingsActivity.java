@@ -197,7 +197,7 @@ public class SettingsActivity extends SettingsAppCompatActivity {
                 || SchoolPreferenceFragment.class.getName().equals(fragmentName)
                 || ApiPreferenceFragment.class.getName().equals(fragmentName)
                 || StartPreferenceFragment.class.getName().equals(fragmentName)
-                || CloudPreferenceFragment.class.getName().equals(fragmentName);
+                || SyncPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -378,11 +378,11 @@ public class SettingsActivity extends SettingsAppCompatActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class CloudPreferenceFragment extends PreferenceFragment {
+    public static class SyncPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_cloud);
+            addPreferencesFromResource(R.xml.pref_sync);
             setHasOptionsMenu(true);
 
         }

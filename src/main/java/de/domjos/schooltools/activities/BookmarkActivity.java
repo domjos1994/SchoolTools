@@ -37,7 +37,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,7 +50,6 @@ import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.IntentHelper;
 import de.domjos.schooltools.helper.Validator;
 import de.domjos.schooltools.custom.CommaTokenizer;
-import de.domjos.schooltools.webservices.nextcloud.BookmarkWebservice;
 
 public final class BookmarkActivity extends AbstractActivity {
     private BottomNavigationView navigation;
@@ -281,7 +279,6 @@ public final class BookmarkActivity extends AbstractActivity {
         this.bookmarkAdapter = new BookmarkAdapter(this.getApplicationContext(), new LinkedList<Bookmark>());
         this.lvBookmarks.setAdapter(this.bookmarkAdapter);
         this.bookmarkAdapter.notifyDataSetChanged();
-        this.openNextCloudSync();
         this.reloadBookmarks("");
 
         this.wvPreview = this.findViewById(R.id.wvPreview);
@@ -519,16 +516,6 @@ public final class BookmarkActivity extends AbstractActivity {
             if(currentBookmark.getSubject()!=null) {
                 spBookmarksSubject.setSelection(bookmarksSubjectAdapter.getPosition(currentBookmark.getSubject()));
             }
-        }
-    }
-
-    private void openNextCloudSync() {
-        try {
-            if(MainActivity.globals.getUserSettings().isNextCloud()) {
-                new BookmarkWebservice(BookmarkActivity.this).execute(new URL(MainActivity.globals.getUserSettings().getNextCloudHost()));
-            }
-        } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
         }
     }
 }

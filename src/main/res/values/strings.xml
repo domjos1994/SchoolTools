@@ -209,14 +209,12 @@
     <string name="settings_api_cancel_export_summary_on">Export abbrechen, sobald eine Zeile fehlerhaft!</string>
     <string name="settings_api_cancel_export_summary_of">Export erst abbrechen, sobald komplette Datei fehlerhaft!</string>
 
-    <string name="settings_cloud">Cloud-Zugang</string>
-    <string name="settings_cloud_nextCloud">NextCloud-Zugang</string>
-    <string name="settings_cloud_nextCloud_host_header">URL zur Nextcloud</string>
-    <string name="settings_cloud_nextCloud_host_summary">Hier die URL zur Nextcloud eingeben</string>
-    <string name="settings_cloud_nextCloud_user_header">Benutzername für die Nextcloud</string>
-    <string name="settings_cloud_nextCloud_user_summary">Hier den Benutzername für die Nextcloud eingeben</string>
-    <string name="settings_cloud_nextCloud_pwd_header">Passwort für die Nextcloud</string>
-    <string name="settings_cloud_nextCloud_pwd_summary">Hier das Passwort für die Nextcloud eingeben</string>
+    <string name="settings_sync">Synchronisation</string>
+    <string name="settings_sync_calendar">Synchronisation des Kalenders</string>
+    <string name="settings_sync_calendar_turnOn_header">Synchronistation aktivieren</string>
+    <string name="settings_sync_calendar_turnOn_summary">Synchronistation des Kalenders aktivieren</string>
+    <string name="settings_sync_calendar_name_header">Name des Kalenders</string>
+    <string name="settings_sync_calendar_name_summary">Name des Kalenders eingeben</string>
 
     <string name="timetable_content">
         <![CDATA[
@@ -501,8 +499,4 @@
     <string name="message_file_format_unknown">Das Format ist nicht bekannt!</string>
     <string name="message_file_not_exists">Die Datei existiert nicht!</string>
     <string name="message_wrong_method">Falsche Methode wurde benutzt!</string>
-    <string name="title_activity_bookmark">BookmarkActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
 </resources>

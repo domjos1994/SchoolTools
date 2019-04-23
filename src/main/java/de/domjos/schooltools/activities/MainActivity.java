@@ -9,12 +9,18 @@
 
 package de.domjos.schooltools.activities;
 
+import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,16 +28,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Config;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.github.angads25.filepicker.view.FilePickerDialog;
+
 import java.util.*;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.*;
+import de.domjos.schooltools.adapter.syncAdapter.Authenticator;
 import de.domjos.schooltools.core.SearchItem;
 import de.domjos.schooltools.core.model.Memory;
 import de.domjos.schooltools.core.model.Note;
@@ -50,6 +60,8 @@ import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.schooltools.helper.SQLite;
+import de.domjos.schooltools.services.AuthenticatorService;
+import de.domjos.schooltools.services.CalendarSyncService;
 import de.domjos.schooltools.services.MemoryService;
 import de.domjos.schooltools.settings.GeneralSettings;
 import de.domjos.schooltools.settings.Globals;
@@ -63,6 +75,8 @@ import de.domjos.schooltools.screenWidgets.TaggedBookMarksScreenWidget;
 import de.domjos.schooltools.screenWidgets.TimeTableEventScreenWidget;
 import de.domjos.schooltools.screenWidgets.TodayScreenWidget;
 import de.domjos.schooltools.screenWidgets.Top5NotesScreenWidget;
+
+import static android.provider.CalendarContract.AUTHORITY;
 
 /**
  * Activity For the Main-Screen
@@ -290,18 +304,47 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     private void initServices() {
         try {
             if(MainActivity.globals.getUserSettings().isNotificationsShown()) {
-                // init Memory Service
-                Intent intent = new Intent(this.getApplicationContext(), MemoryService.class);
-                PendingIntent pendingIntent1 = PendingIntent.getService(this.getApplicationContext(),  0, intent, 0);
-
-                // init frequently
-                AlarmManager alarmManager1 = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-                long frequency= 8 * 60 * 60 * 1000;
-                assert alarmManager1 != null;
-                alarmManager1.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), frequency, pendingIntent1);
+                Helper.initRepeatingService(MainActivity.this, MemoryService.class,  8 * 60 * 60 * 1000);
+            }
+            if(MainActivity.globals.getUserSettings().isSyncCalendarTurnOn()) {
+                if(Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.READ_CALENDAR) && Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.WRITE_CALENDAR)) {
+                    this.initCalendarSyncService();
+                }
             }
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        try {
+            switch (requestCode) {
+                case Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR:
+                    this.initCalendarSyncService();
+                    break;
+            }
+        } catch (Exception ex) {
+            Helper.printException(MainActivity.this, ex);
+        }
+    }
+
+    private void initCalendarSyncService() {
+        boolean newAccount = false;
+        boolean setupComplete = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).getBoolean("PREF_SETUP_COMPLETE", false);
+
+        Account account = AuthenticatorService.GetAccount(this.getApplicationContext(), "de.domjos.schooltools.account");
+        AccountManager accountManager = (AccountManager) this.getApplicationContext().getSystemService(Context.ACCOUNT_SERVICE);
+        if(accountManager.addAccountExplicitly(account, null, null)) {
+            ContentResolver.setIsSyncable(account, AUTHORITY, 1);
+            ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
+            Bundle bundle = new Bundle();
+            bundle.putString("name", MainActivity.globals.getUserSettings().getSyncCalendarName());
+            ContentResolver.addPeriodicSync(account, AUTHORITY, bundle, 60 * 1000);
+            newAccount = true;
+        }
+        if (newAccount || !setupComplete) {
+            PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putBoolean("PREF_SETUP_COMPLETE", true).apply();
         }
     }
 

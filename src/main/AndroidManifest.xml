@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="de.domjos.schooltools">
 
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" android:maxSdkVersion="22" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -20,7 +22,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.BookmarkActivity"
-            android:label="@string/title_activity_bookmark"
+            android:label="@string/main_nav_bookmarks"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             tools:targetApi="jelly_bean">
@@ -346,6 +348,28 @@
         <service
             android:name=".services.MemoryService"
             android:exported="false" />
+        <service
+            android:name=".services.CalendarSyncService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/calendar_sync_adapter" />
+        </service>
+        <service
+            android:name=".services.AuthenticatorService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
     </application>
 
 </manifest>

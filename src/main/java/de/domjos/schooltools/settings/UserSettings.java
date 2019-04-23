@@ -146,20 +146,12 @@ public class UserSettings {
         return color;
     }
 
-    public String getNextCloudHost() {
-        return this.sharedPreferences.getString("txtNextCloudHost", "");
+    public Boolean isSyncCalendarTurnOn() {
+        return this.sharedPreferences.getBoolean("swtSyncCalendarTurnOn", false);
     }
 
-    public String getNextCloudUser() {
-        return this.sharedPreferences.getString("txtNextCloudUser", "");
-    }
-
-    public String getNextCloudPwd() {
-        return this.sharedPreferences.getString("txtNextCloudPwd", "");
-    }
-
-    public boolean isNextCloud() {
-        return !this.getNextCloudHost().trim().equals("") && !this.getNextCloudUser().trim().equals("") && !this.getNextCloudPwd().trim().equals("");
+    public String getSyncCalendarName() {
+        return this.sharedPreferences.getString("txtSyncCalendarName", "");
     }
 
     public Set<String> getDiagramView() {
