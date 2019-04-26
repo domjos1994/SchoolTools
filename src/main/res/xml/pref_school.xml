@@ -94,4 +94,18 @@
             android:summaryOn="@string/settings_school_todo_delete_on"
             android:summaryOff="@string/settings_school_todo_delete_of"/>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/main_nav_learningCards"
+        android:icon="@drawable/ic_collections_bookmark_black_24dp"
+        android:layout="@android:layout/preference_category">
+        <SwitchPreference
+            android:key="swtLearningCardEnableDictionary"
+            android:title="@string/settings_school_learningCard_dictionary_on_header"
+            android:summaryOn="@string/settings_school_learningCard_dictionary_on_summary"/>
+        <com.github.angads25.filepicker.view.FilePickerPreference
+            android:key="txtLearningCardEnableDictionary"
+            android:title="@string/settings_school_learningCard_dictionary_path_header"
+            android:summary="@string/settings_school_learningCard_dictionary_path_summary"
+            android:selectable="true" />
+    </PreferenceCategory>
 </PreferenceScreen>

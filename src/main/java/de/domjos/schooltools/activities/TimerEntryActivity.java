@@ -9,11 +9,9 @@
 
 package de.domjos.schooltools.activities;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +31,7 @@ import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.TimerEvent;
 import de.domjos.schooltools.core.model.timetable.SchoolClass;
 import de.domjos.schooltools.core.model.timetable.Teacher;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
@@ -42,7 +41,7 @@ import de.domjos.schooltools.helper.Validator;
  * @author Dominic Joas
  * @version 1.0
  */
-public class TimerEntryActivity extends AppCompatActivity {
+public final class TimerEntryActivity extends AbstractActivity {
 
     private CheckBox chkTimerMemory;
     private EditText txtTimerTitle, txtTimerDescription, txtTimerCategories, txtTimerMemoryDate;
@@ -54,15 +53,14 @@ public class TimerEntryActivity extends AppCompatActivity {
     private int currentID;
     private Validator validator;
 
+    public TimerEntryActivity() {
+        super(R.layout.timer_entry_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.timer_entry_activity);
-        this.initControls();
+    protected void initActions() {
         this.reloadComboBoxes();
-        this.initValidator();
         this.fillData();
-        Helper.setBackgroundToActivity(this);
 
         this.chkTimerMemory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -132,13 +130,15 @@ public class TimerEntryActivity extends AppCompatActivity {
         }
     }
 
-    private void initValidator() {
+    @Override
+    protected void initValidator() {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addLengthValidator(txtTimerTitle, 3, 500);
         this.validator.addDateValidator(txtTimerMemoryDate);
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         try {
             // init navigation_learning_card_group
             BottomNavigationView navigation = this.findViewById(R.id.navigation);

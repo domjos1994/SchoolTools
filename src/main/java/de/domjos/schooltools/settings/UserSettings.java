@@ -18,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.view.Menu;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -146,12 +147,46 @@ public class UserSettings {
         return color;
     }
 
+    public boolean isDictionary() {
+        return this.sharedPreferences.getBoolean("swtLearningCardEnableDictionary", false);
+    }
+
+    public String getPathToDictionary() {
+        boolean state = this.isDictionary();
+        if(state) {
+            String path = this.sharedPreferences.getString("txtLearningCardEnableDictionary", "");
+            if(path != null) {
+                if(!path.equals("")) {
+                    File directory = new File(this.context.getFilesDir() + "/dict/");
+                    if(directory.exists()) {
+                        for(File file : directory.listFiles()) {
+                            if(file!=null) {
+                                if(file.getAbsolutePath().endsWith(".txt")) {
+                                    return file.getAbsolutePath();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
     public Boolean isSyncCalendarTurnOn() {
         return this.sharedPreferences.getBoolean("swtSyncCalendarTurnOn", false);
     }
 
     public String getSyncCalendarName() {
         return this.sharedPreferences.getString("txtSyncCalendarName", "");
+    }
+
+    public Boolean isSynContactsTurnOn() {
+        return this.sharedPreferences.getBoolean("swtSyncContactsTurnOn", false);
+    }
+
+    public String getSyncContactsGroupName() {
+        return this.sharedPreferences.getString("txtSyncContactsGroupName", "");
     }
 
     public Set<String> getDiagramView() {

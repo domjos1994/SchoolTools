@@ -10,10 +10,8 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +24,7 @@ import java.util.ArrayList;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.YearAdapter;
 import de.domjos.schooltools.core.model.mark.Year;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 
 /**
@@ -33,7 +32,7 @@ import de.domjos.schooltools.helper.Helper;
  * @author Dominic Joas
  * @version 1.0
  */
-public class MarkYearActivity extends AppCompatActivity {
+public final class MarkYearActivity extends AbstractActivity {
     private int currentID;
     private EditText txtYearTitle, txtYearDescription;
     private ListView lvYear;
@@ -41,13 +40,13 @@ public class MarkYearActivity extends AppCompatActivity {
 
     private BottomNavigationView navigation;
 
+    public MarkYearActivity() {
+        super(R.layout.mark_year_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.mark_year_activity);
-        this.initControls();
+    protected void initActions() {
         this.reloadYears();
-        Helper.setBackgroundToActivity(this);
 
         this.lvYear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -73,11 +72,8 @@ public class MarkYearActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.menHelp:
-                startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
-                break;
-            default:
+        if (id == R.id.menHelp) {
+            startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -133,7 +129,8 @@ public class MarkYearActivity extends AppCompatActivity {
         }
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init BottomNavigation
         BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

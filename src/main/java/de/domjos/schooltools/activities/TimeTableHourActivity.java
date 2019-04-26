@@ -11,11 +11,9 @@ package de.domjos.schooltools.activities;
 
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +27,7 @@ import java.util.Calendar;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.HourAdapter;
 import de.domjos.schooltools.core.model.timetable.Hour;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 
@@ -37,7 +36,7 @@ import de.domjos.schooltools.helper.Helper;
  * @author Dominic Joas
  * @version 1.0
  */
-public class TimeTableHourActivity extends AppCompatActivity {
+public final class TimeTableHourActivity extends AbstractActivity {
 
     private BottomNavigationView navigation;
     private ListView lvHours;
@@ -48,14 +47,13 @@ public class TimeTableHourActivity extends AppCompatActivity {
     private HourAdapter hourAdapter;
     private int intLatestHour, intLatestMinute;
 
+    public TimeTableHourActivity() {
+        super(R.layout.timetable_hour_activity);
+    }
+
     @Override
-    @SuppressWarnings("deprecation")
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.timetable_hour_activity);
-        this.initControls();
+    protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableHourActivity.this);
-        Helper.setBackgroundToActivity(this);
 
         this.lvHours.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -103,18 +101,15 @@ public class TimeTableHourActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.menHelp:
-                startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
-                break;
-            default:
+        if (id == R.id.menHelp) {
+            startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("deprecation")
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init BottomNavigation
         OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -190,7 +185,6 @@ public class TimeTableHourActivity extends AppCompatActivity {
         navigation.getMenu().getItem(2).setEnabled(false);
     }
 
-    @SuppressWarnings("deprecation")
     private void setDefaultValuesForAdd() {
         Hour latestHour = null;
         for(int i = 0; i<=this.hourAdapter.getCount()-1; i++) {
@@ -223,7 +217,6 @@ public class TimeTableHourActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void controlFields(boolean editMode, boolean reset) {
         this.tpHoursStart.setEnabled(editMode);
         this.tpHoursEnd.setEnabled(editMode);
@@ -248,7 +241,6 @@ public class TimeTableHourActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void configureTimes(int hour, int minutes, int timeSpan) {
         int intLatestEndMinute = minutes + timeSpan;
         int intLatestEndHour = hour;

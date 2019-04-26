@@ -10,11 +10,9 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,13 +21,13 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.ToDoListsAdapter;
 import de.domjos.schooltools.core.model.todo.ToDoList;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
@@ -39,7 +37,7 @@ import de.domjos.schooltools.helper.Validator;
  * @author Dominic Joas
  * @version 1.0
  */
-public class ToDoListActivity extends AppCompatActivity {
+public final class ToDoListActivity extends AbstractActivity {
     private BottomNavigationView navigation;
 
     private ListView lvToDoLists;
@@ -49,16 +47,15 @@ public class ToDoListActivity extends AppCompatActivity {
     private ToDoListsAdapter toDoListsAdapter;
     private Validator validator;
 
+    public ToDoListActivity() {
+        super(R.layout.todo_list_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.todo_list_activity);
-        this.initControls();
-        this.initValidator();
+    protected void initActions() {
         this.reloadItems();
         this.changeControls(false, true, false);
         this.getListFromExtra();
-        Helper.setBackgroundToActivity(this);
 
         this.lvToDoLists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -116,7 +113,8 @@ public class ToDoListActivity extends AppCompatActivity {
         }
     }
 
-    private void initValidator() {
+    @Override
+    protected void initValidator() {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addLengthValidator(this.txtToDoListTitle, 3, 500);
         this.validator.addDateValidator(this.txtToDoListDate);
@@ -153,7 +151,8 @@ public class ToDoListActivity extends AppCompatActivity {
         }
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init navigation_learning_card_group
         this.navigation = findViewById(R.id.navigation);
         OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {

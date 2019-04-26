@@ -29,6 +29,7 @@ import java.util.List;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.TimeTableAdapter;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.widgets.TimeTableWidget;
 
@@ -37,19 +38,19 @@ import de.domjos.schooltools.widgets.TimeTableWidget;
  * @author Dominic Joas
  * @version 1.0
  */
-public class TimeTableActivity extends AppCompatActivity {
+public final class TimeTableActivity extends AbstractActivity {
     private FloatingActionButton cmdTimeTableAdd;
     private ListView lvTimeTable;
     private TimeTableAdapter timeTableAdapter;
 
+    public TimeTableActivity() {
+        super(R.layout.timetable_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.timetable_activity);
-        this.initControls();
+    protected void initActions() {
         this.reloadTimeTables();
         this.openDescription();
-        Helper.setBackgroundToActivity(this);
 
         this.cmdTimeTableAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +149,9 @@ public class TimeTableActivity extends AppCompatActivity {
             Helper.printException(this.getApplicationContext(), ex);
         }
     }
-    private void initControls() {
+
+    @Override
+    protected void initControls() {
         try {
             // init BottomNavigation
             BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {

@@ -22,15 +22,15 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/lvSearchResults">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/llToday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_margin="8dp"
                 android:background="@drawable/tbl_border">
                 <TextView
@@ -57,7 +57,6 @@
                 android:id="@+id/llTodayCurrentTimeTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/llToday"
                 android:layout_margin="8dp"
                 android:background="@drawable/tbl_border">
                 <TextView
@@ -84,7 +83,6 @@
                 android:id="@+id/llSavedTimeTables"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/llTodayCurrentTimeTable"
                 android:layout_margin="8dp"
                 android:background="@drawable/tbl_border">
                 <TextView
@@ -335,7 +333,6 @@
                 android:id="@+id/llCurrentNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/llSavedTimeTables"
                 android:layout_margin="8dp"
                 android:background="@drawable/tbl_border">
                 <TextView
@@ -362,7 +359,6 @@
                 android:id="@+id/llImportantToDos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/llCurrentNotes"
                 android:layout_margin="8dp"
                 android:background="@drawable/tbl_border">
                 <TextView
@@ -389,7 +385,6 @@
                 android:id="@+id/llSavedMarklist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/llImportantToDos"
                 android:layout_margin="8dp"
                 android:background="@drawable/tbl_border">
                 <TextView
@@ -418,10 +413,61 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/llLearningCardsQuickQuery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/tbl_border">
+                <TextView
+                    android:id="@+id/lblQuickQuery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/main_quickQuery"
+                    android:padding="8dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
+                <Spinner
+                    android:id="@+id/cmbQueries"
+                    android:layout_below="@+id/lblQuickQuery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"/>
+                <TextView
+                    android:id="@+id/lblQuestion"
+                    android:layout_below="@+id/cmbQueries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"/>
+                <EditText
+                    android:id="@+id/txtAnswer"
+                    android:hint="@string/learningCard_answer"
+                    android:layout_below="@+id/lblQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="@string/learningCard_answer"
+                    android:inputType="text"
+                    tools:targetApi="o" />
+                <TextView
+                    android:id="@+id/lblResult"
+                    android:layout_below="@+id/txtAnswer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"/>
+                <Button
+                    android:id="@+id/cmdResult"
+                    android:text="@string/learningCard_result"
+                    android:layout_below="@+id/lblResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/llTaggedBookMarks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/llSavedMarklist"
                 android:layout_margin="8dp"
                 android:background="@drawable/tbl_border">
                 <TextView
@@ -452,8 +498,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/llTaggedBookMarks">
+                android:layout_height="wrap_content">
 
                 <TableLayout
                     android:id="@+id/tblButtons"
@@ -729,7 +774,7 @@
                     </TableRow>
                 </TableLayout>
             </RelativeLayout>
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
     <ListView
         android:id="@+id/lvSearchResults"

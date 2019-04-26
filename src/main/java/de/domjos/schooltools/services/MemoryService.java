@@ -42,7 +42,7 @@ public class MemoryService extends IntentService {
         for(Memory memory : MainActivity.globals.getSqLite().getCurrentMemories()) {
             try {
                 if(Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate()))) {
-                    Builder builder = new Builder(this.getApplicationContext(), "default");
+                    Builder builder = new Builder(this.getApplicationContext(), MainActivity.CHANNEL_ID);
                     builder.setSmallIcon(R.mipmap.ic_launcher);
                     builder.setLights(0xFFff0000, 500, 500);
                     builder.setContentTitle(memory.getTitle());

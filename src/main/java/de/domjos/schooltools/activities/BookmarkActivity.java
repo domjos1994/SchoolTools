@@ -251,6 +251,8 @@ public final class BookmarkActivity extends AbstractActivity {
         }
     }
 
+
+
     @Override
     protected void initControls() {
         // init Toolbar

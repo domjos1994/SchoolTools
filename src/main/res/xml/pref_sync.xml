@@ -23,4 +23,17 @@
             android:title="@string/settings_sync_calendar_name_header"
             android:summary="@string/settings_sync_calendar_name_summary"/>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/settings_sync_contacts"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:layout="@android:layout/preference_category">
+        <SwitchPreference
+            android:key="swtSyncContactsTurnOn"
+            android:title="@string/settings_sync_contacts_turnOn_header"
+            android:summary="@string/settings_sync_contacts_turnOn_summary"/>
+        <EditTextPreference
+            android:key="txtSyncContactsGroupName"
+            android:title="@string/settings_sync_contacts_name_header"
+            android:summary="@string/settings_sync_contacts_name_summary"/>
+    </PreferenceCategory>
 </PreferenceScreen>

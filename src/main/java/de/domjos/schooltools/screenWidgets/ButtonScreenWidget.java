@@ -34,6 +34,7 @@ import de.domjos.schooltools.activities.SettingsActivity;
 import de.domjos.schooltools.activities.TimeTableActivity;
 import de.domjos.schooltools.activities.TimerActivity;
 import de.domjos.schooltools.activities.ToDoActivity;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.custom.ScreenWidget;
 
 public final class ButtonScreenWidget extends ScreenWidget {
@@ -138,7 +139,7 @@ public final class ButtonScreenWidget extends ScreenWidget {
         }
     }
 
-    private void openActivitiesByButtons(List<TableRow> tr, List<Class<? extends AppCompatActivity>> clss) {
+    private void openActivitiesByButtons(List<TableRow> tr, List<Class<? extends AbstractActivity>> clss) {
         for(int i = 0; i<=tr.size()-1; i++) {
             this.openIntentWithButton(tr.get(i), clss.get(i));
         }

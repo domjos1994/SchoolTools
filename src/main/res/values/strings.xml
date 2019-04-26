@@ -9,6 +9,8 @@
 
 <resources>
     <string name="app_name">SchoolTools</string>
+    <string name="channel_name">SchoolTools-Channel</string>
+    <string name="channel_description">NotificationChannel für SchoolTools</string>
 
     <string name="main_nav_main">Startseite</string>
     <string name="main_nav_buttons">Knöpfe</string>
@@ -35,6 +37,7 @@
     <string name="main_top5Notes">Top 5 Notizen</string>
     <string name="main_importantToDos">5 Wichtigste ToDos</string>
     <string name="main_taggedBookMarks">Getagte Lesezeichen</string>
+    <string name="main_quickQuery">Schnelle Abfrage</string>
     <string name="main_importantToDos_onlyNotSolved">nur nicht gelöste</string>
     <string name="main_savedTimeTables">Gespeicherte Stundenpläne</string>
     <string name="main_savedMarkList">Gespeicherte Notenliste</string>
@@ -106,6 +109,7 @@
     <string name="mark_test">Arbeit</string>
 
     <string name="settings_general">Allgemein</string>
+    <string name="settings_general_summary">Einstellungen für Notifikationen, Erinnerungen, Datenbank und Design</string>
     <string name="settings_general_notifications_title">Notifikationen anzeigen</string>
     <string name="settings_general_notifications_summary">Notifikationen von aktuellen Erinnerungen anzeigen!</string>
     <string name="settings_general_background">Hinntergründe</string>
@@ -121,6 +125,7 @@
     <string name="settings_general_reset_database_title">Datenbank zurücksetzen</string>
     <string name="settings_general_reset_database_summary">Datenbank auf Auslieferungszustand zurücksetzen!</string>
     <string name="settings_start">Startbildschirm</string>
+    <string name="settings_start_summary">Einstellungen für Start-Modul, Auswahl der Widgets auf dem Start-Bildschirm, Aktivieren und Deaktivieren von Modulen</string>
     <string name="settings_start_start_header">Widgets für Startseite auswählen</string>
     <string name="settings_start_start_summary">Wählen Sie die Widgets aus, welche auf der Startseite angezeigt
         werden.
@@ -133,6 +138,7 @@
         <item>@string/main_savedTimeTables</item>
         <item>@string/main_savedMarkList</item>
         <item>@string/main_taggedBookMarks</item>
+        <item>@string/main_quickQuery</item>
         <item>@string/main_nav_buttons</item>
     </string-array>
     <string-array name="settings_start_start_default">
@@ -167,6 +173,7 @@
         <item>@string/main_nav_bookmarks</item>
     </string-array>
     <string name="settings_school">Thematische Einstellungen</string>
+    <string name="settings_school_summary">Diverse Einstellungen zu den einzelnen Modulen!</string>
     <string name="settings_school_expert_header">Experten-Modus (Notenliste)</string>
     <string name="settings_school_expert_summary">Der Experten-Modus enthält erweiterte Funktionen!</string>
     <string name="settings_school_extended_max_header">Maximale Punktzahl (Notenliste)</string>
@@ -199,7 +206,15 @@
     <string name="settings_school_todo_delete_header">ToDo-Liste nach Stichtag löschen</string>
     <string name="settings_school_todo_delete_on">Die ToDo-Liste nach Erreichen des Stichtags löschen</string>
     <string name="settings_school_todo_delete_of">Die ToDo-Liste nach Erreichen des Stichtags behalten</string>
+    <string name="settings_school_learningCard_dictionary_on_header">Dict.cc Dictionary verwenden</string>
+    <string name="settings_school_learningCard_dictionary_on_summary"><![CDATA[Dict.cc Dictionary zum Übersetzen verwenden. Datei hier herunterladen: https://www.dict.cc/translation_file_request.php]]></string>
+    <string name="settings_school_learningCard_dictionary_path_header">Pfad zur Dictionary-Datei</string>
+    <string name="settings_school_learningCard_dictionary_path_summary">Pfad zur Dictionary-Datei angeben</string>
+    <string name="settings_school_learningCard_dictionary_path_message_unzipFile">Entpacke Dictionary-Datei in App-Verzeichnis!</string>
+    <string name="settings_school_learningCard_dictionary_path_message_deleteDir">Lösche Dictionary-App-Verzeichnis!</string>
+    <string name="settings_school_learningCard_dictionary_path_message_readLine">Lese Zeile %d von %d in Datenbank!</string>
 
+    <string name="settings_api_summary">Einstellungen zum Im- und Export!</string>
     <string name="settings_api_override_header">Einträge überschreiben</string>
     <string name="settings_api_override_summary_on">Bereits vorhandene Einträge überschreiben</string>
     <string name="settings_api_override_summary_of">Bereits vorhandene Einträge nicht überschreiben, sondern neuen
@@ -210,11 +225,17 @@
     <string name="settings_api_cancel_export_summary_of">Export erst abbrechen, sobald komplette Datei fehlerhaft!</string>
 
     <string name="settings_sync">Synchronisation</string>
+    <string name="settings_sync_summary">Einstellungen zur Synchronisation des Kalenders (Timer) und der Kontakte (Lehrer)!</string>
     <string name="settings_sync_calendar">Synchronisation des Kalenders</string>
     <string name="settings_sync_calendar_turnOn_header">Synchronistation aktivieren</string>
     <string name="settings_sync_calendar_turnOn_summary">Synchronistation des Kalenders aktivieren</string>
     <string name="settings_sync_calendar_name_header">Name des Kalenders</string>
     <string name="settings_sync_calendar_name_summary">Name des Kalenders eingeben</string>
+    <string name="settings_sync_contacts">Synchronisation der Kontakte</string>
+    <string name="settings_sync_contacts_turnOn_header">Synchronistation aktivieren</string>
+    <string name="settings_sync_contacts_turnOn_summary">Synchronistation der Kontakte aktivieren</string>
+    <string name="settings_sync_contacts_name_header">Name der Kontakt-Gruppe</string>
+    <string name="settings_sync_contacts_name_summary">Name der Kontakt-Gruppe eingeben</string>
 
     <string name="timetable_content">
         <![CDATA[
@@ -499,4 +520,5 @@
     <string name="message_file_format_unknown">Das Format ist nicht bekannt!</string>
     <string name="message_file_not_exists">Die Datei existiert nicht!</string>
     <string name="message_wrong_method">Falsche Methode wurde benutzt!</string>
+
 </resources>

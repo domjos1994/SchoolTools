@@ -45,8 +45,10 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
     private ListView lvLearningCards;
     private List<LearningCard> learningCards;
     private SeekBar sbLearningCardPriority;
-    private EditText txtLearningCardTitle, txtLearningCardQuestion, txtLearningCardAnswer, txtLearningCardNote1, txtLearningCardNote2;
-    private AutoCompleteTextView txtLearningCardCategory;
+    private EditText txtLearningCardTitle, txtLearningCardQuestion, txtLearningCardNote1, txtLearningCardNote2;
+    private AutoCompleteTextView txtLearningCardCategory, txtLearningCardAnswer;
+    private ArrayAdapter<String> dictionaryAdapter;
+
 
     public LearningCardGroupEntryActivity() {
         super(R.layout.learning_card_group_entry_activity);
@@ -136,6 +138,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
                     LearningCard learningCard = learningCards.get(cardPosition);
                     if(learningCard!=null) {
                         learningCard.setQuestion(s.toString());
+
                         reloadList();
                     }
                 } catch (Exception ex) {
@@ -219,6 +222,33 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+
+        this.txtLearningCardAnswer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    dictionaryAdapter.clear();
+                    for(String item : MainActivity.globals.getSqLite().findInDictionary(txtLearningCardQuestion.getText().toString())) {
+                        dictionaryAdapter.add(item);
+                    }
+                }
+            }
+        });
+
+        this.txtLearningCardAnswer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    LearningCard learningCard = learningCards.get(cardPosition);
+                    if(learningCard!=null) {
+                        learningCard.setAnswer(txtLearningCardAnswer.getText().toString());
+                        reloadList();
+                    }
+                } catch (Exception ex) {
+                    Helper.printException(getApplicationContext(), ex);
+                }
+            }
+        });
     }
 
 
@@ -300,6 +330,9 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
         this.txtLearningCardCategory = this.findViewById(R.id.txtLearningCardCategory);
         this.txtLearningCardQuestion = this.findViewById(R.id.txtLearningCardQuestion);
         this.txtLearningCardAnswer = this.findViewById(R.id.txtLearningCardAnswer);
+        this.dictionaryAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_list_item_1);
+        this.txtLearningCardAnswer.setAdapter(this.dictionaryAdapter);
+        this.dictionaryAdapter.notifyDataSetChanged();
         this.txtLearningCardNote1 = this.findViewById(R.id.txtLearningCardNote1);
         this.txtLearningCardNote2 = this.findViewById(R.id.txtLearningCardNote2);
 

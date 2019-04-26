@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
 import java.lang.reflect.Field;
@@ -428,7 +429,12 @@ public class SQLite extends SQLiteOpenHelper {
             }
             sqLiteStatement.bindString(1, teacher.getLastName());
             sqLiteStatement.bindString(2, teacher.getFirstName());
-            sqLiteStatement.bindString(3, teacher.getDescription());
+
+            if(teacher.getDescription()!=null) {
+                sqLiteStatement.bindString(3, teacher.getDescription());
+            } else {
+                sqLiteStatement.bindNull(3);
+            }
 
             teacher.setID(this.saveAndClose(teacher.getID(), db, sqLiteStatement));
         } catch (Exception ex) {
@@ -1893,6 +1899,66 @@ public class SQLite extends SQLiteOpenHelper {
             Helper.createToast(this.context, ex.getMessage());
         }
         return entry;
+    }
+
+    public void addSync(String type) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.execSQL("DELETE FROM synchronisation WHERE type=?", new Object[]{type});
+            SQLiteStatement sqLiteStatement = db.compileStatement("INSERT INTO synchronisation(type) VALUES(?)");
+            sqLiteStatement.bindString(1, type);
+            sqLiteStatement.executeInsert();
+        } catch (Exception ex) {
+            Helper.createToast(this.context, ex.getMessage());
+        }
+    }
+
+    public Date getLastSyncDate(String type) {
+        Date date = new Date(1970, 1, 1);
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            Cursor cursor = db.rawQuery("SELECT ts FROM synchronisation WHERE type=?", new String[]{type});
+            if(cursor!=null) {
+                while (cursor.moveToNext()) {
+                    date = new Date(cursor.getLong(0));
+                }
+                cursor.close();
+            }
+        } catch (Exception ex) {
+            Helper.createToast(this.context, ex.getMessage());
+        }
+        return date;
+    }
+
+    public void insertToDictionary(String lang, String item, String foreignLang, String foreignItem) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            SQLiteStatement sqLiteStatement = db.compileStatement("INSERT INTO dict(motherLanguage, motherItem, foreignLanguage, foreignItem) VALUES(?, ?, ?, ?)");
+            sqLiteStatement.bindString(1, lang);
+            sqLiteStatement.bindString(2, item);
+            sqLiteStatement.bindString(3, foreignLang);
+            sqLiteStatement.bindString(4, foreignItem);
+            sqLiteStatement.executeInsert();
+        } catch (Exception ex) {
+            Helper.createToast(this.context, ex.getMessage());
+        }
+    }
+
+    public List<String> findInDictionary(String item) {
+        List<String> items = new LinkedList<>();
+        if(MainActivity.globals.getUserSettings().isDictionary()) {
+            SQLiteDatabase db = this.getReadableDatabase();
+            try {
+                Cursor cursor = db.rawQuery("SELECT foreignItem FROM dict WHERE motherItem like '%" + item + "%'", null);
+                while (cursor.moveToNext()) {
+                    items.add(cursor.getString(0));
+                }
+                cursor.close();
+            } catch (Exception ex) {
+                Helper.createToast(this.context, ex.getMessage());
+            }
+        }
+        return items;
     }
 
     private boolean showNotification(String date) throws Exception {

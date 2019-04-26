@@ -152,7 +152,7 @@
                                     android:layout_height="wrap_content"
                                     android:hint="@string/learningCard_question"
                                     android:inputType="textMultiLine"/>
-                            <EditText
+                            <AutoCompleteTextView
                                     android:id="@+id/txtLearningCardAnswer"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"

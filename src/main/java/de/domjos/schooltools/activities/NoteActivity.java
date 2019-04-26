@@ -11,12 +11,10 @@ package de.domjos.schooltools.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,9 +27,9 @@ import java.util.List;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.NoteAdapter;
 import de.domjos.schooltools.core.model.Note;
-import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
@@ -42,7 +40,7 @@ import de.domjos.schooltools.widgets.NoteWidget;
  * @author Dominic Joas
  * @version 1.0
  */
-public class NoteActivity extends AppCompatActivity {
+public final class NoteActivity extends AbstractActivity {
     private BottomNavigationView navigation;
     private static final int SPEECH_REQUEST_CODE = 0;
 
@@ -56,18 +54,17 @@ public class NoteActivity extends AppCompatActivity {
     private CheckBox chkNoteMemory;
     private Menu menu;
 
+    public NoteActivity() {
+        super(R.layout.note_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.note_activity);
-        this.initControls();
-        this.initValidator();
+    protected void initActions() {
         this.reloadNotes();
         Helper.closeSoftKeyboard(NoteActivity.this);
         this.changeControls(false, true, false);
         this.getNoteFromExtra();
         this.txtNoteTitle.setError(null);
-        Helper.setBackgroundToActivity(this);
 
         this.lvNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -244,14 +241,16 @@ public class NoteActivity extends AppCompatActivity {
         chkNoteMemory.setChecked(!txtNoteMemoryDate.getText().toString().trim().equals(""));
     }
 
-    private void initValidator() {
+    @Override
+    protected void initValidator() {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addLengthValidator(txtNoteTitle, 3, 500);
         this.validator.addDateValidator(txtNoteMemoryDate);
 
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init listener
         OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
             @Override

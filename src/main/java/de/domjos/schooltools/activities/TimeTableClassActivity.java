@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.ClassAdapter;
 import de.domjos.schooltools.core.model.timetable.SchoolClass;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
 
@@ -34,7 +35,7 @@ import de.domjos.schooltools.helper.Validator;
  * @author Dominic Joas
  * @version 1.0
  */
-public class TimeTableClassActivity extends AppCompatActivity {
+public final class TimeTableClassActivity extends AbstractActivity {
     private ListView lvSchoolClass;
     private ClassAdapter classAdapter;
     private EditText txtSchoolClassName, txtSchoolClassNumberOfPupil, txtSchoolClassDescription;
@@ -43,17 +44,15 @@ public class TimeTableClassActivity extends AppCompatActivity {
 
     private Validator validator;
 
+    public TimeTableClassActivity() {
+        super(R.layout.timetable_class_activity);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.timetable_class_activity);
-        this.initControls();
-        this.initValidation();
+    protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableClassActivity.this);
-        Helper.setBackgroundToActivity(this);
         Helper.setSwipeDeleteListener(lvSchoolClass, classAdapter, "classes");
-
 
         this.lvSchoolClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,7 +81,8 @@ public class TimeTableClassActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(Helper.showHelpMenu(item, getApplicationContext(), "help_timetable"));
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init BottomNavigation
         BottomNavigationView.OnNavigationItemSelectedListener navListener
                 = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -152,7 +152,8 @@ public class TimeTableClassActivity extends AppCompatActivity {
         this.navigation.getMenu().getItem(2).setEnabled(false);
     }
 
-    private void initValidation() {
+    @Override
+    protected void initValidator() {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addLengthValidator(txtSchoolClassName, 1, 500);
     }

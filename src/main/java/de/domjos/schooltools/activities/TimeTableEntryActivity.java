@@ -39,6 +39,7 @@ import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.timetable.Teacher;
 import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
 import de.domjos.schooltools.settings.UserSettings;
@@ -48,7 +49,7 @@ import de.domjos.schooltools.settings.UserSettings;
  * @author Dominic Joas
  * @version 1.0
  */
-public class TimeTableEntryActivity extends AppCompatActivity {
+public final class TimeTableEntryActivity extends AbstractActivity {
 
     private BottomNavigationView navigation;
     private EditText txtTimeTableTitle, txtTimeTableDescription;
@@ -61,18 +62,19 @@ public class TimeTableEntryActivity extends AppCompatActivity {
     private Validator validator;
     private Map<String, Integer> mpSubjects;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.timetable_entry_activity);
-        this.mpSubjects = new LinkedHashMap<>();
-        this.initControls();
-        this.initGrid();
-        Helper.closeSoftKeyboard(TimeTableEntryActivity.this);
-        Helper.setBackgroundToActivity(this);
+    public TimeTableEntryActivity() {
+        super(R.layout.timetable_entry_activity);
     }
 
-    private void initControls() {
+    @Override
+    protected void initActions() {
+        this.mpSubjects = new LinkedHashMap<>();
+        this.initGrid();
+        Helper.closeSoftKeyboard(TimeTableEntryActivity.this);
+    }
+
+    @Override
+    protected void initControls() {
         // init BottomNavigation
         OnNavigationItemSelectedListener navListener = new OnNavigationItemSelectedListener() {
             @Override

@@ -11,12 +11,10 @@ package de.domjos.schooltools.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -35,6 +33,7 @@ import java.util.Date;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.TimerAdapter;
 import de.domjos.schooltools.core.model.TimerEvent;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 
@@ -43,7 +42,7 @@ import de.domjos.schooltools.helper.Helper;
  * @author Dominic Joas
  * @version 1.0
  */
-public class TimerActivity extends AppCompatActivity {
+public final class TimerActivity extends AbstractActivity {
     private TextView lblTimerDate;
     private ImageView ivTimerPrevious, ivTimerNext;
     private ListView lvTimerEvents;
@@ -51,14 +50,14 @@ public class TimerActivity extends AppCompatActivity {
 
     private TimerAdapter adapter;
 
+    public TimerActivity() {
+        super(R.layout.timer_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.timer_activity);
-        this.initControls();
+    protected void initActions() {
         this.reloadEvents();
         this.changeDate();
-        Helper.setBackgroundToActivity(this);
 
         this.ivTimerPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,7 +179,8 @@ public class TimerActivity extends AppCompatActivity {
         }
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init Toolbar
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);

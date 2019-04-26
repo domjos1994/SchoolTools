@@ -13,12 +13,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -43,6 +41,7 @@ import de.domjos.schooltools.adapter.ColorAdapter;
 import de.domjos.schooltools.adapter.SubjectAdapter;
 import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.timetable.Teacher;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 
 import de.domjos.schooltools.helper.Validator;
@@ -52,7 +51,7 @@ import de.domjos.schooltools.helper.Validator;
  * @author Dominic Joas
  * @version 1.0
  */
-public class TimeTableSubjectActivity extends AppCompatActivity {
+public final class TimeTableSubjectActivity extends AbstractActivity {
     private BottomNavigationView navigation;
     private ListView lvSubjects;
     private EditText txtSubjectHoursInWeek, txtSubjectDescription;
@@ -69,14 +68,13 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
 
     private Validator validator;
 
+    public TimeTableSubjectActivity() {
+        super(R.layout.timetable_subject_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.timetable_subject_activity);
-        this.initControls();
-        this.initValidation();
+    protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableSubjectActivity.this);
-        Helper.setBackgroundToActivity(this);
 
         this.lvSubjects.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -178,7 +176,8 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
         return  intent;
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init BottomNavigation
         OnNavigationItemSelectedListener navListener = new OnNavigationItemSelectedListener() {
             @Override
@@ -314,11 +313,8 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.menHelp:
-                startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
-                break;
-            default:
+        if (id == R.id.menHelp) {
+            startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -428,7 +424,6 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void setDefaultValues(int name, int color_name, boolean main) {
         txtSubjectTitle.setText(this.getString(name));
         chkSubjectMainSubject.setChecked(main);
@@ -442,7 +437,6 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
         lblSelectedColor.setText(this.getString(color_name));
     }
 
-    @SuppressWarnings("deprecation")
     private void setDefaultValues(int color_name, boolean main) {
         chkSubjectMainSubject.setChecked(main);
         if(main) {
@@ -455,7 +449,8 @@ public class TimeTableSubjectActivity extends AppCompatActivity {
         lblSelectedColor.setText(this.getString(color_name));
     }
 
-    private void initValidation() {
+    @Override
+    protected void initValidator() {
         this.validator =  new Validator(getApplicationContext());
         this.validator.addLengthValidator(txtSubjectTitle, 1, 500);
         this.validator.addLengthValidator(txtSubjectAlias, 1, 3);

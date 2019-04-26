@@ -13,8 +13,6 @@ import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,20 +26,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Config;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.github.angads25.filepicker.view.FilePickerDialog;
-
-import java.util.*;
-
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.*;
-import de.domjos.schooltools.adapter.syncAdapter.Authenticator;
 import de.domjos.schooltools.core.SearchItem;
 import de.domjos.schooltools.core.model.Memory;
 import de.domjos.schooltools.core.model.Note;
@@ -60,8 +52,8 @@ import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.schooltools.helper.SQLite;
+import de.domjos.schooltools.screenWidgets.QuickQueryScreenWidget;
 import de.domjos.schooltools.services.AuthenticatorService;
-import de.domjos.schooltools.services.CalendarSyncService;
 import de.domjos.schooltools.services.MemoryService;
 import de.domjos.schooltools.settings.GeneralSettings;
 import de.domjos.schooltools.settings.Globals;
@@ -88,6 +80,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     private NavigationView navigationView;
 
     public static final Globals globals = new Globals();
+    public static final String CHANNEL_ID = "SchoolTools";
 
     private ImageButton cmdRefresh;
     private SearchView cmdSearch;
@@ -103,6 +96,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     private SavedMarkListsScreenWidget savedMarkListsScreenWidget;
     private TimeTableEventScreenWidget timeTableEventScreenWidget;
     private TaggedBookMarksScreenWidget taggedBookMarksScreenWidget;
+    private QuickQueryScreenWidget quickQueryScreenWidget;
 
     public MainActivity() {
         super(R.layout.main_activity);
@@ -117,6 +111,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         this.initDatabase();
         this.initServices();
         Helper.setBackgroundAppBarToActivity(this.navigationView, MainActivity.this);
+        Helper.createChannel(this.getApplicationContext());
 
         this.buttonScreenWidget.init();
         this.buttonScreenWidget.loadButtons();
@@ -133,6 +128,8 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         this.savedMarkListsScreenWidget.addMarkLists();
         this.timeTableEventScreenWidget.init();
         this.taggedBookMarksScreenWidget.init();
+        this.quickQueryScreenWidget.init();
+        this.quickQueryScreenWidget.reloadQueries();
         MainActivity.globals.getUserSettings().openStartModule(this.buttonScreenWidget, MainActivity.this);
 
         this.hideWidgets();
@@ -212,8 +209,10 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             this.timeTableEventScreenWidget.initCurrentTimeTableEvent();
             MainActivity.globals.getUserSettings().openStartModule(this.buttonScreenWidget, MainActivity.this);
             this.hideWidgets();
+            this.initSyncServices();
             Helper.setBackgroundToActivity(this);
             Helper.setBackgroundAppBarToActivity(this.navigationView, MainActivity.this);
+            this.quickQueryScreenWidget.reloadQueries();
         }
     }
 
@@ -306,9 +305,25 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             if(MainActivity.globals.getUserSettings().isNotificationsShown()) {
                 Helper.initRepeatingService(MainActivity.this, MemoryService.class,  8 * 60 * 60 * 1000);
             }
-            if(MainActivity.globals.getUserSettings().isSyncCalendarTurnOn()) {
-                if(Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.READ_CALENDAR) && Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.WRITE_CALENDAR)) {
-                    this.initCalendarSyncService();
+            if(MainActivity.globals.getUserSettings().isSyncCalendarTurnOn() && MainActivity.globals.getUserSettings().isSynContactsTurnOn()) {
+                if(
+                        Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.READ_CALENDAR) &&
+                        Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.WRITE_CALENDAR) &&
+                        Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.WRITE_CONTACTS) &&
+                        Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.READ_CONTACTS)) {
+                    this.initSyncServices();
+                }
+            } else if(MainActivity.globals.getUserSettings().isSyncCalendarTurnOn()) {
+                if(
+                        Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.READ_CALENDAR) &&
+                        Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.WRITE_CALENDAR)) {
+                    this.initSyncServices();
+                }
+            } else if(MainActivity.globals.getUserSettings().isSynContactsTurnOn()) {
+                if(
+                        Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.READ_CONTACTS) &&
+                        Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, MainActivity.this, Manifest.permission.WRITE_CONTACTS)) {
+                    this.initSyncServices();
                 }
             }
         } catch (Exception ex) {
@@ -321,7 +336,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         try {
             switch (requestCode) {
                 case Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR:
-                    this.initCalendarSyncService();
+                    this.initSyncServices();
                     break;
             }
         } catch (Exception ex) {
@@ -329,7 +344,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         }
     }
 
-    private void initCalendarSyncService() {
+    private void initSyncServices() {
         boolean newAccount = false;
         boolean setupComplete = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).getBoolean("PREF_SETUP_COMPLETE", false);
 
@@ -347,6 +362,8 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putBoolean("PREF_SETUP_COMPLETE", true).apply();
         }
     }
+
+
 
     @Override
     @SuppressLint("ClickableViewAccessibility")
@@ -377,6 +394,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         this.savedMarkListsScreenWidget = new SavedMarkListsScreenWidget(this.findViewById(R.id.llSavedMarklist), MainActivity.this);
         this.timeTableEventScreenWidget = new TimeTableEventScreenWidget(this.findViewById(R.id.llTodayCurrentTimeTable), MainActivity.this);
         this.taggedBookMarksScreenWidget = new TaggedBookMarksScreenWidget(this.findViewById(R.id.llTaggedBookMarks), MainActivity.this);
+        this.quickQueryScreenWidget = new QuickQueryScreenWidget(this.findViewById(R.id.llLearningCardsQuickQuery), MainActivity.this);
 
         this.lvSearchResults = this.findViewById(R.id.lvSearchResults);
         this.searchAdapter = new SearchAdapter(MainActivity.this);
@@ -460,6 +478,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         this.savedMarkListsScreenWidget.setVisibility(false);
         this.timeTableEventScreenWidget.setVisibility(false);
         this.taggedBookMarksScreenWidget.setVisibility(false);
+        this.quickQueryScreenWidget.setVisibility(false);
 
         for(String item : MainActivity.globals.getUserSettings().getStartWidgets()) {
             if(item.equals(this.getString(R.string.main_nav_buttons))) {
@@ -485,6 +504,9 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             }
             if(item.equals(this.getString(R.string.main_taggedBookMarks))) {
                 this.taggedBookMarksScreenWidget.setVisibility(true);
+            }
+            if(item.equals(this.getString(R.string.main_quickQuery))) {
+                this.quickQueryScreenWidget.setVisibility(true);
             }
         }
     }

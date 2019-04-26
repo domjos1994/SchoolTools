@@ -12,19 +12,17 @@ package de.domjos.schooltools.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 
-public class WhatsNewActivity extends AppCompatActivity {
+public final class WhatsNewActivity extends AbstractActivity {
     public final static String isShownAlways = "isShownAlways";
     public final static String isWhatsNew = "isWhatsNew";
     public final static String TITLE_PARAM = "TITLE_PARAM";
@@ -39,13 +37,13 @@ public class WhatsNewActivity extends AppCompatActivity {
     private TextView lblInfo;
     private SharedPreferences preferences;
 
+    public WhatsNewActivity() {
+        super(R.layout.whats_new_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.whats_new_activity);
-        this.preferences = this.getSharedPreferences("desc_data", MODE_PRIVATE);
+    protected void initActions() {
         this.getParameters();
-        this.initControls();
     }
 
     @Override
@@ -67,7 +65,9 @@ public class WhatsNewActivity extends AppCompatActivity {
         return newIntent;
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
+        this.preferences = this.getSharedPreferences("desc_data", MODE_PRIVATE);
         this.lblContent = this.findViewById(R.id.lblContent);
         this.lblInfo = this.findViewById(R.id.lblInfo);
         Toolbar toolbar = this.findViewById(R.id.toolbar);
@@ -115,8 +115,12 @@ public class WhatsNewActivity extends AppCompatActivity {
 
     private String getStringResourceByName(String aString) {
         String packageName = getPackageName();
-        int resId = getResources().getIdentifier(aString, "string", packageName);
-        return getString(resId);
+        if(packageName!=null && aString!=null) {
+            int resId = getResources().getIdentifier(aString, "string", packageName);
+            return getString(resId);
+        } else {
+            return "";
+        }
     }
 
     private boolean alreadyShown(String key) {

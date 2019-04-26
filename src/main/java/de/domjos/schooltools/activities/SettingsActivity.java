@@ -11,6 +11,7 @@ package de.domjos.schooltools.activities;
 
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -30,16 +31,24 @@ import android.support.v4.app.NavUtils;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
+import de.domjos.schooltools.services.ImportToDictionaryTask;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * Activity For the Settings-Screen
  * @author Dominic Joas
  * @version 1.0
  */
-public class SettingsActivity extends SettingsAppCompatActivity {
+public final class SettingsActivity extends SettingsAppCompatActivity {
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -335,6 +344,25 @@ public class SettingsActivity extends SettingsAppCompatActivity {
 
             bindPreferenceSummaryToValue(findPreference("lsSchoolMarkListExtendedColor"));
             bindPreferenceSummaryToValueSet(findPreference("lsSchoolMarkListExtendedDiagram"));
+
+            findPreference("txtLearningCardEnableDictionary").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    try {
+                        if(newValue!=null) {
+                            if(newValue instanceof String) {
+                                String path = ((String) newValue).replace(":", "");
+
+                                ImportToDictionaryTask importToDictionaryTask = new ImportToDictionaryTask(getActivity(), path);
+                                importToDictionaryTask.execute();
+                            }
+                        }
+                    } catch (Exception ex) {
+                        Helper.printException(getActivity(), ex);
+                    }
+                    return false;
+                }
+            });
         }
 
         @Override

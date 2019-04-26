@@ -2,6 +2,7 @@ package de.domjos.schooltools.helper;
 
 import android.app.Activity;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +17,12 @@ public class IntentHelper {
         Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(url));
         intent.putExtra(SearchManager.QUERY, "Karlos");
         activity.startActivity(intent);
+    }
+
+    public static Intent openWebBrowser(Context context, String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(url));
+        intent.putExtra(SearchManager.QUERY, "Karlos");
+        return intent;
     }
 
     public static void openFileViaIntent(File file, Activity activity) {
@@ -40,6 +47,31 @@ public class IntentHelper {
         } catch (Exception ex) {
             Helper.printException(activity, ex);
         }
+    }
+
+    public static Intent openFileViaIntent(File file, Context context) {
+        try {
+            MimeTypeMap myMime = MimeTypeMap.getSingleton();
+            String content = IntentHelper.fileExt(file.getAbsolutePath());
+            String mimeType = myMime.getMimeTypeFromExtension(content);
+
+            Intent intent;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".helper.SchoolToolsFileProvider", file);
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(uri);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } else {
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(file.getAbsolutePath()), mimeType);
+                intent = Intent.createChooser(intent, "Open File");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
+            return intent;
+        } catch (Exception ex) {
+            Helper.printException(context, ex);
+        }
+        return null;
     }
 
     private static String fileExt(String url) {

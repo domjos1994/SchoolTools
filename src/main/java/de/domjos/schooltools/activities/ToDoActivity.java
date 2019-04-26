@@ -27,6 +27,7 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.ToDoAdapter;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.widgets.ToDoWidget;
 
@@ -35,7 +36,7 @@ import de.domjos.schooltools.widgets.ToDoWidget;
  * @author Dominic Joas
  * @version 1.0
  */
-public class ToDoActivity extends AppCompatActivity {
+public final class ToDoActivity extends AbstractActivity {
     private Spinner spToDoList;
     private ListView lvToDos;
     private FloatingActionButton cmdToDoAdd;
@@ -46,14 +47,14 @@ public class ToDoActivity extends AppCompatActivity {
     private MenuItem menSolveToDo;
     private int intPosition = 0;
 
+    public ToDoActivity() {
+        super(R.layout.todo_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.todo_activity);
-        this.initControls();
+    protected void initActions() {
         this.reloadToDoLists();
         this.reloadToDos();
-        Helper.setBackgroundToActivity(this);
 
         this.spToDoList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -229,7 +230,8 @@ public class ToDoActivity extends AppCompatActivity {
         sbState.setProgress(current);
     }
 
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init navigation_learning_card_group
         BottomNavigationView navigation = this.findViewById(R.id.navigation);
         OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {

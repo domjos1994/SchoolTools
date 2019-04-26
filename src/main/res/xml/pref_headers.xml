@@ -7,30 +7,37 @@
   ~ of the License, or (at your option) any later version.
   -->
 
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+<preference-headers
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/bg_water">
 
     <!-- These settings headers are only used on tablets. -->
 
     <header
         android:fragment="de.domjos.schooltools.activities.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
-        android:title="@string/settings_general" />
+        android:title="@string/settings_general"
+        android:summary="@string/settings_general_summary"/>
 
     <header
         android:fragment="de.domjos.schooltools.activities.SettingsActivity$StartPreferenceFragment"
         android:icon="@drawable/ic_widgets_black_24dp"
-        android:title="@string/settings_start" />
+        android:title="@string/settings_start"
+        android:summary="@string/settings_start_summary"/>
 
     <header
         android:fragment="de.domjos.schooltools.activities.SettingsActivity$SchoolPreferenceFragment"
         android:icon="@drawable/ic_subject_black_24dp"
-        android:title="@string/settings_school" />
+        android:title="@string/settings_school"
+        android:summary="@string/settings_school_summary"/>
     <header
         android:fragment="de.domjos.schooltools.activities.SettingsActivity$ApiPreferenceFragment"
         android:icon="@drawable/ic_settings_black_24dp"
-        android:title="@string/main_menu_export" />
+        android:title="@string/main_menu_export"
+        android:summary="@string/settings_api_summary"/>
     <header
         android:fragment="de.domjos.schooltools.activities.SettingsActivity$SyncPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
-        android:title="@string/settings_sync" />
+        android:title="@string/settings_sync"
+        android:summary="@string/settings_sync_summary"/>
 </preference-headers>

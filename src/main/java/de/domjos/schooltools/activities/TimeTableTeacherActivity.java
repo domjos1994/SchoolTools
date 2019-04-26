@@ -9,10 +9,8 @@
 
 package de.domjos.schooltools.activities;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +24,7 @@ import java.util.List;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.TeacherAdapter;
 import de.domjos.schooltools.core.model.timetable.Teacher;
+import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
 
@@ -34,7 +33,7 @@ import de.domjos.schooltools.helper.Validator;
  * @author Dominic Joas
  * @version 1.0
  */
-public class TimeTableTeacherActivity extends AppCompatActivity {
+public final class TimeTableTeacherActivity extends AbstractActivity {
 
     private ListView lvTeachers;
     private TeacherAdapter teacherAdapter;
@@ -44,14 +43,13 @@ public class TimeTableTeacherActivity extends AppCompatActivity {
 
     private Validator validator;
 
+    public TimeTableTeacherActivity() {
+        super(R.layout.timetable_teacher_activity);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.timetable_teacher_activity);
-        this.initControls();
-        this.initValidation();
+    protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableTeacherActivity.this);
-        Helper.setBackgroundToActivity(this);
 
         this.lvTeachers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -80,8 +78,8 @@ public class TimeTableTeacherActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_timetable"));
     }
 
-
-    private void initControls() {
+    @Override
+    protected void initControls() {
         // init BottomNavigation
         BottomNavigationView.OnNavigationItemSelectedListener navListener
                 = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -113,7 +111,7 @@ public class TimeTableTeacherActivity extends AppCompatActivity {
                             teacher.setLastName(txtTeacherLastName.getText().toString());
                             teacher.setDescription(txtTeacherDescription.getText().toString());
 
-                            if(validateName(teacher)) {
+                            if(validateName(teacher) || currentID!=0) {
                                 MainActivity.globals.getSqLite().insertOrUpdateTeacher(teacher);
 
                                 currentID = 0;
@@ -170,7 +168,8 @@ public class TimeTableTeacherActivity extends AppCompatActivity {
         return true;
     }
 
-    private void initValidation() {
+    @Override
+    protected void initValidator() {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addLengthValidator(txtTeacherLastName, 2, 500);
     }
