@@ -10,6 +10,7 @@
 package de.domjos.schooltools.factories;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -78,12 +79,18 @@ public class BookmarkRemoteFactory implements RemoteViewsService.RemoteViewsFact
 
     @Override
     public RemoteViews getViewAt(int position) {
-        RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.note_widget);
+        RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.bookmark_widget_item);
         String callItem = this.bookmarks.get(position);
-        row.setTextViewText(R.id.lblHeader, callItem);
-        Bookmark bookmark = MainActivity.globals.getSqLite().getBookmarks("title='" + callItem + "'").get(0);
-        Intent intent = this.getIntent(bookmark, this.context);
-        row.setOnClickFillInIntent(R.id.lblHeader, intent);
+        row.setTextViewText(R.id.widgetItemTaskNameLabel, callItem);
+
+        Bundle extras = new Bundle();
+        extras.putString("data", callItem);
+        Intent fillInIntent = new Intent(context, BookmarkActivity.class);
+        fillInIntent.putExtras(extras);
+        row.setOnClickFillInIntent(R.id.widgetItemContainer, fillInIntent);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, fillInIntent, 0);
+        row.setOnClickPendingIntent(R.id.widgetItemContainer, pendingIntent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             row = this.changeSize(row);
@@ -99,12 +106,12 @@ public class BookmarkRemoteFactory implements RemoteViewsService.RemoteViewsFact
             Bundle bundle = manager.getAppWidgetOptions(appWidgetId);
             final int minWidth = bundle.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
             if(minWidth==120) {
-                row.setTextViewTextSize(R.id.lblHeader, 0, 14);
+                row.setTextViewTextSize(R.id.widgetItemTaskNameLabel, 0, 14);
             } else {
-                row.setTextViewTextSize(R.id.lblHeader, 0, 18);
+                row.setTextViewTextSize(R.id.widgetItemTaskNameLabel, 0, 18);
             }
         } else {
-            row.setTextViewTextSize(R.id.lblHeader, 0, 18);
+            row.setTextViewTextSize(R.id.widgetItemTaskNameLabel, 0, 18);
         }
         return row;
     }
