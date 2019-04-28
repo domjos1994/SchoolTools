@@ -47,6 +47,7 @@ import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
 import de.domjos.schooltools.core.utils.fileUtils.*;
+import de.domjos.schooltools.core.utils.xFileUtils.ObjectXML;
 import de.domjos.schooltools.settings.MarkListSettings;
 
 public class ApiHelper {
@@ -183,34 +184,9 @@ public class ApiHelper {
     }
 
     public boolean exportMarkListToXML(String where, String path) throws Exception {
-        XMLBuilder builder = new XMLBuilder("MarkLists", new File(path));
         List<MarkListSettings> markListSettings = this.sqLite.getMarkListSearch(where);
         if(!markListSettings.isEmpty()) {
-            for(MarkListSettings settings : markListSettings) {
-                XMLElement element = new XMLElement("MarkListSettings");
-                element.addAttribute("title", this.escapeText(settings.getTitle()));
-                element.addAttribute("type", String.valueOf(settings.getType()));
-
-                XMLElement general = new XMLElement("General");
-                general.setParentElement("MarkListSettings");
-                general.addAttribute("maxPoints", String.valueOf(settings.getMaxPoints()));
-                general.addAttribute("dictatMode", String.valueOf(settings.getDictatMode()));
-                general.addAttribute("halfPoints", String.valueOf(settings.getHalfPoints()));
-                general.addAttribute("tenthMarks", String.valueOf(settings.getTenthMarks()));
-                general.addAttribute("viewMode", String.valueOf(settings.getViewMode()));
-                general.addAttribute("markMode", String.valueOf(settings.getMarMode()));
-                element.addSubElement(general);
-
-                XMLElement customPoint = new XMLElement("CustomPoint");
-                customPoint.setParentElement("MarkListSettings");
-                customPoint.addAttribute("bestMarkAt", String.valueOf(settings.getBestMarkAt()));
-                customPoint.addAttribute("worstMarkTo", String.valueOf(settings.getWorstMarkTo()));
-                customPoint.addAttribute("customPoints", String.valueOf(settings.getCustomPoints()));
-                customPoint.addAttribute("customMark", String.valueOf(settings.getCustomMark()));
-                element.addSubElement(customPoint);
-                builder.addElement(element);
-            }
-            builder.save();
+            ObjectXML.saveObjectListToXML("MarkListSettings", markListSettings, path);
             return true;
         } else {
             return false;

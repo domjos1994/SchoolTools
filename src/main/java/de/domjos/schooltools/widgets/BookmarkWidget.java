@@ -16,12 +16,10 @@ import java.io.FileOutputStream;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.BookmarkActivity;
-import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.Bookmark;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.IntentHelper;
 import de.domjos.schooltools.services.BookmarkWidgetService;
-import de.domjos.schooltools.services.NoteWidgetService;
 
 /**
  * Implementation of App Widget functionality.
