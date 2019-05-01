@@ -16,6 +16,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,6 +73,64 @@ public final class TimeTableEntryActivity extends AbstractActivity {
         this.mpSubjects = new LinkedHashMap<>();
         this.initGrid();
         Helper.closeSoftKeyboard(TimeTableEntryActivity.this);
+
+        this.spTimeTableYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                changeTitle(spTimeTableYear.getSelectedItem(), spTimeTableClass.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                changeTitle(spTimeTableYear.getSelectedItem(), spTimeTableClass.getSelectedItem());
+            }
+        });
+
+        this.spTimeTableClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                changeTitle(spTimeTableYear.getSelectedItem(), spTimeTableClass.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                changeTitle(spTimeTableYear.getSelectedItem(), spTimeTableClass.getSelectedItem());
+            }
+        });
+
+        this.txtTimeTableTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                changeTitle(spTimeTableYear.getSelectedItem(), spTimeTableClass.getSelectedItem());
+            }
+        });
+    }
+
+    private void changeTitle(Object year, Object cls) {
+        if(this.txtTimeTableTitle.getText().toString().equals("")) {
+            String title = "";
+            if(year!=null) {
+                title = year.toString();
+                if(cls!=null) {
+                   title += " - " + cls.toString();
+                }
+            } else {
+               if(cls!=null) {
+                   title = cls.toString();
+               }
+            }
+            this.txtTimeTableTitle.setText(title);
+        }
     }
 
     @Override
