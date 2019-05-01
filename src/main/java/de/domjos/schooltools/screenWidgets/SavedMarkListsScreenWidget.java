@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import de.domjos.schooltools.R;
@@ -56,9 +57,16 @@ public final class SavedMarkListsScreenWidget extends ScreenWidget {
         this.cmbSavedMarkList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                MainActivity.globals.getGeneralSettings().setWidgetMarkListSpinner(savedMarkListAdapter.getItem(position));
-                MarkListSettings settings = MainActivity.globals.getSqLite().getMarkList(savedMarkListAdapter.getItem(position));
-                calculateSelectedMarkList(settings);
+                String item = savedMarkListAdapter.getItem(position);
+                if(item!=null) {
+                    if(item.equals(activity.getApplicationContext().getString(R.string.main_noEntry))) {
+                        markListAdapter.clear();
+                    } else {
+                        MainActivity.globals.getGeneralSettings().setWidgetMarkListSpinner(savedMarkListAdapter.getItem(position));
+                        MarkListSettings settings = MainActivity.globals.getSqLite().getMarkList(savedMarkListAdapter.getItem(position));
+                        calculateSelectedMarkList(settings);
+                    }
+                }
             }
 
             @Override
@@ -91,8 +99,14 @@ public final class SavedMarkListsScreenWidget extends ScreenWidget {
     public void addMarkLists() {
         this.savedMarkListAdapter.clear();
         if(super.view.getVisibility()==View.VISIBLE) {
-            for(String item : MainActivity.globals.getSqLite().listMarkLists()) {
-                this.savedMarkListAdapter.add(item);
+            List<String> items = MainActivity.globals.getSqLite().listMarkLists();
+            if(!items.isEmpty()) {
+                this.savedMarkListAdapter.add(super.activity.getApplicationContext().getString(R.string.main_noEntry));
+                for (String item : MainActivity.globals.getSqLite().listMarkLists()) {
+                    this.savedMarkListAdapter.add(item);
+                }
+            } else {
+                this.savedMarkListAdapter.add(super.activity.getApplicationContext().getString(R.string.main_noEntry));
             }
         }
     }
