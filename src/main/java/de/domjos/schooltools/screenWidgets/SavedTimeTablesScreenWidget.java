@@ -84,7 +84,24 @@ public final class SavedTimeTablesScreenWidget extends ScreenWidget {
 
                 if(tables!=null) {
                     if(!tables.isEmpty()) {
+                        initTimes(grdSavedTimeTables);
                         TimeTableEntryActivity.loadTimeTable(tables.get(0), grdSavedTimeTables, new LinkedHashMap<String, Integer>());
+                    } else {
+                        for(int i = 0; i<=grdSavedTimeTables.getChildCount()-1; i++) {
+                            TableRow tableRow = (TableRow) grdSavedTimeTables.getChildAt(i);
+                            for(int j = 0; j<=tableRow.getChildCount()-1; j++) {
+                                TextView textView = (TextView) tableRow.getChildAt(j);
+                                textView.setText("");
+                            }
+                        }
+                    }
+                } else {
+                    for(int i = 0; i<=grdSavedTimeTables.getChildCount()-1; i++) {
+                        TableRow tableRow = (TableRow) grdSavedTimeTables.getChildAt(i);
+                        for(int j = 0; j<=tableRow.getChildCount()-1; j++) {
+                            TextView textView = (TextView) tableRow.getChildAt(j);
+                            textView.setText("");
+                        }
                     }
                 }
             }
