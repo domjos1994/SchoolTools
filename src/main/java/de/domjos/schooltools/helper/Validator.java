@@ -114,8 +114,13 @@ public class Validator {
     }
 
     public void addIntegerValidator(final EditText txt) {
-        states.put(txt.getId(), false);
-        txt.setError(String.format(this.context.getString(R.string.message_validation_integer), txt.getHint()));
+        if(txt.getText().toString().isEmpty()) {
+            states.put(txt.getId(), false);
+            txt.setError(String.format(this.context.getString(R.string.message_validation_integer), txt.getHint()));
+        } else {
+            states.put(txt.getId(), true);
+            txt.setError(null);
+        }
         txt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

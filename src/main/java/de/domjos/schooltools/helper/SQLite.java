@@ -87,7 +87,6 @@ public class SQLite extends SQLiteOpenHelper {
      * @param db the SQLite-Database
      */
     @Override
-    @SuppressWarnings("deprecation")
     public void onCreate(SQLiteDatabase db) {
         try {
             this.createDatabase(R.raw.init, db);
@@ -131,8 +130,12 @@ public class SQLite extends SQLiteOpenHelper {
             this.onCreate(db);
             db.setVersion(newVersion);
 
-            // add roomNumber
+            // version 0.2
             this.addColumnIfNotExists(db, "timeTable", "roomNumber", Types.VARCHAR, 255, "''");
+
+            // version 0.4
+            this.addColumnIfNotExists(db, "learningCardQueries", "randomVocab", Types.INTEGER, 1, "0");
+            this.addColumnIfNotExists(db, "learningCardQueries", "randomVocabNumber", Types.INTEGER, 255, "0");
 
             this.createDatabase(R.raw.update, db);
         } catch (Exception ex) {
@@ -287,7 +290,17 @@ public class SQLite extends SQLiteOpenHelper {
                         where.append(item);
                     }
                 }
-                return this.getLearningCards(where.toString().replace(" WHERE ", ""), db);
+                learningCards = this.getLearningCards(where.toString().replace(" WHERE ", ""), db);
+
+                if(query.isRandomVocab()) {
+                    List<LearningCard> randomVocab = new LinkedList<>();
+                    for(int i = 0; i<=query.getRandomVocabNumber()-1; i++) {
+                        Random generator = new Random();
+                        int position = generator.nextInt(learningCards.size());
+                        randomVocab.add(learningCards.get(position));
+                    }
+                    return randomVocab;
+                }
             }
         } catch (Exception ex) {
             Helper.printException(this.context, ex);
@@ -1503,16 +1516,17 @@ public class SQLite extends SQLiteOpenHelper {
             if(learningCardQuery.getID()==0) {
                 statement = db.compileStatement(
                     "INSERT INTO learningCardQueries(title,description,cardGroup,category,priority,wrongCardsOfQuery," +
-                            "periodic,period,untilDeadLine,answerMustEqual,showNotes,tries,showNotesImmediately) " +
-                            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                            "periodic,period,untilDeadLine,answerMustEqual,showNotes,tries,showNotesImmediately, randomVocab, randomVocabNumber) " +
+                            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                 );
             } else {
                 statement = db.compileStatement(
                     "UPDATE learningCardQueries SET title=?,description=?,cardGroup=?,category=?,priority=?,wrongCardsOfQuery=?," +
-                            "periodic=?,period=?,untilDeadLine=?,answerMustEqual=?,showNotes=?,tries=?,showNotesImmediately=? " +
+                            "periodic=?,period=?,untilDeadLine=?,answerMustEqual=?,showNotes=?,tries=?,showNotesImmediately=?," +
+                            "randomVocab=?,randomVocabNumber=? " +
                             "WHERE ID=?"
                 );
-                statement.bindLong(14, learningCardQuery.getID());
+                statement.bindLong(16, learningCardQuery.getID());
             }
 
             statement.bindString(1, learningCardQuery.getTitle());
@@ -1536,6 +1550,8 @@ public class SQLite extends SQLiteOpenHelper {
             statement.bindLong(11, learningCardQuery.isShowNotes() ? 1 : 0);
             statement.bindLong(12, learningCardQuery.getTries());
             statement.bindLong(13, learningCardQuery.isShowNotesImmediately() ? 1 : 0);
+            statement.bindLong(14, learningCardQuery.isRandomVocab() ? 1 : 0);
+            statement.bindLong(15, learningCardQuery.getRandomVocabNumber());
 
             statement.execute();
             statement.close();
@@ -1577,7 +1593,9 @@ public class SQLite extends SQLiteOpenHelper {
                 learningCardQuery.setAnswerMustEqual(cursor.getInt(10)==1);
                 learningCardQuery.setShowNotes(cursor.getInt(11)==1);
                 learningCardQuery.setTries(cursor.getInt(12));
-                learningCardQuery.setShowNotesImmediately(cursor.getInt(12)==1);
+                learningCardQuery.setShowNotesImmediately(cursor.getInt(13)==1);
+                learningCardQuery.setRandomVocab(cursor.getInt(14)==1);
+                learningCardQuery.setRandomVocabNumber(cursor.getInt(15));
 
                 learningCardQueries.add(learningCardQuery);
             }
@@ -1886,7 +1904,7 @@ public class SQLite extends SQLiteOpenHelper {
         }
     }
 
-    public Map.Entry<String, byte[]> getSetting(String key) {
+    Map.Entry<String, byte[]> getSetting(String key) {
         Map.Entry<String, byte[]> entry = new AbstractMap.SimpleEntry<>("", null);
         SQLiteDatabase db = this.getWritableDatabase();
         try {
@@ -1914,7 +1932,11 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     public Date getLastSyncDate(String type) {
-        Date date = new Date(1970, 1, 1);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 1970);
+        calendar.set(Calendar.MONTH, 1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date date = calendar.getTime();
         SQLiteDatabase db = this.getReadableDatabase();
         try {
             Cursor cursor = db.rawQuery("SELECT ts FROM synchronisation WHERE type=?", new String[]{type});
@@ -2004,8 +2026,12 @@ public class SQLite extends SQLiteOpenHelper {
             if(this.columnNotExists(db, table, column)) {
                 Map<Integer, String> types = this.getAllJdbcTypeNames();
                 String typeString = types.get(type);
-                if(typeString.toLowerCase().equals("varchar")) {
-                    typeString += "(" + length + ")";
+                if(typeString!=null) {
+                    if(typeString.toLowerCase().equals("varchar")) {
+                        typeString += "(" + length + ")";
+                    }
+                } else {
+                    return;
                 }
                 if(!defaultValue.equals("")) {
                     typeString += " DEFAULT " + defaultValue;

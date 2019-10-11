@@ -28,6 +28,8 @@ public class LearningCardQuery extends BaseCategoryObject {
     private boolean answerMustEqual;
     private boolean showNotes;
     private boolean showNotesImmediately;
+    private boolean randomVocab;
+    private int randomVocabNumber;
 
     public LearningCardQuery() {
         super();
@@ -42,6 +44,8 @@ public class LearningCardQuery extends BaseCategoryObject {
         this.showNotes = false;
         this.showNotes = false;
         this.showNotesImmediately = false;
+        this.randomVocab = false;
+        this.randomVocabNumber = 30;
     }
 
     public LearningCardGroup getLearningCardGroup() {
@@ -122,6 +126,22 @@ public class LearningCardQuery extends BaseCategoryObject {
 
     public void setShowNotesImmediately(boolean showNotesImmediately) {
         this.showNotesImmediately = showNotesImmediately;
+    }
+
+    public boolean isRandomVocab() {
+        return this.randomVocab;
+    }
+
+    public void setRandomVocab(boolean randomVocab) {
+        this.randomVocab = randomVocab;
+    }
+
+    public int getRandomVocabNumber() {
+        return this.randomVocabNumber;
+    }
+
+    public void setRandomVocabNumber(int randomVocabNumber) {
+        this.randomVocabNumber = randomVocabNumber;
     }
 
     public List<LearningCard> loadLearningCards(Context context) {

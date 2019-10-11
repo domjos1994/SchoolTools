@@ -344,6 +344,9 @@
     <string name="learningCard_query_showNotes">Hinweise zeigen</string>
     <string name="learningCard_query_tries">Versuche</string>
     <string name="learningCard_query_showNotesImmediately">Hinweise sofort zeigen</string>
+    <string name="learningCard_query_random">zufällig</string>
+    <string name="learningCard_query_randomNumber">Anzahl</string>
+
     <string name="learningCard_query_start">Abfrage starten</string>
     <string name="learningCard_query_end">Abfrage beenden</string>
     <string name="learningCard_query_select">Abfrage sauswählen</string>

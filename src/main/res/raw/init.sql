@@ -191,6 +191,8 @@ CREATE TABLE IF NOT EXISTS learningCardQueries(
     showNotes INTEGER DEFAULT 0,
     tries INTEGER DEFAULT 0,
     showNotesImmediately INTEGER DEFAULT 0,
+    randomVocab INTEGER DEFAULT 0,
+    randomVocabNumber INTEGER DEFAULT 0,
     FOREIGN KEY(cardGroup) REFERENCES learningCardGroups(ID) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY(wrongCardsOfQuery) REFERENCES learningCardQueries(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );

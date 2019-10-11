@@ -33,10 +33,10 @@ public final class LearningCardQueryActivity extends AbstractActivity {
     private BottomNavigationView navigation;
 
     private ListView lvLearningCardQueries;
-    private EditText txtLearningCardQueryTitle, txtLearningCardQueryDescription, txtLearningCardQueryPeriod, txtLearningCardQueryTries;
+    private EditText txtLearningCardQueryTitle, txtLearningCardQueryDescription, txtLearningCardQueryPeriod, txtLearningCardQueryTries, txtLearningCardQueryRandomNumber;
     private Spinner spLearningCardQueryCategory, spLearningCardQueryGroup, spLearningCardQueryWrong;
     private SeekBar sbLearningCardQueryPriority;
-    private CheckBox chkLearningCardQueryUntilDeadline, chkLearningCardQueryShowNotes, chkLearningCardQueryShowNotesImmediately, chkLearningCardQueryMustEqual;
+    private CheckBox chkLearningCardQueryUntilDeadline, chkLearningCardQueryShowNotes, chkLearningCardQueryShowNotesImmediately, chkLearningCardQueryMustEqual, chkLearningCardQueryRandom;
 
     private ArrayAdapter<LearningCardGroup> groupAdapter;
     private ArrayAdapter<LearningCardQuery> queryAdapter;
@@ -56,6 +56,13 @@ public final class LearningCardQueryActivity extends AbstractActivity {
                 learningCardQuery = learningCardQueryAdapter.getItem(position);
                 loadFields();
                 controlElements(false, false);
+            }
+        });
+
+        this.chkLearningCardQueryRandom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                txtLearningCardQueryRandomNumber.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
     }
@@ -109,6 +116,8 @@ public final class LearningCardQueryActivity extends AbstractActivity {
         this.txtLearningCardQueryPeriod = this.findViewById(R.id.txtLearningCardQueryPeriod);
         this.txtLearningCardQueryTries = this.findViewById(R.id.txtLearningCardQueryTries);
         TextView lblLearningCardQueryPriority = this.findViewById(R.id.lblLearningCardQueryPriority);
+        this.txtLearningCardQueryRandomNumber = this.findViewById(R.id.txtLearningCardQueryRandomNumber);
+        this.txtLearningCardQueryRandomNumber.setText("0");
 
         this.spLearningCardQueryCategory = this.findViewById(R.id.spLearningCardQueryCategory);
         List<String> categories = MainActivity.globals.getSqLite().getColumns("learningCards", "category", "GROUP BY category");
@@ -136,6 +145,7 @@ public final class LearningCardQueryActivity extends AbstractActivity {
         this.chkLearningCardQueryShowNotes = this.findViewById(R.id.chkLearningCardQueryShowNotes);
         this.chkLearningCardQueryShowNotesImmediately = this.findViewById(R.id.chkLearningCardQueryShowNotesImmediately);
         this.chkLearningCardQueryMustEqual = this.findViewById(R.id.chkLearningCardQueryMustEqual);
+        this.chkLearningCardQueryRandom = this.findViewById(R.id.chkLearningCardQueryRandom);
 
         this.sbLearningCardQueryPriority.setOnSeekBarChangeListener(Helper.getChangeListener(lblLearningCardQueryPriority));
         this.sbLearningCardQueryPriority.setProgress(0);
@@ -149,6 +159,7 @@ public final class LearningCardQueryActivity extends AbstractActivity {
         this.validator.addEmptyValidator(this.txtLearningCardQueryTitle);
         this.validator.addEmptyValidator(this.txtLearningCardQueryTries);
         this.validator.addIntegerValidator(this.txtLearningCardQueryTries);
+        this.validator.addIntegerValidator(this.txtLearningCardQueryRandomNumber);
     }
 
     private void controlElements(boolean editMode, boolean reset) {
@@ -171,6 +182,8 @@ public final class LearningCardQueryActivity extends AbstractActivity {
         this.chkLearningCardQueryShowNotes.setEnabled(editMode);
         this.chkLearningCardQueryShowNotesImmediately.setEnabled(editMode);
         this.chkLearningCardQueryMustEqual.setEnabled(editMode);
+        this.chkLearningCardQueryRandom.setEnabled(editMode);
+        this.txtLearningCardQueryRandomNumber.setEnabled(editMode);
 
         if(reset) {
             this.txtLearningCardQueryTitle.setText("");
@@ -201,6 +214,7 @@ public final class LearningCardQueryActivity extends AbstractActivity {
                 this.txtLearningCardQueryPeriod.setText("0");
             }
             this.sbLearningCardQueryPriority.setProgress(this.learningCardQuery.getPriority());
+            this.txtLearningCardQueryRandomNumber.setText(String.valueOf(this.learningCardQuery.getRandomVocabNumber()));
 
             LearningCardGroup group = this.learningCardQuery.getLearningCardGroup();
             if(group!=null) {
@@ -231,6 +245,7 @@ public final class LearningCardQueryActivity extends AbstractActivity {
             this.chkLearningCardQueryUntilDeadline.setChecked(this.learningCardQuery.isUntilDeadLine());
             this.chkLearningCardQueryShowNotes.setChecked(this.learningCardQuery.isShowNotes());
             this.chkLearningCardQueryShowNotesImmediately.setChecked(this.learningCardQuery.isShowNotesImmediately());
+            this.chkLearningCardQueryRandom.setChecked(this.learningCardQuery.isRandomVocab());
         }
     }
 
@@ -243,6 +258,11 @@ public final class LearningCardQueryActivity extends AbstractActivity {
         this.learningCardQuery.setTries(Integer.parseInt(this.txtLearningCardQueryTries.getText().toString()));
         this.learningCardQuery.setPeriod(Integer.parseInt(this.txtLearningCardQueryPeriod.getText().toString()));
         this.learningCardQuery.setPeriodic(this.txtLearningCardQueryPeriod.getText().toString().equals("0"));
+        if(this.txtLearningCardQueryRandomNumber.getText().toString().trim().isEmpty()) {
+            this.learningCardQuery.setRandomVocabNumber(0);
+        } else {
+            this.learningCardQuery.setRandomVocabNumber(Integer.parseInt(this.txtLearningCardQueryRandomNumber.getText().toString()));
+        }
 
         if(this.spLearningCardQueryCategory.getSelectedItem()!=null) {
             this.learningCardQuery.setCategory(this.spLearningCardQueryCategory.getSelectedItem().toString());
@@ -259,6 +279,7 @@ public final class LearningCardQueryActivity extends AbstractActivity {
         this.learningCardQuery.setUntilDeadLine(this.chkLearningCardQueryUntilDeadline.isChecked());
         this.learningCardQuery.setShowNotes(this.chkLearningCardQueryShowNotes.isChecked());
         this.learningCardQuery.setShowNotesImmediately(this.chkLearningCardQueryShowNotesImmediately.isChecked());
+        this.learningCardQuery.setRandomVocab(this.chkLearningCardQueryRandom.isChecked());
     }
 
     private void reloadList() {

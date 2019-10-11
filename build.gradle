@@ -15,8 +15,8 @@ int minSDKVersion = 15
 
 def espressoVersion = '3.2.0'
 
-def appVersionName = '0.3'
-def appVersionCode = 12
+def appVersionName = '0.4.alpha.1'
+def appVersionCode = 13
 
 buildscript {
     repositories {
