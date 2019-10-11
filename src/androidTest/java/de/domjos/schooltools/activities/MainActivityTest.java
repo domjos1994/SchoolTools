@@ -12,7 +12,6 @@ package de.domjos.schooltools.activities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.rule.ActivityTestRule;
@@ -185,7 +184,7 @@ public class MainActivityTest {
 
     @Test
     public void openExportActivityFromMenu() throws Exception {
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getContext());
+        //openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getContext());
         Thread.sleep(500);
         onView(withText(R.string.main_menu_export)).perform(click());
 

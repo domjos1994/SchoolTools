@@ -31,7 +31,6 @@ public class AssistantHelper {
     private TextView lblLearningCardAssistantTitle;
 
     // data for learningCards
-
     // step 1
     private EditText txtLearningCardAssistantGroupTitle;
 
@@ -50,6 +49,16 @@ public class AssistantHelper {
     private final LearningCardQuery query = new LearningCardQuery();
     private final List<Map.Entry<String, String>> vocabulary = new LinkedList<>();
     private int currentVocab;
+
+
+    // data for timetable
+
+
+
+    // general
+    private TextView lblTimeTableAssistantTitle;
+    private TableLayout tblTimeTableAssistant;
+    private AppCompatImageButton cmdTimeTableAssistantBack, cmdTimeTableAssistantForward;
 
     public AssistantHelper(Activity activity) {
         this.activity = activity;
@@ -70,7 +79,7 @@ public class AssistantHelper {
         this.cmdLearningCardAssistantBack = dialog.findViewById(R.id.cmdLearningCardAssistantBack);
         this.cmdLearningCardAssistantForward = dialog.findViewById(R.id.cmdLearningCardAssistantForward);
         this.cmdLearningCardAssistantBack.setEnabled(false);
-        showSteps();
+        showLearningCardSteps();
 
         // step 1
         this.txtLearningCardAssistantGroupTitle = dialog.findViewById(R.id.txtLearningCardAssistantGroupTitle);
@@ -149,7 +158,7 @@ public class AssistantHelper {
             @Override
             public void onClick(View v) {
                 currentStep -= 1;
-                showSteps();
+                showLearningCardSteps();
                 changeLearningCardStepTitle();
 
                 switch (currentStep) {
@@ -167,7 +176,7 @@ public class AssistantHelper {
             @Override
             public void onClick(View v) {
                 currentStep += 1;
-                showSteps();
+                showLearningCardSteps();
                 changeLearningCardStepTitle();
 
                 switch (currentStep) {
@@ -184,7 +193,50 @@ public class AssistantHelper {
         cmdLearningCardAssistantSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData();
+                saveLearningCardData();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void showTimeTableAssistant() {
+        this.maxStep = 4;
+        final Dialog dialog = this.buildDialog(R.layout.timetable_assistant_dialog);
+
+        // general
+        this.tblTimeTableAssistant = dialog.findViewById(R.id.tblTimeTableAssistant);
+        this.lblTimeTableAssistantTitle = dialog.findViewById(R.id.lblTimeTableAssistantTitle);
+        final AppCompatImageButton cmdTimeTableAssistantSave = dialog.findViewById(R.id.cmdTimeTableAssistantSave);
+        this.cmdTimeTableAssistantBack = dialog.findViewById(R.id.cmdTimeTableAssistantBack);
+        this.cmdTimeTableAssistantForward = dialog.findViewById(R.id.cmdTimeTableAssistantForward);
+        this.cmdTimeTableAssistantBack.setEnabled(false);
+        showTimeTableSteps();
+
+
+        this.cmdTimeTableAssistantBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentStep -= 1;
+                showTimeTableSteps();
+                changeTimeTableStepTitle();
+            }
+        });
+
+        this.cmdTimeTableAssistantForward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentStep += 1;
+                showTimeTableSteps();
+                changeTimeTableStepTitle();
+            }
+        });
+
+        cmdTimeTableAssistantSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveTimeTableData();
                 dialog.dismiss();
             }
         });
@@ -206,6 +258,25 @@ public class AssistantHelper {
         }
 
         this.setLearningCard();
+    }
+
+    private void changeTimeTableStepTitle() {
+        switch (this.currentStep) {
+            case 1:
+                this.lblTimeTableAssistantTitle.setText(R.string.timetable_assistant_step1);
+                break;
+            case 2:
+                this.lblTimeTableAssistantTitle.setText(R.string.timetable_assistant_step2);
+                break;
+            case 3:
+                this.lblTimeTableAssistantTitle.setText(R.string.timetable_assistant_step3);
+                break;
+            case 4:
+                this.lblTimeTableAssistantTitle.setText(R.string.timetable_assistant_step4);
+                break;
+        }
+
+        this.setTimeTable();
     }
 
     private void setLearningCard() {
@@ -239,7 +310,15 @@ public class AssistantHelper {
         }
     }
 
-    private void saveData() {
+    private void setTimeTable() {
+
+    }
+
+    private void saveTimeTableData() {
+
+    }
+
+    private void saveLearningCardData() {
         setLearningCard();
 
         this.group.setID(MainActivity.globals.getSqLite().insertOrUpdateLearningCardGroup(this.group));
@@ -268,7 +347,22 @@ public class AssistantHelper {
         );
     }
 
-    private void showSteps() {
+    private void showTimeTableSteps() {
+        this.cmdTimeTableAssistantForward.setEnabled(this.currentStep != this.maxStep);
+        this.cmdTimeTableAssistantBack.setEnabled(this.currentStep != 1);
+
+        for(int i = 0; i<=this.tblTimeTableAssistant.getChildCount()-1; i++) {
+            View view = this.tblTimeTableAssistant.getChildAt(i);
+            String tag = view.getTag().toString();
+            if(tag.equals("step" + this.currentStep)) {
+                view.setVisibility(View.VISIBLE);
+            } else {
+                view.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void showLearningCardSteps() {
         this.cmdLearningCardAssistantForward.setEnabled(this.currentStep != this.maxStep);
         this.cmdLearningCardAssistantBack.setEnabled(this.currentStep != 1);
 

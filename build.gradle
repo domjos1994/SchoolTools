@@ -10,8 +10,9 @@
 apply plugin: 'com.android.application'
 
 // create variables
-int compileSDKVersion = 28
+int compileSDKVersion = 29
 int minSDKVersion = 15
+int javaVersion = 8
 
 def espressoVersion = '3.2.0'
 
@@ -50,6 +51,11 @@ android {
         return void
     }
 
+    compileOptions {
+        targetCompatibility = javaVersion
+        sourceCompatibility = javaVersion
+    }
+
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
@@ -74,7 +80,7 @@ dependencies {
     // library to show graphs
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.hudomju:swipe-to-dismiss-undo:1.0'
-    implementation 'com.github.lookfirst:sardine:5.8'
+    implementation 'com.github.lookfirst:sardine:5.9'
 
     // Log4J-Logging for Android
     implementation 'log4j:log4j:1.2.17'

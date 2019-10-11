@@ -34,5 +34,4 @@
         android:id="@+id/navTimeTableTimes"
         android:icon="@drawable/ic_access_time_black_24dp"
         android:title="@string/timetable_times" />
-
 </menu>

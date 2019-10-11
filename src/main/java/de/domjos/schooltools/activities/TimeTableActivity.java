@@ -16,7 +16,8 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.TimeTableAdapter;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.helper.AssistantHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.widgets.TimeTableWidget;
 
@@ -42,6 +44,7 @@ public final class TimeTableActivity extends AbstractActivity {
     private FloatingActionButton cmdTimeTableAdd;
     private ListView lvTimeTable;
     private TimeTableAdapter timeTableAdapter;
+    private AppCompatImageButton cmdTimeTableAssistant;
 
     public TimeTableActivity() {
         super(R.layout.timetable_activity);
@@ -99,6 +102,14 @@ public final class TimeTableActivity extends AbstractActivity {
             }
         });
 
+        this.cmdTimeTableAssistant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AssistantHelper assistantHelper = new AssistantHelper(TimeTableActivity.this);
+                assistantHelper.showTimeTableAssistant();
+            }
+        });
+
         this.lvTimeTable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -138,6 +149,7 @@ public final class TimeTableActivity extends AbstractActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         try {
             if(resultCode==RESULT_OK) {
                 if(requestCode==99) {
@@ -187,6 +199,7 @@ public final class TimeTableActivity extends AbstractActivity {
 
             // init other controls
             this.cmdTimeTableAdd = this.findViewById(R.id.cmdTimeTableAdd);
+            this.cmdTimeTableAssistant = this.findViewById(R.id.cmdTimeTableAssistant);
 
             this.timeTableAdapter = new TimeTableAdapter(TimeTableActivity.this, R.layout.timetable_item, new ArrayList<TimeTable>());
             this.lvTimeTable = this.findViewById(R.id.lvTimeTable);
