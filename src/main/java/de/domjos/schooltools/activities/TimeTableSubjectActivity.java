@@ -464,13 +464,15 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         for(int i = 0; i<=this.subjectAdapter.getCount()-1; i++) {
             Subject subject = this.subjectAdapter.getItem(i);
             if(subject!=null) {
-                if(txtSubjectAlias.getText().toString().toLowerCase().trim().equals(subject.getAlias().toLowerCase())) {
-                    duplicated = true;
-                    break;
-                }
-                if(txtSubjectTitle.getText().toString().toLowerCase().trim().equals(subject.getTitle().toLowerCase())) {
-                    duplicated = true;
-                    break;
+                if(subject.getID()!=this.currentID) {
+                    if(txtSubjectAlias.getText().toString().toLowerCase().trim().equals(subject.getAlias().toLowerCase())) {
+                        duplicated = true;
+                        break;
+                    }
+                    if(txtSubjectTitle.getText().toString().toLowerCase().trim().equals(subject.getTitle().toLowerCase())) {
+                        duplicated = true;
+                        break;
+                    }
                 }
             }
         }

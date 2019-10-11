@@ -10,7 +10,7 @@
 apply plugin: 'com.android.application'
 
 // create variables
-int compileSDKVersion = 29
+int compileSDKVersion = 28
 int minSDKVersion = 15
 
 def espressoVersion = '3.2.0'
