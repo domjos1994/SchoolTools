@@ -10,9 +10,9 @@
 package de.domjos.schooltools.adapter;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCard;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQueryTraining;
 import de.domjos.schooltools.fragment.LearningCardFragment;

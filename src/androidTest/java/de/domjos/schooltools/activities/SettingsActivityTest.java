@@ -12,7 +12,7 @@ package de.domjos.schooltools.activities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.test.rule.ActivityTestRule;
+import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,9 +26,9 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.settings.UserSettings;
 import de.domjos.schooltools.utils.Helper;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertTrue;
 
 /**

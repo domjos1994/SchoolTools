@@ -10,8 +10,8 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

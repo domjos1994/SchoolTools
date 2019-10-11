@@ -17,7 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 import android.widget.Toast;
@@ -29,7 +29,6 @@ import java.util.List;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.BookmarkActivity;
-import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.Bookmark;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.IntentHelper;

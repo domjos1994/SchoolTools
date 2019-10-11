@@ -10,9 +10,9 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
-import android.support.design.widget.BottomNavigationView;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;

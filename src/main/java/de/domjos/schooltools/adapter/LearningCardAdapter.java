@@ -10,15 +10,14 @@
 package de.domjos.schooltools.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.core.model.learningCard.LearningCard;
-import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.helper.Helper;
 
 import java.util.List;

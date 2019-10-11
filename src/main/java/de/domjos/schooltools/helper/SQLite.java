@@ -15,8 +15,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Build;
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.lang.reflect.Field;
 import java.sql.Types;

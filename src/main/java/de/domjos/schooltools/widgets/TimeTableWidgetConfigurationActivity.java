@@ -15,8 +15,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;

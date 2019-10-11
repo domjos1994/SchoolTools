@@ -86,7 +86,7 @@
         android:layout_below="@+id/grdMarkListType"
         android:layout_above="@+id/grdControls"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/cmdMarkListOpenSearch"
         android:layout_width="64dp"
         android:layout_height="64dp"

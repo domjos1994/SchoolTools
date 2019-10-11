@@ -9,8 +9,8 @@
 
 package de.domjos.schooltools.helper;
 
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import de.domjos.schooltools.activities.MainActivity;
 import org.junit.Before;
 import org.junit.Rule;

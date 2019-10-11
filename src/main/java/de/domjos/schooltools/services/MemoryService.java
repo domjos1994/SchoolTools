@@ -13,7 +13,7 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat.Builder;
+import androidx.core.app.NotificationCompat.Builder;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.*;
@@ -23,7 +23,6 @@ import de.domjos.schooltools.core.model.learningCard.LearningCardQueryTraining;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;

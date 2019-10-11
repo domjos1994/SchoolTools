@@ -31,7 +31,7 @@
             android:divider="@color/Gray"
             android:dividerHeight="2dp"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/cmdTimeTableAdd"
             android:src="@android:drawable/ic_menu_add"
             android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
 
     </FrameLayout>
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -13,21 +13,18 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.core.model.Bookmark;
-import de.domjos.schooltools.core.model.timetable.TimeTable;
-import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 
 /**

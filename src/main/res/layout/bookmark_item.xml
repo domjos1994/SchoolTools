@@ -16,7 +16,7 @@
     android:layout_height="60dp"
     android:weightSum="10">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivBookmarkPreview"
         app:srcCompat="@drawable/ic_bookmark_black_24dp"
         android:layout_width="50dp"

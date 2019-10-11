@@ -11,7 +11,7 @@ package de.domjos.schooltools.core.utils.fileUtils;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.test.InstrumentationRegistry;
+import androidx.test.platform.app.InstrumentationRegistry;
 import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.learningCard.LearningCard;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;

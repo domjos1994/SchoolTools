@@ -1,11 +1,10 @@
 package de.domjos.schooltools.services;
 
 import android.app.Activity;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 
 import java.io.BufferedReader;
 import java.io.File;

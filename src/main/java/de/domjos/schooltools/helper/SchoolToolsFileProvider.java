@@ -13,5 +13,5 @@ package de.domjos.schooltools.helper;
  * @author Dominic Joas
  */
 
-public class SchoolToolsFileProvider extends android.support.v4.content.FileProvider {
+public class SchoolToolsFileProvider extends androidx.core.content.FileProvider {
 }

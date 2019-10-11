@@ -17,7 +17,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -27,12 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.activities.MainActivity;
-import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
 import de.domjos.schooltools.core.model.timetable.PupilHour;
-import de.domjos.schooltools.core.model.timetable.Teacher;
 import de.domjos.schooltools.core.model.timetable.TeacherHour;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;

@@ -7,30 +7,30 @@
     android:layout_height="match_parent"
     tools:context=".activities.BookmarkActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/AppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:layout_alignParentTop="true">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <android.support.v7.widget.SearchView
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/cmdSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="3dp">
-            </android.support.v7.widget.SearchView>
-        </android.support.v7.widget.Toolbar>
+            </androidx.appcompat.widget.SearchView>
+        </androidx.appcompat.widget.Toolbar>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:id="@+id/llSubjects"
@@ -170,7 +170,7 @@
         </TableLayout>
     </ScrollView>
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
