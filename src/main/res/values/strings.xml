@@ -361,6 +361,14 @@
     <string name="learningCard_result_secondTry">Im zweiten Versuch:</string>
     <string name="learningCard_result_thirdTry">Im dritten Versuch:</string>
 
+    <string name="learningCard_assistant">Assistent</string>
+    <string name="learningCard_assistant_step1">Schritt 1: Neue Gruppe anlegen</string>
+    <string name="learningCard_assistant_step2">Schritt 2: Inhalt eingeben</string>
+    <string name="learningCard_assistant_step3">Schritt 3: Abfrage erstellen</string>
+    <string name="learningCard_assistant_back">Zurück</string>
+    <string name="learningCard_assistant_forward">Vor</string>
+    <string name="learningCard_assistant_number">Anzahl an Zufallvokabeln</string>
+
     <string name="bookmark_link">Link</string>
     <string name="bookmark_tags">Tags</string>
     <string name="bookmark_saveAsWebsite">URL als Bookmark speichern!</string>

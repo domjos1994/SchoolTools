@@ -1385,7 +1385,7 @@ public class SQLite extends SQLiteOpenHelper {
         return timerEvents;
     }
 
-    public void insertOrUpdateLearningCardGroup(LearningCardGroup learningCardGroup) {
+    public int insertOrUpdateLearningCardGroup(LearningCardGroup learningCardGroup) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.beginTransaction();
@@ -1450,6 +1450,7 @@ public class SQLite extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+        return learningCardGroup.getID();
     }
 
     public List<LearningCardGroup> getLearningCardGroups(String where, boolean listLearningCards) {

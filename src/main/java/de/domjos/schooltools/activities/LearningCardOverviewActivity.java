@@ -29,6 +29,7 @@ import de.domjos.schooltools.adapter.LearningCardQueryFragmentAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQueryResult;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQueryTraining;
+import de.domjos.schooltools.helper.AssistantHelper;
 import de.domjos.schooltools.helper.Helper;
 
 import java.util.List;
@@ -133,6 +134,10 @@ public final class LearningCardOverviewActivity extends FragmentActivity {
                         break;
                     case R.id.navLearningCardQueries:
                         startActivityForResult(new Intent(getApplicationContext(), LearningCardQueryActivity.class), 99);
+                        break;
+                    case R.id.navLearningCardAssistant:
+                        AssistantHelper assistantHelper = new AssistantHelper(LearningCardOverviewActivity.this);
+                        assistantHelper.showLearningCardAssistant();
                         break;
                 }
                 return false;

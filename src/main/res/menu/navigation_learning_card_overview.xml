@@ -29,4 +29,9 @@
         android:id="@+id/navLearningCardQueries"
         android:icon="@drawable/ic_question_answer_black_24dp"
         android:title="@string/learningCard_query" />
+
+    <item
+        android:id="@+id/navLearningCardAssistant"
+        android:icon="@drawable/ic_assistant_black_24dp"
+        android:title="@string/learningCard_assistant" />
 </menu>
