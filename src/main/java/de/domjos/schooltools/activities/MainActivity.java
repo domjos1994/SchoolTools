@@ -16,6 +16,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -339,6 +340,15 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             }
         } catch (Exception ex) {
             Helper.printException(MainActivity.this, ex);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if(!this.cmdSearch.isInEditMode()) {
+            this.lvSearchResults.setVisibility(View.GONE);
         }
     }
 
