@@ -334,10 +334,8 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         try {
-            switch (requestCode) {
-                case Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR:
-                    this.initSyncServices();
-                    break;
+            if (requestCode == Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR) {
+                this.initSyncServices();
             }
         } catch (Exception ex) {
             Helper.printException(MainActivity.this, ex);
@@ -445,19 +443,19 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         }
 
 
-        for(Subject subject : MainActivity.globals.getSqLite().getSubjects("title like '%" + search + "'")) {
+        for(Subject subject : MainActivity.globals.getSqLite().getSubjects("title like '%" + search + "%'")) {
             this.searchAdapter.add(new SearchItem(subject.getID(), subject.getTitle(), this.getString(R.string.timetable_lesson)));
         }
 
-        for(Teacher teacher : MainActivity.globals.getSqLite().getTeachers("lastName like '%" + search + "'")) {
+        for(Teacher teacher : MainActivity.globals.getSqLite().getTeachers("lastName like '%" + search + "%'")) {
             this.searchAdapter.add(new SearchItem(teacher.getID(), teacher.getLastName(), this.getString(R.string.timetable_teacher)));
         }
 
-        for(SchoolClass schoolClass : MainActivity.globals.getSqLite().getClasses("title like '%" + search + "'")) {
+        for(SchoolClass schoolClass : MainActivity.globals.getSqLite().getClasses("title like '%" + search + "%'")) {
             this.searchAdapter.add(new SearchItem(schoolClass.getID(), schoolClass.getTitle(), this.getString(R.string.timetable_class)));
         }
 
-        for(Year year : MainActivity.globals.getSqLite().getYears("title like '%" + search + "'")) {
+        for(Year year : MainActivity.globals.getSqLite().getYears("title like '%" + search + "%'")) {
             this.searchAdapter.add(new SearchItem(year.getID(), year.getTitle(), this.getString(R.string.mark_year)));
         }
 
