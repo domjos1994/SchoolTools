@@ -9,8 +9,11 @@
 
 package de.domjos.schooltools.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +45,39 @@ public final class LearningCardGroupActivity extends AbstractActivity {
                 Intent intent = new Intent(getApplicationContext(), LearningCardGroupEntryActivity.class);
                 intent.putExtra("ID", 0);
                 startActivityForResult(intent, 99);
+            }
+        });
+
+        this.lvLearnCardGroups.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final LearningCardGroup group = learningCardGroupAdapter.getItem(position);
+
+                if(group!=null) {
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    MainActivity.globals.getSqLite().deleteEntry("learningCardGroups", "ID=" + group.getID());
+                                    reloadGroups();
+                                    dialog.dismiss();
+                                    break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    dialog.dismiss();
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LearningCardGroupActivity.this, R.style.AlertDialogTheme);
+                    builder.setMessage(R.string.learningCard_group_delete_dialog);
+                    builder.setPositiveButton(R.string.learningCard_group_delete_dialog_yes, dialogClickListener);
+                    builder.setNegativeButton(R.string.learningCard_group_delete_dialog_no, dialogClickListener);
+                    builder.show();
+                }
+                return true;
             }
         });
 
@@ -93,6 +129,7 @@ public final class LearningCardGroupActivity extends AbstractActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK) {
             if(requestCode==99) {
                 this.reloadGroups();

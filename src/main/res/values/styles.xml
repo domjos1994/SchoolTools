@@ -29,6 +29,15 @@
         <item name="android:dialogIcon">@mipmap/ic_launcher_round</item>
     </style>
 
+    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/textColor</item>
+        <item name="buttonBarPositiveButtonStyle">@style/textColor</item>
+    </style>
+
+    <style name="textColor" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

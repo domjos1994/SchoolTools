@@ -1580,7 +1580,9 @@ public class SQLite extends SQLiteOpenHelper {
                 learningCardQuery.setDescription(cursor.getString(2));
                 int cardGroup = cursor.getInt(3);
                 if(cardGroup!=0) {
-                    learningCardQuery.setLearningCardGroup(this.getLearningCardGroups("ID=" + cardGroup, false).get(0));
+                    if(this.entryExists("learningCardGroups", cardGroup)) {
+                        learningCardQuery.setLearningCardGroup(this.getLearningCardGroups("ID=" + cardGroup, false).get(0));
+                    }
                 }
                 learningCardQuery.setCategory(cursor.getString(4));
                 learningCardQuery.setPriority(cursor.getInt(5));

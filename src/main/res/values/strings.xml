@@ -327,6 +327,9 @@
 
     <string name="learningCard_questions">Fragen</string>
     <string name="learningCard_group_deadline">Stichtag</string>
+    <string name="learningCard_group_delete_dialog">Sind Sie sicher, dass Sie den Datensatz entfernen möchten?</string>
+    <string name="learningCard_group_delete_dialog_yes">Ja</string>
+    <string name="learningCard_group_delete_dialog_no">Nein</string>
     <string name="learningCard_question">Frage</string>
     <string name="learningCard_answer">Antwort</string>
     <string name="learningCard_note1">Hinweis 1</string>
