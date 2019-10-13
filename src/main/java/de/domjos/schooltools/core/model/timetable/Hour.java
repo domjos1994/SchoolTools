@@ -58,4 +58,8 @@ public class Hour {
     public void setBreak(boolean aBreak) {
         Break = aBreak;
     }
+
+    public String toString() {
+        return String.format("%s - %s", this.start, this.end);
+    }
 }

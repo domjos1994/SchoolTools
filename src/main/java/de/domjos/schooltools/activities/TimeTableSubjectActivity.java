@@ -9,6 +9,7 @@
 
 package de.domjos.schooltools.activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -81,29 +82,26 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         navigation.getMenu().getItem(1).setEnabled(false);
         navigation.getMenu().getItem(2).setEnabled(false);
 
-        this.lvSubjects.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Subject subject = subjectAdapter.getItem(position);
-                if(subject!=null) {
-                    currentID = subject.getID();
-                    txtSubjectTitle.setText(subject.getTitle());
-                    txtSubjectAlias.setText(subject.getAlias());
-                    txtSubjectDescription.setText(subject.getDescription());
-                    txtSubjectHoursInWeek.setText(String.valueOf(subject.getHoursInWeek()));
-                    chkSubjectMainSubject.setChecked(subject.isMainSubject());
-                    int color = Integer.parseInt(subject.getBackgroundColor());
-                    lblSelectedColor.setBackgroundColor(color);
-                    lblSelectedColor.setText(getSelectedName(color));
-                    if(subject.getTeacher()!=null) {
-                        Teacher t = subject.getTeacher();
-                        spSubjectTeachers.setSelection(adapter.getPosition(String.format("%s: %s %s", t.getID(), t.getFirstName(), t.getLastName())));
-                    } else {
-                        spSubjectTeachers.setSelection(-1);
-                    }
-                    navigation.getMenu().getItem(1).setEnabled(true);
-                    navigation.getMenu().getItem(2).setEnabled(true);
+        this.lvSubjects.setOnItemClickListener((parent, view, position, id) -> {
+            Subject subject = subjectAdapter.getItem(position);
+            if(subject!=null) {
+                currentID = subject.getID();
+                txtSubjectTitle.setText(subject.getTitle());
+                txtSubjectAlias.setText(subject.getAlias());
+                txtSubjectDescription.setText(subject.getDescription());
+                txtSubjectHoursInWeek.setText(String.valueOf(subject.getHoursInWeek()));
+                chkSubjectMainSubject.setChecked(subject.isMainSubject());
+                int color = Integer.parseInt(subject.getBackgroundColor());
+                lblSelectedColor.setBackgroundColor(color);
+                lblSelectedColor.setText(getSelectedName(TimeTableSubjectActivity.this, color));
+                if(subject.getTeacher()!=null) {
+                    Teacher t = subject.getTeacher();
+                    spSubjectTeachers.setSelection(adapter.getPosition(String.format("%s: %s %s", t.getID(), t.getFirstName(), t.getLastName())));
+                } else {
+                    spSubjectTeachers.setSelection(-1);
                 }
+                navigation.getMenu().getItem(1).setEnabled(true);
+                navigation.getMenu().getItem(2).setEnabled(true);
             }
         });
 
@@ -284,7 +282,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 String entry = colorAdapter.getItem(i);
                 if (entry != null) {
-                    lblSelectedColor.setBackgroundResource(colorAdapter.getSelectedColor(entry));
+                    lblSelectedColor.setBackgroundResource(colorAdapter.getSelectedColor(getApplicationContext(), entry));
                     lblSelectedColor.setText(entry);
                     dialogInterface.dismiss();
                 }
@@ -435,7 +433,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         } else {
             txtSubjectHoursInWeek.setText(String.valueOf(2));
         }
-        int color = colorAdapter.getSelectedColor(this.getString(color_name));
+        int color = colorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name));
         lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
         lblSelectedColor.setText(this.getString(color_name));
     }
@@ -447,7 +445,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         } else {
             txtSubjectHoursInWeek.setText(String.valueOf(2));
         }
-        int color = colorAdapter.getSelectedColor(this.getString(color_name));
+        int color = colorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name));
         lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
         lblSelectedColor.setText(this.getString(color_name));
     }
@@ -498,7 +496,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
             this.chkSubjectMainSubject.setChecked(false);
             this.lvSubjects.setSelection(-1);
             this.spSubjectTeachers.setSelection(this.adapter.getPosition(""));
-            int color = colorAdapter.getSelectedColor(this.getString(R.string.timetable_subject_rel_color));
+            int color = colorAdapter.getSelectedColor(getApplicationContext(), this.getString(R.string.timetable_subject_rel_color));
             this.lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
             this.lblSelectedColor.setText(this.getString(R.string.timetable_subject_rel_color));
         }
@@ -523,10 +521,10 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         this.setTitle(getString(R.string.timetable_lesson) + " (" + wholeHours + "h)");
     }
 
-    private String getSelectedName(int color) {
+    public static String getSelectedName(Activity activity, int color) {
         String nameToUse = "Black";
-        String[] colorNames = getResources().getStringArray(R.array.colorNames);
-        TypedArray ta = getResources().obtainTypedArray(R.array.colors);
+        String[] colorNames = activity.getResources().getStringArray(R.array.colorNames);
+        TypedArray ta = activity.getResources().obtainTypedArray(R.array.colors);
         for(int i=0; i<colorNames.length; i++) {
             int colorToUse = ta.getColor(i, 0);
             if(colorToUse==color) {

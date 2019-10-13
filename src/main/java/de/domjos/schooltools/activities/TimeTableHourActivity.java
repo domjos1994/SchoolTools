@@ -55,27 +55,24 @@ public final class TimeTableHourActivity extends AbstractActivity {
     protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableHourActivity.this);
 
-        this.lvHours.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Hour hour = hourAdapter.getItem(position);
-                if(hour!=null) {
-                    currentID = hour.getID();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        tpHoursStart.setHour(Integer.parseInt(hour.getStart().split(":")[0]));
-                        tpHoursStart.setMinute(Integer.parseInt(hour.getStart().split(":")[1]));
-                        tpHoursEnd.setHour(Integer.parseInt(hour.getEnd().split(":")[0]));
-                        tpHoursEnd.setMinute(Integer.parseInt(hour.getEnd().split(":")[1]));
-                    } else {
-                        tpHoursStart.setCurrentHour(Integer.parseInt(hour.getStart().split(":")[0]));
-                        tpHoursStart.setCurrentMinute(Integer.parseInt(hour.getStart().split(":")[1]));
-                        tpHoursEnd.setCurrentHour(Integer.parseInt(hour.getEnd().split(":")[0]));
-                        tpHoursEnd.setCurrentMinute(Integer.parseInt(hour.getEnd().split(":")[1]));
-                    }
-                    chkHoursBreak.setChecked(hour.isBreak());
-                    navigation.getMenu().getItem(1).setEnabled(true);
-                    navigation.getMenu().getItem(2).setEnabled(true);
+        this.lvHours.setOnItemClickListener((parent, view, position, id) -> {
+            Hour hour = hourAdapter.getItem(position);
+            if(hour!=null) {
+                currentID = hour.getID();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    tpHoursStart.setHour(Integer.parseInt(hour.getStart().split(":")[0]));
+                    tpHoursStart.setMinute(Integer.parseInt(hour.getStart().split(":")[1]));
+                    tpHoursEnd.setHour(Integer.parseInt(hour.getEnd().split(":")[0]));
+                    tpHoursEnd.setMinute(Integer.parseInt(hour.getEnd().split(":")[1]));
+                } else {
+                    tpHoursStart.setCurrentHour(Integer.parseInt(hour.getStart().split(":")[0]));
+                    tpHoursStart.setCurrentMinute(Integer.parseInt(hour.getStart().split(":")[1]));
+                    tpHoursEnd.setCurrentHour(Integer.parseInt(hour.getEnd().split(":")[0]));
+                    tpHoursEnd.setCurrentMinute(Integer.parseInt(hour.getEnd().split(":")[1]));
                 }
+                chkHoursBreak.setChecked(hour.isBreak());
+                navigation.getMenu().getItem(1).setEnabled(true);
+                navigation.getMenu().getItem(2).setEnabled(true);
             }
         });
 

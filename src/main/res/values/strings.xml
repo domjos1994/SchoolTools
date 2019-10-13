@@ -320,6 +320,11 @@
     <string name="timetable_assistant_step2">Schritt 2: Zeiten eingeben</string>
     <string name="timetable_assistant_step3">Schritt 3: Fächer ergänzen</string>
     <string name="timetable_assistant_step4">Schritt 4: Stundenplan eingeben</string>
+    <string name="timetable_assistant_start">Startzeit</string>
+    <string name="timetable_assistant_end">Endzeit</string>
+    <string name="timetable_assistant_lesson">Unterricht</string>
+    <string name="timetable_assistant_break">Pause</string>
+    <string name="timetable_assistant_add">Hinzufügen</string>
 
     <string name="todo_list">ToDo-Liste</string>
     <string name="todo_category">Kategorie</string>

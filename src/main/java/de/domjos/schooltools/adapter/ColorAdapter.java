@@ -41,18 +41,18 @@ public class ColorAdapter extends ArrayAdapter<String> {
         if(entry!=null) {
             if(lblText!=null) {
                 lblText.setText(entry);
-                lblText.setBackgroundColor(this.context.getResources().getColor(this.getSelectedColor(entry)));
+                lblText.setBackgroundColor(this.context.getResources().getColor(getSelectedColor(context, entry)));
             }
         }
         return rowView;
     }
 
-    public int getSelectedColor(String color) {
+    public static int getSelectedColor(Context context, String color) {
         int colorToUse = 0;
-        String[] colorNames = this.context.getResources().getStringArray(R.array.colorNames);
+        String[] colorNames = context.getResources().getStringArray(R.array.colorNames);
         for(int i=0; i<colorNames.length; i++) {
             if (color.equals(colorNames[i])) {
-                TypedArray ta = this.context.getResources().obtainTypedArray(R.array.colors);
+                TypedArray ta = context.getResources().obtainTypedArray(R.array.colors);
                 colorToUse = ta.getResourceId(i, 0);
                 ta.recycle();
                 break;

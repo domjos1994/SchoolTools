@@ -106,7 +106,7 @@ public final class TimeTableActivity extends AbstractActivity {
             @Override
             public void onClick(View v) {
                 AssistantHelper assistantHelper = new AssistantHelper(TimeTableActivity.this);
-                assistantHelper.showTimeTableAssistant();
+                assistantHelper.showTimeTableAssistant(() -> {reloadTimeTables();});
             }
         });
 

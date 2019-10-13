@@ -367,10 +367,17 @@ public final class TimeTableEntryActivity extends AbstractActivity {
                                 int timeID = Integer.parseInt(txtTime.getTag().toString().trim());
                                 if(entry.getKey().getID()==timeID) {
                                     Subject subject = entry.getValue().getSubject();
-                                    if(mpSubjects.containsKey(subject.getAlias())) {
-                                        mpSubjects.put(subject.getAlias(), (mpSubjects.get(subject.getAlias()) + 1));
-                                    } else {
-                                        mpSubjects.put(subject.getAlias(), 1);
+                                    if(mpSubjects!=null && subject!=null) {
+                                        if(subject.getAlias()!=null) {
+                                            Integer it = mpSubjects.get(subject.getAlias());
+                                            if(it!=null) {
+                                                if (mpSubjects.containsKey(subject.getAlias())) {
+                                                    mpSubjects.put(subject.getAlias(), (it + 1));
+                                                } else {
+                                                    mpSubjects.put(subject.getAlias(), 1);
+                                                }
+                                            }
+                                        }
                                     }
                                     Teacher teacher = entry.getValue().getTeacher();
                                     String roomNumber = entry.getValue().getRoomNumber();
