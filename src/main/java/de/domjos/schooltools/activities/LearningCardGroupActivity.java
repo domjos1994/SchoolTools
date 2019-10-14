@@ -11,27 +11,24 @@ package de.domjos.schooltools.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.LearningCardGroupAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
-
-import java.util.ArrayList;
 
 public final class LearningCardGroupActivity extends AbstractActivity {
     private FloatingActionButton cmdLearningCardGroupAdd;
-    private ListView lvLearnCardGroups;
-    private LearningCardGroupAdapter learningCardGroupAdapter;
+    private SwipeRefreshDeleteList lvLearnCardGroups;
 
     public LearningCardGroupActivity() {
         super(R.layout.learning_card_group_activity);
@@ -39,35 +36,41 @@ public final class LearningCardGroupActivity extends AbstractActivity {
 
     @Override
     protected void initActions() {
-        this.cmdLearningCardGroupAdd.setOnClickListener(new View.OnClickListener() {
+        this.cmdLearningCardGroupAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), LearningCardGroupEntryActivity.class);
+            intent.putExtra("ID", 0);
+            startActivityForResult(intent, 99);
+        });
+
+        this.lvLearnCardGroups.click(new SwipeRefreshDeleteList.ClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(BaseDescriptionObject listObject) {
                 Intent intent = new Intent(getApplicationContext(), LearningCardGroupEntryActivity.class);
-                intent.putExtra("ID", 0);
+                LearningCardGroup group = (LearningCardGroup) listObject;
+                if(group!=null) {
+                    intent.putExtra("ID", group.getID());
+                }
                 startActivityForResult(intent, 99);
             }
         });
 
-        this.lvLearnCardGroups.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        this.lvLearnCardGroups.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final LearningCardGroup group = learningCardGroupAdapter.getItem(position);
+            public void onDelete(BaseDescriptionObject listObject) {
+                LearningCardGroup group = (LearningCardGroup) listObject;
 
                 if(group!=null) {
-                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which){
-                                case DialogInterface.BUTTON_POSITIVE:
-                                    MainActivity.globals.getSqLite().deleteEntry("learningCardGroups", "ID=" + group.getID());
-                                    reloadGroups();
-                                    dialog.dismiss();
-                                    break;
+                    DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                MainActivity.globals.getSqLite().deleteEntry("learningCardGroups", "ID=" + group.getID());
+                                reloadGroups();
+                                dialog.dismiss();
+                                break;
 
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    dialog.dismiss();
-                                    break;
-                            }
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialog.dismiss();
+                                break;
                         }
                     };
 
@@ -77,19 +80,13 @@ public final class LearningCardGroupActivity extends AbstractActivity {
                     builder.setNegativeButton(R.string.learningCard_group_delete_dialog_no, dialogClickListener);
                     builder.show();
                 }
-                return true;
             }
         });
 
-        this.lvLearnCardGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.lvLearnCardGroups.reload(new SwipeRefreshDeleteList.ReloadListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), LearningCardGroupEntryActivity.class);
-                LearningCardGroup group = learningCardGroupAdapter.getItem(position);
-                if(group!=null) {
-                    intent.putExtra("ID", group.getID());
-                }
-                startActivityForResult(intent, 99);
+            public void onReload() {
+                reloadGroups();
             }
         });
     }
@@ -98,19 +95,16 @@ public final class LearningCardGroupActivity extends AbstractActivity {
     protected void initControls() {
         this.cmdLearningCardGroupAdd = this.findViewById(R.id.cmdLearningCardGroupAdd);
 
-        this.learningCardGroupAdapter = new LearningCardGroupAdapter(this.getApplicationContext(), R.layout.learning_card_group_item, new ArrayList<LearningCardGroup>());
         this.lvLearnCardGroups = this.findViewById(R.id.lvLearningCardGroups);
-        this.lvLearnCardGroups.setAdapter(this.learningCardGroupAdapter);
-        this.learningCardGroupAdapter.notifyDataSetChanged();
 
         this.reloadGroups();
         Helper.setBackgroundToActivity(this);
     }
 
     private void reloadGroups() {
-        this.learningCardGroupAdapter.clear();
+        this.lvLearnCardGroups.getAdapter().clear();
         for(LearningCardGroup group : MainActivity.globals.getSqLite().getLearningCardGroups("", false)) {
-            this.learningCardGroupAdapter.add(group);
+            this.lvLearnCardGroups.getAdapter().add(group);
         }
     }
 
@@ -123,7 +117,7 @@ public final class LearningCardGroupActivity extends AbstractActivity {
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_learning_cards"));
     }
 

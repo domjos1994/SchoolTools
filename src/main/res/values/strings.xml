@@ -386,6 +386,7 @@
     <string name="bookmark_tags">Tags</string>
     <string name="bookmark_saveAsWebsite">URL als Bookmark speichern!</string>
     <string name="bookmark_import">Daten Importieren</string>
+    <string name="bookmark_open">Öffnen</string>
 
     <string name="api_choice">Im- oder Export?</string>
     <string name="api_type">Modul</string>

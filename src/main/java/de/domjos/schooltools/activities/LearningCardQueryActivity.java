@@ -9,20 +9,17 @@
 
 package de.domjos.schooltools.activities;
 
-import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.LearningCardQueryAdapter;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQuery;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,16 +29,15 @@ public final class LearningCardQueryActivity extends AbstractActivity {
     private LearningCardQuery learningCardQuery;
     private BottomNavigationView navigation;
 
-    private ListView lvLearningCardQueries;
+    private SwipeRefreshDeleteList lvLearningCardQueries;
     private EditText txtLearningCardQueryTitle, txtLearningCardQueryDescription, txtLearningCardQueryPeriod, txtLearningCardQueryTries, txtLearningCardQueryRandomNumber;
     private Spinner spLearningCardQueryCategory, spLearningCardQueryGroup, spLearningCardQueryWrong;
     private SeekBar sbLearningCardQueryPriority;
     private CheckBox chkLearningCardQueryUntilDeadline, chkLearningCardQueryShowNotes, chkLearningCardQueryShowNotesImmediately, chkLearningCardQueryMustEqual, chkLearningCardQueryRandom;
 
     private ArrayAdapter<LearningCardGroup> groupAdapter;
-    private ArrayAdapter<LearningCardQuery> queryAdapter;
     private ArrayAdapter<String> categoryAdapter;
-    private LearningCardQueryAdapter learningCardQueryAdapter;
+    private ArrayAdapter<LearningCardQuery> queryAdapter;
 
     public LearningCardQueryActivity() {
         super(R.layout.learning_card_query_activity);
@@ -50,66 +46,72 @@ public final class LearningCardQueryActivity extends AbstractActivity {
     @Override
     protected void initActions() {
 
-        this.lvLearningCardQueries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.lvLearningCardQueries.click(new SwipeRefreshDeleteList.ClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                learningCardQuery = learningCardQueryAdapter.getItem(position);
+            public void onClick(BaseDescriptionObject listObject) {
+                learningCardQuery = (LearningCardQuery) listObject;
                 loadFields();
                 controlElements(false, false);
             }
         });
 
-        this.chkLearningCardQueryRandom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        this.lvLearningCardQueries.reload(new SwipeRefreshDeleteList.ReloadListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                txtLearningCardQueryRandomNumber.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            public void onReload() {
+                reloadList();
             }
         });
+
+        this.lvLearningCardQueries.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
+            @Override
+            public void onDelete(BaseDescriptionObject listObject) {
+                MainActivity.globals.getSqLite().deleteEntry("learningCardQueries", "ID=" + listObject.getID());
+                learningCardQuery = null;
+                controlElements(false, true);
+                reloadList();
+            }
+        });
+
+        this.chkLearningCardQueryRandom.setOnCheckedChangeListener((buttonView, isChecked) -> txtLearningCardQueryRandomNumber.setVisibility(isChecked ? View.VISIBLE : View.GONE));
     }
 
     @Override
     protected void initControls() {
         this.navigation = this.findViewById(R.id.navigation);
-        BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navTimeTableSubAdd:
-                        learningCardQuery = null;
-                        controlElements(true, true);
-                        break;
-                    case R.id.navTimeTableSubEdit:
-                        controlElements(true, false);
-                        break;
-                    case R.id.navTimeTableSubDelete:
-                        MainActivity.globals.getSqLite().deleteEntry("learningCardQueries", "ID=" + learningCardQuery.getID());
+        BottomNavigationView.OnNavigationItemSelectedListener listener = item -> {
+            switch (item.getItemId()) {
+                case R.id.navTimeTableSubAdd:
+                    learningCardQuery = null;
+                    controlElements(true, true);
+                    break;
+                case R.id.navTimeTableSubEdit:
+                    controlElements(true, false);
+                    break;
+                case R.id.navTimeTableSubDelete:
+                    MainActivity.globals.getSqLite().deleteEntry("learningCardQueries", "ID=" + learningCardQuery.getID());
+                    learningCardQuery = null;
+                    controlElements(false, true);
+                    reloadList();
+                    break;
+                case R.id.navTimeTableSubCancel:
+                    learningCardQuery = null;
+                    controlElements(false, true);
+                    break;
+                case R.id.navTimeTableSubSave:
+                    if(validator.getState()) {
+                        getFields();
+                        MainActivity.globals.getSqLite().insertOrUpdateLearningCardQuery(learningCardQuery);
                         learningCardQuery = null;
                         controlElements(false, true);
                         reloadList();
-                        break;
-                    case R.id.navTimeTableSubCancel:
-                        learningCardQuery = null;
-                        controlElements(false, true);
-                        break;
-                    case R.id.navTimeTableSubSave:
-                        if(validator.getState()) {
-                            getFields();
-                            MainActivity.globals.getSqLite().insertOrUpdateLearningCardQuery(learningCardQuery);
-                            learningCardQuery = null;
-                            controlElements(false, true);
-                            reloadList();
-                        }
-                        break;
-                }
-                return false;
+                    }
+                    break;
             }
+            return false;
         };
         this.navigation.setOnNavigationItemSelectedListener(listener);
 
         this.lvLearningCardQueries = this.findViewById(R.id.lvLearningCardQueries);
-        this.learningCardQueryAdapter = new LearningCardQueryAdapter(this.getApplicationContext(), R.layout.learning_card_query_item, new ArrayList<LearningCardQuery>());
-        this.lvLearningCardQueries.setAdapter(this.learningCardQueryAdapter);
-        this.learningCardQueryAdapter.notifyDataSetChanged();
 
         this.txtLearningCardQueryTitle = this.findViewById(R.id.txtLearningCardQueryTitle);
         this.txtLearningCardQueryDescription = this.findViewById(R.id.txtLearningCardQueryDescription);
@@ -134,7 +136,7 @@ public final class LearningCardQueryActivity extends AbstractActivity {
         this.groupAdapter.notifyDataSetChanged();
 
         this.spLearningCardQueryWrong = this.findViewById(R.id.spLearningCardQueryWrong);
-        this.queryAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new LinkedList<LearningCardQuery>());
+        this.queryAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new LinkedList<>());
         this.spLearningCardQueryWrong.setAdapter(this.queryAdapter);
         this.queryAdapter.notifyDataSetChanged();
         this.reloadList();
@@ -283,12 +285,12 @@ public final class LearningCardQueryActivity extends AbstractActivity {
     }
 
     private void reloadList() {
-        this.learningCardQueryAdapter.clear();
+        this.lvLearningCardQueries.getAdapter().clear();
         this.queryAdapter.clear();
         this.queryAdapter.add(new LearningCardQuery());
         List<LearningCardQuery> learningCardQueries = MainActivity.globals.getSqLite().getLearningCardQueries("");
         for(LearningCardQuery learningCardQuery : learningCardQueries) {
-            this.learningCardQueryAdapter.add(learningCardQuery);
+            this.lvLearningCardQueries.getAdapter().add(learningCardQuery);
             this.queryAdapter.add(learningCardQuery);
         }
     }

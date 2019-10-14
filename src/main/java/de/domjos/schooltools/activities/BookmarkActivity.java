@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
@@ -23,12 +22,10 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
@@ -39,12 +36,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.BookmarkAdapter;
 import de.domjos.schooltools.core.model.Bookmark;
 import de.domjos.schooltools.core.model.Subject;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.ApiHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.IntentHelper;
@@ -58,8 +57,7 @@ public final class BookmarkActivity extends AbstractActivity {
     private SearchView searchView;
 
     private WebView wvPreview;
-    private ListView lvBookmarks;
-    private BookmarkAdapter bookmarkAdapter;
+    private SwipeRefreshDeleteList lvBookmarks;
 
     private EditText txtBookmarkTitle, txtBookmarkThemes, txtBookmarkDescription, txtBookmarkLink;
     private MultiAutoCompleteTextView txtBookmarkTags;
@@ -79,48 +77,36 @@ public final class BookmarkActivity extends AbstractActivity {
         this.changeControls(false, true);
         this.getItemFromOutSide();
 
-        this.cmdBookmarkLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Helper.closeSoftKeyboard(BookmarkActivity.this);
-                wvPreview.loadUrl(txtBookmarkLink.getText().toString());
-            }
+        this.cmdBookmarkLink.setOnClickListener(v -> {
+            Helper.closeSoftKeyboard(BookmarkActivity.this);
+            wvPreview.loadUrl(txtBookmarkLink.getText().toString());
         });
 
-        this.cmdBookmarkLink.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                openIntent(currentBookmark, BookmarkActivity.this);
-                return false;
-            }
+        this.cmdBookmarkLink.setOnLongClickListener(v -> {
+            openIntent(currentBookmark, BookmarkActivity.this);
+            return false;
         });
 
-        this.cmdBookmarkFile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                File defaultDir = getApplicationContext().getFilesDir();
-                DialogProperties properties = new DialogProperties();
-                properties.selection_mode = DialogConfigs.SINGLE_MODE;
-                properties.root = new File(new File(ApiHelper.findExistingFolder(BookmarkActivity.this)).getParent());
-                properties.error_dir = defaultDir;
-                properties.offset = defaultDir;
-                properties.extensions = new String[]{"pdf", "doc", "docx", "ppt", "pptx", "odp", "odt", "xls", "xlsx", "ods", "png", "jpg"};
-                properties.selection_type = DialogConfigs.FILE_SELECT;
-                FilePickerDialog dialog = new FilePickerDialog(BookmarkActivity.this, properties);
-                dialog.setTitle(getString(R.string.bookmark_import));
-                dialog.show();
+        this.cmdBookmarkFile.setOnClickListener(v -> {
+            File defaultDir = getApplicationContext().getFilesDir();
+            DialogProperties properties = new DialogProperties();
+            properties.selection_mode = DialogConfigs.SINGLE_MODE;
+            properties.root = new File(Objects.requireNonNull(new File(ApiHelper.findExistingFolder(BookmarkActivity.this)).getParent()));
+            properties.error_dir = defaultDir;
+            properties.offset = defaultDir;
+            properties.extensions = new String[]{"pdf", "doc", "docx", "ppt", "pptx", "odp", "odt", "xls", "xlsx", "ods", "png", "jpg"};
+            properties.selection_type = DialogConfigs.FILE_SELECT;
+            FilePickerDialog dialog = new FilePickerDialog(BookmarkActivity.this, properties);
+            dialog.setTitle(getString(R.string.bookmark_import));
+            dialog.show();
 
-                dialog.setDialogSelectionListener(new DialogSelectionListener() {
-                    @Override
-                    public void onSelectedFilePaths(String[] files) {
-                        if(files!=null) {
-                            if(files.length==1) {
-                                txtBookmarkLink.setText(files[0]);
-                            }
-                        }
+            dialog.setDialogSelectionListener(files -> {
+                if(files!=null) {
+                    if(files.length==1) {
+                        txtBookmarkLink.setText(files[0]);
                     }
-                });
-            }
+                }
+            });
         });
 
         txtBookmarkLink.addTextChangedListener(new TextWatcher() {
@@ -155,22 +141,22 @@ public final class BookmarkActivity extends AbstractActivity {
             }
         });
 
-        this.lvBookmarks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.lvBookmarks.click(new SwipeRefreshDeleteList.ClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                currentBookmark = bookmarkAdapter.getItem(position);
+            public void onClick(BaseDescriptionObject listObject) {
+                currentBookmark = (Bookmark) listObject;
                 setFieldsFromObject();
             }
         });
 
-        this.lvBookmarks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        this.lvBookmarks.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Bookmark bookmark = bookmarkAdapter.getItem(position);
-                if(bookmark!=null) {
-                    openIntent(bookmark, BookmarkActivity.this);
+            public void onDelete(BaseDescriptionObject listObject) {
+                if(currentBookmark.getID()!=0) {
+                    MainActivity.globals.getSqLite().deleteEntry("bookmarks", currentBookmark);
                 }
-                return false;
+                changeControls(false, true);
+                reloadBookmarks("");
             }
         });
 
@@ -203,12 +189,9 @@ public final class BookmarkActivity extends AbstractActivity {
             }
         });
 
-        this.searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                reloadBookmarks("");
-                return false;
-            }
+        this.searchView.setOnCloseListener(() -> {
+            reloadBookmarks("");
+            return false;
         });
     }
 
@@ -251,8 +234,6 @@ public final class BookmarkActivity extends AbstractActivity {
         }
     }
 
-
-
     @Override
     protected void initControls() {
         // init Toolbar
@@ -278,9 +259,7 @@ public final class BookmarkActivity extends AbstractActivity {
         this.tagAdapter.notifyDataSetChanged();
 
         this.lvBookmarks = this.findViewById(R.id.lvBookmarks);
-        this.bookmarkAdapter = new BookmarkAdapter(this.getApplicationContext(), new LinkedList<Bookmark>());
-        this.lvBookmarks.setAdapter(this.bookmarkAdapter);
-        this.bookmarkAdapter.notifyDataSetChanged();
+        this.lvBookmarks.setContextMenu(R.menu.menu_bookmark);
         this.reloadBookmarks("");
 
         this.wvPreview = this.findViewById(R.id.wvPreview);
@@ -306,61 +285,58 @@ public final class BookmarkActivity extends AbstractActivity {
 
         // init navigation
         this.navigation = this.findViewById(R.id.navigation);
-        this.navigation.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navTimeTableSubAdd:
-                        currentBookmark = new Bookmark();
-                        changeControls(true, true);
-                        return true;
-                    case R.id.navTimeTableSubEdit:
-                        changeControls(true, false);
-                        return true;
-                    case R.id.navTimeTableSubDelete:
-                        if(currentBookmark.getID()!=0) {
-                            MainActivity.globals.getSqLite().deleteEntry("bookmarks", currentBookmark);
-                        }
-                        changeControls(false, true);
-                        reloadBookmarks("");
-                        return true;
-                    case R.id.navTimeTableSubCancel:
-                        changeControls(false, true);
-                        return true;
-                    case R.id.navTimeTableSubSave:
-                        if(validator.getState()) {
-                            int result = 0;
-                            try {
-                                currentBookmark.setTitle(txtBookmarkTitle.getText().toString());
-                                currentBookmark.setTags(txtBookmarkTags.getText().toString());
-                                currentBookmark.setThemes(txtBookmarkThemes.getText().toString());
-                                currentBookmark.setDescription(txtBookmarkDescription.getText().toString());
-                                currentBookmark.setLink(txtBookmarkLink.getText().toString());
-                                if(spBookmarksSubject.getSelectedItem()!=null) {
-                                    Subject subject = bookmarksSubjectAdapter.getItem(spBookmarksSubject.getSelectedItemPosition());
-                                    currentBookmark.setSubject(subject);
-                                }
-                                if(chkBookmarkImport.isChecked()) {
-                                    File importFile = new File(txtBookmarkLink.getText().toString());
-                                    FileInputStream fileInputStream = new FileInputStream(importFile);
-                                    byte fileContent[] = new byte[(int) importFile.length()];
-                                    result = fileInputStream.read(fileContent);
-                                    fileInputStream.close();
-                                    currentBookmark.setData(fileContent);
-                                }
-                                MainActivity.globals.getSqLite().insertOrUpdateBookmark(currentBookmark);
-                                changeControls(false, true);
-                                reloadBookmarks("");
-                                currentBookmark = new Bookmark();
-                            } catch (Exception ex) {
-                                Log.e("error", String.valueOf(result));
-                                Helper.printException(BookmarkActivity.this, ex);
+        this.navigation.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.navTimeTableSubAdd:
+                    currentBookmark = new Bookmark();
+                    changeControls(true, true);
+                    return true;
+                case R.id.navTimeTableSubEdit:
+                    changeControls(true, false);
+                    return true;
+                case R.id.navTimeTableSubDelete:
+                    if(currentBookmark.getID()!=0) {
+                        MainActivity.globals.getSqLite().deleteEntry("bookmarks", currentBookmark);
+                    }
+                    changeControls(false, true);
+                    reloadBookmarks("");
+                    return true;
+                case R.id.navTimeTableSubCancel:
+                    changeControls(false, true);
+                    return true;
+                case R.id.navTimeTableSubSave:
+                    if(validator.getState()) {
+                        int result = 0;
+                        try {
+                            currentBookmark.setTitle(txtBookmarkTitle.getText().toString());
+                            currentBookmark.setTags(txtBookmarkTags.getText().toString());
+                            currentBookmark.setThemes(txtBookmarkThemes.getText().toString());
+                            currentBookmark.setDescription(txtBookmarkDescription.getText().toString());
+                            currentBookmark.setLink(txtBookmarkLink.getText().toString());
+                            if(spBookmarksSubject.getSelectedItem()!=null) {
+                                Subject subject = bookmarksSubjectAdapter.getItem(spBookmarksSubject.getSelectedItemPosition());
+                                currentBookmark.setSubject(subject);
                             }
+                            if(chkBookmarkImport.isChecked()) {
+                                File importFile = new File(txtBookmarkLink.getText().toString());
+                                FileInputStream fileInputStream = new FileInputStream(importFile);
+                                byte[] fileContent = new byte[(int) importFile.length()];
+                                result = fileInputStream.read(fileContent);
+                                fileInputStream.close();
+                                currentBookmark.setData(fileContent);
+                            }
+                            MainActivity.globals.getSqLite().insertOrUpdateBookmark(currentBookmark);
+                            changeControls(false, true);
+                            reloadBookmarks("");
+                            currentBookmark = new Bookmark();
+                        } catch (Exception ex) {
+                            Log.e("error", String.valueOf(result));
+                            Helper.printException(BookmarkActivity.this, ex);
                         }
-                        return true;
-                }
-                return false;
+                    }
+                    return true;
             }
+            return false;
         });
 
 
@@ -371,6 +347,21 @@ public final class BookmarkActivity extends AbstractActivity {
         this.validator = new Validator(this.getApplicationContext());
         this.validator.addEmptyValidator(this.txtBookmarkTitle);
         this.validator.addEmptyValidator(this.txtBookmarkLink);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id==R.id.menBookmarkOpen) {
+            BaseDescriptionObject baseDescriptionObject = this.lvBookmarks.getAdapter().getObject();
+            if(baseDescriptionObject!=null) {
+                openIntent((Bookmark) baseDescriptionObject, BookmarkActivity.this);
+            }
+
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     private void changeControls(boolean editMode, boolean reset) {
@@ -414,7 +405,7 @@ public final class BookmarkActivity extends AbstractActivity {
 
     private void reloadBookmarks(String search) {
         List<String> tags = new LinkedList<>();
-        this.bookmarkAdapter.clear();
+        this.lvBookmarks.getAdapter().clear();
         for(Bookmark bookmark : MainActivity.globals.getSqLite().getBookmarks("")) {
             getTagsFromBookmark(bookmark, tags);
 
@@ -440,7 +431,7 @@ public final class BookmarkActivity extends AbstractActivity {
                 }
             }
 
-            this.bookmarkAdapter.add(bookmark);
+            this.lvBookmarks.getAdapter().add(bookmark);
         }
 
         this.tagAdapter.clear();

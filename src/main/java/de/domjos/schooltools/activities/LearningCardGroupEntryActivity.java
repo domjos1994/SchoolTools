@@ -9,12 +9,9 @@
 
 package de.domjos.schooltools.activities;
 
-import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.*;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.LearningCardAdapter;
@@ -58,35 +55,29 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
     protected void initActions() {
         this.loadCardGroup();
 
-        this.lvLearningCards.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                cardPosition = position;
-                loadCard();
-            }
+        this.lvLearningCards.setOnItemClickListener((parent, view, position, id) -> {
+            cardPosition = position;
+            loadCard();
         });
 
-        this.lvLearningCards.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                LearningCard learningCard = learningCards.get(position);
-                if(learningCard!=null) {
-                    if(learningCard.getID()!=0) {
-                        learningCards.remove(learningCard);
-                        for(int i = 0; i<=learningCards.size()-1; i++) {
-                            LearningCard tmp = learningCards.get(i);
-                            if(tmp!=null) {
-                                if(tmp.getID()==0) {
-                                    cardPosition = i;
-                                    loadCard();
-                                    break;
-                                }
+        this.lvLearningCards.setOnItemLongClickListener((parent, view, position, id) -> {
+            LearningCard learningCard = learningCards.get(position);
+            if(learningCard!=null) {
+                if(learningCard.getID()!=0) {
+                    learningCards.remove(learningCard);
+                    for(int i = 0; i<=learningCards.size()-1; i++) {
+                        LearningCard tmp = learningCards.get(i);
+                        if(tmp!=null) {
+                            if(tmp.getID()==0) {
+                                cardPosition = i;
+                                loadCard();
+                                break;
                             }
                         }
                     }
                 }
-                return false;
             }
+            return false;
         });
 
         this.txtLearningCardTitle.addTextChangedListener(new TextWatcher() {
@@ -223,30 +214,24 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        this.txtLearningCardAnswer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) {
-                    dictionaryAdapter.clear();
-                    for(String item : MainActivity.globals.getSqLite().findInDictionary(txtLearningCardQuestion.getText().toString())) {
-                        dictionaryAdapter.add(item);
-                    }
+        this.txtLearningCardAnswer.setOnFocusChangeListener((v, hasFocus) -> {
+            if(hasFocus) {
+                dictionaryAdapter.clear();
+                for(String item : MainActivity.globals.getSqLite().findInDictionary(txtLearningCardQuestion.getText().toString())) {
+                    dictionaryAdapter.add(item);
                 }
             }
         });
 
-        this.txtLearningCardAnswer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    LearningCard learningCard = learningCards.get(cardPosition);
-                    if(learningCard!=null) {
-                        learningCard.setAnswer(txtLearningCardAnswer.getText().toString());
-                        reloadList();
-                    }
-                } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+        this.txtLearningCardAnswer.setOnItemClickListener((parent, view, position, id) -> {
+            try {
+                LearningCard learningCard = learningCards.get(cardPosition);
+                if(learningCard!=null) {
+                    learningCard.setAnswer(txtLearningCardAnswer.getText().toString());
+                    reloadList();
                 }
+            } catch (Exception ex) {
+                Helper.printException(getApplicationContext(), ex);
             }
         });
     }
@@ -256,29 +241,26 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
     protected void initControls() {
         BottomNavigationView navigation = this.findViewById(R.id.navigation);
 
-        BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navLearningCardGroupCancel:
-                        setResult(RESULT_OK);
-                        finish();
-                        return true;
-                    case R.id.navLearningCardGroupSave:
-                        try {
-                            if(validator.getState()) {
-                                getCardGroup();
-                                MainActivity.globals.getSqLite().insertOrUpdateLearningCardGroup(learningCardGroup);
-                                setResult(RESULT_OK);
-                                finish();
-                            }
-                        } catch (Exception ex) {
-                            Helper.printException(getApplicationContext(), ex);
+        BottomNavigationView.OnNavigationItemSelectedListener listener = item -> {
+            switch (item.getItemId()) {
+                case R.id.navLearningCardGroupCancel:
+                    setResult(RESULT_OK);
+                    finish();
+                    return true;
+                case R.id.navLearningCardGroupSave:
+                    try {
+                        if(validator.getState()) {
+                            getCardGroup();
+                            MainActivity.globals.getSqLite().insertOrUpdateLearningCardGroup(learningCardGroup);
+                            setResult(RESULT_OK);
+                            finish();
                         }
-                        return true;
-                }
-                return false;
+                    } catch (Exception ex) {
+                        Helper.printException(getApplicationContext(), ex);
+                    }
+                    return true;
             }
+            return false;
         };
         navigation.setOnNavigationItemSelectedListener(listener);
 

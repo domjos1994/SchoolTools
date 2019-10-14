@@ -191,8 +191,9 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // settings
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 98) {
-            if(MainActivity.globals.getUserSettings().isWhatsNew()) {
+            if (MainActivity.globals.getUserSettings().isWhatsNew()) {
                 WhatsNewActivity.resetShown("whats_new", this.getApplicationContext());
                 MainActivity.globals.getUserSettings().setWhatsNew(false);
 
