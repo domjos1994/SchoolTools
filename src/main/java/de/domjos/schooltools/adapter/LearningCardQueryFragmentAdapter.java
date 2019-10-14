@@ -37,6 +37,10 @@ public class LearningCardQueryFragmentAdapter extends FragmentStatePagerAdapter 
         }
     }
 
+    public LearningCardQueryTraining getTraining() {
+        return this.training;
+    }
+
     @Override
     public CharSequence getPageTitle(int position) {
         if(this.training!=null) {

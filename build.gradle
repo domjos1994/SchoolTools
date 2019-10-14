@@ -17,7 +17,7 @@ int javaVersion = 8
 def espressoVersion = '3.2.0'
 
 def appVersionName = '0.4.alpha.1'
-def appVersionCode = 13
+def appVersionCode = 14
 
 buildscript {
     repositories {

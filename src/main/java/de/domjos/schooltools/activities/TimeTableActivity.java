@@ -9,7 +9,6 @@
 
 package de.domjos.schooltools.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
@@ -20,17 +19,13 @@ import androidx.appcompat.widget.AppCompatImageButton;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.TimeTableAdapter;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.core.model.timetable.TimeTable;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.AssistantHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.widgets.TimeTableWidget;
@@ -42,8 +37,7 @@ import de.domjos.schooltools.widgets.TimeTableWidget;
  */
 public final class TimeTableActivity extends AbstractActivity {
     private FloatingActionButton cmdTimeTableAdd;
-    private ListView lvTimeTable;
-    private TimeTableAdapter timeTableAdapter;
+    private SwipeRefreshDeleteList lvTimeTable;
     private AppCompatImageButton cmdTimeTableAssistant;
 
     public TimeTableActivity() {
@@ -55,72 +49,73 @@ public final class TimeTableActivity extends AbstractActivity {
         this.reloadTimeTables();
         this.openDescription();
 
-        this.cmdTimeTableAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean hours = MainActivity.globals.getSqLite().getHours("").isEmpty();
-                boolean teachers = MainActivity.globals.getSqLite().getTeachers("").isEmpty();
-                boolean subjects = MainActivity.globals.getSqLite().getSubjects("").isEmpty();
-                boolean years = MainActivity.globals.getSqLite().getYears("").isEmpty();
-                boolean schoolClasses = MainActivity.globals.getSqLite().getClasses("").isEmpty();
+        this.cmdTimeTableAdd.setOnClickListener(v -> {
+            boolean hours = MainActivity.globals.getSqLite().getHours("").isEmpty();
+            boolean teachers = MainActivity.globals.getSqLite().getTeachers("").isEmpty();
+            boolean subjects = MainActivity.globals.getSqLite().getSubjects("").isEmpty();
+            boolean years = MainActivity.globals.getSqLite().getYears("").isEmpty();
+            boolean schoolClasses = MainActivity.globals.getSqLite().getClasses("").isEmpty();
 
-                String missingFields = "";
-                if(hours) {
-                    missingFields += getString(R.string.timetable_hour) + ", ";
-                }
-                if(teachers) {
-                    missingFields += getString(R.string.timetable_teacher) + ", ";
-                }
-                if(subjects) {
-                    missingFields += getString(R.string.timetable_lesson) + ", ";
-                }
-                if(years) {
-                    missingFields += getString(R.string.timetable_year) + ", ";
-                }
-                if(schoolClasses) {
-                    missingFields += getString(R.string.timetable_class) + ", ";
-                }
-                if(!missingFields.isEmpty()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(TimeTableActivity.this);
-                    builder.setTitle(R.string.message_timetable_warning_header);
-                    builder.setMessage(String.format(getString(R.string.message_timetable_warning_content), (missingFields + ")").replace(", )", "")));
-                    builder.setPositiveButton(R.string.message_marklist_important_message_accept, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
-                            intent.putExtra("id", 0);
-                            startActivityForResult(intent, 99);
-                        }
-                    });
-                    builder.setNegativeButton(R.string.sys_cancel, null);
-                    builder.show();
-                } else {
+            String missingFields = "";
+            if(hours) {
+                missingFields += getString(R.string.timetable_hour) + ", ";
+            }
+            if(teachers) {
+                missingFields += getString(R.string.timetable_teacher) + ", ";
+            }
+            if(subjects) {
+                missingFields += getString(R.string.timetable_lesson) + ", ";
+            }
+            if(years) {
+                missingFields += getString(R.string.timetable_year) + ", ";
+            }
+            if(schoolClasses) {
+                missingFields += getString(R.string.timetable_class) + ", ";
+            }
+            if(!missingFields.isEmpty()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TimeTableActivity.this);
+                builder.setTitle(R.string.message_timetable_warning_header);
+                builder.setMessage(String.format(getString(R.string.message_timetable_warning_content), (missingFields + ")").replace(", )", "")));
+                builder.setPositiveButton(R.string.message_marklist_important_message_accept, (dialog, which) -> {
                     Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
                     intent.putExtra("id", 0);
                     startActivityForResult(intent, 99);
-                }
-            }
-        });
-
-        this.cmdTimeTableAssistant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AssistantHelper assistantHelper = new AssistantHelper(TimeTableActivity.this);
-                assistantHelper.showTimeTableAssistant(() -> {reloadTimeTables();});
-            }
-        });
-
-        this.lvTimeTable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                });
+                builder.setNegativeButton(R.string.sys_cancel, null);
+                builder.show();
+            } else {
                 Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
-                TimeTable timeTable = timeTableAdapter.getItem(position);
-                if (timeTable != null) {
-                    intent.putExtra("id", timeTable.getID());
-                } else {
-                    intent.putExtra("id", 0);
-                }
+                intent.putExtra("id", 0);
                 startActivityForResult(intent, 99);
+            }
+        });
+
+        this.cmdTimeTableAssistant.setOnClickListener(v -> {
+            AssistantHelper assistantHelper = new AssistantHelper(TimeTableActivity.this);
+            assistantHelper.showTimeTableAssistant(this::reloadTimeTables);
+        });
+
+        this.lvTimeTable.click(new SwipeRefreshDeleteList.ClickListener() {
+            @Override
+            public void onClick(BaseDescriptionObject listObject) {
+                Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
+                intent.putExtra("id", listObject.getID());
+                startActivityForResult(intent, 99);
+            }
+        });
+
+        this.lvTimeTable.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
+            @Override
+            public void onDelete(BaseDescriptionObject listObject) {
+                MainActivity.globals.getSqLite().deleteEntry("timeTable", "ID=" + listObject.getID());
+                reloadTimeTables();
+            }
+        });
+
+        this.lvTimeTable.reload(new SwipeRefreshDeleteList.ReloadListener() {
+            @Override
+            public void onReload() {
+                reloadTimeTables();
             }
         });
     }
@@ -143,7 +138,7 @@ public final class TimeTableActivity extends AbstractActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_timetable"));
     }
 
@@ -166,32 +161,29 @@ public final class TimeTableActivity extends AbstractActivity {
     protected void initControls() {
         try {
             // init BottomNavigation
-            BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (Helper.checkMenuID(item)) {
-                        case R.id.navTimeTableLesson:
-                            Intent intent = new Intent(getApplicationContext(), TimeTableSubjectActivity.class);
-                            intent.putExtra("parent", R.layout.timetable_activity);
-                            startActivity(intent);
-                            return true;
-                        case R.id.navTimeTableClass:
-                            startActivity(new Intent(getApplicationContext(), TimeTableClassActivity.class));
-                            break;
-                        case R.id.navTimeTableTeacher:
-                            startActivity(new Intent(getApplicationContext(), TimeTableTeacherActivity.class));
-                            return true;
-                        case R.id.navTimeTableYear:
-                            Intent tmp = new Intent(getApplicationContext(), MarkYearActivity.class);
-                            tmp.putExtra("parent", R.layout.timetable_activity);
-                            startActivity(tmp);
-                            return true;
-                        case R.id.navTimeTableTimes:
-                            startActivity(new Intent(getApplicationContext(), TimeTableHourActivity.class));
-                            return true;
-                    }
-                    return false;
+            BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
+                switch (Helper.checkMenuID(item)) {
+                    case R.id.navTimeTableLesson:
+                        Intent intent = new Intent(getApplicationContext(), TimeTableSubjectActivity.class);
+                        intent.putExtra("parent", R.layout.timetable_activity);
+                        startActivity(intent);
+                        return true;
+                    case R.id.navTimeTableClass:
+                        startActivity(new Intent(getApplicationContext(), TimeTableClassActivity.class));
+                        break;
+                    case R.id.navTimeTableTeacher:
+                        startActivity(new Intent(getApplicationContext(), TimeTableTeacherActivity.class));
+                        return true;
+                    case R.id.navTimeTableYear:
+                        Intent tmp = new Intent(getApplicationContext(), MarkYearActivity.class);
+                        tmp.putExtra("parent", R.layout.timetable_activity);
+                        startActivity(tmp);
+                        return true;
+                    case R.id.navTimeTableTimes:
+                        startActivity(new Intent(getApplicationContext(), TimeTableHourActivity.class));
+                        return true;
                 }
+                return false;
             };
             BottomNavigationView navigation = this.findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(navListener);
@@ -201,10 +193,7 @@ public final class TimeTableActivity extends AbstractActivity {
             this.cmdTimeTableAdd = this.findViewById(R.id.cmdTimeTableAdd);
             this.cmdTimeTableAssistant = this.findViewById(R.id.cmdTimeTableAssistant);
 
-            this.timeTableAdapter = new TimeTableAdapter(TimeTableActivity.this, R.layout.timetable_item, new ArrayList<TimeTable>());
             this.lvTimeTable = this.findViewById(R.id.lvTimeTable);
-            this.lvTimeTable.setAdapter(this.timeTableAdapter);
-            this.timeTableAdapter.notifyDataSetChanged();
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);
         }
@@ -212,10 +201,10 @@ public final class TimeTableActivity extends AbstractActivity {
 
     private void reloadTimeTables() {
         try {
-            this.timeTableAdapter.clear();
+            this.lvTimeTable.getAdapter().clear();
             List<TimeTable> timeTableList = MainActivity.globals.getSqLite().getTimeTables("");
             for(TimeTable timeTable : timeTableList) {
-                this.timeTableAdapter.add(timeTable);
+                this.lvTimeTable.getAdapter().add(timeTable);
             }
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);

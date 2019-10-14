@@ -14,4 +14,7 @@
         <attr name="max" format="integer"/>
         <attr name="current" format="float"/>
     </declare-styleable>
+    <declare-styleable name="SwipeRefreshDeleteList">
+        <attr name="itemIcon" format="integer"/>
+    </declare-styleable>
 </resources>
