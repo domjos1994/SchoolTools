@@ -123,7 +123,12 @@ public final class LearningCardOverviewActivity extends FragmentActivity {
                     startActivityForResult(new Intent(getApplicationContext(), LearningCardGroupActivity.class), 99);
                     break;
                 case R.id.navLearningCardQueries:
-                    startActivityForResult(new Intent(getApplicationContext(), LearningCardQueryActivity.class), 99);
+                    if(MainActivity.globals.getUserSettings().useAssistant()) {
+                        AssistantHelper assistantHelper = new AssistantHelper(LearningCardOverviewActivity.this);
+                        assistantHelper.showLearningCardAssistant();
+                    } else {
+                        startActivityForResult(new Intent(getApplicationContext(), LearningCardQueryActivity.class), 99);
+                    }
                     break;
                 case R.id.navLearningCardAssistant:
                     AssistantHelper assistantHelper = new AssistantHelper(LearningCardOverviewActivity.this);
@@ -132,8 +137,9 @@ public final class LearningCardOverviewActivity extends FragmentActivity {
             }
             return false;
         };
-
         BottomNavigationView navigation = this.findViewById(R.id.navigation);
+        navigation.getMenu().findItem(R.id.navLearningCardGroups).setVisible(!MainActivity.globals.getUserSettings().useAssistant());
+        navigation.getMenu().findItem(R.id.navLearningCardQueries).setVisible(!MainActivity.globals.getUserSettings().useAssistant());
         navigation.setOnNavigationItemSelectedListener(listener);
 
         // init Toolbar

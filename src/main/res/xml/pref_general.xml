@@ -16,6 +16,12 @@
         android:title="@string/settings_general_notifications_title"
         android:summary="@string/settings_general_notifications_summary"/>
 
+    <SwitchPreference
+        android:key="swtUseAssistant"
+        android:defaultValue="true"
+        android:title="@string/settings_general_assistant"
+        android:summary="@string/settings_general_assistant_summary"/>
+
     <PreferenceCategory
         android:title="@string/settings_general_background"
         android:icon="@drawable/ic_view_list_black_24dp"

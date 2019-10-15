@@ -52,6 +52,10 @@ public class UserSettings {
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    public boolean useAssistant() {
+        return this.sharedPreferences.getBoolean("swtUseAssistant", true);
+    }
+
     public boolean isExpertMode() {
         return this.sharedPreferences.getBoolean("swtSchoolMarkListExpert", false);
     }

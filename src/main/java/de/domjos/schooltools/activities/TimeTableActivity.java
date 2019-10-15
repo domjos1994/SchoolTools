@@ -19,6 +19,8 @@ import androidx.appcompat.widget.AppCompatImageButton;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
 import java.util.List;
 
 import de.domjos.schooltools.R;
@@ -50,43 +52,48 @@ public final class TimeTableActivity extends AbstractActivity {
         this.openDescription();
 
         this.cmdTimeTableAdd.setOnClickListener(v -> {
-            boolean hours = MainActivity.globals.getSqLite().getHours("").isEmpty();
-            boolean teachers = MainActivity.globals.getSqLite().getTeachers("").isEmpty();
-            boolean subjects = MainActivity.globals.getSqLite().getSubjects("").isEmpty();
-            boolean years = MainActivity.globals.getSqLite().getYears("").isEmpty();
-            boolean schoolClasses = MainActivity.globals.getSqLite().getClasses("").isEmpty();
+            if(MainActivity.globals.getUserSettings().useAssistant()) {
+                AssistantHelper assistantHelper = new AssistantHelper(TimeTableActivity.this);
+                assistantHelper.showTimeTableAssistant(this::reloadTimeTables);
+            } else {
+                boolean hours = MainActivity.globals.getSqLite().getHours("").isEmpty();
+                boolean teachers = MainActivity.globals.getSqLite().getTeachers("").isEmpty();
+                boolean subjects = MainActivity.globals.getSqLite().getSubjects("").isEmpty();
+                boolean years = MainActivity.globals.getSqLite().getYears("").isEmpty();
+                boolean schoolClasses = MainActivity.globals.getSqLite().getClasses("").isEmpty();
 
-            String missingFields = "";
-            if(hours) {
-                missingFields += getString(R.string.timetable_hour) + ", ";
-            }
-            if(teachers) {
-                missingFields += getString(R.string.timetable_teacher) + ", ";
-            }
-            if(subjects) {
-                missingFields += getString(R.string.timetable_lesson) + ", ";
-            }
-            if(years) {
-                missingFields += getString(R.string.timetable_year) + ", ";
-            }
-            if(schoolClasses) {
-                missingFields += getString(R.string.timetable_class) + ", ";
-            }
-            if(!missingFields.isEmpty()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TimeTableActivity.this);
-                builder.setTitle(R.string.message_timetable_warning_header);
-                builder.setMessage(String.format(getString(R.string.message_timetable_warning_content), (missingFields + ")").replace(", )", "")));
-                builder.setPositiveButton(R.string.message_marklist_important_message_accept, (dialog, which) -> {
+                String missingFields = "";
+                if (hours) {
+                    missingFields += getString(R.string.timetable_hour) + ", ";
+                }
+                if (teachers) {
+                    missingFields += getString(R.string.timetable_teacher) + ", ";
+                }
+                if (subjects) {
+                    missingFields += getString(R.string.timetable_lesson) + ", ";
+                }
+                if (years) {
+                    missingFields += getString(R.string.timetable_year) + ", ";
+                }
+                if (schoolClasses) {
+                    missingFields += getString(R.string.timetable_class) + ", ";
+                }
+                if (!missingFields.isEmpty()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(TimeTableActivity.this);
+                    builder.setTitle(R.string.message_timetable_warning_header);
+                    builder.setMessage(String.format(getString(R.string.message_timetable_warning_content), (missingFields + ")").replace(", )", "")));
+                    builder.setPositiveButton(R.string.message_marklist_important_message_accept, (dialog, which) -> {
+                        Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
+                        intent.putExtra("id", 0);
+                        startActivityForResult(intent, 99);
+                    });
+                    builder.setNegativeButton(R.string.sys_cancel, null);
+                    builder.show();
+                } else {
                     Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
                     intent.putExtra("id", 0);
                     startActivityForResult(intent, 99);
-                });
-                builder.setNegativeButton(R.string.sys_cancel, null);
-                builder.show();
-            } else {
-                Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
-                intent.putExtra("id", 0);
-                startActivityForResult(intent, 99);
+                }
             }
         });
 
@@ -192,6 +199,7 @@ public final class TimeTableActivity extends AbstractActivity {
             // init other controls
             this.cmdTimeTableAdd = this.findViewById(R.id.cmdTimeTableAdd);
             this.cmdTimeTableAssistant = this.findViewById(R.id.cmdTimeTableAssistant);
+            this.cmdTimeTableAssistant.setVisibility(MainActivity.globals.getUserSettings().useAssistant() ? View.GONE : View.VISIBLE);
 
             this.lvTimeTable = this.findViewById(R.id.lvTimeTable);
         } catch (Exception ex) {
