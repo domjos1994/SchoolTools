@@ -112,7 +112,7 @@
     <string name="settings_general_summary">Einstellungen für Notifikationen, Erinnerungen, Datenbank und Design</string>
     <string name="settings_general_notifications_title">Notifikationen anzeigen</string>
     <string name="settings_general_notifications_summary">Notifikationen von aktuellen Erinnerungen anzeigen!</string>
-    <string name="settings_general_background">Hinntergründe</string>
+    <string name="settings_general_background">Hintergründe</string>
     <string name="settings_general_custom_background_title">Eigenes Hintergrundbild</string>
     <string name="settings_general_custom_background_summary">App-Hintergrundbild durch eigenes Bild ersetzen!</string>
     <string name="settings_general_custom_app_bar_title">Eigenes Hintergrundbild der App-Bar</string>
