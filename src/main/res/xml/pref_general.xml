@@ -32,12 +32,19 @@
             android:summary="@string/settings_general_custom_app_bar_summary"/>
     </PreferenceCategory>
 
-    <SwitchPreference
-        android:key="swtWhatsNew"
-        android:defaultValue="false"
-        android:title="@string/settings_general_whatsNew_title"
-        android:summary="@string/settings_general_whatsNew_summary"/>
+    <PreferenceCategory
+        android:title="@string/settings_general_whatsNew"
+        android:layout="@android:layout/preference_category">
+        <SwitchPreference
+            android:key="swtWhatsNew"
+            android:defaultValue="false"
+            android:title="@string/settings_general_whatsNew_title"
+            android:summary="@string/settings_general_whatsNew_summary"/>
+    </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/settings_general_database"
+        android:layout="@android:layout/preference_category">
     <SwitchPreference
         android:key="swtDeleteMemories"
         android:defaultValue="true"
@@ -50,4 +57,5 @@
         android:defaultValue="true"
         android:title="@string/settings_general_reset_database_title"
         android:summary="@string/settings_general_deleteMemories_summary"/>
+    </PreferenceCategory>
 </PreferenceScreen>
