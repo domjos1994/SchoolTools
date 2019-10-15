@@ -15,7 +15,6 @@ import java.util.Date;
 
 /**
  * Model of a Test in the school
- * @see de.domjos.schooltools.adapter.TestAdapter
  * @author Dominic Joas
  * @version 1.0
  */

@@ -43,12 +43,12 @@ public final class SavedMarkListsScreenWidget extends ScreenWidget {
     @SuppressLint("ClickableViewAccessibility")
     public void init() {
         this.cmbSavedMarkList = super.view.findViewById(R.id.cmbSavedMarklist);
-        this.savedMarkListAdapter = new ArrayAdapter<>(super.activity, R.layout.spinner_item, new ArrayList<String>());
+        this.savedMarkListAdapter = new ArrayAdapter<>(super.activity, R.layout.spinner_item, new ArrayList<>());
         this.cmbSavedMarkList.setAdapter(this.savedMarkListAdapter);
         this.savedMarkListAdapter.notifyDataSetChanged();
 
         ListView lvMarkList = super.view.findViewById(R.id.lvMarklist);
-        this.markListAdapter = new MarkListAdapter(super.activity, R.layout.marklist_item, new ArrayList<Map.Entry<Double, Double>>());
+        this.markListAdapter = new MarkListAdapter(super.activity, R.layout.marklist_item, new ArrayList<>());
         lvMarkList.setAdapter(this.markListAdapter);
         this.markListAdapter.notifyDataSetChanged();
 

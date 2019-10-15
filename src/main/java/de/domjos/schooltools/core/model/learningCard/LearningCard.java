@@ -9,9 +9,9 @@
 
 package de.domjos.schooltools.core.model.learningCard;
 
-import de.domjos.schooltools.core.model.objects.BaseObject;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 
-public class LearningCard extends BaseObject {
+public class LearningCard extends BaseDescriptionObject {
     private String category;
     private String question;
     private String answer;

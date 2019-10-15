@@ -17,7 +17,6 @@ import android.widget.ListView;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
@@ -39,7 +38,7 @@ public final class TodayScreenWidget extends ScreenWidget {
     @SuppressLint("ClickableViewAccessibility")
     public void init() {
         ListView lvEvents = this.view.findViewById(R.id.lvEvents);
-        this.eventAdapter = new EventAdapter(activity, R.layout.main_today_event, new ArrayList<Map.Entry<String, String>>());
+        this.eventAdapter = new EventAdapter(activity, R.layout.main_today_event, new ArrayList<>());
         lvEvents.setAdapter(this.eventAdapter);
         this.eventAdapter.notifyDataSetChanged();
 

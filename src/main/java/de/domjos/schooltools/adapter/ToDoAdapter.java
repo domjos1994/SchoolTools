@@ -40,7 +40,7 @@ public class ToDoAdapter extends ArrayAdapter<ToDo> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull  ViewGroup parent) {
-        View rowView = Helper.getRowView(this.context, parent, R.layout.todo_item);
+        View rowView = Helper.getRowView(this.context, parent, R.layout.screen_widget_item);
         ToDo toDo = this.getItem(position);
 
         TextView lblToDoTitle = rowView.findViewById(R.id.lblToDoTitle);

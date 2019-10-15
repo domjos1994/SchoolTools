@@ -25,7 +25,6 @@ import java.util.Map;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.adapter.SubjectHourAdapter;
-import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.timetable.Day;
 import de.domjos.schooltools.core.model.timetable.Hour;
 import de.domjos.schooltools.core.model.timetable.PupilHour;
@@ -44,7 +43,7 @@ public final class TimeTableEventScreenWidget extends ScreenWidget {
     @Override
     public void init() {
         ListView lvTodayCurrentTimeTable = view.findViewById(R.id.lvTodayCurrentTimeTableEvents);
-        this.timeTableEventAdapter = new SubjectHourAdapter(super.activity, R.layout.timetable_subject_item, new ArrayList<Map.Entry<Hour, Subject>>());
+        this.timeTableEventAdapter = new SubjectHourAdapter(super.activity, R.layout.timetable_subject_item, new ArrayList<>());
         lvTodayCurrentTimeTable.setAdapter(this.timeTableEventAdapter);
         this.timeTableEventAdapter.notifyDataSetChanged();
     }
@@ -84,12 +83,10 @@ public final class TimeTableEventScreenWidget extends ScreenWidget {
 
                                                     if(day.getPupilHour().size()-1>counter) {
                                                         Object[] objects = day.getPupilHour().keySet().toArray();
-                                                        if(objects!=null) {
-                                                            Hour hour = (Hour)objects[counter+1];
-                                                            if(day.getPupilHour().values().toArray()[counter] instanceof PupilHour) {
-                                                                PupilHour mapEntry = (PupilHour) day.getPupilHour().values().toArray()[counter+1];
-                                                                timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, mapEntry.getSubject()));
-                                                            }
+                                                        Hour hour = (Hour)objects[counter+1];
+                                                        if(day.getPupilHour().values().toArray()[counter] instanceof PupilHour) {
+                                                            PupilHour mapEntry = (PupilHour) day.getPupilHour().values().toArray()[counter+1];
+                                                            timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, mapEntry.getSubject()));
                                                         }
                                                     }
                                                 }
@@ -112,12 +109,10 @@ public final class TimeTableEventScreenWidget extends ScreenWidget {
 
                                                     if(day.getTeacherHour().size()-1>counter) {
                                                         Object[] objects = day.getTeacherHour().keySet().toArray();
-                                                        if(objects!=null) {
-                                                            Hour hour = (Hour)objects[counter+1];
-                                                            if(day.getTeacherHour().values().toArray()[counter+1] instanceof TeacherHour) {
-                                                                TeacherHour mapEntry = (TeacherHour) day.getTeacherHour().values().toArray()[counter+1];
-                                                                timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, mapEntry.getSubject()));
-                                                            }
+                                                        Hour hour = (Hour)objects[counter+1];
+                                                        if(day.getTeacherHour().values().toArray()[counter+1] instanceof TeacherHour) {
+                                                            TeacherHour mapEntry = (TeacherHour) day.getTeacherHour().values().toArray()[counter+1];
+                                                            timeTableEventAdapter.add(new AbstractMap.SimpleEntry<>(hour, mapEntry.getSubject()));
                                                         }
                                                     }
                                                 }

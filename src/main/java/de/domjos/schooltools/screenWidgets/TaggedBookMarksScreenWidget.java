@@ -14,11 +14,11 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,13 +27,13 @@ import java.util.Map;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.BookmarkActivity;
 import de.domjos.schooltools.activities.MainActivity;
-import de.domjos.schooltools.adapter.BookmarkAdapter;
+import de.domjos.schooltools.adapter.ScreenWidgetAdapter;
 import de.domjos.schooltools.core.model.Bookmark;
 import de.domjos.schooltools.custom.CommaTokenizer;
 import de.domjos.schooltools.custom.ScreenWidget;
 
 public final class TaggedBookMarksScreenWidget extends ScreenWidget {
-    private BookmarkAdapter bookmarkAdapter;
+    private ScreenWidgetAdapter screenWidgetAdapter;
 
     public TaggedBookMarksScreenWidget(View view, Activity activity) {
         super(view, activity);
@@ -41,10 +41,14 @@ public final class TaggedBookMarksScreenWidget extends ScreenWidget {
 
     @Override
     public void init() {
-        this.bookmarkAdapter = new BookmarkAdapter(super.activity.getApplicationContext(), MainActivity.globals.getSqLite().getBookmarks(""));
+        this.screenWidgetAdapter = new ScreenWidgetAdapter(super.activity.getApplicationContext(), R.drawable.ic_bookmark_black_24dp, new ArrayList<>());
+        for(Bookmark bookmark : MainActivity.globals.getSqLite().getBookmarks("")) {
+            this.screenWidgetAdapter.add(bookmark);
+        }
+
         List<String> tags = new LinkedList<>();
-        for(int i = 0; i<=this.bookmarkAdapter.getCount()-1; i++) {
-            Bookmark bookmark = this.bookmarkAdapter.getItem(i);
+        for(int i = 0; i<=this.screenWidgetAdapter.getCount()-1; i++) {
+            Bookmark bookmark = (Bookmark) this.screenWidgetAdapter.getItem(i);
             if(bookmark!=null) {
                 String tagString = bookmark.getTags();
                 if(tagString!=null) {
@@ -70,8 +74,8 @@ public final class TaggedBookMarksScreenWidget extends ScreenWidget {
         tagAdapter.notifyDataSetChanged();
 
         ListView lvTaggedBookMarks = view.findViewById(R.id.lvTaggedBookMarks);
-        lvTaggedBookMarks.setAdapter(this.bookmarkAdapter);
-        this.bookmarkAdapter.notifyDataSetChanged();
+        lvTaggedBookMarks.setAdapter(this.screenWidgetAdapter);
+        this.screenWidgetAdapter.notifyDataSetChanged();
 
         txtTaggedBookMarksTags.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,7 +104,7 @@ public final class TaggedBookMarksScreenWidget extends ScreenWidget {
                         writtenTags.add(s.toString().trim().toLowerCase());
                     }
 
-                    bookmarkAdapter.clear();
+                    screenWidgetAdapter.clear();
                     for(Bookmark bookmark : MainActivity.globals.getSqLite().getBookmarks("")) {
                         String tags = bookmark.getTags().trim();
                         List<String> tagList = new LinkedList<>();
@@ -133,38 +137,32 @@ public final class TaggedBookMarksScreenWidget extends ScreenWidget {
                         }
 
                         if(!dontAdd) {
-                            bookmarkAdapter.add(bookmark);
+                            screenWidgetAdapter.add(bookmark);
                         }
                     }
                 } else {
-                    bookmarkAdapter.clear();
+                    screenWidgetAdapter.clear();
                     for(Bookmark bookmark : MainActivity.globals.getSqLite().getBookmarks("")) {
-                        bookmarkAdapter.add(bookmark);
+                        screenWidgetAdapter.add(bookmark);
                     }
                 }
             }
         });
 
-        lvTaggedBookMarks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Bookmark bookmark = bookmarkAdapter.getItem(position);
-                if(bookmark!=null) {
-                    BookmarkActivity.openIntent(bookmark, TaggedBookMarksScreenWidget.super.activity);
-                }
-                return false;
+        lvTaggedBookMarks.setOnItemLongClickListener((parent, view, position, id) -> {
+            Bookmark bookmark = (Bookmark) screenWidgetAdapter.getItem(position);
+            if(bookmark!=null) {
+                BookmarkActivity.openIntent(bookmark, TaggedBookMarksScreenWidget.super.activity);
             }
+            return false;
         });
 
-        lvTaggedBookMarks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bookmark bookmark = bookmarkAdapter.getItem(position);
-                if(bookmark!=null) {
-                    Intent intent = new Intent(activity.getApplicationContext(), BookmarkActivity.class);
-                    intent.putExtra("id", bookmark.getID());
-                    activity.startActivity(intent);
-                }
+        lvTaggedBookMarks.setOnItemClickListener((parent, view, position, id) -> {
+            Bookmark bookmark = (Bookmark) screenWidgetAdapter.getItem(position);
+            if(bookmark!=null) {
+                Intent intent = new Intent(activity.getApplicationContext(), BookmarkActivity.class);
+                intent.putExtra("id", bookmark.getID());
+                activity.startActivity(intent);
             }
         });
     }

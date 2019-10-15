@@ -50,7 +50,7 @@ public class SearchAdapter extends ArrayAdapter<SearchItem> {
     private Context context;
 
     public SearchAdapter(Context context) {
-        super(context, R.layout.search_item, new ArrayList<SearchItem>());
+        super(context, R.layout.search_item, new ArrayList<>());
         this.context = context;
     }
 
@@ -66,85 +66,82 @@ public class SearchAdapter extends ArrayAdapter<SearchItem> {
 
         if(entry!=null) {
             if(linearLayout!=null) {
-                linearLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = null;
-                        if(entry.getType().equals(context.getString(R.string.main_nav_mark_list))) {
-                            intent = new Intent(context, MarkListActivity.class);
-                        }
-                        if(entry.getType().equals(context.getString(R.string.mark_test))) {
-                            intent = new Intent(context, MarkEntryActivity.class);
-                            List<SchoolYear> schoolYears = MainActivity.globals.getSqLite().getSchoolYears("");
-                            for(SchoolYear schoolYear : schoolYears) {
-                                boolean isFound = false;
-                                for(Test test : schoolYear.getTests()) {
-                                    if(test.getID()==entry.getID()) {
-                                        intent.putExtra("subject", schoolYear.getSubject().getTitle());
-                                        intent.putExtra("year", schoolYear.getYear().getTitle());
-                                        isFound = true;
-                                        break;
-                                    }
-                                }
-                                if(isFound) {
+                linearLayout.setOnClickListener(v -> {
+                    Intent intent = null;
+                    if(entry.getType().equals(context.getString(R.string.main_nav_mark_list))) {
+                        intent = new Intent(context, MarkListActivity.class);
+                    }
+                    if(entry.getType().equals(context.getString(R.string.mark_test))) {
+                        intent = new Intent(context, MarkEntryActivity.class);
+                        List<SchoolYear> schoolYears = MainActivity.globals.getSqLite().getSchoolYears("");
+                        for(SchoolYear schoolYear : schoolYears) {
+                            boolean isFound = false;
+                            for(Test test : schoolYear.getTests()) {
+                                if(test.getID()==entry.getID()) {
+                                    intent.putExtra("subject", schoolYear.getSubject().getTitle());
+                                    intent.putExtra("year", schoolYear.getYear().getTitle());
+                                    isFound = true;
                                     break;
                                 }
                             }
+                            if(isFound) {
+                                break;
+                            }
                         }
-                        if(entry.getType().equals(context.getString(R.string.timetable_lesson))) {
-                            intent = new Intent(context, MarkActivity.class);
-                        }
-                        if(entry.getType().equals(context.getString(R.string.main_nav_notes))) {
-                            intent = new Intent(context, NoteActivity.class);
-                        }
-                        if(entry.getType().equals(context.getString(R.string.todo_list))) {
-                            intent = new Intent(context, ToDoListActivity.class);
-                        }
-                        if(entry.getType().equals(context.getString(R.string.main_nav_todo))) {
-                            intent = new Intent(context, ToDoEntryActivity.class);
-                            List<ToDoList> toDoLists = MainActivity.globals.getSqLite().getToDoLists("");
-                            for(ToDoList toDoList : toDoLists) {
-                                boolean isFound = false;
-                                for(ToDo toDo : toDoList.getToDos()) {
-                                    if(toDo.getID()==entry.getID()) {
-                                        intent.putExtra("list", toDoList.getTitle());
-                                        isFound = true;
-                                        break;
-                                    }
-                                }
-                                if(isFound) {
+                    }
+                    if(entry.getType().equals(context.getString(R.string.timetable_lesson))) {
+                        intent = new Intent(context, MarkActivity.class);
+                    }
+                    if(entry.getType().equals(context.getString(R.string.main_nav_notes))) {
+                        intent = new Intent(context, NoteActivity.class);
+                    }
+                    if(entry.getType().equals(context.getString(R.string.todo_list))) {
+                        intent = new Intent(context, ToDoListActivity.class);
+                    }
+                    if(entry.getType().equals(context.getString(R.string.main_nav_todo))) {
+                        intent = new Intent(context, ToDoEntryActivity.class);
+                        List<ToDoList> toDoLists = MainActivity.globals.getSqLite().getToDoLists("");
+                        for(ToDoList toDoList : toDoLists) {
+                            boolean isFound = false;
+                            for(ToDo toDo : toDoList.getToDos()) {
+                                if(toDo.getID()==entry.getID()) {
+                                    intent.putExtra("list", toDoList.getTitle());
+                                    isFound = true;
                                     break;
                                 }
                             }
+                            if(isFound) {
+                                break;
+                            }
                         }
-                        if(entry.getType().equals(context.getString(R.string.main_nav_timetable))) {
-                            intent = new Intent(context, TimeTableEntryActivity.class);
-                        }
-                        if(entry.getType().equals(context.getString(R.string.main_nav_timer))) {
-                            intent = new Intent(context, TimerEntryActivity.class);
-                            intent.putExtra("date", entry.getExtra());
-                        }
+                    }
+                    if(entry.getType().equals(context.getString(R.string.main_nav_timetable))) {
+                        intent = new Intent(context, TimeTableEntryActivity.class);
+                    }
+                    if(entry.getType().equals(context.getString(R.string.main_nav_timer))) {
+                        intent = new Intent(context, TimerEntryActivity.class);
+                        intent.putExtra("date", entry.getExtra());
+                    }
 
-                        if(entry.getType().equals(context.getString(R.string.timetable_lesson))) {
-                            intent = new Intent(context, TimeTableSubjectActivity.class);
-                        }
+                    if(entry.getType().equals(context.getString(R.string.timetable_lesson))) {
+                        intent = new Intent(context, TimeTableSubjectActivity.class);
+                    }
 
-                        if(entry.getType().equals(context.getString(R.string.timetable_class))) {
-                            intent = new Intent(context, TimeTableClassActivity.class);
-                        }
+                    if(entry.getType().equals(context.getString(R.string.timetable_class))) {
+                        intent = new Intent(context, TimeTableClassActivity.class);
+                    }
 
-                        if(entry.getType().equals(context.getString(R.string.timetable_teacher))) {
-                            intent = new Intent(context, TimeTableTeacherActivity.class);
-                        }
+                    if(entry.getType().equals(context.getString(R.string.timetable_teacher))) {
+                        intent = new Intent(context, TimeTableTeacherActivity.class);
+                    }
 
-                        if(entry.getType().equals(context.getString(R.string.mark_year))) {
-                            intent = new Intent(context, MarkYearActivity.class);
-                        }
+                    if(entry.getType().equals(context.getString(R.string.mark_year))) {
+                        intent = new Intent(context, MarkYearActivity.class);
+                    }
 
-                        if(intent!=null) {
-                            intent.putExtra("id", entry.getID());
-                            context.startActivity(intent);
-                        }
+                    if(intent!=null) {
+                        intent.putExtra("id", entry.getID());
+                        context.startActivity(intent);
                     }
                 });
             }

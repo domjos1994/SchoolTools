@@ -12,7 +12,6 @@ import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 
 /**
  * Model of a Year
- * @see de.domjos.schooltools.adapter.YearAdapter
  * @author Dominic Joas
  * @version 1.0
  */

@@ -35,6 +35,7 @@ public final class LearningCardOverviewActivity extends FragmentActivity {
     private ViewPager viewPager;
     private LearningCardQueryFragmentAdapter fragmentAdapter;
     private Button cmdLearningCardQueryStart;
+    public final static String MODE = "mode", RANDOM = "random";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +155,23 @@ public final class LearningCardOverviewActivity extends FragmentActivity {
                 if(!learningCardQueries.isEmpty()) {
                     this.loadLearningCardQuery(learningCardQueries.get(0));
                 }
+            }
+        }
+        this.startRandomQuery();
+    }
+
+    private void startRandomQuery() {
+        Intent intent = this.getIntent();
+        if(intent!=null) {
+            if(LearningCardOverviewActivity.RANDOM.equals(intent.getStringExtra(LearningCardOverviewActivity.MODE))) {
+                LearningCardQueryTraining training = new LearningCardQueryTraining();
+                LearningCardQuery learningCardQuery = new LearningCardQuery();
+                learningCardQuery.setRandomVocab(true);
+                learningCardQuery.setRandomVocabNumber(30);
+                training.setLearningCardQuery(learningCardQuery);
+                cmdLearningCardQueryStart.setText(getString(R.string.learningCard_query_end));
+                fragmentAdapter.setQuery(training);
+                viewPager.setAdapter(fragmentAdapter);
             }
         }
     }
