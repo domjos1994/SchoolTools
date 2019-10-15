@@ -94,14 +94,12 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <ListView
+            <de.domjos.schooltools.custom.SwipeRefreshDeleteList
                 android:id="@+id/lvTest"
                 android:layout_below="@+id/pnlChoice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="4dp"
-                android:divider="@color/Gray"
-                android:dividerHeight="2dp"/>
+                app:itemIcon="@drawable/ic_check_circle_black_24dp"/>
         </RelativeLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -8,6 +8,10 @@
  */
 package de.domjos.schooltools.core.model.timetable;
 
+import androidx.annotation.NonNull;
+
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
+
 /**
  * Model-Class for the teacher of a Time-Table
  * @see de.domjos.schooltools.activities.TimeTableActivity
@@ -15,23 +19,12 @@ package de.domjos.schooltools.core.model.timetable;
  * @author Dominic Joas
  * @version 1.0
  */
-public class Teacher {
-    private int ID;
-    private String firstName, lastName, description;
+public class Teacher extends BaseDescriptionObject {
+    private String firstName, lastName;
 
     public Teacher() {
-        this.ID = 0;
         this.firstName = "";
         this.lastName = "";
-        this.description = "";
-    }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 
     public String getFirstName() {
@@ -40,6 +33,7 @@ public class Teacher {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+        this.setNameToTitle();
     }
 
     public String getLastName() {
@@ -48,17 +42,15 @@ public class Teacher {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+        this.setNameToTitle();
     }
 
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    private void setNameToTitle() {
+        super.setTitle(String.format("%s %s", this.firstName, this.lastName));
     }
 
     @Override
+    @NonNull
     public String toString() {
         return this.firstName + " " + this.lastName;
     }

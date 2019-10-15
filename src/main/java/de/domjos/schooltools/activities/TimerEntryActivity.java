@@ -12,12 +12,13 @@ package de.domjos.schooltools.activities;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
+
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -62,15 +63,12 @@ public final class TimerEntryActivity extends AbstractActivity {
         this.reloadComboBoxes();
         this.fillData();
 
-        this.chkTimerMemory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    txtTimerMemoryDate.setVisibility(View.VISIBLE);
-                } else {
-                    txtTimerMemoryDate.setText("");
-                    txtTimerMemoryDate.setVisibility(View.GONE);
-                }
+        this.chkTimerMemory.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                txtTimerMemoryDate.setVisibility(View.VISIBLE);
+            } else {
+                txtTimerMemoryDate.setText("");
+                txtTimerMemoryDate.setVisibility(View.GONE);
             }
         });
     }
@@ -82,7 +80,7 @@ public final class TimerEntryActivity extends AbstractActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(Helper.showHelpMenu(item,getApplicationContext(),"help_timer"));
     }
 
@@ -142,60 +140,57 @@ public final class TimerEntryActivity extends AbstractActivity {
         try {
             // init navigation_learning_card_group
             BottomNavigationView navigation = this.findViewById(R.id.navigation);
-            OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (Helper.checkMenuID(item)) {
-                        case R.id.navTimeTableSubDelete:
-                            MainActivity.globals.getSqLite().deleteEntry("timerEvents", "ID", currentID, "");
-                            setResult(RESULT_OK);
-                            finish();
-                            break;
-                        case R.id.navTimeTableSubSave:
-                            try {
-                                if(validator.getState()) {
-                                    TimerEvent timerEvent = new TimerEvent();
-                                    timerEvent.setID(currentID);
-                                    timerEvent.setEventDate(currentDate);
-                                    timerEvent.setTitle(txtTimerTitle.getText().toString());
-                                    timerEvent.setDescription(txtTimerDescription.getText().toString());
-                                    timerEvent.setCategory(txtTimerCategories.getText().toString());
-                                    if(!txtTimerMemoryDate.getText().toString().equals("")) {
-                                        timerEvent.setMemoryDate(Converter.convertStringToDate(txtTimerMemoryDate.getText().toString()));
-                                    }
-                                    if(spTimerSubject.getSelectedItem()!=null) {
-                                        if(!spTimerSubject.getSelectedItem().equals("")) {
-                                            timerEvent.setSubject(MainActivity.globals.getSqLite().getSubjects("title='" + spTimerSubject.getSelectedItem() + "'").get(0));
-                                        }
-                                    }
-                                    if(spTimerClass.getSelectedItem()!=null) {
-                                        if(!spTimerClass.getSelectedItem().equals("")) {
-                                            timerEvent.setSchoolClass(MainActivity.globals.getSqLite().getClasses("title='" + spTimerClass.getSelectedItem() + "'").get(0));
-                                        }
-                                    }
-                                    if(spTimerTeacher.getSelectedItem()!=null) {
-                                        if(!spTimerTeacher.getSelectedItem().equals("")) {
-                                            String firstName = spTimerTeacher.getSelectedItem().toString().split(" ")[0];
-                                            String lastName = spTimerTeacher.getSelectedItem().toString().split(" ")[1];
-                                            timerEvent.setTeacher(MainActivity.globals.getSqLite().getTeachers("firstName='" + firstName + "' AND lastName='" + lastName + "'").get(0));
-                                        }
-                                    }
-                                    MainActivity.globals.getSqLite().insertOrUpdateTimerEvent(timerEvent);
-                                    setResult(RESULT_OK);
-                                    finish();
+            OnNavigationItemSelectedListener listener = item -> {
+                switch (Helper.checkMenuID(item)) {
+                    case R.id.navTimeTableSubDelete:
+                        MainActivity.globals.getSqLite().deleteEntry("timerEvents", "ID", currentID, "");
+                        setResult(RESULT_OK);
+                        finish();
+                        break;
+                    case R.id.navTimeTableSubSave:
+                        try {
+                            if(validator.getState()) {
+                                TimerEvent timerEvent = new TimerEvent();
+                                timerEvent.setID(currentID);
+                                timerEvent.setEventDate(currentDate);
+                                timerEvent.setTitle(txtTimerTitle.getText().toString());
+                                timerEvent.setDescription(txtTimerDescription.getText().toString());
+                                timerEvent.setCategory(txtTimerCategories.getText().toString());
+                                if(!txtTimerMemoryDate.getText().toString().equals("")) {
+                                    timerEvent.setMemoryDate(Converter.convertStringToDate(txtTimerMemoryDate.getText().toString()));
                                 }
-                            } catch (Exception ex) {
-                                Helper.printException(getApplicationContext(), ex);
+                                if(spTimerSubject.getSelectedItem()!=null) {
+                                    if(!spTimerSubject.getSelectedItem().equals("")) {
+                                        timerEvent.setSubject(MainActivity.globals.getSqLite().getSubjects("title='" + spTimerSubject.getSelectedItem() + "'").get(0));
+                                    }
+                                }
+                                if(spTimerClass.getSelectedItem()!=null) {
+                                    if(!spTimerClass.getSelectedItem().equals("")) {
+                                        timerEvent.setSchoolClass(MainActivity.globals.getSqLite().getClasses("title='" + spTimerClass.getSelectedItem() + "'").get(0));
+                                    }
+                                }
+                                if(spTimerTeacher.getSelectedItem()!=null) {
+                                    if(!spTimerTeacher.getSelectedItem().equals("")) {
+                                        String firstName = spTimerTeacher.getSelectedItem().toString().split(" ")[0];
+                                        String lastName = spTimerTeacher.getSelectedItem().toString().split(" ")[1];
+                                        timerEvent.setTeacher(MainActivity.globals.getSqLite().getTeachers("firstName='" + firstName + "' AND lastName='" + lastName + "'").get(0));
+                                    }
+                                }
+                                MainActivity.globals.getSqLite().insertOrUpdateTimerEvent(timerEvent);
+                                setResult(RESULT_OK);
+                                finish();
                             }
-                            break;
-                        case R.id.navTimeTableSubCancel:
-                            setResult(RESULT_OK);
-                            finish();
-                            break;
-                        default:
-                    }
-                    return false;
+                        } catch (Exception ex) {
+                            Helper.printException(getApplicationContext(), ex);
+                        }
+                        break;
+                    case R.id.navTimeTableSubCancel:
+                        setResult(RESULT_OK);
+                        finish();
+                        break;
+                    default:
                 }
+                return false;
             };
             navigation.getMenu().removeItem(R.id.navTimeTableSubAdd);
             navigation.getMenu().removeItem(R.id.navTimeTableSubEdit);
@@ -203,7 +198,14 @@ public final class TimerEntryActivity extends AbstractActivity {
 
             // init other controls
             this.currentID = this.getIntent().getIntExtra("id", 0);
-            this.currentDate = Converter.convertStringToDate(this.getIntent().getStringExtra("date"));
+            if(this.getIntent()!=null) {
+                Intent intent = this.getIntent();
+                String extra = intent.getStringExtra("date");
+                if(extra!=null) {
+                    this.currentDate = Converter.convertStringToDate(extra);
+                }
+            }
+
             TextView lblTimerDate = this.findViewById(R.id.lblTimerDate);
             lblTimerDate.setText(this.getIntent().getStringExtra("date"));
             this.txtTimerTitle = this.findViewById(R.id.txtTimerTitle);
@@ -214,17 +216,17 @@ public final class TimerEntryActivity extends AbstractActivity {
             this.txtTimerMemoryDate.setVisibility(View.GONE);
 
             this.spTimerSubject = this.findViewById(R.id.spTimerSubject);
-            this.subjectAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
+            this.subjectAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
             this.spTimerSubject.setAdapter(this.subjectAdapter);
             this.subjectAdapter.notifyDataSetChanged();
 
             this.spTimerTeacher = this.findViewById(R.id.spTimerTeacher);
-            this.teacherAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
+            this.teacherAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
             this.spTimerTeacher.setAdapter(this.teacherAdapter);
             this.teacherAdapter.notifyDataSetChanged();
 
             this.spTimerClass = this.findViewById(R.id.spTimerClass);
-            this.classAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
+            this.classAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
             this.spTimerClass.setAdapter(this.classAdapter);
             this.classAdapter.notifyDataSetChanged();
         } catch (Exception ex) {

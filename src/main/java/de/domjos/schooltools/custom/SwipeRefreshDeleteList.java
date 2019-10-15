@@ -22,10 +22,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TableLayout;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -70,6 +72,19 @@ public class SwipeRefreshDeleteList extends SwipeRefreshLayout {
     private void initDefault() {
         this.recyclerView = new RecyclerView(this.context);
         this.recyclerView.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), LinearLayoutManager.VERTICAL);
+
+        Drawable drawable;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            drawable = this.context.getDrawable(R.drawable.item_divider);
+        } else {
+            drawable = this.context.getResources().getDrawable(R.drawable.item_divider);
+        }
+        if(drawable!=null) {
+            dividerItemDecoration.setDrawable(drawable);
+        }
+
+        this.recyclerView.addItemDecoration(dividerItemDecoration);
         this.addView(this.recyclerView);
     }
 

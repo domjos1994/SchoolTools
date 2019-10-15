@@ -10,14 +10,12 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Intent;
-import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -64,15 +62,12 @@ public final class MarkEntryActivity extends AbstractActivity {
             Helper.printException(this.getApplicationContext(), ex);
         }
 
-        this.chkTestMemory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    txtTestMemoryDate.setVisibility(View.VISIBLE);
-                } else {
-                    txtTestMemoryDate.setVisibility(View.GONE);
-                    txtTestMemoryDate.setText("");
-                }
+        this.chkTestMemory.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                txtTestMemoryDate.setVisibility(View.VISIBLE);
+            } else {
+                txtTestMemoryDate.setVisibility(View.GONE);
+                txtTestMemoryDate.setText("");
             }
         });
     }
@@ -87,11 +82,8 @@ public final class MarkEntryActivity extends AbstractActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.menHelp:
-                startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
-                break;
-            default:
+        if (id == R.id.menHelp) {
+            startActivity(new Intent(this.getApplicationContext(), HelpActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -137,88 +129,83 @@ public final class MarkEntryActivity extends AbstractActivity {
     protected void initControls() {
         try {
             // init navigation_learning_card_group
-            OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
-
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    try {
-                        switch (Helper.checkMenuID(item)) {
-                            case R.id.navTimeTableSubDelete:
-                                MainActivity.globals.getSqLite().deleteEntry("tests", "ID", currentID, "");
-                                MainActivity.globals.getSqLite().deleteEntry("schoolYears", "test=" + currentID);
-                                setResult(RESULT_OK);
-                                finish();
-                                break;
-                            case R.id.navTimeTableSubSave:
-                                if(validator.getState()) {
-                                    Test test = new Test();
-                                    test.setID(currentID);
-                                    test.setTitle(txtTestTitle.getText().toString());
-                                    test.setWeight(Double.parseDouble(txtTestWeight.getText().toString()));
-                                    if(!txtTestMark.getText().toString().equals("")) {
-                                        test.setMark(Double.parseDouble(txtTestMark.getText().toString()));
-                                    }
-                                    if(!txtTestAverage.getText().toString().equals("")) {
-                                        test.setAverage(Double.parseDouble(txtTestAverage.getText().toString()));
-                                    }
-                                    if(!txtTestDate.getText().toString().equals("")) {
-                                        test.setTestDate(Converter.convertStringToDate(txtTestDate.getText().toString()));
-                                    }
-                                    if(!txtTestMemoryDate.getText().toString().equals("")) {
-                                        test.setMemoryDate(Converter.convertStringToDate(txtTestMemoryDate.getText().toString()));
-                                    }
-                                    test.setThemes(txtTestThemes.getText().toString());
-                                    test.setDescription(txtTestDescription.getText().toString());
-
-                                    if(chkTestTimerEvent.isChecked()) {
-                                        if(!sql.entryExists("timerEvents", "title='" + test.getTitle() + "' AND category='" + test + "'")) {
-                                            TimerEvent event = new TimerEvent();
-                                            event.setTitle(test.getTitle());
-                                            event.setDescription(test.getDescription());
-                                            event.setEventDate(test.getTestDate());
-                                            event.setMemoryDate(test.getMemoryDate());
-                                            event.setSubject(MainActivity.globals.getSqLite().getSubjects("title='" + lblTestSubject.getText() + "'").get(0));
-                                            event.setCategory(getString(R.string.mark_test));
-                                            sql.insertOrUpdateTimerEvent(event);
-                                        }
-                                    }
-
-                                    if(chkTestToDoList.isChecked() && !test.getThemes().isEmpty()) {
-                                        if(!sql.entryExists("toDoLists", "title='" + test.getTitle() + "'")) {
-                                            ToDoList toDoList = new ToDoList();
-                                            toDoList.setTitle(test.getTitle());
-                                            toDoList.setListDate(test.getTestDate());
-                                            toDoList.setDescription(test.getDescription());
-                                            sql.insertOrUpdateToDoList(toDoList);
-                                            for(String theme : test.getThemes().split("\n")) {
-                                                ToDo toDo = new ToDo();
-                                                toDo.setTitle(theme);
-                                                toDo.setSolved(false);
-                                                toDo.setImportance(5);
-                                                toDo.setMemoryDate(test.getMemoryDate());
-                                                sql.insertOrUpdateToDo(toDo, toDoList.getTitle());
-                                            }
-
-                                        }
-                                    }
-
-                                    MainActivity.globals.getSqLite().insertOrUpdateSchoolYear(lblTestSubject.getText().toString(), lblTestYear.getText().toString(), test);
-                                    setResult(RESULT_OK);
-                                    finish();
+            OnNavigationItemSelectedListener listener = item -> {
+                try {
+                    switch (Helper.checkMenuID(item)) {
+                        case R.id.navTimeTableSubDelete:
+                            MainActivity.globals.getSqLite().deleteEntry("tests", "ID", currentID, "");
+                            MainActivity.globals.getSqLite().deleteEntry("schoolYears", "test=" + currentID);
+                            setResult(RESULT_OK);
+                            finish();
+                            break;
+                        case R.id.navTimeTableSubSave:
+                            if(validator.getState()) {
+                                Test test = new Test();
+                                test.setID(currentID);
+                                test.setTitle(txtTestTitle.getText().toString());
+                                test.setWeight(Double.parseDouble(txtTestWeight.getText().toString()));
+                                if(!txtTestMark.getText().toString().equals("")) {
+                                    test.setMark(Double.parseDouble(txtTestMark.getText().toString()));
                                 }
-                                break;
-                            case R.id.navTimeTableSubCancel:
+                                if(!txtTestAverage.getText().toString().equals("")) {
+                                    test.setAverage(Double.parseDouble(txtTestAverage.getText().toString()));
+                                }
+                                if(!txtTestDate.getText().toString().equals("")) {
+                                    test.setTestDate(Converter.convertStringToDate(txtTestDate.getText().toString()));
+                                }
+                                if(!txtTestMemoryDate.getText().toString().equals("")) {
+                                    test.setMemoryDate(Converter.convertStringToDate(txtTestMemoryDate.getText().toString()));
+                                }
+                                test.setThemes(txtTestThemes.getText().toString());
+                                test.setDescription(txtTestDescription.getText().toString());
+
+                                if(chkTestTimerEvent.isChecked()) {
+                                    if(!sql.entryExists("timerEvents", "title='" + test.getTitle() + "' AND category='" + test + "'")) {
+                                        TimerEvent event = new TimerEvent();
+                                        event.setTitle(test.getTitle());
+                                        event.setDescription(test.getDescription());
+                                        event.setEventDate(test.getTestDate());
+                                        event.setMemoryDate(test.getMemoryDate());
+                                        event.setSubject(MainActivity.globals.getSqLite().getSubjects("title='" + lblTestSubject.getText() + "'").get(0));
+                                        event.setCategory(getString(R.string.mark_test));
+                                        sql.insertOrUpdateTimerEvent(event);
+                                    }
+                                }
+
+                                if(chkTestToDoList.isChecked() && !test.getThemes().isEmpty()) {
+                                    if(!sql.entryExists("toDoLists", "title='" + test.getTitle() + "'")) {
+                                        ToDoList toDoList = new ToDoList();
+                                        toDoList.setTitle(test.getTitle());
+                                        toDoList.setListDate(test.getTestDate());
+                                        toDoList.setDescription(test.getDescription());
+                                        sql.insertOrUpdateToDoList(toDoList);
+                                        for(String theme : test.getThemes().split("\n")) {
+                                            ToDo toDo = new ToDo();
+                                            toDo.setTitle(theme);
+                                            toDo.setSolved(false);
+                                            toDo.setImportance(5);
+                                            toDo.setMemoryDate(test.getMemoryDate());
+                                            sql.insertOrUpdateToDo(toDo, toDoList.getTitle());
+                                        }
+
+                                    }
+                                }
+
+                                MainActivity.globals.getSqLite().insertOrUpdateSchoolYear(lblTestSubject.getText().toString(), lblTestYear.getText().toString(), test);
                                 setResult(RESULT_OK);
                                 finish();
-                                break;
-                            default:
-                        }
-                    } catch (ParseException ex) {
-                        Helper.printException(getApplicationContext(), ex);
+                            }
+                            break;
+                        case R.id.navTimeTableSubCancel:
+                            setResult(RESULT_OK);
+                            finish();
+                            break;
+                        default:
                     }
-                    return false;
+                } catch (ParseException ex) {
+                    Helper.printException(getApplicationContext(), ex);
                 }
-
+                return false;
             };
             BottomNavigationView navigation = this.findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(listener);

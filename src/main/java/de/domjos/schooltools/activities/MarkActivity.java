@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,12 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.TestAdapter;
 import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.mark.SchoolYear;
 import de.domjos.schooltools.core.model.mark.Test;
 import de.domjos.schooltools.core.model.mark.Year;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
 
 /**
@@ -45,11 +45,10 @@ public final class MarkActivity extends AbstractActivity {
     private String subject = "", year = "";
     private FloatingActionButton cmdTestAdd;
 
-    private ListView lvTest;
+    private SwipeRefreshDeleteList lvTest;
     private TextView lblMark;
     private Spinner spMarkYear, spMarkSubject;
     private ArrayAdapter<String> yearAdapter, subjectAdapter;
-    private TestAdapter testAdapter;
 
     public MarkActivity() {
         super(R.layout.mark_activity);
@@ -78,30 +77,42 @@ public final class MarkActivity extends AbstractActivity {
         }
         Helper.setBackgroundToActivity(this);
 
-        this.cmdTestAdd.setOnClickListener(new View.OnClickListener() {
+        this.cmdTestAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), MarkEntryActivity.class);
+            intent.putExtra("id", 0);
+            intent.putExtra("subject", subject);
+            intent.putExtra("year", year);
+            startActivityForResult(intent, 98);
+        });
+
+        this.lvTest.click(new SwipeRefreshDeleteList.ClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(BaseDescriptionObject listObject) {
+                Test test = (Test) listObject;
+
                 Intent intent = new Intent(getApplicationContext(), MarkEntryActivity.class);
-                intent.putExtra("id", 0);
+                if(test!=null) {
+                    intent.putExtra("id", test.getID());
+                }
                 intent.putExtra("subject", subject);
                 intent.putExtra("year", year);
                 startActivityForResult(intent, 98);
             }
         });
 
-        this.lvTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.lvTest.reload(new SwipeRefreshDeleteList.ReloadListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(!subject.equals("") && !year.equals("")) {
-                    Intent intent = new Intent(getApplicationContext(), MarkEntryActivity.class);
-                    Test test = testAdapter.getItem(position);
-                    if(test!=null) {
-                        intent.putExtra("id", test.getID());
-                    }
-                    intent.putExtra("subject", subject);
-                    intent.putExtra("year", year);
-                    startActivityForResult(intent, 98);
-                }
+            public void onReload() {
+                reloadTests();
+            }
+        });
+
+        this.lvTest.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
+            @Override
+            public void onDelete(BaseDescriptionObject listObject) {
+                MainActivity.globals.getSqLite().deleteEntry("tests", "ID", listObject.getID(), "");
+                MainActivity.globals.getSqLite().deleteEntry("schoolYears", "test=" + listObject.getID());
+                reloadTests();
             }
         });
 
@@ -139,22 +150,23 @@ public final class MarkActivity extends AbstractActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_calculate_mark"));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         try {
-            if(requestCode==99) {
+            if (requestCode == 99) {
                 this.subject = "";
                 this.year = "";
                 this.reloadSubject();
                 this.reloadYear();
             }
 
-            if(resultCode==RESULT_OK) {
-                if(requestCode==98) {
+            if (resultCode == RESULT_OK) {
+                if (requestCode == 98) {
                     this.reloadTests();
                 }
             }
@@ -191,14 +203,14 @@ public final class MarkActivity extends AbstractActivity {
             this.cmdTestAdd.setVisibility(View.GONE);
         }
 
-        this.testAdapter.clear();
+        this.lvTest.getAdapter().clear();
         double mark = 0.0;
         int countMark = 0;
         for(SchoolYear schoolYear : MainActivity.globals.getSqLite().getSchoolYears(subject, year)) {
             double curMark = schoolYear.calculateAverage();
             mark += curMark;
             for(Test test : schoolYear.getTests()) {
-                this.testAdapter.add(test);
+                this.lvTest.getAdapter().add(test);
             }
             if(curMark!=0.0) {
                 countMark++;
@@ -216,25 +228,22 @@ public final class MarkActivity extends AbstractActivity {
     @Override
     protected void initControls() {
         // init BottomNavigation
-        BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Intent intent;
-                switch (Helper.checkMenuID(item)) {
-                    case R.id.navMarkLesson:
-                        intent = new Intent(getApplicationContext(), TimeTableSubjectActivity.class);
-                        intent.putExtra("parent", R.layout.mark_activity);
-                        startActivityForResult(intent, 99);
-                        break;
-                    case R.id.navMarkYear:
-                        intent = new Intent(getApplicationContext(), MarkYearActivity.class);
-                        intent.putExtra("parent", R.layout.mark_activity);
-                        startActivityForResult(intent, 99);
-                        break;
-                    default:
-                }
-                return false;
+        BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
+            Intent intent;
+            switch (Helper.checkMenuID(item)) {
+                case R.id.navMarkLesson:
+                    intent = new Intent(getApplicationContext(), TimeTableSubjectActivity.class);
+                    intent.putExtra("parent", R.layout.mark_activity);
+                    startActivityForResult(intent, 99);
+                    break;
+                case R.id.navMarkYear:
+                    intent = new Intent(getApplicationContext(), MarkYearActivity.class);
+                    intent.putExtra("parent", R.layout.mark_activity);
+                    startActivityForResult(intent, 99);
+                    break;
+                default:
             }
+            return false;
         };
         BottomNavigationView navigation = this.findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(navListener);
@@ -244,17 +253,14 @@ public final class MarkActivity extends AbstractActivity {
         this.lblMark = this.findViewById(R.id.lblMark);
 
         this.lvTest = this.findViewById(R.id.lvTest);
-        this.testAdapter = new TestAdapter(MarkActivity.this, R.layout.mark_item, new ArrayList<Test>());
-        this.lvTest.setAdapter(this.testAdapter);
-        this.testAdapter.notifyDataSetChanged();
 
         this.spMarkSubject = this.findViewById(R.id.spMarkSubject);
-        this.subjectAdapter = new ArrayAdapter<>(MarkActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.subjectAdapter = new ArrayAdapter<>(MarkActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
         this.spMarkSubject.setAdapter(this.subjectAdapter);
         this.subjectAdapter.notifyDataSetChanged();
 
         this.spMarkYear = this.findViewById(R.id.spMarkYear);
-        this.yearAdapter = new ArrayAdapter<>(MarkActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.yearAdapter = new ArrayAdapter<>(MarkActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
         this.spMarkYear.setAdapter(this.yearAdapter);
         this.yearAdapter.notifyDataSetChanged();
     }

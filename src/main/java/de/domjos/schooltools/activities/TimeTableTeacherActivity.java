@@ -13,18 +13,14 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.TeacherAdapter;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.core.model.timetable.Teacher;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
 
@@ -35,8 +31,7 @@ import de.domjos.schooltools.helper.Validator;
  */
 public final class TimeTableTeacherActivity extends AbstractActivity {
 
-    private ListView lvTeachers;
-    private TeacherAdapter teacherAdapter;
+    private SwipeRefreshDeleteList lvTeachers;
     private EditText txtTeacherFirstName, txtTeacherLastName, txtTeacherDescription;
     private BottomNavigationView navigation;
     private int currentID;
@@ -51,10 +46,10 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
     protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableTeacherActivity.this);
 
-        this.lvTeachers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.lvTeachers.click(new SwipeRefreshDeleteList.ClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Teacher teacher = teacherAdapter.getItem(position);
+            public void onClick(BaseDescriptionObject listObject) {
+                Teacher teacher = (Teacher) listObject;
                 if(teacher!=null) {
                     currentID = teacher.getID();
                     txtTeacherFirstName.setText(teacher.getFirstName());
@@ -63,6 +58,26 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
                     navigation.getMenu().getItem(1).setEnabled(true);
                     navigation.getMenu().getItem(2).setEnabled(true);
                 }
+            }
+        });
+
+        this.lvTeachers.reload(new SwipeRefreshDeleteList.ReloadListener() {
+            @Override
+            public void onReload() {
+                reloadTeachers();
+            }
+        });
+
+        this.lvTeachers.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
+            @Override
+            public void onDelete(BaseDescriptionObject listObject) {
+                MainActivity.globals.getSqLite().deleteEntry("teachers", "ID", listObject.getID(), "");
+
+                currentID = 0;
+                navigation.getMenu().getItem(1).setEnabled(false);
+                navigation.getMenu().getItem(2).setEnabled(false);
+                controlFields(false, true);
+                reloadTeachers();
             }
         });
     }
@@ -74,7 +89,7 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_timetable"));
     }
 
@@ -82,59 +97,54 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
     protected void initControls() {
         // init BottomNavigation
         BottomNavigationView.OnNavigationItemSelectedListener navListener
-                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+                = item -> {
+                    switch (Helper.checkMenuID(item)) {
+                        case R.id.navTimeTableSubAdd:
+                            currentID = 0;
+                            controlFields(true, true);
+                            return true;
+                        case R.id.navTimeTableSubEdit:
+                            controlFields(true, false);
+                            return true;
+                        case R.id.navTimeTableSubDelete:
+                            MainActivity.globals.getSqLite().deleteEntry("teachers", "ID", currentID, "");
 
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (Helper.checkMenuID(item)) {
-                    case R.id.navTimeTableSubAdd:
-                        currentID = 0;
-                        controlFields(true, true);
-                        return true;
-                    case R.id.navTimeTableSubEdit:
-                        controlFields(true, false);
-                        return true;
-                    case R.id.navTimeTableSubDelete:
-                        MainActivity.globals.getSqLite().deleteEntry("teachers", "ID", currentID, "");
+                            currentID = 0;
+                            navigation.getMenu().getItem(1).setEnabled(false);
+                            navigation.getMenu().getItem(2).setEnabled(false);
+                            controlFields(false, true);
+                            reloadTeachers();
+                            return true;
+                        case R.id.navTimeTableSubSave:
+                            if(validator.getState()) {
+                                Teacher teacher = new Teacher();
+                                teacher.setID(currentID);
+                                teacher.setFirstName(txtTeacherFirstName.getText().toString());
+                                teacher.setLastName(txtTeacherLastName.getText().toString());
+                                teacher.setDescription(txtTeacherDescription.getText().toString());
 
-                        currentID = 0;
-                        navigation.getMenu().getItem(1).setEnabled(false);
-                        navigation.getMenu().getItem(2).setEnabled(false);
-                        controlFields(false, true);
-                        reloadTeachers();
-                        return true;
-                    case R.id.navTimeTableSubSave:
-                        if(validator.getState()) {
-                            Teacher teacher = new Teacher();
-                            teacher.setID(currentID);
-                            teacher.setFirstName(txtTeacherFirstName.getText().toString());
-                            teacher.setLastName(txtTeacherLastName.getText().toString());
-                            teacher.setDescription(txtTeacherDescription.getText().toString());
+                                if(validateName(teacher) || currentID!=0) {
+                                    MainActivity.globals.getSqLite().insertOrUpdateTeacher(teacher);
 
-                            if(validateName(teacher) || currentID!=0) {
-                                MainActivity.globals.getSqLite().insertOrUpdateTeacher(teacher);
-
-                                currentID = 0;
-                                navigation.getMenu().getItem(1).setEnabled(false);
-                                navigation.getMenu().getItem(2).setEnabled(false);
-                                controlFields(false, true);
-                                reloadTeachers();
-                            } else {
-                                Helper.createToast(getApplicationContext(), getString(R.string.message_validator_teachers));
+                                    currentID = 0;
+                                    navigation.getMenu().getItem(1).setEnabled(false);
+                                    navigation.getMenu().getItem(2).setEnabled(false);
+                                    controlFields(false, true);
+                                    reloadTeachers();
+                                } else {
+                                    Helper.createToast(getApplicationContext(), getString(R.string.message_validator_teachers));
+                                }
                             }
-                        }
-                        return true;
-                    case R.id.navTimeTableSubCancel:
-                        currentID = 0;
-                        navigation.getMenu().getItem(1).setEnabled(false);
-                        navigation.getMenu().getItem(2).setEnabled(false);
-                        controlFields(false, true);
-                        return true;
-                }
-                return false;
-            }
-
-        };
+                            return true;
+                        case R.id.navTimeTableSubCancel:
+                            currentID = 0;
+                            navigation.getMenu().getItem(1).setEnabled(false);
+                            navigation.getMenu().getItem(2).setEnabled(false);
+                            controlFields(false, true);
+                            return true;
+                    }
+                    return false;
+                };
         this.navigation = this.findViewById(R.id.navigation);
         this.navigation.setOnNavigationItemSelectedListener(navListener);
 
@@ -142,10 +152,7 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
         this.txtTeacherFirstName = this.findViewById(R.id.txtTeacherFirstName);
         this.txtTeacherLastName = this.findViewById(R.id.txtTeacherLastName);
         this.txtTeacherDescription = this.findViewById(R.id.txtTeacherDescription);
-        this.teacherAdapter = new TeacherAdapter(TimeTableTeacherActivity.this, R.layout.timetable_teacher_item, new ArrayList<Teacher>());
         this.lvTeachers = this.findViewById(R.id.lvTeacher);
-        this.lvTeachers.setAdapter(this.teacherAdapter);
-        this.teacherAdapter.notifyDataSetChanged();
         this.controlFields(false, false);
         this.reloadTeachers();
         this.navigation.getMenu().getItem(1).setEnabled(false);
@@ -186,14 +193,13 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
             this.txtTeacherFirstName.setText("");
             this.txtTeacherLastName.setText("");
             this.txtTeacherDescription.setText("");
-            this.lvTeachers.setSelection(-1);
         }
     }
 
     private void reloadTeachers() {
-        this.teacherAdapter.clear();
+        this.lvTeachers.getAdapter().clear();
         for(Teacher teacher : MainActivity.globals.getSqLite().getTeachers("")) {
-            this.teacherAdapter.add(teacher);
+            this.lvTeachers.getAdapter().add(teacher);
         }
     }
 }

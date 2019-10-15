@@ -12,7 +12,6 @@ package de.domjos.schooltools.activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
-import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.view.Menu;
@@ -20,16 +19,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.NoteAdapter;
 import de.domjos.schooltools.core.model.Note;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
@@ -47,8 +45,7 @@ public final class NoteActivity extends AbstractActivity {
 
     private int currentID;
     private Validator validator;
-    private ListView lvNotes;
-    private NoteAdapter noteAdapter;
+    private SwipeRefreshDeleteList lvNotes;
     private EditText txtNoteTitle, txtNoteDescription, txtNoteMemoryDate;
     private ImageButton cmdNoteSpeak;
     private CheckBox chkNoteMemory;
@@ -66,10 +63,10 @@ public final class NoteActivity extends AbstractActivity {
         this.getNoteFromExtra();
         this.txtNoteTitle.setError(null);
 
-        this.lvNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.lvNotes.click(new SwipeRefreshDeleteList.ClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Note note = noteAdapter.getItem(position);
+            public void onClick(BaseDescriptionObject listObject) {
+                Note note = (Note) listObject;
                 if(note!=null) {
                     currentID = note.getID();
                     fillNote(note);
@@ -80,39 +77,31 @@ public final class NoteActivity extends AbstractActivity {
             }
         });
 
-        this.lvNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        this.lvNotes.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Note note = noteAdapter.getItem(position);
-                if(note!=null) {
-                    currentID = note.getID();
-                }
-                if(menu!=null) {
-                    menu.findItem(R.id.menDelete).setVisible(true);
-                    menu.findItem(R.id.menToDo).setVisible(true);
-                }
-                return true;
+            public void onDelete(BaseDescriptionObject listObject) {
+                currentID = listObject.getID();
+                deleteNote();
             }
         });
 
-        this.chkNoteMemory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        this.lvNotes.reload(new SwipeRefreshDeleteList.ReloadListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    txtNoteMemoryDate.setVisibility(View.VISIBLE);
-                } else {
-                    txtNoteMemoryDate.setText("");
-                    txtNoteMemoryDate.setVisibility(View.GONE);
-                }
+            public void onReload() {
+                reloadNotes();
             }
         });
 
-        this.cmdNoteSpeak.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Helper.displaySpeechRecognizer(NoteActivity.this, SPEECH_REQUEST_CODE);
+        this.chkNoteMemory.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                txtNoteMemoryDate.setVisibility(View.VISIBLE);
+            } else {
+                txtNoteMemoryDate.setText("");
+                txtNoteMemoryDate.setVisibility(View.GONE);
             }
         });
+
+        this.cmdNoteSpeak.setOnClickListener(v -> Helper.displaySpeechRecognizer(NoteActivity.this, SPEECH_REQUEST_CODE));
     }
 
     @Override
@@ -147,30 +136,27 @@ public final class NoteActivity extends AbstractActivity {
                 notesConvertToToDo.notifyDataSetChanged();
 
                 final Button btnStart = dialog.findViewById(R.id.cmdStart);
-                btnStart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            Note note = MainActivity.globals.getSqLite().getNotes("ID=" + currentID).get(0);
-                            ToDoList toDoList = notesConvertToToDo.getItem(spNotesConvertToToDo.getSelectedItemPosition());
+                btnStart.setOnClickListener(v -> {
+                    try {
+                        Note note = MainActivity.globals.getSqLite().getNotes("ID=" + currentID).get(0);
+                        ToDoList toDoList = notesConvertToToDo.getItem(spNotesConvertToToDo.getSelectedItemPosition());
 
-                            if(note!=null) {
-                                if(toDoList!=null) {
-                                    ToDo toDo = new ToDo();
-                                    toDo.setTitle(note.getTitle());
-                                    toDo.setDescription(note.getDescription());
-                                    toDo.setCategory(getString(R.string.main_nav_notes));
-                                    toDo.setMemoryDate(note.getMemoryDate());
-                                    MainActivity.globals.getSqLite().insertOrUpdateToDo(toDo, toDoList.getTitle());
-                                    MainActivity.globals.getSqLite().deleteEntry("notes", "ID=" + currentID);
-                                    reloadNotes();
-                                    changeControls(false, true, false);
-                                }
+                        if(note!=null) {
+                            if(toDoList!=null) {
+                                ToDo toDo = new ToDo();
+                                toDo.setTitle(note.getTitle());
+                                toDo.setDescription(note.getDescription());
+                                toDo.setCategory(getString(R.string.main_nav_notes));
+                                toDo.setMemoryDate(note.getMemoryDate());
+                                MainActivity.globals.getSqLite().insertOrUpdateToDo(toDo, toDoList.getTitle());
+                                MainActivity.globals.getSqLite().deleteEntry("notes", "ID=" + currentID);
+                                reloadNotes();
+                                changeControls(false, true, false);
                             }
-                            dialog.dismiss();
-                        } catch (Exception ex) {
-                            Helper.createToast(getApplicationContext(), ex.getMessage());
                         }
+                        dialog.dismiss();
+                    } catch (Exception ex) {
+                        Helper.createToast(getApplicationContext(), ex.getMessage());
                     }
                 });
                 dialog.show();
@@ -187,9 +173,11 @@ public final class NoteActivity extends AbstractActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
             List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            Note note = Helper.getNoteFromString(this.getApplicationContext(), results.get(0));
-            txtNoteDescription.setText(note.getDescription());
-            txtNoteTitle.setText(note.getTitle());
+            if(results!=null) {
+                Note note = Helper.getNoteFromString(this.getApplicationContext(), results.get(0));
+                txtNoteDescription.setText(note.getDescription());
+                txtNoteTitle.setText(note.getTitle());
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -206,9 +194,9 @@ public final class NoteActivity extends AbstractActivity {
     }
 
     private void reloadNotes() {
-        this.noteAdapter.clear();
+        this.lvNotes.getAdapter().clear();
         for(Note note : MainActivity.globals.getSqLite().getNotes("")) {
-            this.noteAdapter.add(note);
+            this.lvNotes.getAdapter().add(note);
         }
     }
 
@@ -252,58 +240,54 @@ public final class NoteActivity extends AbstractActivity {
     @Override
     protected void initControls() {
         // init listener
-        OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (Helper.checkMenuID(item)) {
-                    case R.id.navTimeTableSubAdd:
-                        changeControls(true, true, false);
-                        menu.findItem(R.id.menDelete).setVisible(false);
-                        menu.findItem(R.id.menToDo).setVisible(false);
-                        break;
-                    case R.id.navTimeTableSubEdit:
-                        changeControls(true, false, false);
-                        menu.findItem(R.id.menDelete).setVisible(false);
-                        menu.findItem(R.id.menToDo).setVisible(false);
-                        break;
-                    case R.id.navTimeTableSubDelete:
-                        deleteNote();
-                        menu.findItem(R.id.menDelete).setVisible(false);
-                        menu.findItem(R.id.menToDo).setVisible(false);
-                        break;
-                    case R.id.navTimeTableSubCancel:
-                        changeControls(false, true, false);
-                        menu.findItem(R.id.menDelete).setVisible(false);
-                        menu.findItem(R.id.menToDo).setVisible(false);
-                        break;
-                    case R.id.navTimeTableSubSave:
-                        try {
-                            if(validator.getState()) {
-                                Note note = new Note();
-                                note.setID(currentID);
-                                note.setTitle(txtNoteTitle.getText().toString());
-                                note.setDescription(txtNoteDescription.getText().toString());
-                                if(!txtNoteMemoryDate.getText().toString().equals("")) {
-                                    note.setMemoryDate(Converter.convertStringToDate(txtNoteMemoryDate.getText().toString()));
-                                }
-                                MainActivity.globals.getSqLite().insertOrUpdateNote(note);
-                                reloadNotes();
-                                changeControls(false, true, false);
-                                Helper.sendBroadCast(NoteActivity.this, NoteWidget.class);
-
+        OnNavigationItemSelectedListener listener = item -> {
+            switch (Helper.checkMenuID(item)) {
+                case R.id.navTimeTableSubAdd:
+                    changeControls(true, true, false);
+                    menu.findItem(R.id.menDelete).setVisible(false);
+                    menu.findItem(R.id.menToDo).setVisible(false);
+                    break;
+                case R.id.navTimeTableSubEdit:
+                    changeControls(true, false, false);
+                    menu.findItem(R.id.menDelete).setVisible(false);
+                    menu.findItem(R.id.menToDo).setVisible(false);
+                    break;
+                case R.id.navTimeTableSubDelete:
+                    deleteNote();
+                    menu.findItem(R.id.menDelete).setVisible(false);
+                    menu.findItem(R.id.menToDo).setVisible(false);
+                    break;
+                case R.id.navTimeTableSubCancel:
+                    changeControls(false, true, false);
+                    menu.findItem(R.id.menDelete).setVisible(false);
+                    menu.findItem(R.id.menToDo).setVisible(false);
+                    break;
+                case R.id.navTimeTableSubSave:
+                    try {
+                        if(validator.getState()) {
+                            Note note = new Note();
+                            note.setID(currentID);
+                            note.setTitle(txtNoteTitle.getText().toString());
+                            note.setDescription(txtNoteDescription.getText().toString());
+                            if(!txtNoteMemoryDate.getText().toString().equals("")) {
+                                note.setMemoryDate(Converter.convertStringToDate(txtNoteMemoryDate.getText().toString()));
                             }
-                        } catch (Exception ex) {
-                            Helper.printException(getApplicationContext(), ex);
-                        } finally {
-                            menu.findItem(R.id.menDelete).setVisible(false);
-                            menu.findItem(R.id.menToDo).setVisible(false);
-                        }
-                        break;
-                    default:
-                }
-                return false;
-            }
+                            MainActivity.globals.getSqLite().insertOrUpdateNote(note);
+                            reloadNotes();
+                            changeControls(false, true, false);
+                            Helper.sendBroadCast(NoteActivity.this, NoteWidget.class);
 
+                        }
+                    } catch (Exception ex) {
+                        Helper.printException(getApplicationContext(), ex);
+                    } finally {
+                        menu.findItem(R.id.menDelete).setVisible(false);
+                        menu.findItem(R.id.menToDo).setVisible(false);
+                    }
+                    break;
+                default:
+            }
+            return false;
         };
         this.navigation = this.findViewById(R.id.navigation);
         this.navigation.setOnNavigationItemSelectedListener(listener);
@@ -317,9 +301,6 @@ public final class NoteActivity extends AbstractActivity {
         this.txtNoteMemoryDate.setVisibility(View.GONE);
 
         this.lvNotes = this.findViewById(R.id.lvNotes);
-        this.noteAdapter = new NoteAdapter(NoteActivity.this, R.layout.note_item, new ArrayList<Note>());
-        this.lvNotes.setAdapter(this.noteAdapter);
-        this.noteAdapter.notifyDataSetChanged();
     }
 
     private void deleteNote() {

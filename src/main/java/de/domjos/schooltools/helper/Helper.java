@@ -378,6 +378,7 @@ public class Helper {
         if(id==R.id.menMainHelp || id==R.id.menHelp) {
             Intent intent = new Intent(context, HelpActivity.class);
             intent.putExtra("helpId", help_id);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
 

@@ -23,12 +23,11 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <ListView
+        <de.domjos.schooltools.custom.SwipeRefreshDeleteList
             android:id="@+id/lvYear"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/Gray"
-            android:dividerHeight="2dp"/>
+            app:itemIcon="@drawable/ic_event_note_black_24dp"/>
 
     </FrameLayout>
 

@@ -32,10 +32,7 @@
                 android:id="@+id/lvTimeTable"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
                 custom:itemIcon="@drawable/ic_access_time_black_24dp"
-                android:divider="@color/Gray"
-                android:dividerHeight="2dp"
                 android:layout_above="@+id/cmdTimeTableAssistant"/>
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/cmdTimeTableAssistant"

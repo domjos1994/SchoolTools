@@ -10,21 +10,16 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Intent;
-import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
-
-import java.util.ArrayList;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.YearAdapter;
 import de.domjos.schooltools.core.model.mark.Year;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
 
 /**
@@ -35,8 +30,7 @@ import de.domjos.schooltools.helper.Helper;
 public final class MarkYearActivity extends AbstractActivity {
     private int currentID;
     private EditText txtYearTitle, txtYearDescription;
-    private ListView lvYear;
-    private YearAdapter yearAdapter;
+    private SwipeRefreshDeleteList lvYear;
 
     private BottomNavigationView navigation;
 
@@ -48,16 +42,32 @@ public final class MarkYearActivity extends AbstractActivity {
     protected void initActions() {
         this.reloadYears();
 
-        this.lvYear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.lvYear.click(new SwipeRefreshDeleteList.ClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Year year = yearAdapter.getItem(position);
+            public void onClick(BaseDescriptionObject listObject) {
+                Year year = (Year) listObject;
                 if(year!=null) {
                     currentID = year.getID();
                     txtYearTitle.setText(year.getTitle());
                     txtYearDescription.setText(year.getDescription());
                     controlFields(false, false, true);
                 }
+            }
+        });
+
+        this.lvYear.reload(new SwipeRefreshDeleteList.ReloadListener() {
+            @Override
+            public void onReload() {
+                reloadYears();
+            }
+        });
+
+        this.lvYear.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
+            @Override
+            public void onDelete(BaseDescriptionObject listObject) {
+                MainActivity.globals.getSqLite().deleteEntry("years", "ID", currentID, "");
+                controlFields(false, true, false);
+                reloadYears();
             }
         });
     }
@@ -107,9 +117,9 @@ public final class MarkYearActivity extends AbstractActivity {
     }
 
     private void reloadYears() {
-        this.yearAdapter.clear();
+        this.lvYear.getAdapter().clear();
         for(Year year : MainActivity.globals.getSqLite().getYears("")) {
-            this.yearAdapter.add(year);
+            this.lvYear.getAdapter().add(year);
         }
     }
 
@@ -132,37 +142,34 @@ public final class MarkYearActivity extends AbstractActivity {
     @Override
     protected void initControls() {
         // init BottomNavigation
-        BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (Helper.checkMenuID(item)) {
-                    case R.id.navTimeTableSubAdd:
-                        controlFields(true, true, false);
-                        break;
-                    case R.id.navTimeTableSubEdit:
-                        controlFields(true, false, false);
-                        break;
-                    case R.id.navTimeTableSubDelete:
-                        MainActivity.globals.getSqLite().deleteEntry("years", "ID", currentID, "");
-                        controlFields(false, true, false);
-                        reloadYears();
-                        break;
-                    case R.id.navTimeTableSubCancel:
-                        controlFields(false, true, false);
-                        break;
-                    case R.id.navTimeTableSubSave:
-                        Year year = new Year();
-                        year.setID(currentID);
-                        year.setTitle(txtYearTitle.getText().toString());
-                        year.setDescription(txtYearDescription.getText().toString());
-                        MainActivity.globals.getSqLite().insertOrUpdateYear(year);
-                        controlFields(false, true, false);
-                        reloadYears();
-                        break;
-                    default:
-                }
-                return false;
+        BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
+            switch (Helper.checkMenuID(item)) {
+                case R.id.navTimeTableSubAdd:
+                    controlFields(true, true, false);
+                    break;
+                case R.id.navTimeTableSubEdit:
+                    controlFields(true, false, false);
+                    break;
+                case R.id.navTimeTableSubDelete:
+                    MainActivity.globals.getSqLite().deleteEntry("years", "ID", currentID, "");
+                    controlFields(false, true, false);
+                    reloadYears();
+                    break;
+                case R.id.navTimeTableSubCancel:
+                    controlFields(false, true, false);
+                    break;
+                case R.id.navTimeTableSubSave:
+                    Year year = new Year();
+                    year.setID(currentID);
+                    year.setTitle(txtYearTitle.getText().toString());
+                    year.setDescription(txtYearDescription.getText().toString());
+                    MainActivity.globals.getSqLite().insertOrUpdateYear(year);
+                    controlFields(false, true, false);
+                    reloadYears();
+                    break;
+                default:
             }
+            return false;
         };
         this.navigation = this.findViewById(R.id.navigation);
         this.navigation.setOnNavigationItemSelectedListener(navListener);
@@ -171,9 +178,6 @@ public final class MarkYearActivity extends AbstractActivity {
         this.txtYearTitle = this.findViewById(R.id.txtYearTitle);
         this.txtYearDescription = this.findViewById(R.id.txtYearDescription);
         this.lvYear = this.findViewById(R.id.lvYear);
-        this.yearAdapter = new YearAdapter(MarkYearActivity.this, R.layout.mark_year_item, new ArrayList<Year>());
-        this.lvYear.setAdapter(this.yearAdapter);
-        this.yearAdapter.notifyDataSetChanged();
         this.controlFields(false, true, false);
     }
 }

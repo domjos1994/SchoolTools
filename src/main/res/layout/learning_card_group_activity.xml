@@ -20,9 +20,7 @@
         android:id="@+id/lvLearningCardGroups"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:itemIcon="@drawable/ic_group_work_black_24dp"
-        android:padding="8dp"
-        android:dividerHeight="4dp"/>
+        app:itemIcon="@drawable/ic_group_work_black_24dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/cmdLearningCardGroupAdd"

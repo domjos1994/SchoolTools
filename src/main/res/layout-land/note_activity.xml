@@ -24,14 +24,12 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-        <ListView
+        <de.domjos.schooltools.custom.SwipeRefreshDeleteList
                 android:id="@+id/lvNotes"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/svControls"
-                android:divider="@color/Gray"
-                android:dividerHeight="2dp"
-                android:layout_margin="5dp"/>
+                app:itemIcon="@drawable/ic_note_black_24dp"/>
 
         <ScrollView
                 android:id="@+id/svControls"
