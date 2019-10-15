@@ -114,7 +114,8 @@ public final class TimeTableActivity extends AbstractActivity {
         this.lvTimeTable.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
             @Override
             public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("timeTable", "ID=" + listObject.getID());
+                MainActivity.globals.getSqLite().deleteEntry("plans", "ID", listObject.getID(), "");
+                MainActivity.globals.getSqLite().deleteEntry("timeTable", "plan", listObject.getID(), "");
                 reloadTimeTables();
             }
         });

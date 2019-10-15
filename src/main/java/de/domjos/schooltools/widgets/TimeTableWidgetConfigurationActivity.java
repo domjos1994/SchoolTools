@@ -57,13 +57,15 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
         this.reloadTimeTables();
 
         this.cmdSave.setOnClickListener(v -> {
-            String selected = timeTableAdapter.getItem(cmbTimeTables.getSelectedItemPosition());
+            if(this.cmbTimeTables.getSelectedItemPosition()!=-1) {
+                String selected = timeTableAdapter.getItem(cmbTimeTables.getSelectedItemPosition());
 
-            if(selected!=null) {
-                List<TimeTable> timeTableList = sqLite.getTimeTables("");
-                for(TimeTable timeTable : timeTableList) {
-                    if(selected.equals(timeTable.getTitle())) {
-                        getSettings(timeTable.getID());
+                if (selected != null) {
+                    List<TimeTable> timeTableList = sqLite.getTimeTables("");
+                    for (TimeTable timeTable : timeTableList) {
+                        if (selected.equals(timeTable.getTitle())) {
+                            getSettings(timeTable.getID());
+                        }
                     }
                 }
             }
