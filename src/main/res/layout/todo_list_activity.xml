@@ -23,13 +23,12 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <ListView
+        <de.domjos.schooltools.custom.SwipeRefreshDeleteList
             android:id="@+id/lvToDoLists"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/svControls"
-            android:divider="@color/Gray"
-            android:dividerHeight="2dp"/>
+            app:itemIcon="@drawable/ic_done_all_black_24dp"/>
 
         <ScrollView
             android:id="@+id/svControls"

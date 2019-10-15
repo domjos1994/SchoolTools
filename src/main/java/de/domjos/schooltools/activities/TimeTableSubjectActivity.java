@@ -10,11 +10,9 @@
 package de.domjos.schooltools.activities;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
-import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import androidx.appcompat.app.AlertDialog;
@@ -22,13 +20,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -39,10 +34,11 @@ import java.util.List;
 
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.ColorAdapter;
-import de.domjos.schooltools.adapter.SubjectAdapter;
 import de.domjos.schooltools.core.model.Subject;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.core.model.timetable.Teacher;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
 
 import de.domjos.schooltools.helper.Validator;
@@ -54,7 +50,7 @@ import de.domjos.schooltools.helper.Validator;
  */
 public final class TimeTableSubjectActivity extends AbstractActivity {
     private BottomNavigationView navigation;
-    private ListView lvSubjects;
+    private SwipeRefreshDeleteList lvSubjects;
     private EditText txtSubjectHoursInWeek, txtSubjectDescription;
     private AutoCompleteTextView txtSubjectTitle, txtSubjectAlias;
     private TextView lblSelectedColor;
@@ -64,7 +60,6 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
 
     private ColorAdapter colorAdapter;
     private ArrayAdapter<String> adapter;
-    private SubjectAdapter subjectAdapter;
     private AlertDialog.Builder colorBuilder;
 
     private Validator validator;
@@ -82,26 +77,49 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         navigation.getMenu().getItem(1).setEnabled(false);
         navigation.getMenu().getItem(2).setEnabled(false);
 
-        this.lvSubjects.setOnItemClickListener((parent, view, position, id) -> {
-            Subject subject = subjectAdapter.getItem(position);
-            if(subject!=null) {
-                currentID = subject.getID();
-                txtSubjectTitle.setText(subject.getTitle());
-                txtSubjectAlias.setText(subject.getAlias());
-                txtSubjectDescription.setText(subject.getDescription());
-                txtSubjectHoursInWeek.setText(String.valueOf(subject.getHoursInWeek()));
-                chkSubjectMainSubject.setChecked(subject.isMainSubject());
-                int color = Integer.parseInt(subject.getBackgroundColor());
-                lblSelectedColor.setBackgroundColor(color);
-                lblSelectedColor.setText(getSelectedName(TimeTableSubjectActivity.this, color));
-                if(subject.getTeacher()!=null) {
-                    Teacher t = subject.getTeacher();
-                    spSubjectTeachers.setSelection(adapter.getPosition(String.format("%s: %s %s", t.getID(), t.getFirstName(), t.getLastName())));
-                } else {
-                    spSubjectTeachers.setSelection(-1);
+        this.lvSubjects.click(new SwipeRefreshDeleteList.ClickListener() {
+            @Override
+            public void onClick(BaseDescriptionObject listObject) {
+                Subject subject = (Subject) listObject;
+                if(subject!=null) {
+                    currentID = subject.getID();
+                    txtSubjectTitle.setText(subject.getTitle());
+                    txtSubjectAlias.setText(subject.getAlias());
+                    txtSubjectDescription.setText(subject.getDescription());
+                    txtSubjectHoursInWeek.setText(String.valueOf(subject.getHoursInWeek()));
+                    chkSubjectMainSubject.setChecked(subject.isMainSubject());
+                    int color = Integer.parseInt(subject.getBackgroundColor());
+                    lblSelectedColor.setBackgroundColor(color);
+                    lblSelectedColor.setText(getSelectedName(TimeTableSubjectActivity.this, color));
+                    if(subject.getTeacher()!=null) {
+                        Teacher t = subject.getTeacher();
+                        spSubjectTeachers.setSelection(adapter.getPosition(String.format("%s: %s %s", t.getID(), t.getFirstName(), t.getLastName())));
+                    } else {
+                        spSubjectTeachers.setSelection(-1);
+                    }
+                    navigation.getMenu().getItem(1).setEnabled(true);
+                    navigation.getMenu().getItem(2).setEnabled(true);
                 }
-                navigation.getMenu().getItem(1).setEnabled(true);
-                navigation.getMenu().getItem(2).setEnabled(true);
+            }
+        });
+
+        this.lvSubjects.reload(new SwipeRefreshDeleteList.ReloadListener() {
+            @Override
+            public void onReload() {
+                reloadSubjects();
+            }
+        });
+
+        this.lvSubjects.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
+            @Override
+            public void onDelete(BaseDescriptionObject listObject) {
+                MainActivity.globals.getSqLite().deleteEntry("subjects", "ID", listObject.getID(), "");
+
+                currentID = 0;
+                navigation.getMenu().getItem(1).setEnabled(false);
+                navigation.getMenu().getItem(2).setEnabled(false);
+                controlFields(false, true);
+                reloadSubjects();
             }
         });
 
@@ -143,12 +161,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
             }
         });
 
-        this.lblSelectedColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                colorBuilder.create().show();
-            }
-        });
+        this.lblSelectedColor.setOnClickListener(v -> colorBuilder.create().show());
     }
 
     @Override
@@ -182,75 +195,72 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
     @Override
     protected void initControls() {
         // init BottomNavigation
-        OnNavigationItemSelectedListener navListener = new OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (Helper.checkMenuID(item)) {
-                    case R.id.navTimeTableSubAdd:
-                        currentID = 0;
-                        controlFields(true, true);
-                        return true;
-                    case R.id.navTimeTableSubEdit:
-                        controlFields(true, false);
-                        return true;
-                    case R.id.navTimeTableSubDelete:
-                        MainActivity.globals.getSqLite().deleteEntry("subjects", "ID", currentID, "");
+        OnNavigationItemSelectedListener navListener = (item) -> {
+            switch (Helper.checkMenuID(item)) {
+                case R.id.navTimeTableSubAdd:
+                    currentID = 0;
+                    controlFields(true, true);
+                    return true;
+                case R.id.navTimeTableSubEdit:
+                    controlFields(true, false);
+                    return true;
+                case R.id.navTimeTableSubDelete:
+                    MainActivity.globals.getSqLite().deleteEntry("subjects", "ID", currentID, "");
 
-                        currentID = 0;
-                        navigation.getMenu().getItem(1).setEnabled(false);
-                        navigation.getMenu().getItem(2).setEnabled(false);
-                        controlFields(false, true);
-                        reloadSubjects();
-                        return true;
-                    case R.id.navTimeTableSubSave:
-                        if(validator.getState()) {
-                            if(isDuplicated()) {
-                                Helper.createToast(getApplicationContext(), getString(R.string.message_validator_duplicated));
+                    currentID = 0;
+                    navigation.getMenu().getItem(1).setEnabled(false);
+                    navigation.getMenu().getItem(2).setEnabled(false);
+                    controlFields(false, true);
+                    reloadSubjects();
+                    return true;
+                case R.id.navTimeTableSubSave:
+                    if(validator.getState()) {
+                        if(isDuplicated()) {
+                            Helper.createToast(getApplicationContext(), getString(R.string.message_validator_duplicated));
+                        } else {
+                            Subject subject = new Subject();
+                            subject.setID(currentID);
+                            subject.setTitle(txtSubjectTitle.getText().toString());
+                            subject.setAlias(txtSubjectAlias.getText().toString());
+                            subject.setDescription(txtSubjectDescription.getText().toString());
+                            if(!txtSubjectHoursInWeek.getText().toString().equals("")) {
+                                subject.setHoursInWeek(Integer.parseInt(txtSubjectHoursInWeek.getText().toString()));
                             } else {
-                                Subject subject = new Subject();
-                                subject.setID(currentID);
-                                subject.setTitle(txtSubjectTitle.getText().toString());
-                                subject.setAlias(txtSubjectAlias.getText().toString());
-                                subject.setDescription(txtSubjectDescription.getText().toString());
-                                if(!txtSubjectHoursInWeek.getText().toString().equals("")) {
-                                    subject.setHoursInWeek(Integer.parseInt(txtSubjectHoursInWeek.getText().toString()));
-                                } else {
-                                    subject.setHoursInWeek(0);
-                                }
-                                subject.setMainSubject(chkSubjectMainSubject.isChecked());
-                                int color = 0;
-                                if(lblSelectedColor.getBackground()!=null) {
-                                    if(lblSelectedColor.getBackground() instanceof ColorDrawable) {
-                                        color = ((ColorDrawable) lblSelectedColor.getBackground()).getColor();
-                                    }
-                                }
-                                subject.setBackgroundColor(String.valueOf(color));
-                                if(spSubjectTeachers.getSelectedItem()!=null) {
-                                    if(!spSubjectTeachers.getSelectedItem().toString().trim().equals("")) {
-                                        int id = Integer.parseInt(spSubjectTeachers.getSelectedItem().toString().split(":")[0]);
-                                        Teacher teacher = MainActivity.globals.getSqLite().getTeachers("ID=" + id).get(0);
-                                        subject.setTeacher(teacher);
-                                    }
-                                }
-                                MainActivity.globals.getSqLite().insertOrUpdateSubject(subject);
-
-                                currentID = 0;
-                                navigation.getMenu().getItem(1).setEnabled(false);
-                                navigation.getMenu().getItem(2).setEnabled(false);
-                                controlFields(false, false);
-                                reloadSubjects();
+                                subject.setHoursInWeek(0);
                             }
+                            subject.setMainSubject(chkSubjectMainSubject.isChecked());
+                            int color = 0;
+                            if(lblSelectedColor.getBackground()!=null) {
+                                if(lblSelectedColor.getBackground() instanceof ColorDrawable) {
+                                    color = ((ColorDrawable) lblSelectedColor.getBackground()).getColor();
+                                }
+                            }
+                            subject.setBackgroundColor(String.valueOf(color));
+                            if(spSubjectTeachers.getSelectedItem()!=null) {
+                                if(!spSubjectTeachers.getSelectedItem().toString().trim().equals("")) {
+                                    int id = Integer.parseInt(spSubjectTeachers.getSelectedItem().toString().split(":")[0]);
+                                    Teacher teacher = MainActivity.globals.getSqLite().getTeachers("ID=" + id).get(0);
+                                    subject.setTeacher(teacher);
+                                }
+                            }
+                            MainActivity.globals.getSqLite().insertOrUpdateSubject(subject);
+
+                            currentID = 0;
+                            navigation.getMenu().getItem(1).setEnabled(false);
+                            navigation.getMenu().getItem(2).setEnabled(false);
+                            controlFields(false, false);
+                            reloadSubjects();
                         }
-                        return true;
-                    case R.id.navTimeTableSubCancel:
-                        currentID = 0;
-                        navigation.getMenu().getItem(1).setEnabled(false);
-                        navigation.getMenu().getItem(2).setEnabled(false);
-                        controlFields(false, false);
-                        return true;
-                }
-                return false;
+                    }
+                    return true;
+                case R.id.navTimeTableSubCancel:
+                    currentID = 0;
+                    navigation.getMenu().getItem(1).setEnabled(false);
+                    navigation.getMenu().getItem(2).setEnabled(false);
+                    controlFields(false, false);
+                    return true;
             }
+            return false;
         };
         this.navigation = this.findViewById(R.id.navigation);
         this.navigation.setOnNavigationItemSelectedListener(navListener);
@@ -277,31 +287,19 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         }
         this.colorBuilder = new AlertDialog.Builder(this);
         this.colorBuilder.setTitle(R.string.timetable_color);
-        this.colorBuilder.setAdapter(this.colorAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                String entry = colorAdapter.getItem(i);
-                if (entry != null) {
-                    lblSelectedColor.setBackgroundResource(colorAdapter.getSelectedColor(getApplicationContext(), entry));
-                    lblSelectedColor.setText(entry);
-                    dialogInterface.dismiss();
-                }
-            }
-        });
-        this.colorBuilder.setNegativeButton(R.string.sys_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        this.colorBuilder.setAdapter(this.colorAdapter, (dialogInterface, i) -> {
+            String entry = colorAdapter.getItem(i);
+            if (entry != null) {
+                lblSelectedColor.setBackgroundResource(ColorAdapter.getSelectedColor(getApplicationContext(), entry));
+                lblSelectedColor.setText(entry);
                 dialogInterface.dismiss();
             }
         });
+        this.colorBuilder.setNegativeButton(R.string.sys_cancel, (dialogInterface, i) -> dialogInterface.dismiss());
 
-        this.adapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.adapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<>());
         this.spSubjectTeachers.setAdapter(this.adapter);
         this.adapter.notifyDataSetChanged();
-
-        this.subjectAdapter = new SubjectAdapter(TimeTableSubjectActivity.this, R.layout.timetable_subject_item, new ArrayList<Subject>());
-        this.lvSubjects.setAdapter(this.subjectAdapter);
-        this.subjectAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -433,7 +431,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         } else {
             txtSubjectHoursInWeek.setText(String.valueOf(2));
         }
-        int color = colorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name));
+        int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name));
         lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
         lblSelectedColor.setText(this.getString(color_name));
     }
@@ -445,7 +443,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         } else {
             txtSubjectHoursInWeek.setText(String.valueOf(2));
         }
-        int color = colorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name));
+        int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name));
         lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
         lblSelectedColor.setText(this.getString(color_name));
     }
@@ -459,8 +457,8 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
 
     private boolean isDuplicated() {
         boolean duplicated = false;
-        for(int i = 0; i<=this.subjectAdapter.getCount()-1; i++) {
-            Subject subject = this.subjectAdapter.getItem(i);
+        for(int i = 0; i<=this.lvSubjects.getAdapter().getItemCount()-1; i++) {
+            Subject subject = (Subject) this.lvSubjects.getAdapter().getItem(i);
             if(subject!=null) {
                 if(subject.getID()!=this.currentID) {
                     if(txtSubjectAlias.getText().toString().toLowerCase().trim().equals(subject.getAlias().toLowerCase())) {
@@ -494,9 +492,8 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
             this.txtSubjectDescription.setText("");
             this.txtSubjectHoursInWeek.setText("");
             this.chkSubjectMainSubject.setChecked(false);
-            this.lvSubjects.setSelection(-1);
             this.spSubjectTeachers.setSelection(this.adapter.getPosition(""));
-            int color = colorAdapter.getSelectedColor(getApplicationContext(), this.getString(R.string.timetable_subject_rel_color));
+            int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(R.string.timetable_subject_rel_color));
             this.lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
             this.lblSelectedColor.setText(this.getString(R.string.timetable_subject_rel_color));
         }
@@ -513,10 +510,10 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
 
     private void reloadSubjects() {
         int wholeHours = 0;
-        this.subjectAdapter.clear();
+        this.lvSubjects.getAdapter().clear();
         for(Subject subject : MainActivity.globals.getSqLite().getSubjects("")) {
             wholeHours += subject.getHoursInWeek();
-            this.subjectAdapter.add(subject);
+            this.lvSubjects.getAdapter().add(subject);
         }
         this.setTitle(getString(R.string.timetable_lesson) + " (" + wholeHours + "h)");
     }

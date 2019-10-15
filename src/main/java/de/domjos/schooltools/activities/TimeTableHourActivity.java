@@ -11,23 +11,21 @@ package de.domjos.schooltools.activities;
 
 import android.content.Intent;
 import android.os.Build;
-import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.*;
 
 import java.sql.Time;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.HourAdapter;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.core.model.timetable.Hour;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 
@@ -37,14 +35,12 @@ import de.domjos.schooltools.helper.Helper;
  * @version 1.0
  */
 public final class TimeTableHourActivity extends AbstractActivity {
-
     private BottomNavigationView navigation;
-    private ListView lvHours;
+    private SwipeRefreshDeleteList lvHours;
     private TimePicker tpHoursStart, tpHoursEnd;
     private CheckBox chkHoursBreak;
     private int currentID;
 
-    private HourAdapter hourAdapter;
     private int intLatestHour, intLatestMinute;
 
     public TimeTableHourActivity() {
@@ -55,35 +51,55 @@ public final class TimeTableHourActivity extends AbstractActivity {
     protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableHourActivity.this);
 
-        this.lvHours.setOnItemClickListener((parent, view, position, id) -> {
-            Hour hour = hourAdapter.getItem(position);
-            if(hour!=null) {
-                currentID = hour.getID();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    tpHoursStart.setHour(Integer.parseInt(hour.getStart().split(":")[0]));
-                    tpHoursStart.setMinute(Integer.parseInt(hour.getStart().split(":")[1]));
-                    tpHoursEnd.setHour(Integer.parseInt(hour.getEnd().split(":")[0]));
-                    tpHoursEnd.setMinute(Integer.parseInt(hour.getEnd().split(":")[1]));
-                } else {
-                    tpHoursStart.setCurrentHour(Integer.parseInt(hour.getStart().split(":")[0]));
-                    tpHoursStart.setCurrentMinute(Integer.parseInt(hour.getStart().split(":")[1]));
-                    tpHoursEnd.setCurrentHour(Integer.parseInt(hour.getEnd().split(":")[0]));
-                    tpHoursEnd.setCurrentMinute(Integer.parseInt(hour.getEnd().split(":")[1]));
+        this.lvHours.click(new SwipeRefreshDeleteList.ClickListener() {
+            @Override
+            public void onClick(BaseDescriptionObject listObject) {
+                Hour hour = (Hour) listObject;
+                if(hour!=null) {
+                    currentID = hour.getID();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        tpHoursStart.setHour(Integer.parseInt(hour.getStart().split(":")[0]));
+                        tpHoursStart.setMinute(Integer.parseInt(hour.getStart().split(":")[1]));
+                        tpHoursEnd.setHour(Integer.parseInt(hour.getEnd().split(":")[0]));
+                        tpHoursEnd.setMinute(Integer.parseInt(hour.getEnd().split(":")[1]));
+                    } else {
+                        tpHoursStart.setCurrentHour(Integer.parseInt(hour.getStart().split(":")[0]));
+                        tpHoursStart.setCurrentMinute(Integer.parseInt(hour.getStart().split(":")[1]));
+                        tpHoursEnd.setCurrentHour(Integer.parseInt(hour.getEnd().split(":")[0]));
+                        tpHoursEnd.setCurrentMinute(Integer.parseInt(hour.getEnd().split(":")[1]));
+                    }
+                    chkHoursBreak.setChecked(hour.isBreak());
+                    navigation.getMenu().getItem(1).setEnabled(true);
+                    navigation.getMenu().getItem(2).setEnabled(true);
                 }
-                chkHoursBreak.setChecked(hour.isBreak());
-                navigation.getMenu().getItem(1).setEnabled(true);
-                navigation.getMenu().getItem(2).setEnabled(true);
             }
         });
 
-        this.chkHoursBreak.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        this.lvHours.reload(new SwipeRefreshDeleteList.ReloadListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    configureTimes(intLatestHour, intLatestMinute, MainActivity.globals.getUserSettings().getBreakTime());
-                } else {
-                    configureTimes(intLatestHour, intLatestMinute, 45);
-                }
+            public void onReload() {
+                reloadHours();
+            }
+        });
+
+        this.lvHours.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
+            @Override
+            public void onDelete(BaseDescriptionObject listObject) {
+                MainActivity.globals.getSqLite().deleteEntry("hours", "ID", listObject.getID(), "");
+
+                currentID = 0;
+                navigation.getMenu().getItem(1).setEnabled(false);
+                navigation.getMenu().getItem(2).setEnabled(false);
+                controlFields(false, true);
+                reloadHours();
+            }
+        });
+
+        this.chkHoursBreak.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                configureTimes(intLatestHour, intLatestMinute, MainActivity.globals.getUserSettings().getBreakTime());
+            } else {
+                configureTimes(intLatestHour, intLatestMinute, 45);
             }
         });
     }
@@ -108,60 +124,57 @@ public final class TimeTableHourActivity extends AbstractActivity {
     @Override
     protected void initControls() {
         // init BottomNavigation
-        OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (Helper.checkMenuID(item)) {
-                    case R.id.navTimeTableSubAdd:
-                        currentID = 0;
-                        controlFields(true, true);
-                        setDefaultValuesForAdd();
-                        return true;
-                    case R.id.navTimeTableSubEdit:
-                        controlFields(true, false);
-                        return true;
-                    case R.id.navTimeTableSubDelete:
-                        MainActivity.globals.getSqLite().deleteEntry("hours", "ID", currentID, "");
+        OnNavigationItemSelectedListener navListener = (item) -> {
+            switch (Helper.checkMenuID(item)) {
+                case R.id.navTimeTableSubAdd:
+                    currentID = 0;
+                    controlFields(true, true);
+                    setDefaultValuesForAdd();
+                    return true;
+                case R.id.navTimeTableSubEdit:
+                    controlFields(true, false);
+                    return true;
+                case R.id.navTimeTableSubDelete:
+                    MainActivity.globals.getSqLite().deleteEntry("hours", "ID", currentID, "");
 
-                        currentID = 0;
-                        navigation.getMenu().getItem(1).setEnabled(false);
-                        navigation.getMenu().getItem(2).setEnabled(false);
-                        controlFields(false, true);
-                        reloadHours();
-                        return true;
-                    case R.id.navTimeTableSubSave:
-                        Hour hour = new Hour();
-                        hour.setID(currentID);
-                        DecimalFormat decimalFormat = new DecimalFormat("00");
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            hour.setStart(decimalFormat.format(tpHoursStart.getHour()) + ":" + decimalFormat.format(tpHoursStart.getMinute()));
-                            hour.setEnd(decimalFormat.format(tpHoursEnd.getHour()) + ":" + decimalFormat.format(tpHoursEnd.getMinute()));
-                        } else {
-                            hour.setStart(decimalFormat.format(tpHoursStart.getCurrentHour()) + ":" + decimalFormat.format(tpHoursStart.getCurrentMinute()));
-                            hour.setEnd(decimalFormat.format(tpHoursEnd.getCurrentHour()) + ":" + decimalFormat.format(tpHoursEnd.getCurrentMinute()));
-                        }
-                        hour.setBreak(chkHoursBreak.isChecked());
-                        if(checkHourIsValid(hour)) {
-                            MainActivity.globals.getSqLite().insertOrUpdateHour(hour);
+                    currentID = 0;
+                    navigation.getMenu().getItem(1).setEnabled(false);
+                    navigation.getMenu().getItem(2).setEnabled(false);
+                    controlFields(false, true);
+                    reloadHours();
+                    return true;
+                case R.id.navTimeTableSubSave:
+                    Hour hour = new Hour();
+                    hour.setID(currentID);
+                    DecimalFormat decimalFormat = new DecimalFormat("00");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        hour.setStart(decimalFormat.format(tpHoursStart.getHour()) + ":" + decimalFormat.format(tpHoursStart.getMinute()));
+                        hour.setEnd(decimalFormat.format(tpHoursEnd.getHour()) + ":" + decimalFormat.format(tpHoursEnd.getMinute()));
+                    } else {
+                        hour.setStart(decimalFormat.format(tpHoursStart.getCurrentHour()) + ":" + decimalFormat.format(tpHoursStart.getCurrentMinute()));
+                        hour.setEnd(decimalFormat.format(tpHoursEnd.getCurrentHour()) + ":" + decimalFormat.format(tpHoursEnd.getCurrentMinute()));
+                    }
+                    hour.setBreak(chkHoursBreak.isChecked());
+                    if(checkHourIsValid(hour)) {
+                        MainActivity.globals.getSqLite().insertOrUpdateHour(hour);
 
-                            currentID = 0;
-                            navigation.getMenu().getItem(1).setEnabled(false);
-                            navigation.getMenu().getItem(2).setEnabled(false);
-                            controlFields(false, false);
-                            reloadHours();
-                        } else {
-                            Helper.createToast(getApplicationContext(), getString(R.string.message_validator_times));
-                        }
-                        return true;
-                    case R.id.navTimeTableSubCancel:
                         currentID = 0;
                         navigation.getMenu().getItem(1).setEnabled(false);
                         navigation.getMenu().getItem(2).setEnabled(false);
                         controlFields(false, false);
-                        return true;
-                }
-                return false;
+                        reloadHours();
+                    } else {
+                        Helper.createToast(getApplicationContext(), getString(R.string.message_validator_times));
+                    }
+                    return true;
+                case R.id.navTimeTableSubCancel:
+                    currentID = 0;
+                    navigation.getMenu().getItem(1).setEnabled(false);
+                    navigation.getMenu().getItem(2).setEnabled(false);
+                    controlFields(false, false);
+                    return true;
             }
+            return false;
         };
         this.navigation = this.findViewById(R.id.navigation);
         this.navigation.setOnNavigationItemSelectedListener(navListener);
@@ -172,10 +185,6 @@ public final class TimeTableHourActivity extends AbstractActivity {
         this.tpHoursEnd = this.findViewById(R.id.tpHoursEnd);
         this.chkHoursBreak = this.findViewById(R.id.chkHoursBreak);
 
-        this.hourAdapter = new HourAdapter(TimeTableHourActivity.this, R.layout.timetable_hour_item, new ArrayList<Hour>());
-        this.lvHours.setAdapter(this.hourAdapter);
-        this.hourAdapter.notifyDataSetChanged();
-
         this.reloadHours();
         this.controlFields(false, true);
         navigation.getMenu().getItem(1).setEnabled(false);
@@ -184,8 +193,8 @@ public final class TimeTableHourActivity extends AbstractActivity {
 
     private void setDefaultValuesForAdd() {
         Hour latestHour = null;
-        for(int i = 0; i<=this.hourAdapter.getCount()-1; i++) {
-            Hour hour = this.hourAdapter.getItem(i);
+        for(int i = 0; i<=this.lvHours.getAdapter().getItemCount()-1; i++) {
+            Hour hour = (Hour) this.lvHours.getAdapter().getItem(i);
             if(hour!=null) {
                 if(latestHour!=null) {
                     String[] splLatestHour = latestHour.getEnd().split(":");
@@ -239,30 +248,32 @@ public final class TimeTableHourActivity extends AbstractActivity {
     }
 
     private void configureTimes(int hour, int minutes, int timeSpan) {
-        int intLatestEndMinute = minutes + timeSpan;
-        int intLatestEndHour = hour;
-        if(intLatestEndMinute>=60) {
-            intLatestEndHour++;
-            intLatestEndMinute = intLatestEndMinute % 60;
-        }
+        if(this.currentID==0) {
+            int intLatestEndMinute = minutes + timeSpan;
+            int intLatestEndHour = hour;
+            if(intLatestEndMinute>=60) {
+                intLatestEndHour++;
+                intLatestEndMinute = intLatestEndMinute % 60;
+            }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            this.tpHoursStart.setHour(hour);
-            this.tpHoursStart.setMinute(minutes);
-            this.tpHoursEnd.setHour(intLatestEndHour);
-            this.tpHoursEnd.setMinute(intLatestEndMinute);
-        } else {
-            this.tpHoursStart.setCurrentHour(hour);
-            this.tpHoursStart.setCurrentMinute(minutes);
-            this.tpHoursEnd.setCurrentHour(intLatestEndHour);
-            this.tpHoursEnd.setCurrentMinute(intLatestEndMinute);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                this.tpHoursStart.setHour(hour);
+                this.tpHoursStart.setMinute(minutes);
+                this.tpHoursEnd.setHour(intLatestEndHour);
+                this.tpHoursEnd.setMinute(intLatestEndMinute);
+            } else {
+                this.tpHoursStart.setCurrentHour(hour);
+                this.tpHoursStart.setCurrentMinute(minutes);
+                this.tpHoursEnd.setCurrentHour(intLatestEndHour);
+                this.tpHoursEnd.setCurrentMinute(intLatestEndMinute);
+            }
         }
     }
 
     private void reloadHours() {
-        this.hourAdapter.clear();
+        this.lvHours.getAdapter().clear();
         for(Hour hour : MainActivity.globals.getSqLite().getHours("")) {
-            this.hourAdapter.add(hour);
+            this.lvHours.getAdapter().add(hour);
         }
     }
 

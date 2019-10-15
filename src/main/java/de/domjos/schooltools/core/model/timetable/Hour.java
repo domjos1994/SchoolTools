@@ -8,31 +8,25 @@
  */
 package de.domjos.schooltools.core.model.timetable;
 
+import androidx.annotation.NonNull;
+
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
+
 /**
  * Model-Class for the hour of a Time-Table
  * @see de.domjos.schooltools.activities.TimeTableActivity
  * @author Dominic Joas
  * @version 1.0
  */
-public class Hour {
-    private int ID;
+public class Hour extends BaseDescriptionObject {
     private String start;
     private String end;
     private boolean Break;
 
     public Hour() {
-        this.ID = 0;
         this.start = "";
         this.end = "";
         this.Break = false;
-    }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 
     public String getStart() {
@@ -41,6 +35,7 @@ public class Hour {
 
     public void setStart(String start) {
         this.start = start;
+        this.setTimeToTitle();
     }
 
     public String getEnd() {
@@ -49,6 +44,7 @@ public class Hour {
 
     public void setEnd(String end) {
         this.end = end;
+        this.setTimeToTitle();
     }
 
     public boolean isBreak() {
@@ -59,6 +55,12 @@ public class Hour {
         Break = aBreak;
     }
 
+    public void setTimeToTitle() {
+        super.setTitle(String.format("%s - %s", this.start, this.end));
+    }
+
+    @NonNull
+    @Override
     public String toString() {
         return String.format("%s - %s", this.start, this.end);
     }

@@ -10,24 +10,20 @@
 package de.domjos.schooltools.activities;
 
 import android.content.Intent;
-import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.ToDoListsAdapter;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.core.model.todo.ToDoList;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
@@ -40,11 +36,10 @@ import de.domjos.schooltools.helper.Validator;
 public final class ToDoListActivity extends AbstractActivity {
     private BottomNavigationView navigation;
 
-    private ListView lvToDoLists;
+    private SwipeRefreshDeleteList lvToDoLists;
     private EditText txtToDoListTitle, txtToDoListDescription, txtToDoListDate;
 
     private int currentID;
-    private ToDoListsAdapter toDoListsAdapter;
     private Validator validator;
 
     public ToDoListActivity() {
@@ -57,10 +52,25 @@ public final class ToDoListActivity extends AbstractActivity {
         this.changeControls(false, true, false);
         this.getListFromExtra();
 
-        this.lvToDoLists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.lvToDoLists.click(new SwipeRefreshDeleteList.ClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                setValues(toDoListsAdapter.getItem(position));
+            public void onClick(BaseDescriptionObject listObject) {
+                setValues((ToDoList) listObject);
+            }
+        });
+
+        this.lvToDoLists.reload(new SwipeRefreshDeleteList.ReloadListener() {
+            @Override
+            public void onReload() {
+                reloadItems();
+            }
+        });
+
+        this.lvToDoLists.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
+            @Override
+            public void onDelete(BaseDescriptionObject listObject) {
+                MainActivity.globals.getSqLite().deleteEntry("toDoLists", "ID", listObject.getID(), "");
+                reloadItems();
             }
         });
     }
@@ -121,9 +131,9 @@ public final class ToDoListActivity extends AbstractActivity {
     }
 
     private void reloadItems() {
-        this.toDoListsAdapter.clear();
+        this.lvToDoLists.getAdapter().clear();
         for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("")) {
-            this.toDoListsAdapter.add(toDoList);
+            this.lvToDoLists.getAdapter().add(toDoList);
         }
     }
 
@@ -155,54 +165,48 @@ public final class ToDoListActivity extends AbstractActivity {
     protected void initControls() {
         // init navigation_learning_card_group
         this.navigation = findViewById(R.id.navigation);
-        OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (Helper.checkMenuID(item)) {
-                    case R.id.navTimeTableSubAdd:
-                        changeControls(true, true, false);
-                        break;
-                    case R.id.navTimeTableSubEdit:
-                        changeControls(true, false, false);
-                        break;
-                    case R.id.navTimeTableSubDelete:
-                        MainActivity.globals.getSqLite().deleteEntry("toDoLists", "ID", currentID, "");
-                        reloadItems();
-                        changeControls(false, true, false);
-                        break;
-                    case R.id.navTimeTableSubCancel:
-                        changeControls(false, true, false);
-                        break;
-                    case R.id.navTimeTableSubSave:
-                        try {
-                            if(validator.getState()) {
-                                ToDoList toDoList = new ToDoList();
-                                toDoList.setID(currentID);
-                                toDoList.setTitle(txtToDoListTitle.getText().toString());
-                                toDoList.setDescription(txtToDoListDescription.getText().toString());
-                                if(!txtToDoListDate.getText().toString().equals("")) {
-                                    toDoList.setListDate(Converter.convertStringToDate(txtToDoListDate.getText().toString()));
-                                }
-                                MainActivity.globals.getSqLite().insertOrUpdateToDoList(toDoList);
-                                reloadItems();
-                                changeControls(false, true, false);
+        OnNavigationItemSelectedListener listener = (item) -> {
+            switch (Helper.checkMenuID(item)) {
+                case R.id.navTimeTableSubAdd:
+                    changeControls(true, true, false);
+                    break;
+                case R.id.navTimeTableSubEdit:
+                    changeControls(true, false, false);
+                    break;
+                case R.id.navTimeTableSubDelete:
+                    MainActivity.globals.getSqLite().deleteEntry("toDoLists", "ID", currentID, "");
+                    reloadItems();
+                    changeControls(false, true, false);
+                    break;
+                case R.id.navTimeTableSubCancel:
+                    changeControls(false, true, false);
+                    break;
+                case R.id.navTimeTableSubSave:
+                    try {
+                        if(validator.getState()) {
+                            ToDoList toDoList = new ToDoList();
+                            toDoList.setID(currentID);
+                            toDoList.setTitle(txtToDoListTitle.getText().toString());
+                            toDoList.setDescription(txtToDoListDescription.getText().toString());
+                            if(!txtToDoListDate.getText().toString().equals("")) {
+                                toDoList.setListDate(Converter.convertStringToDate(txtToDoListDate.getText().toString()));
                             }
-                        } catch (Exception ex) {
-                            Helper.printException(getApplicationContext(), ex);
+                            MainActivity.globals.getSqLite().insertOrUpdateToDoList(toDoList);
+                            reloadItems();
+                            changeControls(false, true, false);
                         }
-                        break;
-                    default:
-                }
-                return false;
+                    } catch (Exception ex) {
+                        Helper.printException(getApplicationContext(), ex);
+                    }
+                    break;
+                default:
             }
+            return false;
         };
         this.navigation.setOnNavigationItemSelectedListener(listener);
 
         // init other controls
         this.lvToDoLists = this.findViewById(R.id.lvToDoLists);
-        this.toDoListsAdapter = new ToDoListsAdapter(ToDoListActivity.this, R.layout.todo_list_item, new ArrayList<ToDoList>());
-        this.lvToDoLists.setAdapter(this.toDoListsAdapter);
-        this.toDoListsAdapter.notifyDataSetChanged();
 
         this.txtToDoListTitle = this.findViewById(R.id.txtToDoListTitle);
         this.txtToDoListDescription = this.findViewById(R.id.txtToDoListDescription);

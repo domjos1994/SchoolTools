@@ -65,7 +65,7 @@ public final class MarkYearActivity extends AbstractActivity {
         this.lvYear.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
             @Override
             public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("years", "ID", currentID, "");
+                MainActivity.globals.getSqLite().deleteEntry("years", "ID", listObject.getID(), "");
                 controlFields(false, true, false);
                 reloadYears();
             }

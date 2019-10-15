@@ -74,14 +74,12 @@
                     android:textStyle="bold"/>
             </LinearLayout>
 
-            <ListView
+            <de.domjos.schooltools.custom.SwipeRefreshDeleteList
                 android:id="@+id/lvToDos"
                 android:layout_below="@+id/llState"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="4dp"
-                android:divider="@color/Gray"
-                android:dividerHeight="2dp"/>
+                app:itemIcon="@drawable/ic_done_all_black_24dp"/>
         </RelativeLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

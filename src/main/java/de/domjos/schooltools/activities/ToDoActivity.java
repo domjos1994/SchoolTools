@@ -11,41 +11,39 @@ package de.domjos.schooltools.activities;
 
 import android.content.Intent;
 
-import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.adapter.ToDoAdapter;
+import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.core.model.todo.ToDo;
 import de.domjos.schooltools.core.model.todo.ToDoList;
 import de.domjos.schooltools.custom.AbstractActivity;
+import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.widgets.ToDoWidget;
 
 /**
- * Activity For the ToDo-Screen
+ * Activity For the screen
  * @author Dominic Joas
  * @version 1.0
  */
 public final class ToDoActivity extends AbstractActivity {
     private Spinner spToDoList;
-    private ListView lvToDos;
+    private SwipeRefreshDeleteList lvToDos;
     private FloatingActionButton cmdToDoAdd;
-    private ToDoAdapter toDoAdapter;
     private ArrayAdapter<String> toDoListAdapter;
     private TextView lblState;
     private SeekBar sbState;
-    private MenuItem menSolveToDo;
-    private int intPosition = 0;
 
     public ToDoActivity() {
         super(R.layout.todo_activity);
@@ -68,11 +66,11 @@ public final class ToDoActivity extends AbstractActivity {
             }
         });
 
-        this.lvToDos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.lvToDos.click(new SwipeRefreshDeleteList.ClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(BaseDescriptionObject listObject) {
                 if(cmdToDoAdd.getVisibility()!=View.GONE) {
-                    ToDo toDo = toDoAdapter.getItem(position);
+                    ToDo toDo = (ToDo) listObject;
                     if(toDo!=null) {
                         Intent intent = new Intent(getApplicationContext(), ToDoEntryActivity.class);
                         intent.putExtra("id", toDo.getID());
@@ -83,23 +81,26 @@ public final class ToDoActivity extends AbstractActivity {
             }
         });
 
-        this.lvToDos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        this.lvToDos.reload(new SwipeRefreshDeleteList.ReloadListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                menSolveToDo.setVisible(true);
-                intPosition = position;
-                return true;
+            public void onReload() {
+                reloadToDos();
             }
         });
 
-        this.cmdToDoAdd.setOnClickListener(new View.OnClickListener() {
+        this.lvToDos.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ToDoEntryActivity.class);
-                intent.putExtra("id", 0);
-                intent.putExtra("list", spToDoList.getSelectedItem().toString());
-                startActivityForResult(intent, 98);
+            public void onDelete(BaseDescriptionObject listObject) {
+                MainActivity.globals.getSqLite().deleteEntry("toDos", "ID", listObject.getID(), "");
+                reloadToDoLists();
             }
+        });
+
+        this.cmdToDoAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ToDoEntryActivity.class);
+            intent.putExtra("id", 0);
+            intent.putExtra("list", spToDoList.getSelectedItem().toString());
+            startActivityForResult(intent, 98);
         });
 
         this.sbState.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -124,7 +125,6 @@ public final class ToDoActivity extends AbstractActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_todo, menu);
-        this.menSolveToDo = menu.findItem(R.id.menSolveToDo);
         return true;
     }
 
@@ -132,37 +132,41 @@ public final class ToDoActivity extends AbstractActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.menHelp:
-                super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_todo"));
-                break;
-            case R.id.menSolveToDo:
-                ToDo toDo = toDoAdapter.getItem(intPosition);
-                if(toDo!=null) {
-                    toDo.setSolved(!toDo.isSolved());
+        if(id==R.id.menHelp) {
+            return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_todo"));
+        }
+        return false;
+    }
 
-                    String list = "";
-                    for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("")) {
-                        for(ToDo tmp : toDoList.getToDos()) {
-                            if(tmp.getID() == toDo.getID()) {
-                                list = toDoList.getTitle();
-                                break;
-                            }
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id==R.id.menSolveToDo) {
+            int intPosition = 0;
+            ToDo toDo = (ToDo) lvToDos.getAdapter().getItem(intPosition);
+            if(toDo!=null) {
+                toDo.setSolved(!toDo.isSolved());
+
+                String list = "";
+                for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("")) {
+                    for(ToDo tmp : toDoList.getToDos()) {
+                        if(tmp.getID() == toDo.getID()) {
+                            list = toDoList.getTitle();
+                            break;
                         }
                     }
-                    MainActivity.globals.getSqLite().insertOrUpdateToDo(toDo, list);
-                    reloadToDos();
                 }
-                this.menSolveToDo.setVisible(false);
-                break;
-            default:
+                MainActivity.globals.getSqLite().insertOrUpdateToDo(toDo, list);
+                reloadToDos();
+            }
         }
-
-        return super.onOptionsItemSelected(item);
+        return super.onContextItemSelected(item);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         try {
             if(resultCode==RESULT_OK) {
                 if(requestCode==99) {
@@ -172,7 +176,6 @@ public final class ToDoActivity extends AbstractActivity {
                     this.reloadToDos();
                 }
                 Helper.sendBroadCast(ToDoActivity.this, ToDoWidget.class);
-                this.menSolveToDo.setVisible(false);
             }
         } catch (Exception ex) {
             Helper.printException(this.getApplicationContext(), ex);
@@ -188,39 +191,39 @@ public final class ToDoActivity extends AbstractActivity {
     }
 
     private void reloadToDos() {
-        this.toDoAdapter.clear();
+        this.lvToDos.getAdapter().clear();
         if(!this.toDoListAdapter.isEmpty()) {
             if(this.spToDoList.getSelectedItem()!=null) {
                 if(!this.spToDoList.getSelectedItem().toString().equals("")) {
                     for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("title='" + this.spToDoList.getSelectedItem().toString() + "'")) {
                         for(ToDo toDo : toDoList.getToDos()) {
-                            this.toDoAdapter.add(toDo);
+                            this.lvToDos.getAdapter().add(toDo);
                         }
                     }
-                    cmdToDoAdd.setVisibility(View.VISIBLE);
+                    cmdToDoAdd.show();
                 } else {
                     for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("")) {
                         for(ToDo toDo : toDoList.getToDos()) {
-                            this.toDoAdapter.add(toDo);
+                            this.lvToDos.getAdapter().add(toDo);
                         }
                     }
-                    cmdToDoAdd.setVisibility(View.GONE);
+                    cmdToDoAdd.hide();
                 }
             } else {
                 for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("")) {
                     for(ToDo toDo : toDoList.getToDos()) {
-                        this.toDoAdapter.add(toDo);
+                        this.lvToDos.getAdapter().add(toDo);
                     }
                 }
-                cmdToDoAdd.setVisibility(View.GONE);
+                cmdToDoAdd.hide();
             }
         } else {
-            cmdToDoAdd.setVisibility(View.GONE);
+            cmdToDoAdd.hide();
         }
 
         int max = 0, current = 0;
-        for(int i = 0; i<=this.toDoAdapter.getCount()-1; i++) {
-            ToDo toDo = this.toDoAdapter.getItem(i);
+        for(int i = 0; i<=this.lvToDos.getAdapter().getItemCount()-1; i++) {
+            ToDo toDo = (ToDo) this.lvToDos.getAdapter().getItem(i);
             if(toDo!=null) {
                 max += toDo.getImportance();
                 current += (toDo.isSolved() ? toDo.getImportance() : 0);
@@ -234,32 +237,24 @@ public final class ToDoActivity extends AbstractActivity {
     protected void initControls() {
         // init navigation_learning_card_group
         BottomNavigationView navigation = this.findViewById(R.id.navigation);
-        OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (Helper.checkMenuID(item)) {
-                    case R.id.navToDoList:
-                        Intent intent = new Intent(getApplicationContext(), ToDoListActivity.class);
-                        startActivityForResult(intent, 99);
-                        break;
-                    default:
-                }
-                return false;
+        OnNavigationItemSelectedListener listener = (item) -> {
+            if(Helper.checkMenuID(item)==R.id.navToDoList) {
+                Intent intent = new Intent(getApplicationContext(), ToDoListActivity.class);
+                startActivityForResult(intent, 99);
             }
+            return false;
         };
         navigation.setOnNavigationItemSelectedListener(listener);
 
         // init other controls
         this.cmdToDoAdd = this.findViewById(R.id.cmdToDoAdd);
         this.spToDoList = this.findViewById(R.id.spToDoList);
-        this.toDoListAdapter = new ArrayAdapter<>(ToDoActivity.this, android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.toDoListAdapter = new ArrayAdapter<>(ToDoActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
         this.spToDoList.setAdapter(this.toDoListAdapter);
         this.toDoListAdapter.notifyDataSetChanged();
 
         this.lvToDos = this.findViewById(R.id.lvToDos);
-        this.toDoAdapter = new ToDoAdapter(ToDoActivity.this, R.layout.todo_item, new ArrayList<ToDo>());
-        this.lvToDos.setAdapter(this.toDoAdapter);
-        this.toDoAdapter.notifyDataSetChanged();
+        this.lvToDos.setContextMenu(R.menu.ctx_todo);
 
         this.lblState = this.findViewById(R.id.lblState);
         this.sbState = this.findViewById(R.id.sbState);

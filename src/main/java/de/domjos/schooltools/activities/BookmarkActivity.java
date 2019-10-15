@@ -259,7 +259,7 @@ public final class BookmarkActivity extends AbstractActivity {
         this.tagAdapter.notifyDataSetChanged();
 
         this.lvBookmarks = this.findViewById(R.id.lvBookmarks);
-        this.lvBookmarks.setContextMenu(R.menu.menu_bookmark);
+        this.lvBookmarks.setContextMenu(R.menu.ctx_bookmark);
         this.reloadBookmarks("");
 
         this.wvPreview = this.findViewById(R.id.wvPreview);

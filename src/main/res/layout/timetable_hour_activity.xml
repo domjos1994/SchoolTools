@@ -24,14 +24,12 @@
         android:layout_weight="1"
         android:background="@drawable/bg_water">
 
-        <ListView
+        <de.domjos.schooltools.custom.SwipeRefreshDeleteList
             android:id="@+id/lvHours"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/svControls"
-            android:divider="@color/Gray"
-            android:dividerHeight="2dp"
-            android:background="@drawable/bg_water"/>
+            app:itemIcon="@drawable/ic_access_time_black_24dp"/>
 
         <ScrollView
             android:id="@+id/svControls"

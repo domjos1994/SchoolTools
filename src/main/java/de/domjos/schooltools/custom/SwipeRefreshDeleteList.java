@@ -32,6 +32,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.core.model.objects.BaseDescriptionObject;
 
@@ -45,6 +48,7 @@ public class SwipeRefreshDeleteList extends SwipeRefreshLayout {
     private ClickListener clickListener;
     private LinearLayoutManager manager;
     private Drawable icon;
+    private Snackbar snackbar;
 
     public SwipeRefreshDeleteList(@NonNull Context context) {
         super(context);
@@ -86,6 +90,8 @@ public class SwipeRefreshDeleteList extends SwipeRefreshLayout {
 
         this.recyclerView.addItemDecoration(dividerItemDecoration);
         this.addView(this.recyclerView);
+
+        this.snackbar = Snackbar.make(((Activity)context).findViewById(android.R.id.content), R.string.item_deleted, Snackbar.LENGTH_SHORT);
     }
 
     private void initAdapter() {
@@ -98,12 +104,30 @@ public class SwipeRefreshDeleteList extends SwipeRefreshLayout {
         this.adapter.onSwipeListener(new SwipeToDeleteCallback(this.context) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if (deleteListener != null) {
-                    deleteListener.onDelete(adapter.getItem(viewHolder.getAdapterPosition()));
-                }
+                final boolean[] rollBack = {false};
+                BaseDescriptionObject baseDescriptionObject = getAdapter().getItem(viewHolder.getAdapterPosition());
                 if (viewHolder.getAdapterPosition() != -1) {
                     getAdapter().deleteItem(viewHolder.getAdapterPosition());
                 }
+                snackbar.setAction(R.string.item_undo, v -> {
+                    getAdapter().add(baseDescriptionObject);
+                    rollBack[0] = true;
+                });
+                Snackbar.Callback callback = new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        if(!rollBack[0]) {
+                            if (deleteListener != null) {
+                                deleteListener.onDelete(baseDescriptionObject);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onShown(Snackbar snackbar){}
+                };
+                snackbar.addCallback(callback);
+                snackbar.show();
             }
         });
 

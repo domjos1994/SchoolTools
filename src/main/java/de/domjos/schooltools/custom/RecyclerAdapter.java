@@ -131,7 +131,11 @@ public class RecyclerAdapter extends Adapter<RecyclerAdapter.RecycleViewHolder> 
     }
 
     public BaseDescriptionObject getItem(int position) {
-        return data.get(position);
+        if(position==noEntryItem) {
+            return null;
+        } else {
+            return data.get(position);
+        }
     }
 
     public int getItemPosition(BaseDescriptionObject listObject) {

@@ -11,6 +11,8 @@
     <string name="app_name">SchoolTools</string>
     <string name="channel_name">SchoolTools-Channel</string>
     <string name="channel_description">NotificationChannel für SchoolTools</string>
+    <string name="item_deleted">1 Eintrag wurde entfernt!</string>
+    <string name="item_undo">Rückgängig</string>
 
     <string name="main_nav_main">Startseite</string>
     <string name="main_nav_buttons">Knöpfe</string>
@@ -332,6 +334,7 @@
     <string name="todo_category">Kategorie</string>
     <string name="todo_solved">Erledigt</string>
     <string name="todo_priority">Priorität</string>
+    <string name="todo_solve">Lösen</string>
 
     <string name="note_header">Notiz</string>
     <string name="note_convert_to_todo">Konvertiere Notiz zu ToDo!</string>
