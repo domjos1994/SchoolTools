@@ -36,7 +36,7 @@ public final class QuickQueryScreenWidget extends ScreenWidget {
     @Override
     public void init() {
         Spinner cmbQueries = super.view.findViewById(R.id.cmbQueries);
-        this.queryAdapter = new ArrayAdapter<>(this.activity.getApplicationContext(), android.R.layout.simple_spinner_item);
+        this.queryAdapter = new ArrayAdapter<>(this.activity.getApplicationContext(), R.layout.spinner_item);
         cmbQueries.setAdapter(this.queryAdapter);
         this.queryAdapter.notifyDataSetChanged();
 

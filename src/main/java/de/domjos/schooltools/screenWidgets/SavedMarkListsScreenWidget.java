@@ -43,7 +43,7 @@ public final class SavedMarkListsScreenWidget extends ScreenWidget {
     @SuppressLint("ClickableViewAccessibility")
     public void init() {
         this.cmbSavedMarkList = super.view.findViewById(R.id.cmbSavedMarklist);
-        this.savedMarkListAdapter = new ArrayAdapter<>(super.activity, android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.savedMarkListAdapter = new ArrayAdapter<>(super.activity, R.layout.spinner_item, new ArrayList<String>());
         this.cmbSavedMarkList.setAdapter(this.savedMarkListAdapter);
         this.savedMarkListAdapter.notifyDataSetChanged();
 

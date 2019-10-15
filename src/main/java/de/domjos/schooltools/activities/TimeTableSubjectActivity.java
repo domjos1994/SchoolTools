@@ -297,7 +297,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         });
         this.colorBuilder.setNegativeButton(R.string.sys_cancel, (dialogInterface, i) -> dialogInterface.dismiss());
 
-        this.adapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<>());
+        this.adapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, new ArrayList<>());
         this.spSubjectTeachers.setAdapter(this.adapter);
         this.adapter.notifyDataSetChanged();
     }

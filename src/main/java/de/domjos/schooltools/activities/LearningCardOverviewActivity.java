@@ -53,7 +53,7 @@ public final class LearningCardOverviewActivity extends FragmentActivity {
 
 
                 final Spinner spLearningCardQuery = dialog.findViewById(R.id.spLearningCardQueries);
-                final ArrayAdapter<LearningCardQuery> learningCardQueries = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.globals.getSqLite().getLearningCardQueries(""));
+                final ArrayAdapter<LearningCardQuery> learningCardQueries = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, MainActivity.globals.getSqLite().getLearningCardQueries(""));
                 spLearningCardQuery.setAdapter(learningCardQueries);
                 learningCardQueries.notifyDataSetChanged();
 

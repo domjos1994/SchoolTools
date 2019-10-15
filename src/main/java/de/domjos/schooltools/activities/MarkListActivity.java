@@ -414,7 +414,7 @@ public final class MarkListActivity extends AbstractActivity {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(MarkListActivity.this, R.style.MyDialogStyle));
                     builder.setTitle(this.getString(R.string.marklist_settings_open_title));
                     final Spinner spinner = new Spinner(this.getApplicationContext());
-                    ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+                    ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, new ArrayList<String>());
                     spinner.setAdapter(spinnerAdapter);
                     spinnerAdapter.notifyDataSetChanged();
                     for(String list : MainActivity.globals.getSqLite().listMarkLists()) {

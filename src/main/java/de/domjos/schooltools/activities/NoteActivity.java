@@ -131,7 +131,7 @@ public final class NoteActivity extends AbstractActivity {
 
 
                 final Spinner spNotesConvertToToDo = dialog.findViewById(R.id.spNotesConvertToToDo);
-                final ArrayAdapter<ToDoList> notesConvertToToDo = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.globals.getSqLite().getToDoLists(""));
+                final ArrayAdapter<ToDoList> notesConvertToToDo = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, MainActivity.globals.getSqLite().getToDoLists(""));
                 spNotesConvertToToDo.setAdapter(notesConvertToToDo);
                 notesConvertToToDo.notifyDataSetChanged();
 

@@ -683,7 +683,7 @@ public class AssistantHelper {
         this.txtTimeTableAssistantSubjectsTitle = dialog.findViewById(R.id.txtTimeTableAssistantSubjectsTitle);
         this.txtTimeTableAssistantSubjectsAlias = dialog.findViewById(R.id.txtTimeTableAssistantSubjectsAlias);
         this.spTimeTableAssistantSubjectsColor = dialog.findViewById(R.id.spTimeTableAssistantSubjectsColor);
-        this.timeTableAssistantSubjectsColorAdapter = new ArrayAdapter<>(this.activity, android.R.layout.simple_spinner_item);
+        this.timeTableAssistantSubjectsColorAdapter = new ArrayAdapter<>(this.activity, R.layout.spinner_item);
         for(String color : this.activity.getResources().getStringArray(R.array.colorNames)) {
             this.timeTableAssistantSubjectsColorAdapter.add(color);
         }

@@ -284,13 +284,13 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
         this.txtLearningCardGroupDeadline = this.findViewById(R.id.txtLearningCardGroupDeadline);
 
         this.spLearningCardGroupSubject = this.findViewById(R.id.spLearningCardGroupSubject);
-        this.subjectAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.globals.getSqLite().getSubjects(""));
+        this.subjectAdapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, MainActivity.globals.getSqLite().getSubjects(""));
         this.subjectAdapter.add(new Subject());
         this.spLearningCardGroupSubject.setAdapter(this.subjectAdapter);
         this.subjectAdapter.notifyDataSetChanged();
 
         this.spLearningCardGroupTeacher = this.findViewById(R.id.spLearningCardGroupTeacher);
-        this.teacherAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, MainActivity.globals.getSqLite().getTeachers(""));
+        this.teacherAdapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, MainActivity.globals.getSqLite().getTeachers(""));
         this.teacherAdapter.add(new Teacher());
         this.spLearningCardGroupTeacher.setAdapter(this.teacherAdapter);
         this.teacherAdapter.notifyDataSetChanged();

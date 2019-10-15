@@ -76,7 +76,7 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
         this.chkToDoNotSolved = this.findViewById(R.id.chkToDoNotSolved);
 
         this.cmbToDoLists = this.findViewById(R.id.cmbToDoList);
-        this.adapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new LinkedList<ToDoList>());
+        this.adapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, new LinkedList<ToDoList>());
         this.cmbToDoLists.setAdapter(this.adapter);
         this.adapter.notifyDataSetChanged();
 

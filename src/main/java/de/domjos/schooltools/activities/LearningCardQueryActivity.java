@@ -124,19 +124,19 @@ public final class LearningCardQueryActivity extends AbstractActivity {
         this.spLearningCardQueryCategory = this.findViewById(R.id.spLearningCardQueryCategory);
         List<String> categories = MainActivity.globals.getSqLite().getColumns("learningCards", "category", "GROUP BY category");
         categories.add(0, "");
-        this.categoryAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+        this.categoryAdapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, categories);
         this.spLearningCardQueryCategory.setAdapter(this.categoryAdapter);
         this.categoryAdapter.notifyDataSetChanged();
 
         this.spLearningCardQueryGroup = this.findViewById(R.id.spLearningCardQueryGroup);
         List<LearningCardGroup> groups = MainActivity.globals.getSqLite().getLearningCardGroups("", false);
         groups.add(0, new LearningCardGroup());
-        this.groupAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, groups);
+        this.groupAdapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, groups);
         this.spLearningCardQueryGroup.setAdapter(this.groupAdapter);
         this.groupAdapter.notifyDataSetChanged();
 
         this.spLearningCardQueryWrong = this.findViewById(R.id.spLearningCardQueryWrong);
-        this.queryAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, new LinkedList<>());
+        this.queryAdapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, new LinkedList<>());
         this.spLearningCardQueryWrong.setAdapter(this.queryAdapter);
         this.queryAdapter.notifyDataSetChanged();
         this.reloadList();

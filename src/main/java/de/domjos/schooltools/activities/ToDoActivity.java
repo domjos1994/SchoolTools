@@ -249,7 +249,7 @@ public final class ToDoActivity extends AbstractActivity {
         // init other controls
         this.cmdToDoAdd = this.findViewById(R.id.cmdToDoAdd);
         this.spToDoList = this.findViewById(R.id.spToDoList);
-        this.toDoListAdapter = new ArrayAdapter<>(ToDoActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
+        this.toDoListAdapter = new ArrayAdapter<>(ToDoActivity.this, R.layout.spinner_item, new ArrayList<>());
         this.spToDoList.setAdapter(this.toDoListAdapter);
         this.toDoListAdapter.notifyDataSetChanged();
 

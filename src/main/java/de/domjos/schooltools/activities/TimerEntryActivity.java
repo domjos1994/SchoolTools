@@ -216,17 +216,17 @@ public final class TimerEntryActivity extends AbstractActivity {
             this.txtTimerMemoryDate.setVisibility(View.GONE);
 
             this.spTimerSubject = this.findViewById(R.id.spTimerSubject);
-            this.subjectAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
+            this.subjectAdapter = new ArrayAdapter<>(TimerEntryActivity.this, R.layout.spinner_item, new ArrayList<>());
             this.spTimerSubject.setAdapter(this.subjectAdapter);
             this.subjectAdapter.notifyDataSetChanged();
 
             this.spTimerTeacher = this.findViewById(R.id.spTimerTeacher);
-            this.teacherAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
+            this.teacherAdapter = new ArrayAdapter<>(TimerEntryActivity.this, R.layout.spinner_item, new ArrayList<>());
             this.spTimerTeacher.setAdapter(this.teacherAdapter);
             this.teacherAdapter.notifyDataSetChanged();
 
             this.spTimerClass = this.findViewById(R.id.spTimerClass);
-            this.classAdapter = new ArrayAdapter<>(TimerEntryActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
+            this.classAdapter = new ArrayAdapter<>(TimerEntryActivity.this, R.layout.spinner_item, new ArrayList<>());
             this.spTimerClass.setAdapter(this.classAdapter);
             this.classAdapter.notifyDataSetChanged();
         } catch (Exception ex) {

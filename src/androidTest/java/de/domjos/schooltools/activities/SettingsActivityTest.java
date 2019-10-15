@@ -64,25 +64,25 @@ public class SettingsActivityTest  {
         onView(withText(R.string.settings_start_shown_modules_header)).perform(click());
         onView(withText(R.string.main_nav_mark_list)).perform(click());
         onView(withText("OK")).perform(click());
-        widgets = settings.getStartWidgets(context);
+        widgets = settings.getStartWidgets();
         assertTrue(!widgets.contains(context.getString(R.string.main_nav_mark_list)));
 
         onView(withText(R.string.settings_start_shown_modules_header)).perform(click());
         onView(withText(R.string.main_nav_mark)).perform(click());
         onView(withText("OK")).perform(click());
-        widgets = settings.getStartWidgets(context);
+        widgets = settings.getStartWidgets();
         assertTrue(!widgets.contains(context.getString(R.string.main_nav_mark)));
 
         onView(withText(R.string.settings_start_shown_modules_header)).perform(click());
         onView(withText(R.string.main_nav_timetable)).perform(click());
         onView(withText("OK")).perform(click());
-        widgets = settings.getStartWidgets(context);
+        widgets = settings.getStartWidgets();
         assertTrue(!widgets.contains(context.getString(R.string.main_nav_timetable)));
 
         onView(withText(R.string.settings_start_shown_modules_header)).perform(click());
         onView(withText(R.string.main_nav_timer)).perform(click());
         onView(withText("OK")).perform(click());
-        widgets = settings.getStartWidgets(context);
+        widgets = settings.getStartWidgets();
         assertTrue(!widgets.contains(context.getString(R.string.main_nav_timer)));
     }
 
@@ -94,25 +94,25 @@ public class SettingsActivityTest  {
         onView(withText(R.string.settings_start_start_header)).perform(click());
         onView(withText(R.string.main_today)).perform(click());
         onView(withText(R.string.sys_save)).perform(click());
-        widgets = settings.getStartWidgets(context);
+        widgets = settings.getStartWidgets();
         assertTrue(!widgets.contains(context.getString(R.string.main_today)));
 
         onView(withText(R.string.settings_start_start_header)).perform(click());
         onView(withText(R.string.main_top5Notes)).perform(click());
         onView(withText(R.string.sys_save)).perform(click());
-        widgets = settings.getStartWidgets(context);
+        widgets = settings.getStartWidgets();
         assertTrue(!widgets.contains(context.getString(R.string.main_top5Notes)));
 
         onView(withText(R.string.settings_start_start_header)).perform(click());
         onView(withText(R.string.main_savedMarkList)).perform(click());
         onView(withText(R.string.sys_save)).perform(click());
-        widgets = settings.getStartWidgets(context);
+        widgets = settings.getStartWidgets();
         assertTrue(!widgets.contains(context.getString(R.string.main_savedMarkList)));
 
         onView(withText(R.string.settings_start_start_header)).perform(click());
         onView(withText(R.string.main_nav_buttons)).perform(click());
         onView(withText(R.string.sys_save)).perform(click());
-        widgets = settings.getStartWidgets(context);
+        widgets = settings.getStartWidgets();
         assertTrue(widgets.contains(context.getString(R.string.main_nav_buttons)));
     }
 }

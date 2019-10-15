@@ -248,7 +248,7 @@ public final class BookmarkActivity extends AbstractActivity {
         // init other controls
         List<Subject> subjects = MainActivity.globals.getSqLite().getSubjects("");
         subjects.add(0, new Subject());
-        int spinner_item = android.R.layout.simple_spinner_item;
+        int spinner_item = R.layout.spinner_item;
 
         this.searchView = this.findViewById(R.id.cmdSearch);
 

@@ -45,7 +45,7 @@ public final class SavedTimeTablesScreenWidget extends ScreenWidget {
     @Override
     public void init() {
         this.cmbSavedTimeTables = super.view.findViewById(R.id.cmbSavedTimeTables);
-        this.savedTimeTablesAdapter = new ArrayAdapter<>(super.activity, android.R.layout.simple_spinner_item, new ArrayList<String>());
+        this.savedTimeTablesAdapter = new ArrayAdapter<>(super.activity, R.layout.spinner_item, new ArrayList<String>());
         this.cmbSavedTimeTables.setAdapter(this.savedTimeTablesAdapter);
         this.savedTimeTablesAdapter.notifyDataSetChanged();
         this.grdSavedTimeTables = super.view.findViewById(R.id.grdSavedTimeTables);

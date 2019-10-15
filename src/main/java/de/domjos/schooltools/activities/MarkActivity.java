@@ -255,12 +255,12 @@ public final class MarkActivity extends AbstractActivity {
         this.lvTest = this.findViewById(R.id.lvTest);
 
         this.spMarkSubject = this.findViewById(R.id.spMarkSubject);
-        this.subjectAdapter = new ArrayAdapter<>(MarkActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
+        this.subjectAdapter = new ArrayAdapter<>(MarkActivity.this, R.layout.spinner_item, new ArrayList<>());
         this.spMarkSubject.setAdapter(this.subjectAdapter);
         this.subjectAdapter.notifyDataSetChanged();
 
         this.spMarkYear = this.findViewById(R.id.spMarkYear);
-        this.yearAdapter = new ArrayAdapter<>(MarkActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>());
+        this.yearAdapter = new ArrayAdapter<>(MarkActivity.this, R.layout.spinner_item, new ArrayList<>());
         this.spMarkYear.setAdapter(this.yearAdapter);
         this.yearAdapter.notifyDataSetChanged();
     }
