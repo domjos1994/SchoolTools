@@ -8,7 +8,6 @@
  */
 package de.domjos.schooltools.helper;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
@@ -36,20 +35,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.hudomju.swipe.SwipeToDismissTouchListener;
-import com.hudomju.swipe.adapter.ListViewAdapter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -98,7 +89,7 @@ public class Helper {
         }
 
         LayoutInflater inflater = activity.getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) activity.findViewById(R.id.custom_toast_container));
+        View layout = inflater.inflate(R.layout.custom_toast, activity.findViewById(R.id.custom_toast_container));
         TextView text = layout.findViewById(R.id.text);
         text.setText(msg);
         Toast toast = new Toast(activity);
@@ -172,7 +163,9 @@ public class Helper {
         if (view == null) {
             view = new View(activity);
         }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if(imm!=null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     public static View getRowView(Context context, ViewGroup parent, int layout) {
@@ -386,7 +379,6 @@ public class Helper {
         return item;
     }
 
-    @SuppressWarnings("deprecation")
     public static void showHTMLInTextView(Context context, String resource, TextView txt) {
         String packageName = context.getPackageName();
         int resId = context.getResources().getIdentifier(resource, "string", packageName);
@@ -430,38 +422,11 @@ public class Helper {
         navigationView.setBackgroundResource(R.drawable.bg_ice);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    public static void setSwipeDeleteListener(ListView lv, final ArrayAdapter adapter, final String table) {
-        ListViewAdapter listViewAdapter = new ListViewAdapter(lv);
-        final SwipeToDismissTouchListener<ListViewAdapter> touchListener = new SwipeToDismissTouchListener<>(
-                listViewAdapter,
-                new SwipeToDismissTouchListener.DismissCallbacks<ListViewAdapter>() {
-                    @Override
-                    public boolean canDismiss(int position) {
-                        return true;
-                    }
-
-                    @Override
-                    public void onDismiss(ListViewAdapter recyclerView, int position) {
-                        Object object = adapter.getItem(position);
-                        MainActivity.globals.getSqLite().deleteEntry(table, object);
-                        adapter.remove(object);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-
-        lv.setOnTouchListener(touchListener);
-        lv.setOnScrollListener((AbsListView.OnScrollListener) touchListener.makeScrollListener());
-    }
-
 
     public static View.OnTouchListener addOnTouchListenerForScrolling() {
-        return new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.getParent().requestDisallowInterceptTouchEvent(true);
-                return v.performClick();
-            }
+        return (v, event) -> {
+            v.getParent().requestDisallowInterceptTouchEvent(true);
+            return v.performClick();
         };
     }
 
@@ -484,7 +449,9 @@ public class Helper {
             NotificationChannel channel = new NotificationChannel(MainActivity.CHANNEL_ID, name, importance);
             channel.setDescription(description);
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            if(notificationManager!=null) {
+                notificationManager.createNotificationChannel(channel);
+            }
         }
     }
 }

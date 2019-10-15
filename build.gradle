@@ -16,8 +16,8 @@ int javaVersion = 8
 
 def espressoVersion = '3.2.0'
 
-def appVersionName = '0.4.alpha.1'
-def appVersionCode = 14
+def appVersionName = '0.4.alpha.2'
+def appVersionCode = 15
 
 buildscript {
     repositories {
@@ -80,8 +80,10 @@ dependencies {
     implementation 'com.itextpdf:itextg:5.5.10'
     // library to show graphs
     implementation 'com.jjoe64:graphview:4.2.2'
-    implementation 'com.hudomju:swipe-to-dismiss-undo:1.0'
     implementation 'com.github.lookfirst:sardine:5.9'
+
+    // library to show spotlight
+    implementation 'com.github.takusemba:spotlight:1.8.0'
 
     // Log4J-Logging for Android
     implementation 'log4j:log4j:1.2.17'

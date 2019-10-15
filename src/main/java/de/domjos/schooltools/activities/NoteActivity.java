@@ -31,6 +31,7 @@ import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Validator;
+import de.domjos.schooltools.spotlight.OnBoardingHelper;
 import de.domjos.schooltools.widgets.NoteWidget;
 
 /**
@@ -41,7 +42,6 @@ import de.domjos.schooltools.widgets.NoteWidget;
 public final class NoteActivity extends AbstractActivity {
     private BottomNavigationView navigation;
     private static final int SPEECH_REQUEST_CODE = 0;
-
 
     private int currentID;
     private Validator validator;
@@ -301,6 +301,8 @@ public final class NoteActivity extends AbstractActivity {
         this.txtNoteMemoryDate.setVisibility(View.GONE);
 
         this.lvNotes = this.findViewById(R.id.lvNotes);
+
+        OnBoardingHelper.tutorialNote(NoteActivity.this, this.txtNoteTitle, this.txtNoteMemoryDate);
     }
 
     private void deleteNote() {
