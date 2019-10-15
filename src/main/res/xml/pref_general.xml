@@ -45,17 +45,15 @@
     <PreferenceCategory
         android:title="@string/settings_general_database"
         android:layout="@android:layout/preference_category">
-    <SwitchPreference
-        android:key="swtDeleteMemories"
-        android:defaultValue="true"
-        android:title="@string/settings_general_deleteMemories_title"
-        android:summary="@string/settings_general_deleteMemories_summary"/>
-
-
-    <SwitchPreference
-        android:key="swtResetDatabase"
-        android:defaultValue="true"
-        android:title="@string/settings_general_reset_database_title"
-        android:summary="@string/settings_general_deleteMemories_summary"/>
+        <SwitchPreference
+            android:key="swtDeleteMemories"
+            android:defaultValue="true"
+            android:title="@string/settings_general_deleteMemories_title"
+            android:summary="@string/settings_general_deleteMemories_summary"/>
+        <SwitchPreference
+            android:key="swtResetDatabase"
+            android:defaultValue="true"
+            android:title="@string/settings_general_reset_database_title"
+            android:summary="@string/settings_general_reset_database_summary"/>
     </PreferenceCategory>
 </PreferenceScreen>
