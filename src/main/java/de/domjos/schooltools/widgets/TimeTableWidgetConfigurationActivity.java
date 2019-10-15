@@ -13,12 +13,9 @@ package de.domjos.schooltools.widgets;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -59,18 +56,14 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
         this.initControls();
         this.reloadTimeTables();
 
-        this.cmdSave.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onClick(View v) {
-                String selected = timeTableAdapter.getItem(cmbTimeTables.getSelectedItemPosition());
+        this.cmdSave.setOnClickListener(v -> {
+            String selected = timeTableAdapter.getItem(cmbTimeTables.getSelectedItemPosition());
 
-                if(selected!=null) {
-                    List<TimeTable> timeTableList = sqLite.getTimeTables("");
-                    for(TimeTable timeTable : timeTableList) {
-                        if(selected.equals(timeTable.getTitle())) {
-                            getSettings(timeTable.getID());
-                        }
+            if(selected!=null) {
+                List<TimeTable> timeTableList = sqLite.getTimeTables("");
+                for(TimeTable timeTable : timeTableList) {
+                    if(selected.equals(timeTable.getTitle())) {
+                        getSettings(timeTable.getID());
                     }
                 }
             }
@@ -87,7 +80,7 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
     private void initControls() {
         this.cmdSave = this.findViewById(R.id.cmdSave);
 
-        this.timeTableAdapter = new ArrayAdapter<>(TimeTableWidgetConfigurationActivity.this, R.layout.spinner_item, new ArrayList<String>());
+        this.timeTableAdapter = new ArrayAdapter<>(TimeTableWidgetConfigurationActivity.this, R.layout.spinner_item, new ArrayList<>());
         this.cmbTimeTables = this.findViewById(R.id.cmbTimeTable);
         this.cmbTimeTables.setAdapter(this.timeTableAdapter);
         this.timeTableAdapter.notifyDataSetChanged();

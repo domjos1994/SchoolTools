@@ -15,7 +15,7 @@
     android:minResizeHeight="60dp"
     android:minResizeWidth="120dp"
     android:updatePeriodMillis="86400000"
-    android:previewImage="@mipmap/ic_launcher_round"
+    android:previewImage="@drawable/ic_check_circle_black_24dp"
     android:initialLayout="@layout/todo_widget"
     android:resizeMode="vertical|horizontal"
     android:configure="de.domjos.schooltools.widgets.ToDoWidgetConfigurationActivity">

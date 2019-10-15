@@ -85,7 +85,7 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
         row.setTextViewText(R.id.lblHeader, callItem);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            row = this.changeSize(row);
+            this.changeSize(row);
         }
 
         int color = this.timeTableRow.get(position).getValue();
@@ -108,7 +108,7 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private RemoteViews changeSize(RemoteViews row) {
+    private void changeSize(RemoteViews row) {
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
             Bundle bundle = manager.getAppWidgetOptions(appWidgetId);
@@ -121,7 +121,6 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
         } else {
             row.setTextViewTextSize(R.id.lblHeader, 0, 14);
         }
-        return row;
     }
 
     @Override
