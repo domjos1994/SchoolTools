@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 public class Helper {
 
     public static Context getContext() {
-        return InstrumentationRegistry.getTargetContext();
+        return InstrumentationRegistry.getInstrumentation().getTargetContext();
     }
 
     /**

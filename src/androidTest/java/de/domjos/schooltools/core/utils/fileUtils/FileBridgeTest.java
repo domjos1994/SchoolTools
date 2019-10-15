@@ -16,6 +16,8 @@ import de.domjos.schooltools.core.model.Subject;
 import de.domjos.schooltools.core.model.learningCard.LearningCard;
 import de.domjos.schooltools.core.model.learningCard.LearningCardGroup;
 import de.domjos.schooltools.core.model.timetable.Teacher;
+import de.domjos.schooltools.utils.Helper;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -72,17 +74,13 @@ public class FileBridgeTest {
 
     @Test
     public void testObjectToFile() throws Exception {
-        FileBridge fileBridge = new FileBridge(this.group, "test.csv", this.getContext());
+        FileBridge fileBridge = new FileBridge(this.group, "test.csv", Helper.getContext());
         fileBridge.writeObjectToFile();
     }
 
     @Test
     public void testObjectFromFile() throws Exception {
-        FileBridge fileBridge = new FileBridge(null, "test.csv", this.getContext());
+        FileBridge fileBridge = new FileBridge(null, "test.csv", Helper.getContext());
         fileBridge.readObjectFromFile();
-    }
-
-    private Context getContext() {
-        return InstrumentationRegistry.getTargetContext();
     }
 }

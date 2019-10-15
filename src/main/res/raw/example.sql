@@ -229,3 +229,6 @@ INSERT INTO toDoLists(ID,title,description) VALUES(1,'Wunschliste','');
 INSERT INTO toDoLists(ID,title,description) VALUES(2,'Einkaufsliste','');
 INSERT INTO toDoLists(ID,title,description) VALUES(3,'Kuchen','');
 
+INSERT INTO todos(ID,title,importance,solved,todoList) VALUES(1,'Äpfel',7,0,2);
+INSERT INTO todos(ID,title,importance,solved,todoList) VALUES(2,'Birnen',7,1,2);
+INSERT INTO todos(ID,title,importance,solved,todoList) VALUES(3,'Playstation 5',9,0,1);
