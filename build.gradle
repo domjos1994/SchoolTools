@@ -13,11 +13,12 @@ apply plugin: 'com.android.application'
 int compileSDKVersion = 29
 int minSDKVersion = 15
 int javaVersion = 8
+def androidXVersion = "1.1.0"
 
 def espressoVersion = '3.2.0'
 
-def appVersionName = '0.4.alpha.2'
-def appVersionCode = 15
+def appVersionName = '0.4.alpha.3'
+def appVersionCode = 16
 
 buildscript {
     repositories {
@@ -66,10 +67,10 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // android libraries
-    implementation "androidx.appcompat:appcompat:1.1.0"
-    implementation "androidx.appcompat:appcompat-resources:1.1.0"
-    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation "androidx.preference:preference:1.1.0"
+    implementation "androidx.appcompat:appcompat:${androidXVersion}"
+    implementation "androidx.appcompat:appcompat-resources:${androidXVersion}"
+    implementation "androidx.vectordrawable:vectordrawable:${androidXVersion}"
+    implementation "androidx.preference:preference:${androidXVersion}"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.0.0'
@@ -81,7 +82,6 @@ dependencies {
     // library to show graphs
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.github.lookfirst:sardine:5.9'
-
     // library to show spotlight
     implementation 'com.github.takusemba:spotlight:1.8.0'
 

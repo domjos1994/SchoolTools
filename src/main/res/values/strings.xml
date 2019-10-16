@@ -455,6 +455,8 @@
             <p>Die Android-App benutzt iTextG von iText. Die Bibliothek ist lizenziert unter der Affero General Public License.</p>
             <h3>GraphView</h3>
             <p>Die Android-App benutzt GraphView von Jonas Gehring. Die Bibliothek ist lizenziert unter der  Apache License V 2.0.</p>
+            <h3>Spotlight</h3>
+            <p>Die Android-App benutzt Spotlight von Takusemba. Die Bibliothek ist lizenziert unter der the Apache License V 2.0.</p>
             <h2>Bilder</h2>
             <hr/>
             <p>Die Android-App benutzt Bilder von Unsplash.</p>
@@ -465,10 +467,15 @@
     <string name="whats_new">Neuigkeiten</string>
     <string name="whats_new_content">
         <![CDATA[
-            <h1>SchoolTools Version 0.2</h1>
+            <h1>SchoolTools Version 0.4</h1>
             <p>
                 <ul>
-                    <li>Neues Modul Kartei-Karten</li>
+                    <li>Assistenten für Stundenplan und Kartei-Karten hinzugefügt</li>
+                    <li>Einführungen für das jeweilige Tool hinzugefügt</li>
+                    <li>Löschen von Einträgen durch Swipen</li>
+                    <li>Neues Design der Listen-Einträge</li>
+                    <li>Fehler in Einstellungen behoben</li>
+                    <li>diverse kleinere Fehler und Unschönheiten behoben</li>
                 </ul>
             </p>
         ]]>

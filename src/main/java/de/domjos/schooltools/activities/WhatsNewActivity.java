@@ -42,9 +42,7 @@ public final class WhatsNewActivity extends AbstractActivity {
     }
 
     @Override
-    protected void initActions() {
-        this.getParameters();
-    }
+    protected void initActions(){}
 
     @Override
     public Intent getParentActivityIntent() {
@@ -67,9 +65,13 @@ public final class WhatsNewActivity extends AbstractActivity {
 
     @Override
     protected void initControls() {
+        this.getParameters();
+
         this.preferences = this.getSharedPreferences("desc_data", MODE_PRIVATE);
         this.lblContent = this.findViewById(R.id.lblContent);
         this.lblInfo = this.findViewById(R.id.lblInfo);
+
+
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(this.getSupportActionBar()!=null) {
@@ -77,19 +79,16 @@ public final class WhatsNewActivity extends AbstractActivity {
         }
 
         FloatingActionButton fab = this.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setResult(RESULT_OK);
-                finish();
-            }
+        fab.setOnClickListener(view -> {
+            setResult(RESULT_OK);
+            finish();
         });
 
         if(this.whatsNew) {
             content = "whats_new_content";
             title = "whats_new";
         }
-        if(this.alreadyShown(title)) {
+        if(this.alreadyShown(title + "_" + MainActivity.globals.getGeneralSettings().getCurrentVersionCode(this))) {
             setResult(RESULT_OK);
             finish();
         }

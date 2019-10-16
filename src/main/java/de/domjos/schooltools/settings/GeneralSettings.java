@@ -32,24 +32,6 @@ public class GeneralSettings {
         this.editor = this.preferences.edit();
     }
 
-    public void setCurrentInternalVersion(float version) {
-        this.editor.putFloat(GeneralSettings.INTERNAL_VERSION, version);
-        this.editor.apply();
-    }
-
-    public float getCurrentInternalVersion() {
-        return this.preferences.getFloat(GeneralSettings.INTERNAL_VERSION, 0.0f);
-    }
-
-    public void setCurrentInternalPhase(String phase) {
-        this.editor.putString(GeneralSettings.INTERNAL_PHASE, phase);
-        this.editor.apply();
-    }
-
-    public String getCurrentInternalPhase() {
-        return this.preferences.getString(GeneralSettings.INTERNAL_PHASE, "");
-    }
-
     public int getCurrentVersionCode(Context context) {
         int version;
         try {
