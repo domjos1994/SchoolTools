@@ -49,6 +49,7 @@ import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.IntentHelper;
 import de.domjos.schooltools.helper.Validator;
 import de.domjos.schooltools.custom.CommaTokenizer;
+import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
 public final class BookmarkActivity extends AbstractActivity {
     private BottomNavigationView navigation;
@@ -339,7 +340,7 @@ public final class BookmarkActivity extends AbstractActivity {
             return false;
         });
 
-
+        OnBoardingHelper.tutorialBookmark(this, this.spBookmarksFilterSubject, this.navigation, this.cmdBookmarkFile, this.lvBookmarks);
     }
 
     @Override
@@ -356,7 +357,9 @@ public final class BookmarkActivity extends AbstractActivity {
         if(id==R.id.menBookmarkOpen) {
             BaseDescriptionObject baseDescriptionObject = this.lvBookmarks.getAdapter().getObject();
             if(baseDescriptionObject!=null) {
-                openIntent((Bookmark) baseDescriptionObject, BookmarkActivity.this);
+                if(baseDescriptionObject instanceof Bookmark) {
+                    openIntent((Bookmark) baseDescriptionObject, BookmarkActivity.this);
+                }
             }
 
         }

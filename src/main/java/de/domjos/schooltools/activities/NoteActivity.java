@@ -302,7 +302,7 @@ public final class NoteActivity extends AbstractActivity {
 
         this.lvNotes = this.findViewById(R.id.lvNotes);
 
-        OnBoardingHelper.tutorialNote(NoteActivity.this, this.txtNoteTitle, this.txtNoteMemoryDate);
+        OnBoardingHelper.tutorialNote(NoteActivity.this, this.findViewById(R.id.svControls), this.navigation, this.cmdNoteSpeak);
     }
 
     private void deleteNote() {

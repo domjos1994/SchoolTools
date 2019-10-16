@@ -28,6 +28,7 @@ import de.domjos.schooltools.core.model.learningCard.LearningCardQueryResult;
 import de.domjos.schooltools.core.model.learningCard.LearningCardQueryTraining;
 import de.domjos.schooltools.helper.AssistantHelper;
 import de.domjos.schooltools.helper.Helper;
+import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
 import java.util.List;
 
@@ -138,8 +139,8 @@ public final class LearningCardOverviewActivity extends FragmentActivity {
             return false;
         };
         BottomNavigationView navigation = this.findViewById(R.id.navigation);
-        navigation.getMenu().findItem(R.id.navLearningCardGroups).setVisible(!MainActivity.globals.getUserSettings().useAssistant());
-        navigation.getMenu().findItem(R.id.navLearningCardQueries).setVisible(!MainActivity.globals.getUserSettings().useAssistant());
+        //navigation.getMenu().findItem(R.id.navLearningCardGroups).setVisible(!MainActivity.globals.getUserSettings().useAssistant());
+        //navigation.getMenu().findItem(R.id.navLearningCardQueries).setVisible(!MainActivity.globals.getUserSettings().useAssistant());
         navigation.setOnNavigationItemSelectedListener(listener);
 
         // init Toolbar
@@ -164,6 +165,8 @@ public final class LearningCardOverviewActivity extends FragmentActivity {
             }
         }
         this.startRandomQuery();
+
+        OnBoardingHelper.tutorialLearningCard(this, navigation, this.cmdLearningCardQueryStart);
     }
 
     private void startRandomQuery() {

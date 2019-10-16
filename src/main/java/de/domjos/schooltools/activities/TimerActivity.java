@@ -33,6 +33,7 @@ import de.domjos.schooltools.custom.AbstractActivity;
 import de.domjos.schooltools.custom.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
+import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
 /**
  * Activity For the Timer-Screen
@@ -236,6 +237,8 @@ public final class TimerActivity extends AbstractActivity {
                 return false;
             }
         });
+
+        OnBoardingHelper.tutorialTimer(this, cmdTimerEventAdd, lvTimerEvents, ivTimerPrevious, ivTimerNext);
     }
 
     private void changeDate() {

@@ -19,11 +19,10 @@
 package de.domjos.schooltools.spotlight;
 
 import android.app.Activity;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-
+import androidx.appcompat.widget.ActionMenuView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.takusemba.spotlight.OnTargetStateChangedListener;
@@ -36,6 +35,7 @@ import java.util.ArrayList;
 
 import de.domjos.schooltools.R;
 
+@SuppressWarnings("SameParameterValue")
 class SpotlightHelper {
     private ArrayList<Target> targets;
     private Activity activity;
@@ -48,7 +48,7 @@ class SpotlightHelper {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         this.OVERLAY_X = displayMetrics.widthPixels / 20;
-        this.OVERLAY_Y = displayMetrics.heightPixels / 2;
+        this.OVERLAY_Y = displayMetrics.heightPixels / 4;
     }
 
     void addTarget(View view, int title, int description, Runnable start, Runnable end) {
@@ -88,6 +88,7 @@ class SpotlightHelper {
         this.targets.add(target);
     }
 
+    @SuppressWarnings("unused")
     void addTarget(int x, int y, int height, int width, int title, int description, Runnable start, Runnable end) {
         RoundedRectangle rectangle = new RoundedRectangle(height, width, width / 2f);
 
@@ -118,7 +119,10 @@ class SpotlightHelper {
     }
 
     void addTargetToHamburger(Toolbar toolbar, int title, int description, Runnable end) {
-        this.addTarget(this.getNavigationIconView(toolbar), title, description, null, end);
+        View view = this.getNavigationIconView(toolbar);
+        if(view!=null) {
+            this.addTarget(view, title, description, null, end);
+        }
     }
 
     void show() {
@@ -132,22 +136,13 @@ class SpotlightHelper {
     }
 
     private View getNavigationIconView(Toolbar toolbar) {
-        String previousContentDescription = (String) toolbar.getNavigationContentDescription();
-        boolean hadContentDescription = !TextUtils.isEmpty(previousContentDescription);
-        String contentDescription = hadContentDescription ? previousContentDescription : "navigationIcon";
-        toolbar.setNavigationContentDescription(contentDescription);
-
-        ArrayList<View> potentialViews = new ArrayList<>();
-        toolbar.findViewsWithText(potentialViews, contentDescription, View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
-        View navIcon = null;
-        if (potentialViews.size() > 0) {
-            navIcon = potentialViews.get(0);
+        for (int toolbarChildIndex = 0; toolbarChildIndex < toolbar.getChildCount(); toolbarChildIndex++) {
+            View view = toolbar.getChildAt(toolbarChildIndex);
+            if (view instanceof ActionMenuView) {
+                ActionMenuView menuView = (ActionMenuView) view;
+                return menuView.getChildAt(0);
+            }
         }
-
-        if (!hadContentDescription) {
-            toolbar.setNavigationContentDescription(previousContentDescription);
-        }
-
-        return navIcon;
+        return null;
     }
 }

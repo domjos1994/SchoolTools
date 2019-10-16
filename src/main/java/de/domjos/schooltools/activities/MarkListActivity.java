@@ -9,7 +9,6 @@
 
 package de.domjos.schooltools.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AlertDialog;
@@ -24,7 +23,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,6 +52,7 @@ import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.schooltools.helper.Validator;
 import de.domjos.schooltools.settings.MarkListSettings;
+import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
 /**
  * Activity For the MarkList-Screen
@@ -103,66 +102,60 @@ public final class MarkListActivity extends AbstractActivity {
         this.openMarkList(this.getIntent().getIntExtra("id", 0));
         Helper.closeSoftKeyboard(MarkListActivity.this);
 
-        this.lvMarkList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Map.Entry<Double, Double> entry = markListAdapter.getItem(position);
+        this.lvMarkList.setOnItemClickListener((parent, view, position, id) -> {
+            Map.Entry<Double, Double> entry = markListAdapter.getItem(position);
 
-                if(entry!=null) {
-                    String text;
-                    if(curSettings.getViewMode()==0 || curSettings.getViewMode()==1) {
-                        int percentage = (int) (entry.getValue() / (curSettings.getMaxPoints() / 100.0f));
-                        if(curSettings.isDictatMode()) {
-                            text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getKey(), getString(R.string.marklist_failures), entry.getValue(), percentage);
-                        } else {
-                            text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getKey(), getString(R.string.marklist_points), entry.getValue(), percentage);
-                        }
+            if(entry!=null) {
+                String text;
+                if(curSettings.getViewMode()==0 || curSettings.getViewMode()==1) {
+                    int percentage = (int) (entry.getValue() / (curSettings.getMaxPoints() / 100.0f));
+                    if(curSettings.isDictatMode()) {
+                        text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getKey(), getString(R.string.marklist_failures), entry.getValue(), percentage);
                     } else {
-                        int percentage = (int) (entry.getKey() / (curSettings.getMaxPoints() / 100.0f));
-                        if(curSettings.isDictatMode()) {
-                            text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getValue(), getString(R.string.marklist_failures), entry.getKey(), percentage);
-                        } else {
-                            text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getValue(), getString(R.string.marklist_points), entry.getKey(), percentage);
-                        }
+                        text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getKey(), getString(R.string.marklist_points), entry.getValue(), percentage);
                     }
-
-                    Helper.createToast(MarkListActivity.this, text);
+                } else {
+                    int percentage = (int) (entry.getKey() / (curSettings.getMaxPoints() / 100.0f));
+                    if(curSettings.isDictatMode()) {
+                        text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getValue(), getString(R.string.marklist_failures), entry.getKey(), percentage);
+                    } else {
+                        text = String.format("%s: %s%n%s: %s (%s%%)", getString(R.string.marklist_mark), entry.getValue(), getString(R.string.marklist_points), entry.getKey(), percentage);
+                    }
                 }
+
+                Helper.createToast(MarkListActivity.this, text);
             }
         });
 
-        this.cmdMarkListOpenSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int list = spMarkListType.getSelectedItemPosition();
+        this.cmdMarkListOpenSettings.setOnClickListener(v -> {
+            int list = spMarkListType.getSelectedItemPosition();
 
-                if(grdMarkListSimple.getVisibility()==View.GONE) {
-                    grdMarkListSimple.setVisibility(View.VISIBLE);
-                    grdControls.getLayoutParams().height = (int) (150 * scale + 0.5f);
+            if(grdMarkListSimple.getVisibility()==View.GONE) {
+                grdMarkListSimple.setVisibility(View.VISIBLE);
+                grdControls.getLayoutParams().height = (int) (150 * scale + 0.5f);
+            } else {
+                grdMarkListSimple.setVisibility(View.GONE);
+                grdControls.getLayoutParams().height = Toolbar.LayoutParams.WRAP_CONTENT;
+            }
+
+            if(list==1 || list==2) {
+                grdMarkListWithCrease.setVisibility(grdMarkListSimple.getVisibility());
+                txtMarkListWithCreaseCustomMark.setEnabled(list!=2);
+                txtMarkListWithCreaseCustomPoints.setEnabled(list!=2);
+                if(list==2) {
+                    txtMarkListWithCreaseCustomMark.setText("");
+                    txtMarkListWithCreaseCustomPoints.setText("");
                 } else {
-                    grdMarkListSimple.setVisibility(View.GONE);
-                    grdControls.getLayoutParams().height = Toolbar.LayoutParams.WRAP_CONTENT;
-                }
-
-                if(list==1 || list==2) {
-                    grdMarkListWithCrease.setVisibility(grdMarkListSimple.getVisibility());
-                    txtMarkListWithCreaseCustomMark.setEnabled(list!=2);
-                    txtMarkListWithCreaseCustomPoints.setEnabled(list!=2);
-                    if(list==2) {
-                        txtMarkListWithCreaseCustomMark.setText("");
-                        txtMarkListWithCreaseCustomPoints.setText("");
+                    //txtMarkListWithCreaseCustomMark.setText(String.valueOf(3.5));
+                    if(!txtMarkListMaxPoints.getText().toString().isEmpty()) {
+                        txtMarkListWithCreaseCustomPoints.setText(String.valueOf(Integer.parseInt(txtMarkListMaxPoints.getText().toString())/2));
                     } else {
-                        //txtMarkListWithCreaseCustomMark.setText(String.valueOf(3.5));
-                        if(!txtMarkListMaxPoints.getText().toString().isEmpty()) {
-                            txtMarkListWithCreaseCustomPoints.setText(String.valueOf(Integer.parseInt(txtMarkListMaxPoints.getText().toString())/2));
-                        } else {
-                            txtMarkListWithCreaseCustomPoints.setText(String.valueOf(10.0));
-                        }
+                        txtMarkListWithCreaseCustomPoints.setText(String.valueOf(10.0));
                     }
                 }
-                if(MainActivity.globals.getUserSettings().isExpertMode()) {
-                    grdMarkListExpert.setVisibility(grdMarkListSimple.getVisibility());
-                }
+            }
+            if(MainActivity.globals.getUserSettings().isExpertMode()) {
+                grdMarkListExpert.setVisibility(grdMarkListSimple.getVisibility());
             }
         });
 
@@ -179,13 +172,10 @@ public final class MarkListActivity extends AbstractActivity {
             }
         });
 
-        this.cmdSearch.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                markListAdapter.findItem(-1);
-                calculateMarkList();
-                return false;
-            }
+        this.cmdSearch.setOnCloseListener(() -> {
+            markListAdapter.findItem(-1);
+            calculateMarkList();
+            return false;
         });
 
         TextWatcher textWatcher = new TextWatcher() {
@@ -201,33 +191,13 @@ public final class MarkListActivity extends AbstractActivity {
 
         this.txtMarkListMaxPoints.addTextChangedListener(textWatcher);
 
-        this.rbMarkListSimpleTenthMarks.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                calculateMarkList();
-            }
-        });
+        this.rbMarkListSimpleTenthMarks.setOnCheckedChangeListener((buttonView, isChecked) -> calculateMarkList());
 
-        this.rbMarkListSimpleQuarterMarks.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                calculateMarkList();
-            }
-        });
+        this.rbMarkListSimpleQuarterMarks.setOnCheckedChangeListener((buttonView, isChecked) -> calculateMarkList());
 
-        this.chkMarkListSimpleHalfPoints.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                calculateMarkList();
-            }
-        });
+        this.chkMarkListSimpleHalfPoints.setOnCheckedChangeListener((buttonView, isChecked) -> calculateMarkList());
 
-        this.chkMarkListSimpleDictatMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                calculateMarkList();
-            }
-        });
+        this.chkMarkListSimpleDictatMode.setOnCheckedChangeListener((buttonView, isChecked) -> calculateMarkList());
 
         this.spMarkListType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -295,29 +265,24 @@ public final class MarkListActivity extends AbstractActivity {
         this.txtMarkListWithCreaseBestMarkAt.addTextChangedListener(textWatcher);
         this.txtMarkListWithCreaseWorstMarkTo.addTextChangedListener(textWatcher);
 
-        this.lblMarkListState.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!detailedErrorMessage.equals("")) {
-                    Helper.createToast(getApplicationContext(), detailedErrorMessage);
-                }
+        this.lblMarkListState.setOnClickListener(view -> {
+            if(!detailedErrorMessage.equals("")) {
+                Helper.createToast(getApplicationContext(), detailedErrorMessage);
             }
         });
 
-        this.ivMarkListState.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!detailedErrorMessage.equals("")) {
-                    Helper.createToast(getApplicationContext(), detailedErrorMessage);
-                }
+        this.ivMarkListState.setOnClickListener(view -> {
+            if(!detailedErrorMessage.equals("")) {
+                Helper.createToast(getApplicationContext(), detailedErrorMessage);
             }
         });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
-            if(requestCode==99) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 99) {
                 this.spMarkListType.setSelection(data.getIntExtra("type", 1));
                 this.txtMarkListMaxPoints.setText(String.valueOf(data.getIntExtra("maxPoints", 20)));
                 this.txtMarkListWithCreaseBestMarkAt.setText(String.valueOf(data.getDoubleExtra("bestMarkAt", 20.0)));
@@ -391,15 +356,12 @@ public final class MarkListActivity extends AbstractActivity {
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         input.setLayoutParams(lp);
                         builder.setView(input);
-                        builder.setPositiveButton(this.getString(R.string.sys_save), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if(input.getText()!=null) {
-                                    if(!input.getText().toString().isEmpty()) {
-                                        curSettings = getValues(input.getText().toString());
-                                        MainActivity.globals.getSqLite().insertOrUpdateMarkList(input.getText().toString(), curSettings);
-                                        Helper.createToast(getApplicationContext(), getString(R.string.message_marklist_settings_saved));
-                                    }
+                        builder.setPositiveButton(this.getString(R.string.sys_save), (dialog, which) -> {
+                            if(input.getText()!=null) {
+                                if(!input.getText().toString().isEmpty()) {
+                                    curSettings = getValues(input.getText().toString());
+                                    MainActivity.globals.getSqLite().insertOrUpdateMarkList(input.getText().toString(), curSettings);
+                                    Helper.createToast(getApplicationContext(), getString(R.string.message_marklist_settings_saved));
                                 }
                             }
                         });
@@ -414,7 +376,7 @@ public final class MarkListActivity extends AbstractActivity {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(MarkListActivity.this, R.style.MyDialogStyle));
                     builder.setTitle(this.getString(R.string.marklist_settings_open_title));
                     final Spinner spinner = new Spinner(this.getApplicationContext());
-                    ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, new ArrayList<String>());
+                    ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, new ArrayList<>());
                     spinner.setAdapter(spinnerAdapter);
                     spinnerAdapter.notifyDataSetChanged();
                     for(String list : MainActivity.globals.getSqLite().listMarkLists()) {
@@ -423,18 +385,8 @@ public final class MarkListActivity extends AbstractActivity {
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                     spinner.setLayoutParams(lp);
                     builder.setView(spinner);
-                    builder.setPositiveButton(this.getString(R.string.sys_open), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            setValues(spinner.getSelectedItem().toString());
-                        }
-                    });
-                    builder.setNegativeButton(this.getString(R.string.sys_delete), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.globals.getSqLite().deleteEntry("markLists", "title='" + spinner.getSelectedItem().toString() + "'");
-                        }
-                    });
+                    builder.setPositiveButton(this.getString(R.string.sys_open), (dialog, which) -> setValues(spinner.getSelectedItem().toString()));
+                    builder.setNegativeButton(this.getString(R.string.sys_delete), (dialog, which) -> MainActivity.globals.getSqLite().deleteEntry("markLists", "title='" + spinner.getSelectedItem().toString() + "'"));
                     builder.show();
                 } catch (Exception ex) {
                     Helper.printException(this.getApplicationContext(), ex);
@@ -478,7 +430,7 @@ public final class MarkListActivity extends AbstractActivity {
 
         // init mark-list
         this.lvMarkList = this.findViewById(R.id.lvMarkList);
-        this.markListAdapter = new MarkListAdapter(MarkListActivity.this, R.layout.marklist_item, new ArrayList<Map.Entry<Double, Double>>());
+        this.markListAdapter = new MarkListAdapter(MarkListActivity.this, R.layout.marklist_item, new ArrayList<>());
         this.lvMarkList.setAdapter(this.markListAdapter);
         this.markListAdapter.notifyDataSetChanged();
 
@@ -501,6 +453,8 @@ public final class MarkListActivity extends AbstractActivity {
         this.txtMarkListWithCreaseCustomPoints = this.findViewById(R.id.txtMarkListWithCreaseCustomPoints);
         this.txtMarkListWithCreaseBestMarkAt = this.findViewById(R.id.txtMarkListWithCreaseBestMarkAt);
         this.txtMarkListWithCreaseWorstMarkTo = this.findViewById(R.id.txtMarkListWithCreaseWorstMarkTo);
+
+        OnBoardingHelper.tutorialMarkList(this, this.spMarkListType, this.cmdMarkListOpenSettings, toolbar);
     }
 
     @Override
