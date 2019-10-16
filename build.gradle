@@ -17,7 +17,7 @@ def androidXVersion = "1.1.0"
 
 def espressoVersion = '3.2.0'
 
-def appVersionName = '0.4.alpha.3'
+def appVersionName = '0.4'
 def appVersionCode = 16
 
 buildscript {
