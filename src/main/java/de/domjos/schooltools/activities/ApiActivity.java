@@ -183,76 +183,61 @@ public final class ApiActivity extends AbstractActivity {
         });
 
 
-        this.cmdApiPath.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View v) {
-                try {
-                    String item = apiChoice.getItem(spApiChoice.getSelectedItemPosition());
-                    if(item!=null) {
-                        File defaultDir = getApplicationContext().getFilesDir();
-                        DialogProperties properties = new DialogProperties();
-                        properties.selection_mode = DialogConfigs.SINGLE_MODE;
-                        properties.root = new File(new File(ApiHelper.findExistingFolder(ApiActivity.this)).getParent());
-                        properties.error_dir = defaultDir;
-                        properties.offset = defaultDir;
+        this.cmdApiPath.setOnClickListener(v -> {
+            try {
+                String item = apiChoice.getItem(spApiChoice.getSelectedItemPosition());
+                if(item!=null) {
+                    File defaultDir = getApplicationContext().getFilesDir();
+                    DialogProperties properties = new DialogProperties();
+                    properties.selection_mode = DialogConfigs.SINGLE_MODE;
+                    properties.root = new File(new File(ApiHelper.findExistingFolder(ApiActivity.this)).getParent());
+                    properties.error_dir = defaultDir;
+                    properties.offset = defaultDir;
 
-                        if(item.equals(getResources().getStringArray(R.array.api_choice)[0])) {
-                            if(spApiFormat.getSelectedItemPosition()==0) {
-                                properties.extensions = new String[]{"csv"};
-                            } else if(spApiFormat.getSelectedItemPosition()==1) {
-                                properties.extensions = new String[]{"xml"};
-                            } else {
-                                properties.extensions = null;
-                            }
-                            properties.selection_type = DialogConfigs.FILE_SELECT;
-                            dialog = new FilePickerDialog(ApiActivity.this, properties);
-                            dialog.setTitle(getString(R.string.api_path_choose_file));
+                    if(item.equals(getResources().getStringArray(R.array.api_choice)[0])) {
+                        if(spApiFormat.getSelectedItemPosition()==0) {
+                            properties.extensions = new String[]{"csv"};
+                        } else if(spApiFormat.getSelectedItemPosition()==1) {
+                            properties.extensions = new String[]{"xml"};
                         } else {
                             properties.extensions = null;
-                            properties.selection_type = DialogConfigs.DIR_SELECT;
-                            dialog = new FilePickerDialog(ApiActivity.this, properties);
-                            dialog.setTitle(getString(R.string.api_path_choose_dir));
                         }
-
-                        dialog.setCancelable(true);
-                        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialogInterface) {
-                                lblApiPath.setText(ApiHelper.findExistingFolder(ApiActivity.this));
-                            }
-                        });
-
-                        dialog.setDialogSelectionListener(new DialogSelectionListener() {
-                            @Override
-                            public void onSelectedFilePaths(String[] files) {
-                                if(files!=null) {
-                                    lblApiPath.setText(files[0]);
-                                }
-                            }
-                        });
-                        dialog.show();
+                        properties.selection_type = DialogConfigs.FILE_SELECT;
+                        dialog = new FilePickerDialog(ApiActivity.this, properties);
+                        dialog.setTitle(getString(R.string.api_path_choose_file));
+                    } else {
+                        properties.extensions = null;
+                        properties.selection_type = DialogConfigs.DIR_SELECT;
+                        dialog = new FilePickerDialog(ApiActivity.this, properties);
+                        dialog.setTitle(getString(R.string.api_path_choose_dir));
                     }
-                } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+
+                    dialog.setCancelable(true);
+                    dialog.setOnCancelListener(dialogInterface -> lblApiPath.setText(ApiHelper.findExistingFolder(ApiActivity.this)));
+
+                    dialog.setDialogSelectionListener(files -> {
+                        if(files!=null) {
+                            lblApiPath.setText(files[0]);
+                        }
+                    });
+                    dialog.show();
                 }
+            } catch (Exception ex) {
+                Helper.printException(getApplicationContext(), ex);
             }
         });
 
-        this.cmdApiSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if(Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE, ApiActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        if(executeChoice()) {
-                            Helper.createToast(getApplicationContext(), String.format(getString(R.string.api_choice_successfully), apiChoice.getItem(spApiChoice.getSelectedItemPosition())));
-                        } else {
-                            Helper.createToast(getApplicationContext(), String.format(getString(R.string.api_choice_error), apiChoice.getItem(spApiChoice.getSelectedItemPosition())));
-                        }
+        this.cmdApiSave.setOnClickListener(v -> {
+            try {
+                if(Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE, ApiActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    if(executeChoice()) {
+                        Helper.createToast(getApplicationContext(), String.format(getString(R.string.api_choice_successfully), apiChoice.getItem(spApiChoice.getSelectedItemPosition())));
+                    } else {
+                        Helper.createToast(getApplicationContext(), String.format(getString(R.string.api_choice_error), apiChoice.getItem(spApiChoice.getSelectedItemPosition())));
                     }
-                } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
                 }
+            } catch (Exception ex) {
+                Helper.printException(getApplicationContext(), ex);
             }
         });
     }
@@ -264,12 +249,13 @@ public final class ApiActivity extends AbstractActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(Helper.showHelpMenu(item, this.getApplicationContext(), "help_export_import"));
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK) {
             if (requestCode == 9999) {
                 Uri uri = data.getData();

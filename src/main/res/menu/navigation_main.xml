@@ -55,4 +55,12 @@
                 android:title="@string/main_nav_bookmarks"/>
         </menu>
     </item>
+    <item android:title="@string/main_nav_else">
+        <menu>
+            <item
+                android:id="@+id/navMainTrafficLights"
+                android:icon="@drawable/ic_traffic_black_24dp"
+                android:title="@string/traffic_light"/>
+        </menu>
+    </item>
 </menu>

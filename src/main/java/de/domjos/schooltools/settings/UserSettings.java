@@ -103,7 +103,7 @@ public class UserSettings {
     }
 
     public boolean isNotificationsShown() {
-        return this.sharedPreferences.getBoolean("swtNotifications", false);
+        return this.sharedPreferences.getBoolean("swtNotifications", true);
     }
 
     public boolean isWhatsNew() {

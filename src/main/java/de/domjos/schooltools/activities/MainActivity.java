@@ -290,6 +290,9 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             case R.id.navMainBookMarks:
                 intent = new Intent(this.getApplicationContext(), BookmarkActivity.class);
                 break;
+            case R.id.navMainTrafficLights:
+                intent = new Intent(this.getApplicationContext(), TrafficLightActivity.class);
+                break;
             default:
                 intent = null;
         }

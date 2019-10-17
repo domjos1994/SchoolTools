@@ -17,8 +17,8 @@ def androidXVersion = "1.1.0"
 
 def espressoVersion = '3.2.0'
 
-def appVersionName = '0.4'
-def appVersionCode = 16
+def appVersionName = '0.5.alpha.1'
+def appVersionCode = 17
 
 buildscript {
     repositories {
@@ -90,6 +90,10 @@ dependencies {
     implementation 'de.mindpipe.android:android-logging-log4j:1.0.3'
 
     // Test-Libraries
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.navigation:navigation-fragment:2.0.0'
+    implementation 'androidx.navigation:navigation-ui:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation "androidx.test.espresso:espresso-core:${espressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-intents:${espressoVersion}"

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navTrafficLightsStart"
+        android:icon="@drawable/ic_fiber_manual_record_black_24dp"
+        android:title="@string/traffic_light_start"/>
+
+    <item
+        android:id="@+id/navTrafficLightsStop"
+        android:icon="@drawable/ic_stop_black_24dp"
+        android:title="@string/traffic_light_stop"/>
+
+    <item
+        android:id="@+id/navTrafficLightsExpand"
+        android:icon="@drawable/ic_expand_less_black_24dp"
+        android:title="@string/traffic_light_exp"/>
+</menu>
