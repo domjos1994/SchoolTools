@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">SchoolToolsLib</string>
+
+    <string name="main_nav_mark_list">Notenliste</string>
+    <string name="main_nav_notes">Notizen</string>
+    <string name="main_nav_timer">Schultimer</string>
+    <string name="main_nav_todo">ToDo</string>
+
+    <string name="mark_test">Arbeit</string>
+
+    <string name="message_marklist_1">Die maximale Punktzahl sollte größer als 0 sein!</string>
+    <string name="message_marklist_2">Die maximale Punktzahl sollte kleiner als 40000 sein!</string>
+    <string name="message_marklist_3">Die kleinste Note sollte größer als 0 sein!</string>
+    <string name="message_marklist_4">Die kleinste Note sollte kleiner als die maximale Punktzahl sein!</string>
+    <string name="message_marklist_5">Die größte Note sollte größer als 0 sein!</string>
+    <string name="message_marklist_6">Die größte Note sollte kleiner als die maximale Punktzahl sein!</string>
+    <string name="message_marklist_7">Der Noten-Multiplikator sollte zwischen 0 und 5 liegen!</string>
+    <string name="message_marklist_8">Der Punkte-Multiplikator sollte zwischen 0 und 5 liegen!</string>
+    <string name="message_marklist_9">Die Punktzahl, mit der man die beste Note bekommt, sollte zwischen 0 und der
+        Maximalen Punktzahl liegen!
+    </string>
+    <string name="message_marklist_10">Die Punktzahl, mit der man die schlechteste Note bekommt, sollte zwischen 0 und
+        der Maximalen Punktzahl liegen!
+    </string>
+    <string name="message_marklist_11">Die Punktzahl, mit der man die beste Note bekommt, sollte größer sein, als die
+        Punktzahl mit der man die schlechteste Note bekommt!
+    </string>
+    <string name="message_marklist_12">Die benutzerdefinierte Punktzahl sollte zwischen 0 und der maximalen Punktzahl
+        liegen!
+    </string>
+    <string name="message_marklist_13">Die benutzerdefinierte Punktzahl sollte zwischen der Punktzahl, mit der man die
+        beste Note bekommt, und der Punktzahl, mit der man die schlechteste Note bekommt, liegen!
+    </string>
+    <string name="message_marklist_14">Die benutzerdefinierte Note sollte zwischen der größten und der kleinsten Note
+        liegen!
+    </string>
+
+    <string name="message_file_format_unknown">Das Format ist nicht bekannt!</string>
+    <string name="message_file_not_exists">Die Datei existiert nicht!</string>
+    <string name="message_wrong_method">Falsche Methode wurde benutzt!</string>
+</resources>

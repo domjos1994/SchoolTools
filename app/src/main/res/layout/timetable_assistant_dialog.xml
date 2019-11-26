@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/lblTimeTableAssistantTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:padding="2dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="@string/timetable_assistant_step1"
+        android:layout_alignParentTop="true"/>
+
+
+
+    <TableLayout
+        android:id="@+id/tblTimeTableAssistant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblTimeTableAssistantTitle"
+        android:layout_margin="2dp"
+        android:weightSum="10">
+
+        <TableRow
+            android:tag="step1">
+            <EditText
+                android:id="@+id/txtTimeTableAssistantTimeTableTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:inputType="text"
+                android:hint="@string/sys_title"
+                android:nextFocusForward="@+id/txtTimeTableAssistantTimeTableYear"/>
+        </TableRow>
+
+        <TableRow
+            android:tag="step1">
+            <EditText
+                android:id="@+id/txtTimeTableAssistantTimeTableYear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:inputType="text"
+                android:hint="@string/timetable_year"/>
+        </TableRow>
+
+        <TableRow
+            android:tag="step2">
+            <ListView
+                android:id="@+id/lvTimeTableAssistantTimes"
+                android:layout_weight="10"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_margin="2dp"
+                android:divider="@color/Black"
+                android:dividerHeight="1dp"/>
+        </TableRow>
+
+        <TableRow
+            android:tag="step2">
+            <EditText
+                android:id="@+id/txtTimeTableAssistantTimesStart"
+                android:hint="@string/timetable_assistant_start"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="time"/>
+            <EditText
+                android:id="@+id/txtTimeTableAssistantTimesEnd"
+                android:hint="@string/timetable_assistant_end"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="time"/>
+            <CheckBox
+                android:id="@+id/chkTimeTableAssistantTimesBreak"
+                android:hint="@string/timetable_assistant_break"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"/>
+        </TableRow>
+
+        <TableRow
+            android:tag="step2">
+            <Button
+                android:id="@+id/cmdTimeTableAssistantTimesAdd"
+                android:text="@string/timetable_assistant_add"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:contentDescription="@string/learningCard_assistant_forward" />
+        </TableRow>
+
+        <TableRow
+            android:tag="step3">
+            <ListView
+                android:id="@+id/lvTimeTableAssistantSubjects"
+                android:layout_weight="10"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_margin="2dp"
+                android:divider="@color/Black"
+                android:dividerHeight="1dp"/>
+        </TableRow>
+
+        <TableRow
+            android:tag="step3">
+            <EditText
+                android:id="@+id/txtTimeTableAssistantSubjectsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="@string/sys_title"
+                android:layout_weight="8"/>
+            <EditText
+                android:id="@+id/txtTimeTableAssistantSubjectsAlias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="@string/timetable_subject_alias"
+                android:layout_weight="2"/>
+        </TableRow>
+
+        <TableRow
+            android:tag="step3">
+            <Spinner
+                android:id="@+id/spTimeTableAssistantSubjectsColor"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="10"
+                android:inputType="text"
+                android:hint="@string/timetable_color"/>
+        </TableRow>
+
+        <TableRow
+            android:tag="step3">
+            <Button
+                android:id="@+id/cmdTimeTableAssistantSubjectsAdd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:text="@string/timetable_assistant_add"
+                android:contentDescription="@string/timetable_assistant_add" />
+        </TableRow>
+
+        <TableRow
+            android:tag="step4">
+            <TableLayout
+                android:id="@+id/tblTimeTableAssistantTimeTable"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:weightSum="6"/>
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/timeTableAssistantControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/tblTimeTableAssistant">
+        <TextView
+            android:id="@+id/border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000"/>
+
+        <LinearLayout
+            android:id="@+id/arrows"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:weightSum="10"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/cmdTimeTableAssistantBack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                app:srcCompat="@drawable/ic_arrow_back_black_24dp"
+                android:contentDescription="@string/learningCard_assistant_back" />
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/cmdTimeTableAssistantForward"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                app:srcCompat="@drawable/ic_arrow_forward_black_24dp"
+                android:contentDescription="@string/learningCard_assistant_forward" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/cmdTimeTableAssistantSave"
+            app:srcCompat="@android:drawable/ic_menu_save"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+    </LinearLayout>
+</RelativeLayout>

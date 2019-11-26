@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion propCompVersion
+
+    defaultConfig {
+        minSdkVersion propMinVersion
+        targetSdkVersion propCompVersion
+        versionCode propVersion
+        versionName propVersionCode
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    compileOptions {
+        targetCompatibility = propJavaVersion
+        sourceCompatibility = propJavaVersion
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // library to create a pdf
+    implementation 'com.itextpdf:itextg:5.5.10'
+
+    // Test-Libraries
+    testImplementation "junit:junit:${propJUnitVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${propEspressoVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:${propEspressoVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:${propEspressoVersion}"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+
+    implementation project(path: ':customwidgets')
+}

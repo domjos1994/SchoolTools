@@ -1,0 +1,86 @@
+/*
+ * Copyright (C) 2017-2019  Dominic Joas
+ *  
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion propCompVersion
+
+    defaultConfig {
+        applicationId "de.domjos.schooltools"
+
+        minSdkVersion propMinVersion
+        targetSdkVersion propCompVersion
+
+        versionCode propVersion
+        versionName propVersionCode
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+        return void
+    }
+
+    compileOptions {
+        targetCompatibility = propJavaVersion
+        sourceCompatibility = propJavaVersion
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
+}
+
+dependencies {
+    // libraries in  local system
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // android libraries
+    implementation "androidx.appcompat:appcompat:${propAndroidVersion}"
+    implementation "androidx.appcompat:appcompat-resources:${propAndroidVersion}"
+    implementation "androidx.vectordrawable:vectordrawable:${propAndroidVersion}"
+    implementation "androidx.preference:preference:${propAndroidVersion}"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
+
+    // library to select file in android filesystem
+    implementation 'com.github.angads25:filepicker:1.1.1'
+    // library to create a pdf
+    implementation 'com.itextpdf:itextg:5.5.10'
+    // library to show graphs
+    implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'com.github.lookfirst:sardine:5.9'
+    // library to show spotlight
+    implementation 'com.github.takusemba:spotlight:1.8.0'
+
+    // Log4J-Logging for Android
+    implementation 'log4j:log4j:1.2.17'
+    implementation 'de.mindpipe.android:android-logging-log4j:1.0.3'
+
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.navigation:navigation-fragment:2.1.0'
+    implementation 'androidx.navigation:navigation-ui:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+
+    // Test-Libraries
+    testImplementation "junit:junit:${propJUnitVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${propEspressoVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:${propEspressoVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:${propEspressoVersion}"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+
+    implementation project(path: ':schooltoolslib')
+    implementation project(path: ':customwidgets')
+}

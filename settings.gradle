@@ -1,0 +1,3 @@
+include ':app', ':schooltoolslib', ':customwidgets'
+
+project(':customwidgets').projectDir = new File(settingsDir, 'customwidgets')

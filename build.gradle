@@ -1,127 +1,54 @@
 /*
- * Copyright (C) 2017-2019  Dominic Joas
- *  
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 3
- * of the License, or (at your option) any later version.
+ * Copyright (C)  2019 Domjos
+ * This file is part of UniTrackerMobile <https://github.com/domjos1994/UniTrackerMobile>.
+ *
+ * UniTrackerMobile is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * UniTrackerMobile is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with UniTrackerMobile. If not, see <http://www.gnu.org/licenses/>.
  */
 
-apply plugin: 'com.android.application'
+ext.propVersion = 13
+ext.propVersionCode = "0.5.alpha.3"
 
-// create variables
-int compileSDKVersion = 29
-int minSDKVersion = 15
-int javaVersion = 8
-def androidXVersion = "1.1.0"
+ext.propJavaVersion = "8"
 
-def espressoVersion = '3.2.0'
+ext.propCompVersion = 29
+ext.propMinVersion = 20
+ext.propAndroidVersion = "1.1.0"
 
-def appVersionName = '0.5.alpha.1'
-def appVersionCode = 17
+ext.propJUnitVersion = "4.12"
+ext.propEspressoVersion = "3.2.0"
 
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
+        
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.5.2'
     }
 }
 
-android {
-    compileSdkVersion compileSDKVersion
-
-    defaultConfig {
-        applicationId "de.domjos.schooltools"
-
-        minSdkVersion minSDKVersion
-        targetSdkVersion compileSDKVersion
-
-        versionCode appVersionCode
-        versionName appVersionName
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
-    }
-
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-        return void
-    }
-
-    compileOptions {
-        targetCompatibility = javaVersion
-        sourceCompatibility = javaVersion
-    }
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases/' }
     }
 }
 
-dependencies {
-    // libraries in  local system
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    // android libraries
-    implementation "androidx.appcompat:appcompat:${androidXVersion}"
-    implementation "androidx.appcompat:appcompat-resources:${androidXVersion}"
-    implementation "androidx.vectordrawable:vectordrawable:${androidXVersion}"
-    implementation "androidx.preference:preference:${androidXVersion}"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.google.android.material:material:1.0.0'
-
-    // library to select file in android filesystem
-    implementation 'com.github.angads25:filepicker:1.1.1'
-    // library to create a pdf
-    implementation 'com.itextpdf:itextg:5.5.10'
-    // library to show graphs
-    implementation 'com.jjoe64:graphview:4.2.2'
-    implementation 'com.github.lookfirst:sardine:5.9'
-    // library to show spotlight
-    implementation 'com.github.takusemba:spotlight:1.8.0'
-
-    // Log4J-Logging for Android
-    implementation 'log4j:log4j:1.2.17'
-    implementation 'de.mindpipe.android:android-logging-log4j:1.0.3'
-
-    // Test-Libraries
-    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'androidx.navigation:navigation-fragment:2.0.0'
-    implementation 'androidx.navigation:navigation-ui:2.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation "androidx.test.espresso:espresso-core:${espressoVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:${espressoVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:${espressoVersion}"
-
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test:rules:1.2.0'
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
 
-repositories {
-    jcenter()
-    maven {
-        url 'https://maven.google.com/'
-        name 'Google'
-    }
-}
-
-task createZip(type: Zip) {
-    clean
-    from '.'
-    include 'build.gradle'
-    include '.gitignore'
-    include 'LICENSE'
-    include 'README.md'
-    include '*.java'
-    include 'src/**'
-    include 'gradle.properties'
-    exclude 'build'
-    archiveFileName = rootProject.name + '.zip'
-    destinationDirectory = file(rootProject.rootDir)
-}
