@@ -64,7 +64,7 @@ public final class MarkListExtendedActivity extends AbstractActivity {
     private String detailedErrorMessage = "";
 
     public MarkListExtendedActivity() {
-        super(R.layout.marklist_extended_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.marklist_extended_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

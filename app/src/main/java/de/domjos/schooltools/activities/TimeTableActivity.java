@@ -44,7 +44,7 @@ public final class TimeTableActivity extends AbstractActivity {
     private AppCompatImageButton cmdTimeTableAssistant;
 
     public TimeTableActivity() {
-        super(R.layout.timetable_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.timetable_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

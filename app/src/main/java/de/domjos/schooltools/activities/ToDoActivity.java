@@ -47,7 +47,7 @@ public final class ToDoActivity extends AbstractActivity {
     private SeekBar sbState;
 
     public ToDoActivity() {
-        super(R.layout.todo_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.todo_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

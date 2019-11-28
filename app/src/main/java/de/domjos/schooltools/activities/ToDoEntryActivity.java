@@ -43,7 +43,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
     private Validator validator;
 
     public ToDoEntryActivity() {
-        super(R.layout.todo_entry_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.todo_entry_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

@@ -77,7 +77,7 @@ public final class ApiActivity extends AbstractActivity {
     private ApiHelper apiHelper;
 
     public ApiActivity() {
-        super(R.layout.api_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.api_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

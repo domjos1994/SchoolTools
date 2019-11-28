@@ -233,4 +233,5 @@ INSERT INTO todos(ID,title,importance,solved,todoList) VALUES(1,'Äpfel',7,0,2);
 INSERT INTO todos(ID,title,importance,solved,todoList) VALUES(2,'Birnen',7,1,2);
 INSERT INTO todos(ID,title,importance,solved,todoList) VALUES(3,'Playstation 5',9,0,1);
 
-INSERT INTO timerEvents(ID,title,description,category,deadline,subject,teacher,schoolclass,eventDate) VALUES(1,)
+INSERT INTO timerEvents(ID,title,description,category,subject,teacher,schoolclass,eventDate) VALUES(1,'Hausaufgaben','Hausaufgaben machen', 'Hausaufgaben',4,7,2,'2019-11-28');
+INSERT INTO timerEvents(ID,title,description,category,subject,teacher,schoolclass,eventDate) VALUES(2,'Test','Für test lernen', 'Lernen',4,7,2,'2019-11-28');

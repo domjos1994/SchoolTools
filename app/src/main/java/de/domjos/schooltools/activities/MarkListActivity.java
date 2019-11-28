@@ -93,7 +93,7 @@ public final class MarkListActivity extends AbstractActivity {
     private MarkListSettings curSettings;
 
     public MarkListActivity() {
-        super(R.layout.marklist_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.marklist_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

@@ -331,6 +331,9 @@
     <string name="timetable_assistant_break">Pause</string>
     <string name="timetable_assistant_add">Hinzufügen</string>
 
+    <string name="timer_menu_calendar">Kalender anzeigen</string>
+    <string name="timer_menu_day">Tagesansicht anzeigen</string>
+
     <string name="todo_list">ToDo-Liste</string>
     <string name="todo_category">Kategorie</string>
     <string name="todo_solved">Erledigt</string>

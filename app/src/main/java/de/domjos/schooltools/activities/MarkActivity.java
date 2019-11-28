@@ -52,7 +52,7 @@ public final class MarkActivity extends AbstractActivity {
     private ArrayAdapter<String> yearAdapter, subjectAdapter;
 
     public MarkActivity() {
-        super(R.layout.mark_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.mark_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override
@@ -211,6 +211,7 @@ public final class MarkActivity extends AbstractActivity {
             double curMark = schoolYear.calculateAverage();
             mark += curMark;
             for(Test test : schoolYear.getTests()) {
+                test.setDescription(this.getString(R.string.mark_mark) + ": " + test.getMark() + ", " + this.getString(R.string.mark_average) + ": " + test.getAverage() + ", " + this.getString(R.string.mark_weight) + ": " + test.getWeight());
                 this.lvTest.getAdapter().add(test);
             }
             if(curMark!=0.0) {

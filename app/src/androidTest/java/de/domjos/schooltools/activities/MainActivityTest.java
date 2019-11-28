@@ -62,7 +62,7 @@ public class MainActivityTest {
         editor.commit();
 
         SQLite sqLite = MainActivity.globals.getSqLite();
-        String[] tables = de.domjos.schooltools.helper.Helper.readFileFromRaw(context, R.raw.example).split(";");
+        String[] tables = de.domjos.schooltools.helper.Helper.readFileFromRaw(context, de.domjos.schooltools.test.R.raw.example).split(";");
         for(String query : tables) {
             if(!query.trim().equals("")) {
                 try {

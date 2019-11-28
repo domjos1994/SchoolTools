@@ -35,7 +35,7 @@ public final class MarkYearActivity extends AbstractActivity {
     private BottomNavigationView navigation;
 
     public MarkYearActivity() {
-        super(R.layout.mark_year_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.mark_year_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

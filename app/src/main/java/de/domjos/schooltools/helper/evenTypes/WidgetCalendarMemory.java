@@ -9,6 +9,7 @@ import de.domjos.schooltoolslib.model.Memory;
 
 public class WidgetCalendarMemory extends Event {
     private Memory memory;
+    private int icon;
 
     public WidgetCalendarMemory() {
         super();
@@ -18,7 +19,11 @@ public class WidgetCalendarMemory extends Event {
 
     @Override
     public int getIcon() {
-        return R.drawable.ic_event_black_24dp;
+        return this.icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
     }
 
     public Memory getMemory() {

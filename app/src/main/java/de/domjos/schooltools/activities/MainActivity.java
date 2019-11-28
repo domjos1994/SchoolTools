@@ -100,7 +100,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     private QuickQueryScreenWidget quickQueryScreenWidget;
 
     public MainActivity() {
-        super(R.layout.main_activity, null);
+        super(R.layout.main_activity, null, R.drawable.bg_water);
     }
 
     @Override

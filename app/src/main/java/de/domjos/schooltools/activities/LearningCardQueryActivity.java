@@ -41,7 +41,7 @@ public final class LearningCardQueryActivity extends AbstractActivity {
     private ArrayAdapter<LearningCardQuery> queryAdapter;
 
     public LearningCardQueryActivity() {
-        super(R.layout.learning_card_query_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.learning_card_query_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

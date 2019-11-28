@@ -52,7 +52,7 @@ public final class NoteActivity extends AbstractActivity {
     private Menu menu;
 
     public NoteActivity() {
-        super(R.layout.note_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.note_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

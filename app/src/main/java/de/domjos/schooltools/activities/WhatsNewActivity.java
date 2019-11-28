@@ -38,7 +38,7 @@ public final class WhatsNewActivity extends AbstractActivity {
     private SharedPreferences preferences;
 
     public WhatsNewActivity() {
-        super(R.layout.whats_new_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.whats_new_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

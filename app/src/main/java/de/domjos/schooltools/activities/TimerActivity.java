@@ -29,6 +29,7 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.helper.evenTypes.WidgetCalendarMemory;
 import de.domjos.schooltools.helper.evenTypes.WidgetCalendarTimerEvent;
 import de.domjos.schooltoolslib.model.Memory;
+import de.domjos.schooltoolslib.model.Note;
 import de.domjos.schooltoolslib.model.TimerEvent;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
@@ -43,7 +44,7 @@ public final class TimerActivity extends AbstractActivity {
     private FloatingActionButton cmdTimerEventAdd;
 
     public TimerActivity() {
-        super(R.layout.timer_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.timer_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override
@@ -65,6 +66,24 @@ public final class TimerActivity extends AbstractActivity {
             this.reloadEvents();
         });
 
+        this.widgetCalendar.setOnHourGroupClick(event -> {
+            if(event.getColor()==android.R.color.transparent) {
+                Intent intent = new Intent(getApplicationContext(), TimerEntryActivity.class);
+                intent.putExtra("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(this.widgetCalendar.getCurrentEvent().getCalendar().getTime()));
+                if(event instanceof WidgetCalendarTimerEvent) {
+                    intent.putExtra("id", ((WidgetCalendarTimerEvent)event).getTimerEvent().getID());
+                }
+                startActivityForResult(intent, 99);
+            }
+        });
+
+        this.widgetCalendar.setOnHourHeaderClick(event -> {
+            Intent intent = new Intent(getApplicationContext(), TimerEntryActivity.class);
+            intent.putExtra("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(this.widgetCalendar.getCurrentEvent().getCalendar().getTime()));
+            intent.putExtra("id", 0);
+            startActivityForResult(intent, 99);
+        });
+
         this.cmdTimerEventAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), TimerEntryActivity.class);
             intent.putExtra("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(this.widgetCalendar.getCurrentEvent().getCalendar().getTime()));
@@ -75,7 +94,17 @@ public final class TimerActivity extends AbstractActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_help_only, menu);
+        getMenuInflater().inflate(R.menu.menu_timer, menu);
+        menu.findItem(R.id.menShowCalendar).setOnMenuItemClickListener(menuItem -> {
+            this.widgetCalendar.showMonth(!menuItem.isChecked());
+            menuItem.setChecked(!menuItem.isChecked());
+            return false;
+        });
+        menu.findItem(R.id.menShowDay).setOnMenuItemClickListener(menuItem -> {
+            this.widgetCalendar.showDay(!menuItem.isChecked());
+            menuItem.setChecked(!menuItem.isChecked());
+            return false;
+        });
         return true;
     }
 
@@ -111,6 +140,21 @@ public final class TimerActivity extends AbstractActivity {
             for(Memory memory : MainActivity.globals.getSqLite().getCurrentMemories()) {
                 WidgetCalendarMemory widgetCalendarMemory = new WidgetCalendarMemory();
                 widgetCalendarMemory.setMemory(memory);
+                switch (memory.getType()) {
+                    case Note:
+                        widgetCalendarMemory.setIcon(R.drawable.ic_note_black_24dp);
+                        break;
+                    case toDo:
+                        widgetCalendarMemory.setIcon(R.drawable.ic_done_all_black_24dp);
+                        break;
+                    case Test:
+                        widgetCalendarMemory.setIcon(R.drawable.ic_check_circle_black_24dp);
+                        break;
+                    case timerEvent:
+                        widgetCalendarMemory.setIcon(R.drawable.ic_date_range_black_24dp);
+                        break;
+                }
+
                 this.widgetCalendar.addEvent(widgetCalendarMemory);
             }
             this.widgetCalendar.reload();

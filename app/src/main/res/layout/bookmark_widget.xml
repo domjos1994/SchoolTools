@@ -22,12 +22,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="2dp">
+
         <ListView
             android:id="@+id/widgetListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:dividerHeight="1dp"
             android:divider="@color/SlateGray"
-            tools:listitem="@layout/bookmark_widget_item"/>
+            android:dividerHeight="1dp"
+            tools:listitem="@layout/bookmark_widget_item" />
     </LinearLayout>
 </LinearLayout>

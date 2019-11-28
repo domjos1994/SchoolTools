@@ -65,7 +65,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
     private Map<String, Integer> mpSubjects;
 
     public TimeTableEntryActivity() {
-        super(R.layout.timetable_entry_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.timetable_entry_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

@@ -55,7 +55,7 @@ public final class TimerEntryActivity extends AbstractActivity {
     private Validator validator;
 
     public TimerEntryActivity() {
-        super(R.layout.timer_entry_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.timer_entry_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

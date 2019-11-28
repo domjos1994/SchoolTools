@@ -55,7 +55,7 @@ public final class TrafficLightActivity extends AbstractActivity {
     private int notification_id = -1;
 
     public TrafficLightActivity() {
-        super(R.layout.traffic_light_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.traffic_light_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

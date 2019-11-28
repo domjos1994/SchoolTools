@@ -39,7 +39,7 @@ public final class TimeTableClassActivity extends AbstractActivity {
     private Validator validator;
 
     public TimeTableClassActivity() {
-        super(R.layout.timetable_class_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.timetable_class_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @SuppressLint("ClickableViewAccessibility")

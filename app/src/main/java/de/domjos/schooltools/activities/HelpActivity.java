@@ -31,7 +31,7 @@ public final class HelpActivity extends AbstractActivity {
     private File logFile;
 
     public HelpActivity() {
-        super(R.layout.help_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.help_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

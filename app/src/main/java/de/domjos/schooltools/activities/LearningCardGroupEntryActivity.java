@@ -49,7 +49,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
 
 
     public LearningCardGroupEntryActivity() {
-        super(R.layout.learning_card_group_entry_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.learning_card_group_entry_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

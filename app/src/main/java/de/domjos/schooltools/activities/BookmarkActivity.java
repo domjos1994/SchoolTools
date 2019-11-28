@@ -70,7 +70,7 @@ public final class BookmarkActivity extends AbstractActivity {
     private int subjectID = 0;
 
     public BookmarkActivity() {
-        super(R.layout.bookmark_activity,MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.bookmark_activity,MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

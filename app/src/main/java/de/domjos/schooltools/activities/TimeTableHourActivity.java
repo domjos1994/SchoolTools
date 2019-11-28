@@ -44,7 +44,7 @@ public final class TimeTableHourActivity extends AbstractActivity {
     private int intLatestHour, intLatestMinute;
 
     public TimeTableHourActivity() {
-        super(R.layout.timetable_hour_activity, MainActivity.globals.getSqLite().getSetting("background"));
+        super(R.layout.timetable_hour_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
     }
 
     @Override

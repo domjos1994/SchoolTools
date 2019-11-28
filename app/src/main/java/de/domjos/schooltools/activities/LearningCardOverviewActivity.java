@@ -14,6 +14,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 import android.view.Window;
@@ -146,7 +148,6 @@ public final class LearningCardOverviewActivity extends FragmentActivity {
         // init Toolbar
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.learningCard_overView);
-        toolbar.setNavigationIcon(R.drawable.home_as_up);
         toolbar.setNavigationOnClickListener(v -> startActivity(new Intent(getApplicationContext(),MainActivity.class)));
 
         this.cmdLearningCardQueryStart = this.findViewById(R.id.cmdLearningCardQueryStart);
