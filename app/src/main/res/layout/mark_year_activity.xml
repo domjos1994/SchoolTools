@@ -27,7 +27,8 @@
             android:id="@+id/lvYear"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:itemIcon="@drawable/ic_event_note_black_24dp"/>
+            app:itemIcon="@drawable/ic_event_note_black_24dp"
+            app:listItemBackground="@drawable/listview_background"/>
 
     </FrameLayout>
 

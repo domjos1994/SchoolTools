@@ -25,7 +25,8 @@
             android:id="@+id/lvLearningCardQueries"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:itemIcon="@drawable/ic_question_answer_black_24dp"/>
+            app:itemIcon="@drawable/ic_question_answer_black_24dp"
+            app:listItemBackground="@drawable/listview_background"/>
 
         <ScrollView
             android:id="@+id/scrollView"

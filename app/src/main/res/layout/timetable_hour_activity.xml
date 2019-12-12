@@ -29,7 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/svControls"
-            app:itemIcon="@drawable/ic_access_time_black_24dp"/>
+            app:itemIcon="@drawable/ic_access_time_black_24dp"
+            app:listItemBackground="@drawable/listview_background"/>
 
         <ScrollView
             android:id="@+id/svControls"

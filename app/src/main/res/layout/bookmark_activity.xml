@@ -66,6 +66,7 @@
         android:layout_below="@+id/llSubjects"
         android:layout_above="@+id/svControls"
         custom:itemIcon="@drawable/ic_bookmark_black_24dp"
+        app:listItemBackground="@drawable/listview_background"
         android:padding="1dp"/>
 
     <WebView

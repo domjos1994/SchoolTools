@@ -217,7 +217,7 @@
     <string name="settings_school_learningCard_dictionary_path_summary">Pfad zur Dictionary-Datei angeben</string>
     <string name="settings_school_learningCard_dictionary_path_message_unzipFile">Entpacke Dictionary-Datei in App-Verzeichnis!</string>
     <string name="settings_school_learningCard_dictionary_path_message_deleteDir">Lösche Dictionary-App-Verzeichnis!</string>
-    <string name="settings_school_learningCard_dictionary_path_message_readLine">Lese Zeile %d von %d in Datenbank!</string>
+    <string name="settings_school_learningCard_dictionary_path_message_readLine" formatted="false">Lese Zeile %d von %d in Datenbank!</string>
 
     <string name="settings_api_summary">Einstellungen zum Im- und Export!</string>
     <string name="settings_api_override_header">Einträge überschreiben</string>

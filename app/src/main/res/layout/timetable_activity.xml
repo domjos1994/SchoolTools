@@ -33,7 +33,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 custom:itemIcon="@drawable/ic_access_time_black_24dp"
-                android:layout_above="@+id/cmdTimeTableAssistant"/>
+                android:layout_above="@+id/cmdTimeTableAssistant"
+                app:listItemBackground="@drawable/listview_background"/>
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/cmdTimeTableAssistant"
                 android:layout_width="match_parent"
