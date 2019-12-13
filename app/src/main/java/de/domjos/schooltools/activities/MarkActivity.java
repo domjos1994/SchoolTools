@@ -28,6 +28,7 @@ import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.Subject;
 import de.domjos.schooltoolslib.model.mark.SchoolYear;
@@ -172,7 +173,7 @@ public final class MarkActivity extends AbstractActivity {
                 }
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkActivity.this);
         }
     }
 

@@ -31,8 +31,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import android.text.Html;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +38,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,6 +55,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.HelpActivity;
 import de.domjos.schooltools.activities.MainActivity;
@@ -74,57 +72,6 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 public class Helper {
     public static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 99;
     public static final int PERMISSIONS_REQUEST_WRITE_CALENDAR = 101;
-
-    public static void createToast(Context context, String msg) {
-        Helper.createToast(context, msg, true);
-    }
-
-    public static void createToast(Activity activity, String msg) {
-        Helper.createToast(activity, msg, true);
-    }
-
-    private static void createToast(Activity activity, String msg, boolean log) {
-        if(log) {
-            Log4JHelper.getLogger(activity.getPackageName()).info(msg);
-        }
-
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast, activity.findViewById(R.id.custom_toast_container));
-        TextView text = layout.findViewById(R.id.text);
-        text.setText(msg);
-        Toast toast = new Toast(activity);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(layout);
-        toast.show();
-    }
-
-    private static void createToast(Context context, String msg, boolean log) {
-        if(log) {
-            Log4JHelper.getLogger(context.getPackageName()).info(msg);
-        }
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-    }
-
-    public static void printException(Context context, Throwable ex) {
-        StringBuilder message = new StringBuilder(ex.getMessage() + "\n" + ex.toString());
-        for(StackTraceElement element : ex.getStackTrace()) {
-            message.append(element.getFileName()).append(":").append(element.getClassName()).append(":").append(element.getMethodName()).append(":").append(element.getLineNumber());
-        }
-        Log.e("Exception", message.toString(), ex);
-        Log4JHelper.getLogger(context.getPackageName()).error("Exception", ex);
-        Helper.createToast(context, ex.getLocalizedMessage(), false);
-    }
-
-    public static void printException(Activity activity, Throwable ex) {
-        StringBuilder message = new StringBuilder(ex.getMessage() + "\n" + ex.toString());
-        for(StackTraceElement element : ex.getStackTrace()) {
-            message.append(element.getFileName()).append(":").append(element.getClassName()).append(":").append(element.getMethodName()).append(":").append(element.getLineNumber());
-        }
-        Log.e("Exception", message.toString(), ex);
-        Log4JHelper.getLogger(activity.getPackageName()).error("Exception", ex);
-        Helper.createToast(activity, ex.getLocalizedMessage(), false);
-    }
 
     public static String readFileFromRaw(Context context, int id) {
         StringBuilder content = new StringBuilder();
@@ -144,14 +91,14 @@ public class Helper {
             } while (true);
             reader.close();
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         } finally {
             try {
                 if(inputStream!=null) {
                     inputStream.close();
                 }
             } catch (Exception ex) {
-                Helper.printException(context, ex);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
             }
         }
         return content.toString();
@@ -210,7 +157,7 @@ public class Helper {
                 }
             }
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
         return false;
     }
@@ -250,7 +197,7 @@ public class Helper {
                 inputStreamReader.close();
             }
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
         return fileContent.toString();
     }
@@ -311,11 +258,11 @@ public class Helper {
         }
     }
 
-    public static boolean isInteger(String number) {
+    static boolean isInteger(String number) {
         return Pattern.matches("^\\d+$", number.trim());
     }
 
-    public static boolean isDouble(String number) {
+    static boolean isDouble(String number) {
         return Pattern.matches("^[0-9]+(.|,)?[0-9]?$", number.trim());
     }
 
@@ -390,32 +337,22 @@ public class Helper {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public static void setBackgroundToActivity(Activity activity) {
         Map.Entry<String, byte[]> entry = MainActivity.globals.getSqLite().getSetting("background");
         if(entry!=null) {
             if(!entry.getKey().equals("")) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    activity.getWindow().getDecorView().getRootView().setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
-                } else {
-                    activity.getWindow().getDecorView().getRootView().setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
-                }
+                activity.getWindow().getDecorView().getRootView().setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
                 return;
             }
         }
         activity.getWindow().getDecorView().getRootView().setBackgroundResource(R.drawable.bg_water);
     }
 
-    @SuppressWarnings("deprecation")
     public static void setBackgroundAppBarToActivity(NavigationView navigationView, Activity activity) {
         Map.Entry<String, byte[]> entry = MainActivity.globals.getSqLite().getSetting("app_bar_background");
         if(entry!=null) {
             if(!entry.getKey().equals("")) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    navigationView.setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
-                } else {
-                    navigationView.setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
-                }
+                navigationView.setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
                 return;
             }
         }
@@ -460,7 +397,7 @@ public class Helper {
         try {
             return MainActivity.globals.getSqLite().getLearningCards(query);
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
         return learningCards;
     }

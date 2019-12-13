@@ -40,6 +40,7 @@ import java.util.Objects;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.Bookmark;
 import de.domjos.schooltoolslib.model.Subject;
@@ -217,7 +218,7 @@ public final class BookmarkActivity extends AbstractActivity {
                             }
                         }
                     } catch (Exception ex) {
-                        Helper.printException(activity, ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, activity);
                     }
                 }
             }
@@ -331,8 +332,7 @@ public final class BookmarkActivity extends AbstractActivity {
                             reloadBookmarks("");
                             currentBookmark = new Bookmark();
                         } catch (Exception ex) {
-                            Log.e("error", String.valueOf(result));
-                            Helper.printException(BookmarkActivity.this, ex);
+                            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, BookmarkActivity.this);
                         }
                     }
                     return true;
@@ -479,7 +479,7 @@ public final class BookmarkActivity extends AbstractActivity {
             bm.recycle();
             return fOut.toByteArray();
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, BookmarkActivity.this);
         }
         return null;
     }

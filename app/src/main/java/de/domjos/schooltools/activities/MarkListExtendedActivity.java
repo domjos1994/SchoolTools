@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
@@ -27,18 +26,17 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.OnDataPointTapListener;
-import com.jjoe64.graphview.series.Series;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 
 import de.domjos.schooltoolslib.marklist.de.GermanExponentialList;
@@ -50,7 +48,6 @@ import de.domjos.schooltoolslib.model.marklist.MarkList;
 import de.domjos.schooltoolslib.model.marklist.MarkListInterface;
 import de.domjos.schooltools.helper.ApiHelper;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.customwidgets.widgets.LabelledSeekBar;
 
 public final class MarkListExtendedActivity extends AbstractActivity {
@@ -72,60 +69,31 @@ public final class MarkListExtendedActivity extends AbstractActivity {
         this.initDefaultValues();
         Helper.closeSoftKeyboard(MarkListExtendedActivity.this);
 
-        this.sbMaximumPoints.setOnChangeListener(new Runnable() {
-            @Override
-            public void run() {
-                sbCustomPoints.setMax(sbMaximumPoints.getCurrent());
-                sbBestMarkFirst.setMax(sbMaximumPoints.getCurrent());
-                sbWorstMarkTo.setMax(sbMaximumPoints.getCurrent());
-                graphView.getViewport().setMaxX(sbMaximumPoints.getCurrent()+1);
-                calculateMarkListAndDrawDiagram();
+        this.sbMaximumPoints.setOnChangeListener(() -> {
+            sbCustomPoints.setMax(sbMaximumPoints.getCurrent());
+            sbBestMarkFirst.setMax(sbMaximumPoints.getCurrent());
+            sbWorstMarkTo.setMax(sbMaximumPoints.getCurrent());
+            graphView.getViewport().setMaxX(sbMaximumPoints.getCurrent()+1);
+            calculateMarkListAndDrawDiagram();
+        });
+
+        this.sbCustomMark.setOnChangeListener(this::calculateMarkListAndDrawDiagram);
+
+        this.sbCustomPoints.setOnChangeListener(this::calculateMarkListAndDrawDiagram);
+
+        this.sbBestMarkFirst.setOnChangeListener(this::calculateMarkListAndDrawDiagram);
+
+        this.sbWorstMarkTo.setOnChangeListener(this::calculateMarkListAndDrawDiagram);
+
+        this.ivMarkListState.setOnClickListener(view -> {
+            if(!detailedErrorMessage.equals("")) {
+                MessageHelper.printMessage(detailedErrorMessage, R.mipmap.ic_launcher_round, MarkListExtendedActivity.this);
             }
         });
 
-        this.sbCustomMark.setOnChangeListener(new Runnable() {
-            @Override
-            public void run() {
-                calculateMarkListAndDrawDiagram();
-            }
-        });
-
-        this.sbCustomPoints.setOnChangeListener(new Runnable() {
-            @Override
-            public void run() {
-                calculateMarkListAndDrawDiagram();
-            }
-        });
-
-        this.sbBestMarkFirst.setOnChangeListener(new Runnable() {
-            @Override
-            public void run() {
-                calculateMarkListAndDrawDiagram();
-            }
-        });
-
-        this.sbWorstMarkTo.setOnChangeListener(new Runnable() {
-            @Override
-            public void run() {
-                calculateMarkListAndDrawDiagram();
-            }
-        });
-
-        this.ivMarkListState.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!detailedErrorMessage.equals("")) {
-                    Helper.createToast(getApplicationContext(), detailedErrorMessage);
-                }
-            }
-        });
-
-        this.lblMarkListState.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!detailedErrorMessage.equals("")) {
-                    Helper.createToast(getApplicationContext(), detailedErrorMessage);
-                }
+        this.lblMarkListState.setOnClickListener(view -> {
+            if(!detailedErrorMessage.equals("")) {
+                MessageHelper.printMessage(detailedErrorMessage, R.mipmap.ic_launcher_round, MarkListExtendedActivity.this);
             }
         });
     }
@@ -180,7 +148,7 @@ public final class MarkListExtendedActivity extends AbstractActivity {
                     DialogProperties properties = new DialogProperties();
                     properties.selection_mode = DialogConfigs.SINGLE_MODE;
                     properties.selection_type = DialogConfigs.DIR_SELECT;
-                    properties.root = new File(new File(ApiHelper.findExistingFolder(MarkListExtendedActivity.this)).getParent());
+                    properties.root = new File(Objects.requireNonNull(new File(ApiHelper.findExistingFolder(MarkListExtendedActivity.this)).getParent()));
                     properties.extensions = null;
                     properties.error_dir = defaultDir;
                     properties.offset = defaultDir;
@@ -190,26 +158,23 @@ public final class MarkListExtendedActivity extends AbstractActivity {
 
                     final Bitmap bitmap = this.graphView.takeSnapshot();
 
-                    dialog.setDialogSelectionListener(new DialogSelectionListener() {
-                        @Override
-                        public void onSelectedFilePaths(String[] files) {
-                            FileOutputStream outputStream = null;
-                            try {
-                                if(files!=null) {
-                                    outputStream = new FileOutputStream(files[0] + File.separatorChar + "graphView.png");
-                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                                    outputStream.flush();
+                    dialog.setDialogSelectionListener(files -> {
+                        FileOutputStream outputStream = null;
+                        try {
+                            if(files!=null) {
+                                outputStream = new FileOutputStream(files[0] + File.separatorChar + "graphView.png");
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                                outputStream.flush();
 
-                                }
-                            } catch (Exception ex) {
-                                Helper.printException(getApplicationContext(), ex);
-                            } finally {
-                                if(outputStream!=null) {
-                                    try {
-                                        outputStream.close();
-                                    } catch (Exception ex) {
-                                        Helper.printException(getApplicationContext(), ex);
-                                    }
+                            }
+                        } catch (Exception ex) {
+                            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListExtendedActivity.this);
+                        } finally {
+                            if(outputStream!=null) {
+                                try {
+                                    outputStream.close();
+                                } catch (Exception ex) {
+                                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListExtendedActivity.this);
                                 }
                             }
                         }
@@ -242,7 +207,7 @@ public final class MarkListExtendedActivity extends AbstractActivity {
             this.sbBestMarkFirst = this.findViewById(R.id.sbBestMarkFirst);
             this.configureGraphView();
         } catch (Exception ex) {
-            Helper.printException(getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListExtendedActivity.this);
         }
     }
 
@@ -404,12 +369,7 @@ public final class MarkListExtendedActivity extends AbstractActivity {
                     series.setColor(Color.WHITE);
                 }
                 series.setDrawAsPath(true);
-                series.setOnDataPointTapListener(new OnDataPointTapListener() {
-                    @Override
-                    public void onTap(Series series, DataPointInterface dataPoint) {
-                        Helper.createToast(getApplicationContext(), getString(R.string.marklist_points) + ": " + dataPoint.getX() + "\n" + getString(R.string.marklist_mark) + ": " + dataPoint.getY());
-                    }
-                });
+                series.setOnDataPointTapListener((series1, dataPoint) -> MessageHelper.printMessage(getString(R.string.marklist_points) + ": " + dataPoint.getX() + "\n" + getString(R.string.marklist_mark) + ": " + dataPoint.getY(), R.mipmap.ic_launcher_round, MarkListExtendedActivity.this));
                 this.graphView.addSeries(series);
             }
             if(stringSet.contains(values[1])) {
@@ -420,12 +380,7 @@ public final class MarkListExtendedActivity extends AbstractActivity {
                 } else {
                     series.setColor(Color.WHITE);
                 }
-                series.setOnDataPointTapListener(new OnDataPointTapListener() {
-                    @Override
-                    public void onTap(Series series, DataPointInterface dataPoint) {
-                        Helper.createToast(getApplicationContext(), getString(R.string.marklist_points) + ": " + dataPoint.getX() + "\n" + getString(R.string.marklist_mark) + ": " + dataPoint.getY());
-                    }
-                });
+                series.setOnDataPointTapListener((series12, dataPoint) -> MessageHelper.printMessage(getString(R.string.marklist_points) + ": " + dataPoint.getX() + "\n" + getString(R.string.marklist_mark) + ": " + dataPoint.getY(), R.mipmap.ic_launcher_round, MarkListExtendedActivity.this));
                 this.graphView.addSeries(series);
             }
 
@@ -440,7 +395,7 @@ public final class MarkListExtendedActivity extends AbstractActivity {
             this.ivMarkListState.setVisibility(View.VISIBLE);
             this.lblMarkListState.setText(this.getString(R.string.marklist_state_error));
             this.detailedErrorMessage = ex.getMessage();
-            Log4JHelper.getLogger(MarkListActivity.class.getName()).error(ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListExtendedActivity.this);
         } else {
             this.ivMarkListState.setVisibility(View.GONE);
             this.lblMarkListState.setText(this.getString(R.string.marklist_state_ok));

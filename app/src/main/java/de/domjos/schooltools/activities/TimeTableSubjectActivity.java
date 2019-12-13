@@ -34,6 +34,7 @@ import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.ColorAdapter;
 import de.domjos.schooltoolslib.model.Subject;
@@ -216,7 +217,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
                 case R.id.navTimeTableSubSave:
                     if(validator.getState()) {
                         if(isDuplicated()) {
-                            Helper.createToast(getApplicationContext(), getString(R.string.message_validator_duplicated));
+                            MessageHelper.printMessage(getString(R.string.message_validator_duplicated), R.mipmap.ic_launcher_round, TimeTableSubjectActivity.this);
                         } else {
                             Subject subject = new Subject();
                             subject.setID(currentID);

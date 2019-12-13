@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.Subject;
 import de.domjos.schooltoolslib.model.TimerEvent;
@@ -181,7 +182,7 @@ public final class TimerEntryActivity extends AbstractActivity {
                                 finish();
                             }
                         } catch (Exception ex) {
-                            Helper.printException(getApplicationContext(), ex);
+                            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimerEntryActivity.this);
                         }
                         break;
                     case R.id.navTimeTableSubCancel:
@@ -230,7 +231,7 @@ public final class TimerEntryActivity extends AbstractActivity {
             this.spTimerClass.setAdapter(this.classAdapter);
             this.classAdapter.notifyDataSetChanged();
         } catch (Exception ex) {
-            Helper.printException(getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimerEntryActivity.this);
         }
     }
 }

@@ -21,8 +21,10 @@ import android.view.Menu;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.BookmarkActivity;
 import de.domjos.schooltools.activities.LearningCardOverviewActivity;
@@ -32,7 +34,6 @@ import de.domjos.schooltools.activities.NoteActivity;
 import de.domjos.schooltools.activities.TimeTableActivity;
 import de.domjos.schooltools.activities.TimerActivity;
 import de.domjos.schooltools.activities.ToDoActivity;
-import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.schooltools.screenWidgets.ButtonScreenWidget;
 
 /**
@@ -140,12 +141,10 @@ public class UserSettings {
         int[] colors = this.context.getResources().getIntArray(R.array.colors);
 
         int color = 0;
-        if(strColor!=null) {
-            for(int i = 0; i<=colorNames.length-1; i++) {
-                if(strColor.equals(colorNames[i])) {
-                    color =  colors[i];
-                    break;
-                }
+        for(int i = 0; i<=colorNames.length-1; i++) {
+            if(strColor.equals(colorNames[i])) {
+                color =  colors[i];
+                break;
             }
         }
         return color;
@@ -159,15 +158,13 @@ public class UserSettings {
         boolean state = this.isDictionary();
         if(state) {
             String path = this.sharedPreferences.getString("txtLearningCardEnableDictionary", "");
-            if(path != null) {
-                if(!path.equals("")) {
-                    File directory = new File(this.context.getFilesDir() + "/dict/");
-                    if(directory.exists()) {
-                        for(File file : directory.listFiles()) {
-                            if(file!=null) {
-                                if(file.getAbsolutePath().endsWith(".txt")) {
-                                    return file.getAbsolutePath();
-                                }
+            if(!path.equals("")) {
+                File directory = new File(this.context.getFilesDir() + "/dict/");
+                if(directory.exists()) {
+                    for(File file : Objects.requireNonNull(directory.listFiles())) {
+                        if(file!=null) {
+                            if(file.getAbsolutePath().endsWith(".txt")) {
+                                return file.getAbsolutePath();
                             }
                         }
                     }
@@ -267,12 +264,10 @@ public class UserSettings {
 
     private int getPreference(String key, int defaultValue) {
         String content = this.sharedPreferences.getString(key, String.valueOf(defaultValue));
-        if(content!=null) {
-            try {
-                return Integer.parseInt(content);
-            } catch (Exception ex) {
-                Log4JHelper.getLogger("warning").error(ex.getMessage(), ex);
-            }
+        try {
+            return Integer.parseInt(content);
+        } catch (Exception ex) {
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return defaultValue;
     }

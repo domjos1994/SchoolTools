@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.BookmarkActivity;
 import de.domjos.schooltoolslib.model.Bookmark;
@@ -73,7 +74,7 @@ public class BookmarkWidget extends AppWidgetProvider {
                             }
                         }
                     } catch (Exception ex) {
-                        Helper.printException(context, ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
                     }
                 }
             }
@@ -82,7 +83,7 @@ public class BookmarkWidget extends AppWidgetProvider {
                 try {
                     return IntentHelper.openFileViaIntent(file, context);
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(context, "No handler for this type of file.", Toast.LENGTH_LONG).show();
+                    MessageHelper.printMessage("No handler for this type of file.", R.mipmap.ic_launcher_round, context);
                 }
             }
 

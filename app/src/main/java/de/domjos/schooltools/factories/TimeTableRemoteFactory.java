@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.Day;
 import de.domjos.schooltoolslib.model.timetable.Hour;
@@ -238,7 +239,7 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
                 }
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
     }
 }

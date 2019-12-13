@@ -17,6 +17,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.schooltools.helper.Helper;
@@ -123,7 +125,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 }
             } catch (Exception ex) {
-                Helper.printException(this.getContext(), ex);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getContext());
             }
 
             this.sql.addSync(this.type);

@@ -20,6 +20,7 @@ import android.widget.EditText;
 import java.util.List;
 
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.customwidgets.model.AbstractActivity;
@@ -196,7 +197,7 @@ public final class ToDoListActivity extends AbstractActivity {
                             changeControls(false, true, false);
                         }
                     } catch (Exception ex) {
-                        Helper.printException(getApplicationContext(), ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoListActivity.this);
                     }
                     break;
                 default:

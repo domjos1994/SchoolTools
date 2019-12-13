@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.widgets.calendar.WidgetCalendar;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.helper.evenTypes.WidgetCalendarMemory;
@@ -124,7 +125,7 @@ public final class TimerActivity extends AbstractActivity {
 
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimerActivity.this);
         }
     }
 
@@ -159,7 +160,7 @@ public final class TimerActivity extends AbstractActivity {
             }
             this.widgetCalendar.reload();
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimerActivity.this);
         }
     }
 
@@ -237,7 +238,7 @@ public final class TimerActivity extends AbstractActivity {
                 this.reloadEvents();
             }
         } catch (Exception ex) {
-            Helper.printException(TimerActivity.this, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimerActivity.this);
         }
     }
 }

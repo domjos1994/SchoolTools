@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.widget.*;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.LearningCardAdapter;
 import de.domjos.schooltoolslib.model.Subject;
@@ -95,7 +96,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
                         reloadList();
                     }
                 } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, LearningCardGroupEntryActivity.this);
                 }
             }
         });
@@ -114,7 +115,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
                         reloadList();
                     }
                 } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, LearningCardGroupEntryActivity.this);
                 }
             }
         });
@@ -134,7 +135,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
                         reloadList();
                     }
                 } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, LearningCardGroupEntryActivity.this);
                 }
             }
         });
@@ -153,7 +154,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
                         reloadList();
                     }
                 } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, LearningCardGroupEntryActivity.this);
                 }
             }
         });
@@ -172,7 +173,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
                         reloadList();
                     }
                 } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, LearningCardGroupEntryActivity.this);
                 }
             }
         });
@@ -191,7 +192,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
                         reloadList();
                     }
                 } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, LearningCardGroupEntryActivity.this);
                 }
             }
         });
@@ -206,7 +207,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
                         reloadList();
                     }
                 } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, LearningCardGroupEntryActivity.this);
                 }
             }
             @Override
@@ -232,7 +233,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
                     reloadList();
                 }
             } catch (Exception ex) {
-                Helper.printException(getApplicationContext(), ex);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, LearningCardGroupEntryActivity.this);
             }
         });
     }
@@ -257,7 +258,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
                             finish();
                         }
                     } catch (Exception ex) {
-                        Helper.printException(getApplicationContext(), ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, LearningCardGroupEntryActivity.this);
                     }
                     return true;
             }

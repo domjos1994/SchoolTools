@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
@@ -179,7 +180,7 @@ public final class ToDoActivity extends AbstractActivity {
                 Helper.sendBroadCast(ToDoActivity.this, ToDoWidget.class);
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoActivity.this);
         }
     }
 

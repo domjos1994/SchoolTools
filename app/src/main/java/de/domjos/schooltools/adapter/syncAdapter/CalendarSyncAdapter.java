@@ -22,8 +22,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
+import de.domjos.schooltools.activities.TimeTableActivity;
 import de.domjos.schooltoolslib.model.TimerEvent;
 import de.domjos.schooltools.helper.Helper;
 
@@ -154,7 +156,7 @@ public class CalendarSyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 }
             } catch (Exception ex) {
-                Helper.printException(this.getContext(), ex);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getContext());
             }
         }
     }

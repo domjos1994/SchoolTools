@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 
 public class Validator {
@@ -57,7 +58,7 @@ public class Validator {
         if(sp.getSelectedItem()!=null) {
             if(sp.getSelectedItem().toString().equals("")) {
                 states.put(sp.getId(), false);
-                Helper.createToast(this.context, String.format(this.context.getString(R.string.message_validation_empty), title));
+                MessageHelper.printMessage(String.format(this.context.getString(R.string.message_validation_empty), title), R.mipmap.ic_launcher_round, this.context);
             } else {
                 states.put(sp.getId(), true);
             }
@@ -67,7 +68,7 @@ public class Validator {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(((String)sp.getAdapter().getItem(position)).isEmpty()) {
-                    Helper.createToast(context, String.format(context.getString(R.string.message_validation_empty), title));
+                    MessageHelper.printMessage(String.format(context.getString(R.string.message_validation_empty), title), R.mipmap.ic_launcher_round, context);
                     states.put(sp.getId(), false);
                 } else {
                     states.put(sp.getId(), true);
@@ -76,7 +77,7 @@ public class Validator {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Helper.createToast(context, String.format(context.getString(R.string.message_validation_empty), title));
+                MessageHelper.printMessage(String.format(context.getString(R.string.message_validation_empty), title), R.mipmap.ic_launcher_round, context);
                 states.put(sp.getId(), false);
             }
         });

@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltools.helper.Helper;
@@ -155,7 +156,7 @@ public class ToDoRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
                 }
             }
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
 
         return row;

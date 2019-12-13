@@ -33,8 +33,10 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
+import de.domjos.schooltools.activities.ApiActivity;
 import de.domjos.schooltools.helper.Helper;
 
 @SuppressWarnings("SameParameterValue")
@@ -147,7 +149,7 @@ public class OnBoardingHelper {
 
                     activity.runOnUiThread(runnable);
                 } catch (Exception ex) {
-                    activity.runOnUiThread(()-> Helper.printException(activity, ex));
+                    activity.runOnUiThread(()-> MessageHelper.printException(ex, R.mipmap.ic_launcher_round, activity));
                 }
                 return null;
             }

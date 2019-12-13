@@ -23,6 +23,7 @@ import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.Note;
 import de.domjos.schooltoolslib.model.todo.ToDo;
@@ -156,7 +157,7 @@ public final class NoteActivity extends AbstractActivity {
                         }
                         dialog.dismiss();
                     } catch (Exception ex) {
-                        Helper.createToast(getApplicationContext(), ex.getMessage());
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, NoteActivity.this);
                     }
                 });
                 dialog.show();
@@ -279,7 +280,7 @@ public final class NoteActivity extends AbstractActivity {
 
                         }
                     } catch (Exception ex) {
-                        Helper.printException(getApplicationContext(), ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, NoteActivity.this);
                     } finally {
                         menu.findItem(R.id.menDelete).setVisible(false);
                         menu.findItem(R.id.menToDo).setVisible(false);

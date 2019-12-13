@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.mark.Year;
 import de.domjos.schooltoolslib.model.timetable.Day;
@@ -241,7 +242,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
                                 finish();
                             }
                         } catch (Exception ex) {
-                            Helper.printException(getApplicationContext(), ex);
+                            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimeTableEntryActivity.this);
                         }
                         return true;
                     case R.id.navTimeTableSubCancel:

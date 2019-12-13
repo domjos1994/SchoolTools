@@ -23,6 +23,7 @@ import java.util.Calendar;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.Hour;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
@@ -164,7 +165,7 @@ public final class TimeTableHourActivity extends AbstractActivity {
                         controlFields(false, false);
                         reloadHours();
                     } else {
-                        Helper.createToast(getApplicationContext(), getString(R.string.message_validator_times));
+                        MessageHelper.printMessage(getString(R.string.message_validator_times), R.mipmap.ic_launcher_round, TimeTableHourActivity.this);
                     }
                     return true;
                 case R.id.navTimeTableSubCancel:

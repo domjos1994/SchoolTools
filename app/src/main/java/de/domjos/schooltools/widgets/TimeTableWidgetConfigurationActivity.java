@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;
@@ -107,7 +108,7 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
             setResult(RESULT_OK, resultValue);
             finish();
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getApplicationContext());
         }
     }
 }

@@ -15,6 +15,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import androidx.core.app.NotificationCompat.Builder;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.*;
 import de.domjos.schooltoolslib.model.Memory;
@@ -76,7 +77,7 @@ public class MemoryService extends IntentService {
                     }
                 }
             } catch (Exception ex) {
-                Helper.printException(this.getApplicationContext(), ex);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getApplicationContext());
                 if(MainActivity.globals.getUserSettings().isDeleteMemories()) {
                     MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
                 }

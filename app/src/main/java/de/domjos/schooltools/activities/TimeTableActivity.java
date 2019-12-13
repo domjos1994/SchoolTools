@@ -25,6 +25,7 @@ import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
@@ -162,7 +163,7 @@ public final class TimeTableActivity extends AbstractActivity {
                 }
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimeTableActivity.this);
         }
     }
 
@@ -207,7 +208,7 @@ public final class TimeTableActivity extends AbstractActivity {
 
             OnBoardingHelper.tutorialTimeTable(this, navigation, this.cmdTimeTableAdd, this.lvTimeTable);
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimeTableActivity.this);
         }
     }
 
@@ -219,7 +220,7 @@ public final class TimeTableActivity extends AbstractActivity {
                 this.lvTimeTable.getAdapter().add(timeTable);
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimeTableActivity.this);
         }
     }
 }

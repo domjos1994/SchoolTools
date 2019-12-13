@@ -23,6 +23,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltools.helper.Converter;
@@ -131,7 +132,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
                         default:
                     }
                 } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoEntryActivity.this);
                 }
                 return false;
             }

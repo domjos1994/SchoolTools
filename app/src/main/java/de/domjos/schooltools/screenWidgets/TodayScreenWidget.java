@@ -18,7 +18,9 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.ApiActivity;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.adapter.EventAdapter;
 import de.domjos.schooltoolslib.model.Memory;
@@ -62,7 +64,7 @@ public final class TodayScreenWidget extends ScreenWidget {
                         this.eventAdapter.add(new AbstractMap.SimpleEntry<>("Er.(" + memory.getStringType(this.activity) + ")", memory.getTitle()));
                     }
                 } catch (Exception ex) {
-                    Helper.printException(this.activity, ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, super.activity);
                 }
             }
 

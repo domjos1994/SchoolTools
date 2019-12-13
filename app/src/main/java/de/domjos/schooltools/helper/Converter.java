@@ -12,18 +12,11 @@ package de.domjos.schooltools.helper;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
-
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +24,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Pattern;
+
+import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.schooltools.R;
 
 /**
  * Class which contains converter for formats.
@@ -53,7 +50,7 @@ public class Converter {
         if(date.isEmpty()) {
             return null;
         } else {
-            if(Pattern.matches("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$", date)) {
+            if(Pattern.matches("^(?:(?:31([/\\-.])(?:0?[13578]|1[02]))\\1|(?:(?:29|30)([/\\-.])(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29([/\\-.])0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])([/\\-.])(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$", date)) {
                 if(date.contains("-")) {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
                     return sdf.parse(date);
@@ -93,7 +90,7 @@ public class Converter {
                 return cursor.getString(column_index);
             }
         } catch (Exception ex) {
-              Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -105,9 +102,9 @@ public class Converter {
     public static Time convertStringToTime(Context context, String time) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            return new java.sql.Time(formatter.parse(time).getTime());
+            return new java.sql.Time(Objects.requireNonNull(formatter.parse(time)).getTime());
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
         return null;
     }
@@ -122,7 +119,7 @@ public class Converter {
             int year = calendar.get(Calendar.YEAR);
             return formatter.parse(String.format("%s.%s.%s %s", day, month, year, time));
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
         return null;
     }

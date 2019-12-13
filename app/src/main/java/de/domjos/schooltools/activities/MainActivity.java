@@ -33,7 +33,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import java.util.Objects;
+
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.*;
 import de.domjos.schooltoolslib.SearchItem;
@@ -51,7 +54,6 @@ import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.schooltools.helper.SQLite;
 import de.domjos.schooltools.screenWidgets.QuickQueryScreenWidget;
 import de.domjos.schooltools.services.AuthenticatorService;
@@ -105,7 +107,6 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
     @Override
     protected void initActions() {
-        Log4JHelper.configure(MainActivity.this);
         MainActivity.globals.setUserSettings(new UserSettings(this.getApplicationContext()));
         MainActivity.globals.setGeneralSettings(new GeneralSettings(this.getApplicationContext()));
         this.resetDatabase();
@@ -154,23 +155,17 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
 
 
-        this.cmdRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                todayScreenWidget.addEvents();
-                top5NotesScreenWidget.addNotes();
-                importantToDoScreenWidget.addToDos();
-                savedMarkListsScreenWidget.addMarkLists();
-                Helper.createToast(getApplicationContext(), getString(R.string.main_refreshSuccessFully));
-            }
+        this.cmdRefresh.setOnClickListener(v -> {
+            todayScreenWidget.addEvents();
+            top5NotesScreenWidget.addNotes();
+            importantToDoScreenWidget.addToDos();
+            savedMarkListsScreenWidget.addMarkLists();
+            MessageHelper.printMessage(getString(R.string.main_refreshSuccessFully), R.mipmap.ic_launcher_round, MainActivity.this);
         });
 
-        this.cmdSearch.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                lvSearchResults.setVisibility(View.GONE);
-                return false;
-            }
+        this.cmdSearch.setOnCloseListener(() -> {
+            lvSearchResults.setVisibility(View.GONE);
+            return false;
         });
 
         this.cmdSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -332,7 +327,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 }
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
         }
     }
 
@@ -343,12 +338,12 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 this.initSyncServices();
             }
         } catch (Exception ex) {
-            Helper.printException(MainActivity.this, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
         }
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if(!this.cmdSearch.isInEditMode()) {
@@ -362,7 +357,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
         Account account = AuthenticatorService.GetAccount(this.getApplicationContext(), "de.domjos.schooltools.account");
         AccountManager accountManager = (AccountManager) this.getApplicationContext().getSystemService(Context.ACCOUNT_SERVICE);
-        if(accountManager.addAccountExplicitly(account, null, null)) {
+        if(Objects.requireNonNull(accountManager).addAccountExplicitly(account, null, null)) {
             ContentResolver.setIsSyncable(account, AUTHORITY, 1);
             ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
             Bundle bundle = new Bundle();
@@ -533,7 +528,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     }
                 } catch (Exception ex) {
                     MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
-                    Log4JHelper.getLogger(MainActivity.this.getPackageName()).error(ex.getMessage());
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
                 }
             }
         }
@@ -547,7 +542,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                         MainActivity.globals.getSqLite().deleteEntry("toDoLists", "ID=" + toDoList.getID());
                     }
                 } catch (Exception ex) {
-                    Log4JHelper.getLogger(MainActivity.this.getPackageName()).error(ex.getMessage());
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
                 }
             }
         }
@@ -566,7 +561,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 this.getApplicationContext().deleteDatabase("schoolTools.db");
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
         }
     }
 

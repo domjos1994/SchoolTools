@@ -11,6 +11,10 @@ import android.webkit.MimeTypeMap;
 
 import java.io.File;
 
+import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.ApiActivity;
+
 public class IntentHelper {
 
     public static void openWebBrowser(Activity activity, String url) {
@@ -45,7 +49,7 @@ public class IntentHelper {
             }
             activity.startActivity(intent);
         } catch (Exception ex) {
-            Helper.printException(activity, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, activity);
         }
     }
 
@@ -69,7 +73,7 @@ public class IntentHelper {
             }
             return intent;
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
         return null;
     }

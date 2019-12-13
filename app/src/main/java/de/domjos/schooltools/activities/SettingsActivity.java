@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import androidx.core.app.NavUtils;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
@@ -286,7 +287,7 @@ public final class SettingsActivity extends SettingsAppCompatActivity {
                     MainActivity.globals.getSqLite().addSetting("app_bar_background", "", null);
                 }
             } catch (Exception ex) {
-                Helper.createToast(getActivity(), ex.getMessage());
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getActivity());
             }
         }
     }
@@ -347,7 +348,7 @@ public final class SettingsActivity extends SettingsAppCompatActivity {
                             }
                         }
                     } catch (Exception ex) {
-                        Helper.printException(getActivity(), ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getActivity());
                     }
                     return false;
                 }
