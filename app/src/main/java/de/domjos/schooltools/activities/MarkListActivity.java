@@ -50,7 +50,7 @@ import de.domjos.schooltoolslib.model.marklist.MarkList;
 import de.domjos.schooltoolslib.model.marklist.MarkListInterface;
 import de.domjos.schooltoolslib.model.marklist.MarkListWithMarkMode;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 import de.domjos.schooltools.settings.MarkListSettings;
 import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
@@ -459,10 +459,10 @@ public final class MarkListActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.baseValidator = new Validator(this.getApplicationContext());
+        this.baseValidator = new Validator(MarkListActivity.this, R.mipmap.ic_launcher_round);
         this.baseValidator.addIntegerValidator(this.txtMarkListMaxPoints);
 
-        this.withCreaseValidator = new Validator(this.getApplicationContext());
+        this.withCreaseValidator = new Validator(MarkListActivity.this, R.mipmap.ic_launcher_round);
         this.withCreaseValidator.addDoubleValidator(this.txtMarkListWithCreaseCustomMark);
         this.withCreaseValidator.addDoubleValidator(this.txtMarkListWithCreaseCustomPoints);
         this.withCreaseValidator.addDoubleValidator(this.txtMarkListWithCreaseBestMarkAt);

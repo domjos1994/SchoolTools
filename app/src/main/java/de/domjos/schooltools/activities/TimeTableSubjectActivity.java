@@ -42,7 +42,7 @@ import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
 
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 /**
  * Activity For the Subject-Screen
@@ -451,7 +451,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator =  new Validator(getApplicationContext());
+        this.validator =  new Validator(TimeTableSubjectActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtSubjectTitle, 1, 500);
         this.validator.addLengthValidator(txtSubjectAlias, 1, 3);
     }

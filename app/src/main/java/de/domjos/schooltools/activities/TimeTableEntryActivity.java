@@ -44,7 +44,7 @@ import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.schooltoolslib.model.timetable.TeacherHour;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 import de.domjos.schooltools.settings.UserSettings;
 
 /**
@@ -331,7 +331,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
     }
 
     private void initValidation() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(TimeTableEntryActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtTimeTableTitle, 3, 500);
         this.validator.addEmptyValidator(spTimeTableYear, this.getString(R.string.timetable_year));
     }

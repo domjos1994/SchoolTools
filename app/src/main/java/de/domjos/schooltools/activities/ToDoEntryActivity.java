@@ -28,7 +28,7 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 /**
  * Activity For the ToDo-Screen
@@ -83,7 +83,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
     }
 
     private void initValidation() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(ToDoEntryActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtToDoTitle, 3, 500);
         this.validator.addDateValidator(txtToDoMemoryDate);
     }

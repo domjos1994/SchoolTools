@@ -20,7 +20,7 @@ import de.domjos.schooltoolslib.model.learningCard.LearningCardGroup;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardQuery;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -158,7 +158,7 @@ public final class LearningCardQueryActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(LearningCardQueryActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addEmptyValidator(this.txtLearningCardQueryTitle);
         this.validator.addEmptyValidator(this.txtLearningCardQueryTries);
         this.validator.addIntegerValidator(this.txtLearningCardQueryTries);

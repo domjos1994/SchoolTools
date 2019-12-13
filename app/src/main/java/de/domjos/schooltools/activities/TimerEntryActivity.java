@@ -36,7 +36,7 @@ import de.domjos.schooltoolslib.model.timetable.SchoolClass;
 import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 /**
  * Activity For the Timer-Screen
@@ -131,7 +131,7 @@ public final class TimerEntryActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(TimerEntryActivity.this, R.mipmap.ic_launcher_round);;
         this.validator.addLengthValidator(txtTimerTitle, 3, 500);
         this.validator.addDateValidator(txtTimerMemoryDate);
     }

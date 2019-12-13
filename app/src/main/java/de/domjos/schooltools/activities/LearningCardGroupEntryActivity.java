@@ -24,7 +24,7 @@ import de.domjos.schooltoolslib.model.learningCard.LearningCardGroup;
 import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -342,7 +342,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(LearningCardGroupEntryActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addEmptyValidator(this.txtLearningCardGroupTitle);
         this.validator.addDateValidator(this.txtLearningCardGroupDeadline, new Date(), null);
     }

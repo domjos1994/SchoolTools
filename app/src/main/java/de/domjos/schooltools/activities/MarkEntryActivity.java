@@ -32,7 +32,7 @@ import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 /**
  * Activity For the Mark-Entry-Screen
@@ -256,7 +256,7 @@ public final class MarkEntryActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(MarkEntryActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtTestTitle, 2, 500);
         this.validator.addDoubleValidator(txtTestWeight);
         this.validator.addEmptyValidator(txtTestWeight);

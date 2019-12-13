@@ -27,7 +27,7 @@ import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 /**
  * Activity For the List-Screen
@@ -126,7 +126,7 @@ public final class ToDoListActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(ToDoListActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(this.txtToDoListTitle, 3, 500);
         this.validator.addDateValidator(this.txtToDoListDate);
     }

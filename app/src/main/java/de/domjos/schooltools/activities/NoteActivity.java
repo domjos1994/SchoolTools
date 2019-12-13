@@ -31,7 +31,7 @@ import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 import de.domjos.schooltools.spotlight.OnBoardingHelper;
 import de.domjos.schooltools.widgets.NoteWidget;
 
@@ -232,7 +232,7 @@ public final class NoteActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(NoteActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtNoteTitle, 3, 500);
         this.validator.addDateValidator(txtNoteMemoryDate);
 

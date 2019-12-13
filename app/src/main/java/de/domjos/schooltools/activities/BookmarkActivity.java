@@ -12,7 +12,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -48,7 +47,7 @@ import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDelete
 import de.domjos.schooltools.helper.ApiHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.IntentHelper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 import de.domjos.customwidgets.tokenizer.CommaTokenizer;
 import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
@@ -345,7 +344,7 @@ public final class BookmarkActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(BookmarkActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addEmptyValidator(this.txtBookmarkTitle);
         this.validator.addEmptyValidator(this.txtBookmarkLink);
     }
