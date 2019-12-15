@@ -23,11 +23,12 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 /**
  * Activity For the ToDo-Screen
@@ -82,7 +83,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
     }
 
     private void initValidation() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtToDoTitle, 3, 500);
         this.validator.addDateValidator(txtToDoMemoryDate);
     }
@@ -131,7 +132,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
                         default:
                     }
                 } catch (Exception ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoEntryActivity.this);
                 }
                 return false;
             }

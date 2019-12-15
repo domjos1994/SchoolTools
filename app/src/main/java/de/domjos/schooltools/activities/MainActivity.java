@@ -34,6 +34,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.*;
 import de.domjos.schooltoolslib.SearchItem;
@@ -154,23 +155,17 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
 
 
-        this.cmdRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                todayScreenWidget.addEvents();
-                top5NotesScreenWidget.addNotes();
-                importantToDoScreenWidget.addToDos();
-                savedMarkListsScreenWidget.addMarkLists();
-                Helper.createToast(getApplicationContext(), getString(R.string.main_refreshSuccessFully));
-            }
+        this.cmdRefresh.setOnClickListener(v -> {
+            todayScreenWidget.addEvents();
+            top5NotesScreenWidget.addNotes();
+            importantToDoScreenWidget.addToDos();
+            savedMarkListsScreenWidget.addMarkLists();
+            MessageHelper.printMessage(getString(R.string.main_refreshSuccessFully), R.mipmap.ic_launcher_round, MainActivity.this);
         });
 
-        this.cmdSearch.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                lvSearchResults.setVisibility(View.GONE);
-                return false;
-            }
+        this.cmdSearch.setOnCloseListener(() -> {
+            lvSearchResults.setVisibility(View.GONE);
+            return false;
         });
 
         this.cmdSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -332,7 +327,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 }
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
         }
     }
 
@@ -343,7 +338,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 this.initSyncServices();
             }
         } catch (Exception ex) {
-            Helper.printException(MainActivity.this, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
         }
     }
 
@@ -566,7 +561,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                 this.getApplicationContext().deleteDatabase("schoolTools.db");
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
         }
     }
 

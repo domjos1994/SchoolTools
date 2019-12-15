@@ -24,6 +24,7 @@ import java.util.*;
 
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.customwidgets.model.objects.BaseObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.model.Bookmark;
@@ -87,6 +88,7 @@ public class SQLite extends SQLiteOpenHelper {
      * @param db the SQLite-Database
      */
     @Override
+    @SuppressWarnings("deprecation")
     public void onCreate(SQLiteDatabase db) {
         try {
             this.createDatabase(R.raw.init, db);
@@ -111,7 +113,7 @@ public class SQLite extends SQLiteOpenHelper {
                 this.insertSubject("Rel", R.string.timetable_subject_rel_name, this.context.getResources().getColor(R.color.White), false, db);
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -139,7 +141,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             this.createDatabase(R.raw.update, db);
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -193,7 +195,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             db.execSQL("DELETE FROM " + table + " WHERE " + column + "=" + id + where + ";");
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -206,7 +208,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             db.execSQL("DELETE FROM " + table + where + ";");
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -219,7 +221,7 @@ public class SQLite extends SQLiteOpenHelper {
                 db.execSQL("DELETE FROM " + table + " WHERE ID=" + ((BaseObject)object).getID() + ";");
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -237,7 +239,7 @@ public class SQLite extends SQLiteOpenHelper {
             cursor.close();
             return state;
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return false;
     }
@@ -262,7 +264,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return results;
     }
@@ -303,7 +305,7 @@ public class SQLite extends SQLiteOpenHelper {
                 }
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return learningCards;
     }
@@ -351,7 +353,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -376,7 +378,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return markLists;
     }
@@ -391,7 +393,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return settings;
     }
@@ -406,7 +408,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return settingLists;
     }
@@ -451,7 +453,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             teacher.setID(this.saveAndClose(teacher.getID(), db, sqLiteStatement));
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return teacher.getID();
     }
@@ -475,7 +477,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
 
         return teachers;
@@ -510,7 +512,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             schoolClass.setID(this.saveAndClose(schoolClass.getID(), db, sqLiteStatement));
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return schoolClass.getID();
     }
@@ -534,7 +536,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
 
         return schoolClasses;
@@ -575,7 +577,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             subject.setID(this.saveAndClose(subject.getID(), db, sqLiteStatement));
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return subject.getID();
     }
@@ -611,7 +613,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
 
         return subjects;
@@ -638,7 +640,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             hour.setID(this.saveAndClose(hour.getID(), db, sqLiteStatement));
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return hour.getID();
     }
@@ -662,7 +664,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
 
         return hours;
@@ -727,7 +729,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -850,7 +852,7 @@ public class SQLite extends SQLiteOpenHelper {
                 cursor.close();
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
 
         return timeTables;
@@ -893,7 +895,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return test.getID();
     }
@@ -934,7 +936,7 @@ public class SQLite extends SQLiteOpenHelper {
                 tests.get(i).setMemoryDate(this.getMemoryDate("tests", tests.get(i).getID(), db));
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return tests;
     }
@@ -955,7 +957,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             year.setID(this.saveAndClose(year.getID(), db, sqLiteStatement));
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return year.getID();
     }
@@ -979,7 +981,7 @@ public class SQLite extends SQLiteOpenHelper {
             cursor.close();
 
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return years;
     }
@@ -1019,7 +1021,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -1038,7 +1040,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             schoolYears = this.getSchoolYear(subjects, years, db);
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return schoolYears;
     }
@@ -1052,7 +1054,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             schoolYears = this.getSchoolYear(subjects, years, db);
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return schoolYears;
     }
@@ -1111,7 +1113,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -1137,7 +1139,7 @@ public class SQLite extends SQLiteOpenHelper {
                 notes.get(i).setMemoryDate(this.getMemoryDate("notes", notes.get(i).getID(), db));
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return notes;
     }
@@ -1171,7 +1173,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -1201,7 +1203,7 @@ public class SQLite extends SQLiteOpenHelper {
             cursor.close();
 
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return toDoLists;
     }
@@ -1250,7 +1252,7 @@ public class SQLite extends SQLiteOpenHelper {
                 db.setTransactionSuccessful();
                 db.endTransaction();
             } catch (Exception ex) {
-                Helper.printException(this.context, ex);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
             }
         }
         return toDo.getID();
@@ -1281,7 +1283,7 @@ public class SQLite extends SQLiteOpenHelper {
                 toDos.get(i).setMemoryDate(this.getMemoryDate("toDos", toDos.get(i).getID(), db));
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return toDos;
     }
@@ -1331,7 +1333,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -1380,7 +1382,7 @@ public class SQLite extends SQLiteOpenHelper {
                 timerEvents.get(i).setMemoryDate(this.getMemoryDate("timerEvents", timerEvents.get(i).getID(), db));
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return timerEvents;
     }
@@ -1446,7 +1448,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         } finally {
             db.endTransaction();
         }
@@ -1503,7 +1505,7 @@ public class SQLite extends SQLiteOpenHelper {
                 }
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return learningCardGroups;
     }
@@ -1559,7 +1561,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -1604,7 +1606,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return learningCardQueries;
     }
@@ -1634,7 +1636,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             statement.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return learningCardQueryResult.getID();
     }
@@ -1663,7 +1665,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return learningCardQueryResults;
     }
@@ -1687,7 +1689,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             statement.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return learningCardQueryTraining.getID();
     }
@@ -1713,7 +1715,7 @@ public class SQLite extends SQLiteOpenHelper {
                 learningCardQueryTrainings.get(i).setResults(this.getLearningCardResults("learningCardQueryTraining=" + learningCardQueryTrainings.get(i).getID()));
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return learningCardQueryTrainings;
     }
@@ -1796,7 +1798,7 @@ public class SQLite extends SQLiteOpenHelper {
             statement.execute();
             statement.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -1827,7 +1829,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return bookmarks;
     }
@@ -1872,7 +1874,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return memories;
     }
@@ -1903,7 +1905,7 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindString(3, value);
             sqLiteStatement.execute();
         } catch (Exception ex) {
-            Helper.createToast(this.context, ex.getMessage());
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -1917,7 +1919,7 @@ public class SQLite extends SQLiteOpenHelper {
             }
             cursor.close();
         } catch (Exception ex) {
-            Helper.createToast(this.context, ex.getMessage());
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return entry;
     }
@@ -1930,7 +1932,7 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindString(1, type);
             sqLiteStatement.executeInsert();
         } catch (Exception ex) {
-            Helper.createToast(this.context, ex.getMessage());
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -1950,7 +1952,7 @@ public class SQLite extends SQLiteOpenHelper {
                 cursor.close();
             }
         } catch (Exception ex) {
-            Helper.createToast(this.context, ex.getMessage());
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return date;
     }
@@ -1965,7 +1967,7 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindString(4, foreignItem);
             sqLiteStatement.executeInsert();
         } catch (Exception ex) {
-            Helper.createToast(this.context, ex.getMessage());
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 
@@ -1980,7 +1982,7 @@ public class SQLite extends SQLiteOpenHelper {
                 }
                 cursor.close();
             } catch (Exception ex) {
-                Helper.createToast(this.context, ex.getMessage());
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
             }
         }
         return items;
@@ -2043,7 +2045,7 @@ public class SQLite extends SQLiteOpenHelper {
                 db.execSQL(String.format("ALTER TABLE %s ADD COLUMN %s %s", table, column, typeString));
             }
         } catch (Exception ex) {
-            Helper.printException(this.context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
     }
 

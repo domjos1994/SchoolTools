@@ -41,6 +41,7 @@ import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.Memory;
 import de.domjos.schooltoolslib.model.Note;
@@ -161,8 +162,8 @@ public final class ApiActivity extends AbstractActivity {
                 cmdApiSave.setEnabled(true);
                 try {
                     lblApiPath.setText(ApiHelper.findExistingFolder(ApiActivity.this));
-                } catch (Error ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                } catch (Exception ex) {
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
                     File documentDir =new File(Environment.getExternalStorageDirectory() + String.valueOf(File.separatorChar) + "Documents");
                     if(documentDir.mkdirs()) {
                         lblApiPath.setText(documentDir.getAbsolutePath());
@@ -224,7 +225,7 @@ public final class ApiActivity extends AbstractActivity {
                     dialog.show();
                 }
             } catch (Exception ex) {
-                Helper.printException(getApplicationContext(), ex);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
             }
         });
 
@@ -232,13 +233,13 @@ public final class ApiActivity extends AbstractActivity {
             try {
                 if(Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE, ApiActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     if(executeChoice()) {
-                        Helper.createToast(getApplicationContext(), String.format(getString(R.string.api_choice_successfully), apiChoice.getItem(spApiChoice.getSelectedItemPosition())));
+                        MessageHelper.printMessage(String.format(getString(R.string.api_choice_successfully), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
                     } else {
-                        Helper.createToast(getApplicationContext(), String.format(getString(R.string.api_choice_error), apiChoice.getItem(spApiChoice.getSelectedItemPosition())));
+                        MessageHelper.printMessage(String.format(getString(R.string.api_choice_error), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
                     }
                 }
             } catch (Exception ex) {
-                Helper.printException(getApplicationContext(), ex);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
             }
         });
     }
@@ -283,20 +284,20 @@ public final class ApiActivity extends AbstractActivity {
                         EventHelper helper = new EventHelper();
                         helper.saveMemoriesToCalendar(ApiActivity.this);
                     } catch (Exception ex) {
-                        Helper.printException(getApplicationContext(), ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
                     }
                     break;
                 case Helper.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
                     if(this.executeChoice()) {
-                        Helper.createToast(getApplicationContext(), String.format(getString(R.string.api_choice_successfully), apiChoice.getItem(spApiChoice.getSelectedItemPosition())));
+                        MessageHelper.printMessage(String.format(getString(R.string.api_choice_successfully), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
                     } else {
-                        Helper.createToast(getApplicationContext(), String.format(getString(R.string.api_choice_error), apiChoice.getItem(spApiChoice.getSelectedItemPosition())));
+                        MessageHelper.printMessage(String.format(getString(R.string.api_choice_error), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
                     }
                     break;
                 default:
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
         }
     }
 
@@ -311,7 +312,7 @@ public final class ApiActivity extends AbstractActivity {
             if(type.equals(this.getString(R.string.main_nav_learningCards))) return this.apiHelper.importLearningCardGroupFromText(content);
             if(type.equals(this.getString(R.string.main_nav_timer))) return this.apiHelper.importTimerEventFromTEXT(content);
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
         }
 
         return false;
@@ -327,7 +328,7 @@ public final class ApiActivity extends AbstractActivity {
             if(type.equals(this.getString(R.string.main_nav_learningCards))) return this.apiHelper.importLearningCardGroupFromXML(path);
             if(type.equals(this.getString(R.string.main_nav_timer))) return this.apiHelper.importTimerEventFromXML(path);
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
         }
         return false;
     }
@@ -383,7 +384,7 @@ public final class ApiActivity extends AbstractActivity {
                 return this.apiHelper.exportTimerEventToXML(where, exportPath);
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
         }
         return false;
     }
@@ -460,7 +461,7 @@ public final class ApiActivity extends AbstractActivity {
                 return true;
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
         }
         return false;
     }
@@ -473,7 +474,7 @@ public final class ApiActivity extends AbstractActivity {
                         EventHelper helper = new EventHelper();
                         helper.saveMemoriesToCalendar(ApiActivity.this);
                     } catch (Exception ex) {
-                        Helper.printException(getApplicationContext(), ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
                     }
                 }
                 return true;
@@ -490,7 +491,7 @@ public final class ApiActivity extends AbstractActivity {
                 }
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
         }
         return false;
     }
@@ -632,7 +633,7 @@ public final class ApiActivity extends AbstractActivity {
                     try {
                         PDFBuilder.openPDFFile(exportPath, this.getApplicationContext());
                     } catch (Exception ex) {
-                        Helper.printException(ApiActivity.this, ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
                     }
                 }
                 return state;

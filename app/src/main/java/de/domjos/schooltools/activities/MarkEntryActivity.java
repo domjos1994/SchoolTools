@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.TimerEvent;
 import de.domjos.schooltoolslib.model.mark.Test;
@@ -31,7 +32,7 @@ import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 /**
  * Activity For the Mark-Entry-Screen
@@ -59,7 +60,7 @@ public final class MarkEntryActivity extends AbstractActivity {
         try {
             this.loadData();
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkEntryActivity.this);
         }
 
         this.chkTestMemory.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -203,7 +204,7 @@ public final class MarkEntryActivity extends AbstractActivity {
                         default:
                     }
                 } catch (ParseException ex) {
-                    Helper.printException(getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkEntryActivity.this);
                 }
                 return false;
             };
@@ -249,13 +250,13 @@ public final class MarkEntryActivity extends AbstractActivity {
                 navigation.getMenu().getItem(1).setEnabled(false);
             }
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkEntryActivity.this);
         }
     }
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtTestTitle, 2, 500);
         this.validator.addDoubleValidator(txtTestWeight);
         this.validator.addEmptyValidator(txtTestWeight);

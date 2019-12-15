@@ -18,11 +18,12 @@ import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 /**
  * Activity For the Teacher-Screen
@@ -132,7 +133,7 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
                                     controlFields(false, true);
                                     reloadTeachers();
                                 } else {
-                                    Helper.createToast(getApplicationContext(), getString(R.string.message_validator_teachers));
+                                    MessageHelper.printMessage(getString(R.string.message_validator_teachers), R.mipmap.ic_launcher_round, TimeTableTeacherActivity.this);
                                 }
                             }
                             return true;
@@ -177,7 +178,7 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtTeacherLastName, 2, 500);
     }
 

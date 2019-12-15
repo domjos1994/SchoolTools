@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.MarkListAdapter;
 import de.domjos.schooltoolslib.exceptions.MarkListException;
@@ -50,7 +51,7 @@ import de.domjos.schooltoolslib.model.marklist.MarkListInterface;
 import de.domjos.schooltoolslib.model.marklist.MarkListWithMarkMode;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.Log4JHelper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 import de.domjos.schooltools.settings.MarkListSettings;
 import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
@@ -123,7 +124,7 @@ public final class MarkListActivity extends AbstractActivity {
                     }
                 }
 
-                Helper.createToast(MarkListActivity.this, text);
+                MessageHelper.printMessage(text, R.mipmap.ic_launcher_round, MarkListActivity.this);
             }
         });
 
@@ -267,13 +268,13 @@ public final class MarkListActivity extends AbstractActivity {
 
         this.lblMarkListState.setOnClickListener(view -> {
             if(!detailedErrorMessage.equals("")) {
-                Helper.createToast(getApplicationContext(), detailedErrorMessage);
+                MessageHelper.printMessage(detailedErrorMessage, R.mipmap.ic_launcher_round, MarkListActivity.this);
             }
         });
 
         this.ivMarkListState.setOnClickListener(view -> {
             if(!detailedErrorMessage.equals("")) {
-                Helper.createToast(getApplicationContext(), detailedErrorMessage);
+                MessageHelper.printMessage(detailedErrorMessage, R.mipmap.ic_launcher_round, MarkListActivity.this);
             }
         });
     }
@@ -330,13 +331,13 @@ public final class MarkListActivity extends AbstractActivity {
                     }
                     startActivityForResult(extIntent, 99);
                 } catch (IllegalStateException ex) {
-                    Helper.printException(this.getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListActivity.this);
                 }
                 break;
             case R.id.menMarkListSaveAsDefault:
                 this.curSettings = this.getValues("");
                 MainActivity.globals.getSqLite().insertOrUpdateMarkList("", this.curSettings);
-                Helper.createToast(this.getApplicationContext(), this.getString(R.string.message_marklist_settings_saved));
+                MessageHelper.printMessage(this.getString(R.string.message_marklist_settings_saved), R.mipmap.ic_launcher_round, MarkListActivity.this);
                 break;
             case R.id.menMarkListResetToDefault:
                 this.setValues("");
@@ -361,14 +362,14 @@ public final class MarkListActivity extends AbstractActivity {
                                 if(!input.getText().toString().isEmpty()) {
                                     curSettings = getValues(input.getText().toString());
                                     MainActivity.globals.getSqLite().insertOrUpdateMarkList(input.getText().toString(), curSettings);
-                                    Helper.createToast(getApplicationContext(), getString(R.string.message_marklist_settings_saved));
+                                    MessageHelper.printMessage(this.getString(R.string.message_marklist_settings_saved), R.mipmap.ic_launcher_round, MarkListActivity.this);
                                 }
                             }
                         });
                         builder.show();
                     }
                 } catch (Exception ex) {
-                    Helper.printException(this.getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListActivity.this);
                 }
                 break;
             case R.id.menMarkListOpenMarkList:
@@ -389,7 +390,7 @@ public final class MarkListActivity extends AbstractActivity {
                     builder.setNegativeButton(this.getString(R.string.sys_delete), (dialog, which) -> MainActivity.globals.getSqLite().deleteEntry("markLists", "title='" + spinner.getSelectedItem().toString() + "'"));
                     builder.show();
                 } catch (Exception ex) {
-                    Helper.printException(this.getApplicationContext(), ex);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListActivity.this);
                 }
                 break;
             case R.id.menMainHelp:
@@ -459,10 +460,10 @@ public final class MarkListActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.baseValidator = new Validator(this.getApplicationContext());
+        this.baseValidator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.baseValidator.addIntegerValidator(this.txtMarkListMaxPoints);
 
-        this.withCreaseValidator = new Validator(this.getApplicationContext());
+        this.withCreaseValidator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.withCreaseValidator.addDoubleValidator(this.txtMarkListWithCreaseCustomMark);
         this.withCreaseValidator.addDoubleValidator(this.txtMarkListWithCreaseCustomPoints);
         this.withCreaseValidator.addDoubleValidator(this.txtMarkListWithCreaseBestMarkAt);
@@ -770,7 +771,7 @@ public final class MarkListActivity extends AbstractActivity {
                             }
                         }
                     } catch(Exception e) {
-                        Helper.printException(getApplicationContext(), e);
+                        MessageHelper.printException(e, R.mipmap.ic_launcher_round, MarkListActivity.this);
                     }
                 }
             }

@@ -12,14 +12,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.model.timetable.Teacher;
-import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
 
 import static android.provider.ContactsContract.Groups;
@@ -123,7 +121,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 }
             } catch (Exception ex) {
-                Helper.printException(this.getContext(), ex);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getContext());
             }
 
             this.sql.addSync(this.type);
@@ -143,6 +141,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
             contentValues.put(Groups.GROUP_VISIBLE, 1);
             contentValues.put(Groups.SHOULD_SYNC, true);
             final Uri newGroupUri = provider.insert(ContactSyncAdapter.asSyncAdapter(Groups.CONTENT_URI, account), contentValues);
+            assert newGroupUri != null;
             this.group_id = ContentUris.parseId(newGroupUri);
         }
     }
@@ -171,13 +170,8 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
     private Map<Teacher, Date> getTeachersFromContacts(ContentProviderClient provider, Account account) throws Exception {
         Map<Teacher, Date> teachers = new LinkedHashMap<>();
 
-        Date dt = new Date();
         String[] projection;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            projection = new String[]{Contacts._ID, Contacts.CONTACT_LAST_UPDATED_TIMESTAMP};
-        } else {
-            projection = new String[]{Contacts._ID};
-        }
+        projection = new String[]{Contacts._ID, Contacts.CONTACT_LAST_UPDATED_TIMESTAMP};
 
         Cursor teacherCursor = provider.query(asSyncAdapter(Contacts.CONTENT_URI, account), projection, null, null, null);
         if(teacherCursor!=null) {
@@ -185,9 +179,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
                 Teacher teacher = new Teacher();
                 teacher.setID(teacherCursor.getInt(teacherCursor.getColumnIndex(Contacts._ID)));
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    dt = new Date(teacherCursor.getLong(teacherCursor.getColumnIndex(Contacts.CONTACT_LAST_UPDATED_TIMESTAMP)));
-                }
+                Date dt = new Date(teacherCursor.getLong(teacherCursor.getColumnIndex(Contacts.CONTACT_LAST_UPDATED_TIMESTAMP)));
 
                 String[] structuredProjection = new String[]{StructuredName.FAMILY_NAME, StructuredName.GIVEN_NAME};
                 String selection = StructuredName.CONTACT_ID + "=?";
@@ -230,7 +222,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
         contentValues.put(RawContacts.ACCOUNT_TYPE, account.type);
         if(teacher.getID()==0) {
             Uri uri = provider.insert(asSyncAdapter(RawContacts.CONTENT_URI, account), contentValues);
-            contact_id = ContentUris.parseId(uri);
+            contact_id = ContentUris.parseId(Objects.requireNonNull(uri));
         } else {
             String selection = RawContacts._ID + "=?";
             provider.update(asSyncAdapter(RawContacts.CONTENT_URI, account), contentValues, selection, new String[]{String.valueOf(teacher.getID())});

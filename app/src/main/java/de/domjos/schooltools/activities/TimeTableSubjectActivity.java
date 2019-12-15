@@ -34,6 +34,7 @@ import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.ColorAdapter;
 import de.domjos.schooltoolslib.model.Subject;
@@ -41,7 +42,7 @@ import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
 
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 /**
  * Activity For the Subject-Screen
@@ -216,7 +217,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
                 case R.id.navTimeTableSubSave:
                     if(validator.getState()) {
                         if(isDuplicated()) {
-                            Helper.createToast(getApplicationContext(), getString(R.string.message_validator_duplicated));
+                            MessageHelper.printMessage(getString(R.string.message_validator_duplicated), R.mipmap.ic_launcher_round, TimeTableSubjectActivity.this);
                         } else {
                             Subject subject = new Subject();
                             subject.setID(currentID);
@@ -423,6 +424,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void setDefaultValues(int name, int color_name, boolean main) {
         txtSubjectTitle.setText(this.getString(name));
         chkSubjectMainSubject.setChecked(main);
@@ -436,6 +438,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         lblSelectedColor.setText(this.getString(color_name));
     }
 
+    @SuppressWarnings("deprecation")
     private void setDefaultValues(int color_name, boolean main) {
         chkSubjectMainSubject.setChecked(main);
         if(main) {
@@ -450,7 +453,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator =  new Validator(getApplicationContext());
+        this.validator =  new Validator(getApplicationContext(), R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtSubjectTitle, 1, 500);
         this.validator.addLengthValidator(txtSubjectAlias, 1, 3);
     }
@@ -475,6 +478,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         return duplicated;
     }
 
+    @SuppressWarnings("deprecation")
     private void controlFields(boolean editMode, boolean reset) {
         this.txtSubjectTitle.setEnabled(editMode);
         this.txtSubjectAlias.setEnabled(editMode);

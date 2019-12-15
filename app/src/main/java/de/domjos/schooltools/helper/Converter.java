@@ -12,25 +12,17 @@ package de.domjos.schooltools.helper;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
-
-import java.io.BufferedInputStream;
+import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.schooltools.R;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -93,7 +85,7 @@ public class Converter {
                 return cursor.getString(column_index);
             }
         } catch (Exception ex) {
-              Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -105,9 +97,9 @@ public class Converter {
     public static Time convertStringToTime(Context context, String time) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            return new java.sql.Time(formatter.parse(time).getTime());
+            return new java.sql.Time(Objects.requireNonNull(formatter.parse(time)).getTime());
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
         return null;
     }
@@ -122,7 +114,7 @@ public class Converter {
             int year = calendar.get(Calendar.YEAR);
             return formatter.parse(String.format("%s.%s.%s %s", day, month, year, time));
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
         return null;
     }

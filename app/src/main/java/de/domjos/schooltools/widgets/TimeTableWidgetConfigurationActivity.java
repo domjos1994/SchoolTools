@@ -23,9 +23,9 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
-import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
 
 /**
@@ -88,6 +88,7 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
         this.timeTableAdapter.notifyDataSetChanged();
     }
 
+    @SuppressWarnings("deprecation")
     private void setTT_ID(int id) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit();
         editor.putInt("tt_id_" + this.appWidgetID, id);
@@ -107,7 +108,7 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
             setResult(RESULT_OK, resultValue);
             finish();
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimeTableWidgetConfigurationActivity.this);
         }
     }
 }

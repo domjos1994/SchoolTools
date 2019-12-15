@@ -20,13 +20,14 @@ import android.widget.EditText;
 import java.util.List;
 
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 
 /**
  * Activity For the List-Screen
@@ -125,7 +126,7 @@ public final class ToDoListActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(this.txtToDoListTitle, 3, 500);
         this.validator.addDateValidator(this.txtToDoListDate);
     }
@@ -196,7 +197,7 @@ public final class ToDoListActivity extends AbstractActivity {
                             changeControls(false, true, false);
                         }
                     } catch (Exception ex) {
-                        Helper.printException(getApplicationContext(), ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoListActivity.this);
                     }
                     break;
                 default:

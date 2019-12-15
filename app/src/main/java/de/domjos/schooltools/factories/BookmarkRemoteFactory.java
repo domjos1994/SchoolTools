@@ -27,8 +27,10 @@ import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.BookmarkActivity;
+import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.model.Bookmark;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.IntentHelper;
@@ -165,7 +167,7 @@ public class BookmarkRemoteFactory implements RemoteViewsService.RemoteViewsFact
                             }
                         }
                     } catch (Exception ex) {
-                        Helper.printException(context, ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
                     }
                 }
             }
@@ -179,7 +181,7 @@ public class BookmarkRemoteFactory implements RemoteViewsService.RemoteViewsFact
             }
 
         } else {
-            return IntentHelper.openWebBrowser(context, s);
+            IntentHelper.openWebBrowser(context, s);
         }
         return null;
     }

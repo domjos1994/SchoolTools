@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.mark.Year;
 import de.domjos.schooltoolslib.model.timetable.Day;
@@ -43,7 +44,7 @@ import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.schooltoolslib.model.timetable.TeacherHour;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 import de.domjos.schooltools.settings.UserSettings;
 
 /**
@@ -241,7 +242,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
                                 finish();
                             }
                         } catch (Exception ex) {
-                            Helper.printException(getApplicationContext(), ex);
+                            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimeTableEntryActivity.this);
                         }
                         return true;
                     case R.id.navTimeTableSubCancel:
@@ -330,7 +331,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
     }
 
     private void initValidation() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtTimeTableTitle, 3, 500);
         this.validator.addEmptyValidator(spTimeTableYear, this.getString(R.string.timetable_year));
     }

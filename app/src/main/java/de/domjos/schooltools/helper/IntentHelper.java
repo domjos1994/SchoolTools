@@ -8,21 +8,17 @@ import android.net.Uri;
 import android.os.Build;
 import androidx.core.content.FileProvider;
 import android.webkit.MimeTypeMap;
+import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.schooltools.R;
 
 import java.io.File;
 
 public class IntentHelper {
 
-    public static void openWebBrowser(Activity activity, String url) {
+    public static void openWebBrowser(Context context, String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(url));
         intent.putExtra(SearchManager.QUERY, "Karlos");
-        activity.startActivity(intent);
-    }
-
-    public static Intent openWebBrowser(Context context, String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(url));
-        intent.putExtra(SearchManager.QUERY, "Karlos");
-        return intent;
+        context.startActivity(intent);
     }
 
     public static void openFileViaIntent(File file, Activity activity) {
@@ -45,7 +41,7 @@ public class IntentHelper {
             }
             activity.startActivity(intent);
         } catch (Exception ex) {
-            Helper.printException(activity, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, activity);
         }
     }
 
@@ -69,7 +65,7 @@ public class IntentHelper {
             }
             return intent;
         } catch (Exception ex) {
-            Helper.printException(context, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
         return null;
     }

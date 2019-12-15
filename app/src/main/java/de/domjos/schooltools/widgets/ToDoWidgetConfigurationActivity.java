@@ -12,12 +12,9 @@ package de.domjos.schooltools.widgets;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -25,9 +22,9 @@ import android.widget.Spinner;
 
 import java.util.LinkedList;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
-import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
 
 /**
@@ -52,15 +49,11 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
         setResult(RESULT_CANCELED);
         this.initControls();
 
-        this.cmdSave.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onClick(View v) {
-                ToDoList toDoList = adapter.getItem(cmbToDoLists.getSelectedItemPosition());
+        this.cmdSave.setOnClickListener(v -> {
+            ToDoList toDoList = adapter.getItem(cmbToDoLists.getSelectedItemPosition());
 
-                if(toDoList!=null) {
-                    getSettings(toDoList.getID(), chkToDoNotSolved.isChecked());
-                }
+            if(toDoList!=null) {
+                getSettings(toDoList.getID(), chkToDoNotSolved.isChecked());
             }
         });
     }
@@ -76,7 +69,7 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
         this.chkToDoNotSolved = this.findViewById(R.id.chkToDoNotSolved);
 
         this.cmbToDoLists = this.findViewById(R.id.cmbToDoList);
-        this.adapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, new LinkedList<ToDoList>());
+        this.adapter = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, new LinkedList<>());
         this.cmbToDoLists.setAdapter(this.adapter);
         this.adapter.notifyDataSetChanged();
 
@@ -99,10 +92,11 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
             setResult(RESULT_OK, resultValue);
             finish();
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoWidgetConfigurationActivity.this);
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void saveSettings(int id, boolean solved) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit();
         editor.putInt("todo_list_id_" + this.appWidgetID, id);

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.BookmarkActivity;
 import de.domjos.schooltoolslib.model.Bookmark;
@@ -73,7 +74,7 @@ public class BookmarkWidget extends AppWidgetProvider {
                             }
                         }
                     } catch (Exception ex) {
-                        Helper.printException(context, ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
                     }
                 }
             }
@@ -87,7 +88,7 @@ public class BookmarkWidget extends AppWidgetProvider {
             }
 
         } else {
-            return IntentHelper.openWebBrowser(context, s);
+            IntentHelper.openWebBrowser(context, s);
         }
         return null;
     }

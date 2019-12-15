@@ -19,6 +19,7 @@ import java.io.File;
 import android.widget.TextView;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.helper.Helper;
 
@@ -52,16 +53,16 @@ public final class HelpActivity extends AbstractActivity {
                 if(this.logFile.exists()) {
                     try {
                         Helper.sendMailWithAttachment("webmaster@domjos.de", "SchoolTools-LogFile", this.logFile, HelpActivity.this);
-                        Helper.createToast(getApplicationContext(), getString(R.string.message_help_send_success));
+                        MessageHelper.printMessage(getString(R.string.message_help_send_success), R.mipmap.ic_launcher_round, HelpActivity.this);
                     } catch (Exception ex) {
-                        Helper.printException(getApplicationContext(), ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, HelpActivity.this);
                     }
                 }
                 break;
             case R.id.menHelpDeleteLog:
                 if(this.logFile.exists()) {
                     if(this.logFile.delete()) {
-                        Helper.createToast(getApplicationContext(), getString(R.string.message_help_delete_success));
+                        MessageHelper.printMessage(getString(R.string.message_help_delete_success), R.mipmap.ic_launcher_round, HelpActivity.this);
                     }
                 }
                 break;
@@ -86,7 +87,7 @@ public final class HelpActivity extends AbstractActivity {
         try {
             this.logFile = new File(MainActivity.globals.getLogFile());
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, HelpActivity.this);
         }
 
 

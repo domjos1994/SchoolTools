@@ -12,7 +12,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -40,6 +39,7 @@ import java.util.Objects;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.Bookmark;
 import de.domjos.schooltoolslib.model.Subject;
@@ -47,7 +47,7 @@ import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDelete
 import de.domjos.schooltools.helper.ApiHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.IntentHelper;
-import de.domjos.schooltools.helper.Validator;
+import de.domjos.customwidgets.utils.Validator;
 import de.domjos.customwidgets.tokenizer.CommaTokenizer;
 import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
@@ -217,7 +217,7 @@ public final class BookmarkActivity extends AbstractActivity {
                             }
                         }
                     } catch (Exception ex) {
-                        Helper.printException(activity, ex);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, activity);
                     }
                 }
             }
@@ -307,7 +307,6 @@ public final class BookmarkActivity extends AbstractActivity {
                     return true;
                 case R.id.navTimeTableSubSave:
                     if(validator.getState()) {
-                        int result = 0;
                         try {
                             currentBookmark.setTitle(txtBookmarkTitle.getText().toString());
                             currentBookmark.setTags(txtBookmarkTags.getText().toString());
@@ -322,7 +321,7 @@ public final class BookmarkActivity extends AbstractActivity {
                                 File importFile = new File(txtBookmarkLink.getText().toString());
                                 FileInputStream fileInputStream = new FileInputStream(importFile);
                                 byte[] fileContent = new byte[(int) importFile.length()];
-                                result = fileInputStream.read(fileContent);
+                                int result = fileInputStream.read(fileContent);
                                 fileInputStream.close();
                                 currentBookmark.setData(fileContent);
                             }
@@ -331,8 +330,7 @@ public final class BookmarkActivity extends AbstractActivity {
                             reloadBookmarks("");
                             currentBookmark = new Bookmark();
                         } catch (Exception ex) {
-                            Log.e("error", String.valueOf(result));
-                            Helper.printException(BookmarkActivity.this, ex);
+                            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, BookmarkActivity.this);
                         }
                     }
                     return true;
@@ -345,7 +343,7 @@ public final class BookmarkActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext());
+        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
         this.validator.addEmptyValidator(this.txtBookmarkTitle);
         this.validator.addEmptyValidator(this.txtBookmarkLink);
     }
@@ -479,7 +477,7 @@ public final class BookmarkActivity extends AbstractActivity {
             bm.recycle();
             return fOut.toByteArray();
         } catch (Exception ex) {
-            Helper.printException(this.getApplicationContext(), ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, BookmarkActivity.this);
         }
         return null;
     }

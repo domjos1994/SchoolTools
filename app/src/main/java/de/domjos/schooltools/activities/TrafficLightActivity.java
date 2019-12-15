@@ -24,8 +24,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import de.domjos.customwidgets.model.AbstractActivity;
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.helper.Helper;
 
 public final class TrafficLightActivity extends AbstractActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
@@ -187,7 +187,7 @@ public final class TrafficLightActivity extends AbstractActivity {
                 }
             }, 0, 1000);
         } catch (Exception ex) {
-            Helper.printException(this, ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TrafficLightActivity.this);
         }
     }
 

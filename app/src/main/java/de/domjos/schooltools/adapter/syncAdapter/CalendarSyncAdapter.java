@@ -22,10 +22,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.model.TimerEvent;
-import de.domjos.schooltools.helper.Helper;
 
 import static android.provider.CalendarContract.Calendars.CAL_ACCESS_OWNER;
 import static android.provider.CalendarContract.Calendars.CALENDAR_DISPLAY_NAME;
@@ -56,11 +56,11 @@ public class CalendarSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        if(MainActivity.globals.getUserSettings().isSyncCalendarTurnOn()) {
+        if (MainActivity.globals.getUserSettings().isSyncCalendarTurnOn()) {
             try {
                 String name = MainActivity.globals.getUserSettings().getSyncCalendarName();
                 Map<Long, String> calendars = this.listCalendars();
-                if(!calendars.values().contains(name)) {
+                if (!calendars.containsValue(name)) {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(ACCOUNT_NAME, account.name);
                     contentValues.put(ACCOUNT_TYPE, account.type);
@@ -78,8 +78,8 @@ public class CalendarSyncAdapter extends AbstractThreadedSyncAdapter {
                     calendars = this.listCalendars();
                 }
 
-                for(Map.Entry<Long, String> entry : calendars.entrySet()) {
-                    if(entry.getValue().equals(name)) {
+                for (Map.Entry<Long, String> entry : calendars.entrySet()) {
+                    if (entry.getValue().equals(name)) {
                         this.calendar_id = entry.getKey();
                         break;
                     }
@@ -87,14 +87,14 @@ public class CalendarSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 List<TimerEvent> calendarTimerEvents = this.getEventsFromCalendar(provider, account);
                 List<TimerEvent> savedTimerEvents = MainActivity.globals.getSqLite().getTimerEvents("");
-                for(TimerEvent savedTimerEvent : savedTimerEvents) {
+                for (TimerEvent savedTimerEvent : savedTimerEvents) {
                     boolean isAvailable = false, isDirty = false;
-                    for(TimerEvent calendarTimerEvent : calendarTimerEvents) {
-                        if(calendarTimerEvent.getTitle().trim().toLowerCase().equals(savedTimerEvent.getTitle().trim().toLowerCase())) {
-                            if(calendarTimerEvent.getEventDate().compareTo(savedTimerEvent.getEventDate())==0) {
+                    for (TimerEvent calendarTimerEvent : calendarTimerEvents) {
+                        if (calendarTimerEvent.getTitle().trim().toLowerCase().equals(savedTimerEvent.getTitle().trim().toLowerCase())) {
+                            if (calendarTimerEvent.getEventDate().compareTo(savedTimerEvent.getEventDate()) == 0) {
                                 Date memoryDate = savedTimerEvent.getMemoryDate();
                                 String description = savedTimerEvent.getDescription().toLowerCase().trim();
-                                if(memoryDate!=null && calendarTimerEvent.getMemoryDate()!=null) {
+                                if (memoryDate != null && calendarTimerEvent.getMemoryDate() != null) {
                                     if (calendarTimerEvent.getMemoryDate().compareTo(memoryDate) != 0 || !calendarTimerEvent.getDescription().toLowerCase().toLowerCase().equals(description)) {
                                         savedTimerEvent.setID(calendarTimerEvent.getID());
                                         isDirty = true;
@@ -111,30 +111,30 @@ public class CalendarSyncAdapter extends AbstractThreadedSyncAdapter {
                         }
                     }
 
-                    if(!isAvailable) {
+                    if (!isAvailable) {
                         this.saveTimeEventToCalendar(savedTimerEvent, provider, account);
                     } else {
-                        if(isDirty) {
+                        if (isDirty) {
                             this.saveTimeEventToCalendar(savedTimerEvent, provider, account);
                         }
                     }
                 }
 
                 calendarTimerEvents = this.getEventsFromCalendar(provider, account);
-                for(TimerEvent calendarTimerEvent : calendarTimerEvents) {
+                for (TimerEvent calendarTimerEvent : calendarTimerEvents) {
                     boolean isAvailable = false, isDirty = false;
-                    for(TimerEvent savedTimerEvent : savedTimerEvents) {
-                        if(calendarTimerEvent.getTitle().trim().toLowerCase().equals(savedTimerEvent.getTitle().trim().toLowerCase())) {
-                            if(calendarTimerEvent.getEventDate().compareTo(savedTimerEvent.getEventDate())==0) {
+                    for (TimerEvent savedTimerEvent : savedTimerEvents) {
+                        if (calendarTimerEvent.getTitle().trim().toLowerCase().equals(savedTimerEvent.getTitle().trim().toLowerCase())) {
+                            if (calendarTimerEvent.getEventDate().compareTo(savedTimerEvent.getEventDate()) == 0) {
                                 Date memoryDate = calendarTimerEvent.getMemoryDate();
                                 String description = calendarTimerEvent.getDescription().toLowerCase().trim();
-                                if(memoryDate!=null && savedTimerEvent.getMemoryDate()!=null) {
-                                    if(savedTimerEvent.getMemoryDate().compareTo(memoryDate)!=0 || !savedTimerEvent.getDescription().toLowerCase().toLowerCase().equals(description)) {
+                                if (memoryDate != null && savedTimerEvent.getMemoryDate() != null) {
+                                    if (savedTimerEvent.getMemoryDate().compareTo(memoryDate) != 0 || !savedTimerEvent.getDescription().toLowerCase().toLowerCase().equals(description)) {
                                         calendarTimerEvent.setID(savedTimerEvent.getID());
                                         isDirty = true;
                                     }
                                 } else {
-                                    if(savedTimerEvent.getMemoryDate() != null || savedTimerEvent.getMemoryDate() == null && memoryDate != null || !savedTimerEvent.getDescription().toLowerCase().toLowerCase().equals(description)) {
+                                    if (savedTimerEvent.getMemoryDate() != null || savedTimerEvent.getMemoryDate() == null && memoryDate != null || !savedTimerEvent.getDescription().toLowerCase().toLowerCase().equals(description)) {
                                         calendarTimerEvent.setID(savedTimerEvent.getID());
                                         isDirty = true;
                                     }
@@ -145,23 +145,23 @@ public class CalendarSyncAdapter extends AbstractThreadedSyncAdapter {
                         }
                     }
 
-                    if(!isAvailable) {
+                    if (!isAvailable) {
                         MainActivity.globals.getSqLite().insertOrUpdateTimerEvent(calendarTimerEvent);
                     } else {
-                        if(isDirty) {
+                        if (isDirty) {
                             MainActivity.globals.getSqLite().insertOrUpdateTimerEvent(calendarTimerEvent);
                         }
                     }
                 }
             } catch (Exception ex) {
-                Helper.printException(this.getContext(), ex);
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.getContext());
             }
         }
     }
 
     private static Uri asSyncAdapter(Uri uri, String account, String accountType) {
         return uri.buildUpon()
-                .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER,"true")
+                .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
                 .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, account)
                 .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, accountType).build();
     }
@@ -169,7 +169,7 @@ public class CalendarSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private Map<Long, String> listCalendars() {
         Map<Long, String> calendars = new LinkedHashMap<>();
-        String[] selection = new String[] {_ID,CALENDAR_DISPLAY_NAME};
+        String[] selection = new String[]{_ID, CALENDAR_DISPLAY_NAME};
         Uri uri = CalendarContract.Calendars.CONTENT_URI;
         Cursor cursor = this.contentResolver.query(uri, selection, null, null, null);
         if (cursor!=null) {
