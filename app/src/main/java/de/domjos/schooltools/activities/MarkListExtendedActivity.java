@@ -48,7 +48,6 @@ import de.domjos.schooltoolslib.model.marklist.MarkList;
 import de.domjos.schooltoolslib.model.marklist.MarkListInterface;
 import de.domjos.schooltools.helper.ApiHelper;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.customwidgets.widgets.LabelledSeekBar;
 
 public final class MarkListExtendedActivity extends AbstractActivity {
@@ -394,7 +393,7 @@ public final class MarkListExtendedActivity extends AbstractActivity {
             this.ivMarkListState.setVisibility(View.VISIBLE);
             this.lblMarkListState.setText(this.getString(R.string.marklist_state_error));
             this.detailedErrorMessage = ex.getMessage();
-            Log4JHelper.getLogger(MarkListActivity.class.getName()).error(ex);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListExtendedActivity.this);
         } else {
             this.ivMarkListState.setVisibility(View.GONE);
             this.lblMarkListState.setText(this.getString(R.string.marklist_state_ok));

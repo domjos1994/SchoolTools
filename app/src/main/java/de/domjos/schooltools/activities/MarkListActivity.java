@@ -50,7 +50,6 @@ import de.domjos.schooltoolslib.model.marklist.MarkList;
 import de.domjos.schooltoolslib.model.marklist.MarkListInterface;
 import de.domjos.schooltoolslib.model.marklist.MarkListWithMarkMode;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.customwidgets.utils.Validator;
 import de.domjos.schooltools.settings.MarkListSettings;
 import de.domjos.schooltools.spotlight.OnBoardingHelper;
@@ -665,7 +664,7 @@ public final class MarkListActivity extends AbstractActivity {
             this.ivMarkListState.setVisibility(View.VISIBLE);
             this.lblMarkListState.setText(this.getString(R.string.marklist_state_error));
             this.detailedErrorMessage = ex.getMessage();
-            Log4JHelper.getLogger(MarkListActivity.class.getName()).error(ex.toString());
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListActivity.this);
         } else {
             this.ivMarkListState.setVisibility(View.GONE);
             this.lblMarkListState.setText(this.getString(R.string.marklist_state_ok));

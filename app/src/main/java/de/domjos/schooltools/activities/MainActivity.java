@@ -52,7 +52,6 @@ import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.schooltools.helper.SQLite;
 import de.domjos.schooltools.screenWidgets.QuickQueryScreenWidget;
 import de.domjos.schooltools.services.AuthenticatorService;
@@ -106,7 +105,6 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
     @Override
     protected void initActions() {
-        Log4JHelper.configure(MainActivity.this);
         MainActivity.globals.setUserSettings(new UserSettings(this.getApplicationContext()));
         MainActivity.globals.setGeneralSettings(new GeneralSettings(this.getApplicationContext()));
         this.resetDatabase();
@@ -528,7 +526,6 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                     }
                 } catch (Exception ex) {
                     MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
-                    Log4JHelper.getLogger(MainActivity.this.getPackageName()).error(ex.getMessage());
                 }
             }
         }
@@ -542,7 +539,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
                         MainActivity.globals.getSqLite().deleteEntry("toDoLists", "ID=" + toDoList.getID());
                     }
                 } catch (Exception ex) {
-                    Log4JHelper.getLogger(MainActivity.this.getPackageName()).error(ex.getMessage());
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.getApplicationContext());
                 }
             }
         }

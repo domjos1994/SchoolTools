@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.BookmarkActivity;
 import de.domjos.schooltools.activities.LearningCardOverviewActivity;
@@ -32,7 +33,6 @@ import de.domjos.schooltools.activities.NoteActivity;
 import de.domjos.schooltools.activities.TimeTableActivity;
 import de.domjos.schooltools.activities.TimerActivity;
 import de.domjos.schooltools.activities.ToDoActivity;
-import de.domjos.schooltools.helper.Log4JHelper;
 import de.domjos.schooltools.screenWidgets.ButtonScreenWidget;
 
 /**
@@ -267,12 +267,10 @@ public class UserSettings {
 
     private int getPreference(String key, int defaultValue) {
         String content = this.sharedPreferences.getString(key, String.valueOf(defaultValue));
-        if(content!=null) {
-            try {
-                return Integer.parseInt(content);
-            } catch (Exception ex) {
-                Log4JHelper.getLogger("warning").error(ex.getMessage(), ex);
-            }
+        try {
+            return Integer.parseInt(content);
+        } catch (Exception ex) {
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
         return defaultValue;
     }
