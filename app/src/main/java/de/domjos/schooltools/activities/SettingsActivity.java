@@ -126,7 +126,7 @@ public final class SettingsActivity extends SettingsAppCompatActivity {
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
-                        .getStringSet(preference.getKey(), new HashSet<String>()));
+                        .getStringSet(preference.getKey(), new HashSet<>()));
     }
 
     @Override
@@ -213,29 +213,23 @@ public final class SettingsActivity extends SettingsAppCompatActivity {
             setHasOptionsMenu(true);
 
             final SwitchPreference switchPreference = (SwitchPreference) this.findPreference("swtCustomBackground");
-            switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if((boolean)newValue) {
-                        startChooser(98);
-                    } else {
-                        MainActivity.globals.getSqLite().addSetting("background", "", null);
-                    }
-                    return true;
+            switchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                if((boolean)newValue) {
+                    startChooser(98);
+                } else {
+                    MainActivity.globals.getSqLite().addSetting("background", "", null);
                 }
+                return true;
             });
 
             final SwitchPreference switchAppBarPreference = (SwitchPreference) this.findPreference("swtCustomAppBarBackground");
-            switchAppBarPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if((boolean)newValue) {
-                        startChooser(99);
-                    } else {
-                        MainActivity.globals.getSqLite().addSetting("app_bar_background", "", null);
-                    }
-                    return true;
+            switchAppBarPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                if((boolean)newValue) {
+                    startChooser(99);
+                } else {
+                    MainActivity.globals.getSqLite().addSetting("app_bar_background", "", null);
                 }
+                return true;
             });
         }
 
@@ -251,8 +245,6 @@ public final class SettingsActivity extends SettingsAppCompatActivity {
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-
             return super.onOptionsItemSelected(item);
         }
 

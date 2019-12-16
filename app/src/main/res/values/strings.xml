@@ -409,8 +409,13 @@
     <string name="traffic_light_red_def">60</string>
     <string name="traffic_light_max">Maximum</string>
     <string name="traffic_light_max_def">100</string>
+    <string name="traffic_light_password">Password</string>
     <string name="traffic_light_notification_title">Zu Laut!</string>
     <string name="traffic_light_notification_content">Es ist zu Laut! Bitte Leiser!</string>
+    <string name="traffic_light_menu_save">Einstellungen speichern</string>
+    <string name="traffic_light_saved_success">Einstellungen erfolgreich gespeichert!</string>
+    <string name="traffic_light_menu_lock">Sperren</string>
+    <string name="traffic_light_locked">Gesperrt</string>
 
     <string name="api_choice">Im- oder Export?</string>
     <string name="api_type">Modul</string>

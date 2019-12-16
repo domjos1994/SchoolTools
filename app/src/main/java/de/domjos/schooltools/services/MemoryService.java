@@ -10,10 +10,7 @@
 package de.domjos.schooltools.services;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
-import androidx.core.app.NotificationCompat.Builder;
 
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
@@ -37,16 +34,9 @@ public class MemoryService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        int id = 1;
         for(Memory memory : MainActivity.globals.getSqLite().getCurrentMemories()) {
             try {
                 if(Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate(), this.getApplicationContext()))) {
-                    Builder builder = new Builder(this.getApplicationContext(), MainActivity.CHANNEL_ID);
-                    builder.setSmallIcon(R.mipmap.ic_launcher);
-                    builder.setLights(0xFFff0000, 500, 500);
-                    builder.setContentTitle(memory.getTitle());
-                    builder.setContentText(memory.getDescription());
                     Intent linkedIntent = null;
                     switch (memory.getType()) {
                         case Note:
@@ -66,11 +56,7 @@ public class MemoryService extends IntentService {
                             break;
                     }
 
-                    builder.setContentIntent(PendingIntent.getActivity(this.getApplicationContext(), 99, linkedIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-                    if(notificationManager!=null) {
-                        notificationManager.notify(id, builder.build());
-                    }
-                    id++;
+                    MessageHelper.showNotification(this.getApplicationContext(), memory.getTitle(), memory.getDescription(), R.mipmap.ic_launcher_round, linkedIntent, 99);
                 } else {
                     if(MainActivity.globals.getUserSettings().isDeleteMemories()) {
                         MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
@@ -85,17 +71,7 @@ public class MemoryService extends IntentService {
         }
 
         for(LearningCardQuery query : this.loadPeriodicLearningCardQueries()) {
-            Builder builder = new Builder(this.getApplicationContext(), "default");
-            builder.setSmallIcon(R.mipmap.ic_launcher);
-            builder.setLights(0xFFff0000, 501, 501);
-            builder.setContentTitle(query.getTitle());
-            builder.setContentText(getApplicationContext().getString(R.string.learningCard_query_memory) + query.getTitle());
-            Intent overViewIntent = new Intent(this.getApplicationContext(), LearningCardOverviewActivity.class);
-            overViewIntent.putExtra("queryID", query.getID());
-            builder.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 99, intent, PendingIntent.FLAG_UPDATE_CURRENT));
-            if(notificationManager!=null) {
-                notificationManager.notify(id, builder.build());
-            }
+            MessageHelper.showNotification(this.getApplicationContext(), query.getTitle(), getApplicationContext().getString(R.string.learningCard_query_memory) + query.getTitle(), R.mipmap.ic_launcher_round, intent, 99);
         }
     }
 
