@@ -53,7 +53,7 @@ import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.schooltoolslib.utils.fileUtils.PDFBuilder;
 import de.domjos.schooltools.helper.ApiHelper;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.schooltools.helper.EventHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
@@ -262,7 +262,7 @@ public final class ApiActivity extends AbstractActivity {
             if (requestCode == 9999) {
                 Uri uri = data.getData();
                 if (uri != null) {
-                    lblApiPath.setText(Converter.convertURIToStringPath(this.getApplicationContext(), uri));
+                    lblApiPath.setText(Converter.convertURIToStringPath(this.getApplicationContext(), uri, R.mipmap.ic_launcher_round));
                 }
             }
         }
@@ -281,7 +281,7 @@ public final class ApiActivity extends AbstractActivity {
                     break;
                 case Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR:
                     try {
-                        EventHelper helper = new EventHelper();
+                        EventHelper helper = new EventHelper(this.getApplicationContext());
                         helper.saveMemoriesToCalendar(ApiActivity.this);
                     } catch (Exception ex) {
                         MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
@@ -471,7 +471,7 @@ public final class ApiActivity extends AbstractActivity {
             if(entryType.equals(this.getString(R.string.api_entry_all))) {
                 if(Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, ApiActivity.this, Manifest.permission.WRITE_CALENDAR)) {
                     try {
-                        EventHelper helper = new EventHelper();
+                        EventHelper helper = new EventHelper(this.getApplicationContext());
                         helper.saveMemoriesToCalendar(ApiActivity.this);
                     } catch (Exception ex) {
                         MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
@@ -481,7 +481,7 @@ public final class ApiActivity extends AbstractActivity {
             } else {
                 for(Memory memory : sqLite.getCurrentMemories()) {
                     if(memory.getID()==id) {
-                        EventHelper helper = new EventHelper(memory);
+                        EventHelper helper = new EventHelper(memory, this.getApplicationContext());
                         Intent intent = helper.openCalendar();
                         if(intent!=null) {
                             startActivity(intent);

@@ -25,7 +25,7 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
 
@@ -145,7 +145,7 @@ public final class ToDoListActivity extends AbstractActivity {
             txtToDoListTitle.setText(toDoList.getTitle());
             txtToDoListDescription.setText(toDoList.getDescription());
             if(toDoList.getListDate()!=null) {
-                txtToDoListDate.setText(Converter.convertDateToString(toDoList.getListDate()));
+                txtToDoListDate.setText(Converter.convertDateToString(toDoList.getListDate(), this.getApplicationContext()));
             }
             changeControls(false, false, true);
         }
@@ -190,7 +190,7 @@ public final class ToDoListActivity extends AbstractActivity {
                             toDoList.setTitle(txtToDoListTitle.getText().toString());
                             toDoList.setDescription(txtToDoListDescription.getText().toString());
                             if(!txtToDoListDate.getText().toString().equals("")) {
-                                toDoList.setListDate(Converter.convertStringToDate(txtToDoListDate.getText().toString()));
+                                toDoList.setListDate(Converter.convertStringToDate(txtToDoListDate.getText().toString(), this.getApplicationContext()));
                             }
                             MainActivity.globals.getSqLite().insertOrUpdateToDoList(toDoList);
                             reloadItems();

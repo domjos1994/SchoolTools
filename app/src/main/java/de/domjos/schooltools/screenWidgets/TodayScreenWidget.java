@@ -20,13 +20,12 @@ import java.util.List;
 
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.activities.ApiActivity;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.adapter.EventAdapter;
 import de.domjos.schooltoolslib.model.Memory;
 import de.domjos.schooltoolslib.model.TimerEvent;
 import de.domjos.customwidgets.model.ScreenWidget;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.schooltools.helper.Helper;
 
 public final class TodayScreenWidget extends ScreenWidget {
@@ -60,7 +59,7 @@ public final class TodayScreenWidget extends ScreenWidget {
             List<Memory> memories = MainActivity.globals.getSqLite().getCurrentMemories();
             for(Memory memory : memories) {
                 try {
-                    if(Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate()))) {
+                    if(Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate(), this.activity))) {
                         this.eventAdapter.add(new AbstractMap.SimpleEntry<>("Er.(" + memory.getStringType(this.activity) + ")", memory.getTitle()));
                     }
                 } catch (Exception ex) {

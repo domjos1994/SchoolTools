@@ -29,7 +29,7 @@ import de.domjos.schooltoolslib.model.Note;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
 import de.domjos.schooltools.spotlight.OnBoardingHelper;
@@ -226,7 +226,7 @@ public final class NoteActivity extends AbstractActivity {
     private void fillNote(Note note) {
         txtNoteTitle.setText(note.getTitle());
         txtNoteDescription.setText(note.getDescription());
-        txtNoteMemoryDate.setText(Converter.convertDateToString(note.getMemoryDate()));
+        txtNoteMemoryDate.setText(Converter.convertDateToString(note.getMemoryDate(), this.getApplicationContext()));
         chkNoteMemory.setChecked(!txtNoteMemoryDate.getText().toString().trim().equals(""));
     }
 
@@ -271,7 +271,7 @@ public final class NoteActivity extends AbstractActivity {
                             note.setTitle(txtNoteTitle.getText().toString());
                             note.setDescription(txtNoteDescription.getText().toString());
                             if(!txtNoteMemoryDate.getText().toString().equals("")) {
-                                note.setMemoryDate(Converter.convertStringToDate(txtNoteMemoryDate.getText().toString()));
+                                note.setMemoryDate(Converter.convertStringToDate(txtNoteMemoryDate.getText().toString(), this.getApplicationContext()));
                             }
                             MainActivity.globals.getSqLite().insertOrUpdateNote(note);
                             reloadNotes();

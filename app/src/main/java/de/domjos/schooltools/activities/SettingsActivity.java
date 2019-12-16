@@ -29,7 +29,7 @@ import androidx.core.app.NavUtils;
 
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.services.ImportToDictionaryTask;
 

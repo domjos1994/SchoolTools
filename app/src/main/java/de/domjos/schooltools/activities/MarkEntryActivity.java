@@ -19,7 +19,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.text.ParseException;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
@@ -29,7 +28,7 @@ import de.domjos.schooltoolslib.model.TimerEvent;
 import de.domjos.schooltoolslib.model.mark.Test;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
 import de.domjos.customwidgets.utils.Validator;
@@ -105,11 +104,11 @@ public final class MarkEntryActivity extends AbstractActivity {
                         txtTestAverage.setText(String.valueOf(test.getAverage()));
                     }
                     if(test.getTestDate()!=null) {
-                        txtTestDate.setText(Converter.convertDateToString(test.getTestDate()));
+                        txtTestDate.setText(Converter.convertDateToString(test.getTestDate(), this.getApplicationContext()));
                     }
                     chkTestMemory.setChecked(true);
                     txtTestMemoryDate.setVisibility(View.VISIBLE);
-                    txtTestMemoryDate.setText(Converter.convertDateToString(test.getMemoryDate()));
+                    txtTestMemoryDate.setText(Converter.convertDateToString(test.getMemoryDate(), this.getApplicationContext()));
 
                     txtTestThemes.setText(test.getThemes());
                     txtTestDescription.setText(test.getDescription());
@@ -152,10 +151,10 @@ public final class MarkEntryActivity extends AbstractActivity {
                                     test.setAverage(Double.parseDouble(txtTestAverage.getText().toString()));
                                 }
                                 if(!txtTestDate.getText().toString().equals("")) {
-                                    test.setTestDate(Converter.convertStringToDate(txtTestDate.getText().toString()));
+                                    test.setTestDate(Converter.convertStringToDate(txtTestDate.getText().toString(), this.getApplicationContext()));
                                 }
                                 if(!txtTestMemoryDate.getText().toString().equals("")) {
-                                    test.setMemoryDate(Converter.convertStringToDate(txtTestMemoryDate.getText().toString()));
+                                    test.setMemoryDate(Converter.convertStringToDate(txtTestMemoryDate.getText().toString(), this.getApplicationContext()));
                                 }
                                 test.setThemes(txtTestThemes.getText().toString());
                                 test.setDescription(txtTestDescription.getText().toString());
@@ -203,7 +202,7 @@ public final class MarkEntryActivity extends AbstractActivity {
                             break;
                         default:
                     }
-                } catch (ParseException ex) {
+                } catch (Exception ex) {
                     MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkEntryActivity.this);
                 }
                 return false;

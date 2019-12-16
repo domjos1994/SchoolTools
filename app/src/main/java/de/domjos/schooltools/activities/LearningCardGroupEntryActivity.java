@@ -22,9 +22,9 @@ import de.domjos.schooltoolslib.model.Subject;
 import de.domjos.schooltoolslib.model.learningCard.LearningCard;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardGroup;
 import de.domjos.schooltoolslib.model.timetable.Teacher;
-import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
+import de.domjos.customwidgets.utils.Converter;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -361,7 +361,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
         this.txtLearningCardGroupDescription.setText(this.learningCardGroup.getDescription());
         Date deadLine = this.learningCardGroup.getDeadLine();
         if(deadLine!=null) {
-            this.txtLearningCardGroupDeadline.setText(Converter.convertDateToString(deadLine));
+            this.txtLearningCardGroupDeadline.setText(Converter.convertDateToString(deadLine, this.getApplicationContext()));
         }
 
         Subject subject = this.learningCardGroup.getSubject();
@@ -420,7 +420,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
 
         String deadLine = this.txtLearningCardGroupDeadline.getText().toString();
         if(!deadLine.trim().equals("")) {
-            this.learningCardGroup.setDeadLine(Converter.convertStringToDate(deadLine));
+            this.learningCardGroup.setDeadLine(Converter.convertStringToDate(deadLine, this.getApplicationContext()));
         }
 
         Teacher teacher = this.teacherAdapter.getItem(this.spLearningCardGroupTeacher.getSelectedItemPosition());

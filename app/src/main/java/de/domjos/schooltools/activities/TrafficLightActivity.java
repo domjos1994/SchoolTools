@@ -26,7 +26,6 @@ import java.util.TimerTask;
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
-import de.domjos.schooltools.helper.Helper;
 
 public final class TrafficLightActivity extends AbstractActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;

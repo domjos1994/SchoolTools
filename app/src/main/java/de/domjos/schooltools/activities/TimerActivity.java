@@ -30,9 +30,8 @@ import de.domjos.schooltools.R;
 import de.domjos.schooltools.helper.evenTypes.WidgetCalendarMemory;
 import de.domjos.schooltools.helper.evenTypes.WidgetCalendarTimerEvent;
 import de.domjos.schooltoolslib.model.Memory;
-import de.domjos.schooltoolslib.model.Note;
 import de.domjos.schooltoolslib.model.TimerEvent;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.schooltools.helper.Helper;
 
 /**
@@ -211,7 +210,7 @@ public final class TimerActivity extends AbstractActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 try {
-                    Date dt = Converter.convertStringToDate(newText);
+                    Date dt = Converter.convertStringToDate(newText, getApplicationContext());
                     if(dt!=null) {
                         widgetCalendar.setCurrentDate(dt);
                     } else {

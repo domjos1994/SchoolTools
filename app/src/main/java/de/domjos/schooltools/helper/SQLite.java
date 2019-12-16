@@ -25,6 +25,8 @@ import java.util.*;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.customwidgets.model.objects.BaseObject;
 import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.customwidgets.utils.Converter;
+
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.model.Bookmark;
@@ -268,7 +270,7 @@ public class SQLite extends SQLiteOpenHelper {
         return results;
     }
 
-    public List<LearningCard> getLearningCards(LearningCardQuery query) {
+    List<LearningCard> getLearningCards(LearningCardQuery query) {
         List<LearningCard> learningCards = new LinkedList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         try {
@@ -875,7 +877,7 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindDouble(5, test.getMark());
             sqLiteStatement.bindDouble(6, test.getAverage());
             if(test.getTestDate()!=null) {
-                sqLiteStatement.bindString(7, Converter.convertDateToString(test.getTestDate()));
+                sqLiteStatement.bindString(7, Converter.convertDateToString(test.getTestDate(), this.context));
             } else {
                 sqLiteStatement.bindNull(7);
             }
@@ -922,7 +924,7 @@ public class SQLite extends SQLiteOpenHelper {
                     if(dt.equals("")) {
                         test.setTestDate(null);
                     } else {
-                        test.setTestDate(Converter.convertStringToDate(dt));
+                        test.setTestDate(Converter.convertStringToDate(dt, this.context));
                     }
                 } else {
                     test.setTestDate(null);
@@ -1157,7 +1159,7 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindString(1, toDoList.getTitle());
             sqLiteStatement.bindString(2, toDoList.getDescription());
             if(toDoList.getListDate()!=null) {
-                sqLiteStatement.bindString(3, Converter.convertDateToString(toDoList.getListDate()));
+                sqLiteStatement.bindString(3, Converter.convertDateToString(toDoList.getListDate(), this.context));
             } else {
                 sqLiteStatement.bindNull(3);
             }
@@ -1193,7 +1195,7 @@ public class SQLite extends SQLiteOpenHelper {
                 String item = cursor.getString(3);
                 if(item!=null) {
                     if(!item.equals("")) {
-                        toDoList.setListDate(Converter.convertStringToDate(cursor.getString(3)));
+                        toDoList.setListDate(Converter.convertStringToDate(cursor.getString(3), this.context));
                     }
                 }
                 toDoList.setToDos(this.getToDos("toDoList=" + toDoList.getID()));
@@ -1316,7 +1318,7 @@ public class SQLite extends SQLiteOpenHelper {
             } else {
                 sqLiteStatement.bindNull(6);
             }
-            sqLiteStatement.bindString(7, Converter.convertDateToString(timerEvent.getEventDate()));
+            sqLiteStatement.bindString(7, Converter.convertDateToString(timerEvent.getEventDate(), this.context));
 
             if(timerEvent.getID()==0) {
                 timerEvent.setID((int) sqLiteStatement.executeInsert());
@@ -1372,7 +1374,7 @@ public class SQLite extends SQLiteOpenHelper {
                     }
                 }
 
-                timerEvent.setEventDate(Converter.convertStringToDate(cursor.getString(7)));
+                timerEvent.setEventDate(Converter.convertStringToDate(cursor.getString(7), this.context));
                 timerEvents.add(timerEvent);
             }
             cursor.close();
@@ -1401,7 +1403,7 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindString(2, learningCardGroup.getDescription());
             sqLiteStatement.bindString(3, learningCardGroup.getCategory());
             if(learningCardGroup.getDeadLine()!=null) {
-                sqLiteStatement.bindString(4, Converter.convertDateToString(learningCardGroup.getDeadLine()));
+                sqLiteStatement.bindString(4, Converter.convertDateToString(learningCardGroup.getDeadLine(), this.context));
             } else {
                 sqLiteStatement.bindNull(4);
             }
@@ -1472,7 +1474,7 @@ public class SQLite extends SQLiteOpenHelper {
                 String deadLine = cursor.getString(4);
                 if(deadLine!=null) {
                     if(!deadLine.equals("")) {
-                        learningCardGroup.setDeadLine(Converter.convertStringToDate(deadLine));
+                        learningCardGroup.setDeadLine(Converter.convertStringToDate(deadLine, this.context));
                     }
                 }
                 int subjectID = cursor.getInt(5);
@@ -1988,9 +1990,9 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     private boolean showNotification(String date) throws Exception {
-        Calendar calendar =  Converter.convertStringDateToCalendar(date);
+        Calendar calendar =  Converter.convertStringToCalendar(date, this.context);
         if(calendar!=null) {
-            Calendar calendarCur = Converter.convertStringDateToCalendar(Converter.convertDateToString(new Date()));
+            Calendar calendarCur = Converter.convertStringToCalendar(Converter.convertDateToString(new Date(), this.context), this.context);
             if(calendarCur!=null) {
                 if(calendar.get(Calendar.YEAR)==calendarCur.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && calendar.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
                     return true;
@@ -2008,7 +2010,7 @@ public class SQLite extends SQLiteOpenHelper {
 
     private void addMemory(String table, int id, Date date, SQLiteDatabase db) {
         db.execSQL("DELETE FROM memories WHERE itemID=" + id + " AND [table]='" + table + "';");
-        db.execSQL(String.format("INSERT INTO memories(memoryDate, itemID, [table]) VALUES('%s', %s, '%s');", Converter.convertDateToString(date), id, table));
+        db.execSQL(String.format("INSERT INTO memories(memoryDate, itemID, [table]) VALUES('%s', %s, '%s');", Converter.convertDateToString(date, this.context), id, table));
     }
 
     private Date getMemoryDate(String table, int id, SQLiteDatabase db) throws Exception {
@@ -2017,7 +2019,7 @@ public class SQLite extends SQLiteOpenHelper {
             String item = cursor.getString(0);
             if(item!=null) {
                 if(!item.equals("")) {
-                    return Converter.convertStringToDate(item);
+                    return Converter.convertStringToDate(item, this.context);
                 }
             }
         }

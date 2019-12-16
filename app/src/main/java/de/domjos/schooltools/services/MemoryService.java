@@ -21,7 +21,7 @@ import de.domjos.schooltools.activities.*;
 import de.domjos.schooltoolslib.model.Memory;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardQuery;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardQueryTraining;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.schooltools.helper.Helper;
 
 import java.util.Calendar;
@@ -41,7 +41,7 @@ public class MemoryService extends IntentService {
         int id = 1;
         for(Memory memory : MainActivity.globals.getSqLite().getCurrentMemories()) {
             try {
-                if(Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate()))) {
+                if(Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate(), this.getApplicationContext()))) {
                     Builder builder = new Builder(this.getApplicationContext(), MainActivity.CHANNEL_ID);
                     builder.setSmallIcon(R.mipmap.ic_launcher);
                     builder.setLights(0xFFff0000, 500, 500);

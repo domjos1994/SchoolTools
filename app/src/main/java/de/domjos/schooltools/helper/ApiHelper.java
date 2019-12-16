@@ -21,8 +21,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.marklist.de.GermanLinearList;
@@ -277,11 +279,11 @@ public class ApiHelper {
             List<List<Map.Entry<String, BaseColor>>> lsBuilders = new LinkedList<>();
             List<Map.Entry<String, BaseColor>> ls = new LinkedList<>();
             ls.add(new AbstractMap.SimpleEntry<>(this.context.getString(R.string.mark_date), BaseColor.GRAY));
-            ls.add(new AbstractMap.SimpleEntry<>(Converter.convertDateToString(test.getTestDate()), BaseColor.GRAY));
+            ls.add(new AbstractMap.SimpleEntry<>(Converter.convertDateToString(test.getTestDate(), this.context), BaseColor.GRAY));
             lsBuilders.add(ls);
             ls = new LinkedList<>();
             ls.add(new AbstractMap.SimpleEntry<>(this.context.getString(R.string.sys_memory), BaseColor.GRAY));
-            ls.add(new AbstractMap.SimpleEntry<>(Converter.convertDateToString(test.getMemoryDate()), BaseColor.GRAY));
+            ls.add(new AbstractMap.SimpleEntry<>(Converter.convertDateToString(test.getMemoryDate(), this.context), BaseColor.GRAY));
             lsBuilders.add(ls);
             ls = new LinkedList<>();
             ls.add(new AbstractMap.SimpleEntry<>(this.context.getString(R.string.mark_weight), BaseColor.GRAY));
@@ -374,8 +376,8 @@ public class ApiHelper {
                         testElement.addAttribute("mark", String.valueOf(test.getMark()));
                         testElement.addAttribute("average", String.valueOf(test.getAverage()));
                         testElement.addAttribute("weight", String.valueOf(test.getWeight()));
-                        testElement.addAttribute("memoryDate", Converter.convertDateToString(test.getMemoryDate()));
-                        testElement.addAttribute("testDate", Converter.convertDateToString(test.getTestDate()));
+                        testElement.addAttribute("memoryDate", Converter.convertDateToString(test.getMemoryDate(), this.context));
+                        testElement.addAttribute("testDate", Converter.convertDateToString(test.getTestDate(), this.context));
                         tests.addSubElement(testElement);
                     }
                     element.addSubElement(tests);
@@ -455,11 +457,11 @@ public class ApiHelper {
                                     test.setWeight(this.getDoubleFromMap(element.getAttributes(), "weight"));
                                     String memoryDate = element.getAttributes().get("memoryDate");
                                     if(memoryDate!=null) {
-                                        test.setMemoryDate(Converter.convertStringToDate(memoryDate));
+                                        test.setMemoryDate(Converter.convertStringToDate(memoryDate, this.context));
                                     }
                                     String testDate = element.getAttributes().get("testDate");
                                     if(testDate!=null) {
-                                        test.setTestDate(Converter.convertStringToDate(testDate));
+                                        test.setTestDate(Converter.convertStringToDate(testDate, this.context));
                                     }
                                     schoolYear.addTest(test);
                                 }
@@ -647,8 +649,8 @@ public class ApiHelper {
                                         CSVObject hourObject = new CSVObject("###", 3);
                                         CSVObject timeObject = this.getCSVObjectFromHour(hour);
                                         hourObject.writeValue("1", timeObject, "{{", "}}");
-                                        hourObject.writeValue("2", new LinkedList<CSVObject>(), "{{", "}}");
-                                        hourObject.writeValue("3", new LinkedList<CSVObject>(), "{{", "}}");
+                                        hourObject.writeValue("2", new LinkedList<>(), "{{", "}}");
+                                        hourObject.writeValue("3", new LinkedList<>(), "{{", "}}");
                                         hourObjects.add(hourObject);
                                     }
                                 }
@@ -681,8 +683,8 @@ public class ApiHelper {
                                         CSVObject hourObject = new CSVObject("###", 3);
                                         CSVObject timeObject = this.getCSVObjectFromHour(hour);
                                         hourObject.writeValue("1", timeObject, "{{", "}}");
-                                        hourObject.writeValue("2", new LinkedList<CSVObject>(), "{{", "}}");
-                                        hourObject.writeValue("3", new LinkedList<CSVObject>(), "{{", "}}");
+                                        hourObject.writeValue("2", new LinkedList<>(), "{{", "}}");
+                                        hourObject.writeValue("3", new LinkedList<>(), "{{", "}}");
                                         hourObjects.add(hourObject);
                                     }
                                 }
@@ -976,7 +978,7 @@ public class ApiHelper {
                                 day.setPositionInWeek(this.getIntegerFromMap(dayElement.getAttributes(), "positionInWeek"));
                                 if(dayElement.getSubElements()!=null) {
                                     for(XMLElement hoursElement : dayElement.getSubElements()) {
-                                        if(hoursElement.getAttributes().get("mode").equals("pupil")) {
+                                        if(Objects.equals(hoursElement.getAttributes().get("mode"), "pupil")) {
                                             if(hoursElement.getSubElements()!=null) {
                                                 for(XMLElement hourElement : hoursElement.getSubElements()) {
                                                     Hour hour = this.getHourFromXMLElement(hourElement);
@@ -999,7 +1001,7 @@ public class ApiHelper {
                                                     day.addPupilHour(hour, subject, teacher, roomNumber);
                                                 }
                                             }
-                                        } else if(hoursElement.getAttributes().get("mode").equals("teacher")) {
+                                        } else if(Objects.equals(hoursElement.getAttributes().get("mode"), "teacher")) {
                                             if(hoursElement.getSubElements()!=null) {
                                                 for(XMLElement hourElement : hoursElement.getSubElements()) {
                                                     Hour hour = this.getHourFromXMLElement(hourElement);
@@ -1056,7 +1058,7 @@ public class ApiHelper {
 
     public PDFBuilder exportNoteToPDF(PDFBuilder pdfBuilder, Note note) throws Exception {
         pdfBuilder.addTitle(note.getTitle(), "header", Paragraph.ALIGN_CENTER);
-        pdfBuilder.addParagraph("", Converter.convertDateToString(note.getMemoryDate()), "header", "subHeader");
+        pdfBuilder.addParagraph("", Converter.convertDateToString(note.getMemoryDate(), this.context), "header", "subHeader");
         pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), note.getDescription(), "subHeader", "CONTENT_PARAM");
         pdfBuilder.newPage();
         return pdfBuilder;
@@ -1092,7 +1094,7 @@ public class ApiHelper {
                 for(Note note : notes) {
                     XMLElement element = new XMLElement("Note");
                     element.addAttribute("id", String.valueOf(note.getID()));
-                    element.addAttribute("memory_date", Converter.convertDateToString(note.getMemoryDate()));
+                    element.addAttribute("memory_date", Converter.convertDateToString(note.getMemoryDate(), this.context));
                     element.addAttribute("title", this.escapeText(note.getTitle()));
                     element.setContent(this.escapeText(note.getDescription()));
                     builder.addElement(element);
@@ -1132,7 +1134,7 @@ public class ApiHelper {
                 String memory = xmlElement.getAttributes().get("memory_date");
                 if(memory!=null) {
                     if(!memory.isEmpty()) {
-                        note.setMemoryDate(Converter.convertStringToDate(memory));
+                        note.setMemoryDate(Converter.convertStringToDate(memory, this.context));
                     }
                 }
                 note.setTitle(this.unescapeText(xmlElement.getAttributes().get("title")));
@@ -1162,7 +1164,7 @@ public class ApiHelper {
 
     public PDFBuilder exportToDoListToPDF(PDFBuilder pdfBuilder, ToDoList toDoList) throws Exception {
         pdfBuilder.addTitle(toDoList.getTitle(), "header", Paragraph.ALIGN_CENTER);
-        pdfBuilder.addTitle(Converter.convertDateToString(toDoList.getListDate()), "subHeader", Paragraph.ALIGN_CENTER);
+        pdfBuilder.addTitle(Converter.convertDateToString(toDoList.getListDate(), this.context), "subHeader", Paragraph.ALIGN_CENTER);
         pdfBuilder.addParagraph(this.context.getString(R.string.sys_description), toDoList.getDescription(), "subHeader", "CONTENT_PARAM");
         pdfBuilder.addEmptyLine(3);
 
@@ -1181,7 +1183,7 @@ public class ApiHelper {
             List<Map.Entry<String, BaseColor>> toDoEntry = new LinkedList<>();
             toDoEntry.add(new AbstractMap.SimpleEntry<>(toDo.getTitle(), BaseColor.WHITE));
             toDoEntry.add(new AbstractMap.SimpleEntry<>(toDo.getCategory(), BaseColor.WHITE));
-            toDoEntry.add(new AbstractMap.SimpleEntry<>(Converter.convertDateToString(toDo.getMemoryDate()), BaseColor.WHITE));
+            toDoEntry.add(new AbstractMap.SimpleEntry<>(Converter.convertDateToString(toDo.getMemoryDate(), this.context), BaseColor.WHITE));
             toDoEntry.add(new AbstractMap.SimpleEntry<>(toDo.getDescription(), BaseColor.WHITE));
             toDoEntry.add(new AbstractMap.SimpleEntry<>(String.valueOf(toDo.getImportance()), BaseColor.WHITE));
             toDoEntry.add(new AbstractMap.SimpleEntry<>(String.valueOf(toDo.isSolved()), BaseColor.WHITE));
@@ -1229,7 +1231,7 @@ public class ApiHelper {
                 for(ToDoList toDoList : toDoLists) {
                     XMLElement element = new XMLElement("ToDoList");
                     element.addAttribute("id", String.valueOf(toDoList.getID()));
-                    element.addAttribute("list_date", Converter.convertDateToString(toDoList.getListDate()));
+                    element.addAttribute("list_date", Converter.convertDateToString(toDoList.getListDate(), this.context));
                     element.addAttribute("title", this.escapeText(toDoList.getTitle()));
                     if(toDoList.getToDos()!=null) {
                         if(!toDoList.getToDos().isEmpty()) {
@@ -1285,7 +1287,7 @@ public class ApiHelper {
             for(XMLElement xmlElement : elements.get(0).getSubElements()) {
                 ToDoList toDoList = new ToDoList();
                 toDoList.setID(this.getIntegerFromMap(xmlElement.getAttributes(), "id"));
-                toDoList.setListDate(Converter.convertStringToDate(xmlElement.getAttributes().get("list_date")));
+                toDoList.setListDate(Converter.convertStringToDate(xmlElement.getAttributes().get("list_date"), this.context));
                 toDoList.setTitle(this.unescapeText(xmlElement.getAttributes().get("title")));
                 toDoList.setDescription(this.unescapeText(xmlElement.getContent()));
                 this.saveToDoList(toDoList);
@@ -1320,8 +1322,8 @@ public class ApiHelper {
     public PDFBuilder exportTimerEventToPDF(PDFBuilder pdfBuilder, TimerEvent timerEvent) throws Exception {
         pdfBuilder.addTitle(timerEvent.getTitle(), "header", Paragraph.ALIGN_CENTER);
         pdfBuilder.addTitle(this.context.getString(R.string.todo_category) + ": " + timerEvent.getCategory(), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
-        pdfBuilder.addTitle(this.context.getString(R.string.mark_date) + ": " + Converter.convertDateToString(timerEvent.getEventDate()), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
-        pdfBuilder.addTitle(this.context.getString(R.string.sys_memory) + ": " + Converter.convertDateToString(timerEvent.getMemoryDate()), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
+        pdfBuilder.addTitle(this.context.getString(R.string.mark_date) + ": " + Converter.convertDateToString(timerEvent.getEventDate(), this.context), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
+        pdfBuilder.addTitle(this.context.getString(R.string.sys_memory) + ": " + Converter.convertDateToString(timerEvent.getMemoryDate(), this.context), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
         if(timerEvent.getSchoolClass()!=null) {
             pdfBuilder.addTitle(this.context.getString(R.string.timetable_class) + ": " + timerEvent.getSchoolClass().getTitle(), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
         }
@@ -1371,8 +1373,8 @@ public class ApiHelper {
                 for(TimerEvent timerEvent : timerEvents) {
                     XMLElement element = new XMLElement("TimerEvent");
                     element.addAttribute("id", String.valueOf(timerEvent.getID()));
-                    element.addAttribute("event_date", Converter.convertDateToString(timerEvent.getEventDate()));
-                    element.addAttribute("memory_date", Converter.convertDateToString(timerEvent.getMemoryDate()));
+                    element.addAttribute("event_date", Converter.convertDateToString(timerEvent.getEventDate(), this.context));
+                    element.addAttribute("memory_date", Converter.convertDateToString(timerEvent.getMemoryDate(), this.context));
                     element.addAttribute("title", this.escapeText(timerEvent.getTitle()));
                     element.addAttribute("category", this.escapeText(timerEvent.getCategory()));
                     element.addSubElement(this.getXMLElementFromSubject(timerEvent.getSubject()));
@@ -1436,13 +1438,13 @@ public class ApiHelper {
                 String memory = xmlElement.getAttributes().get("memory_date");
                 if(memory!=null) {
                     if(!memory.isEmpty()) {
-                        timerEvent.setMemoryDate(Converter.convertStringToDate(memory));
+                        timerEvent.setMemoryDate(Converter.convertStringToDate(memory, this.context));
                     }
                 }
                 String event = xmlElement.getAttributes().get("event_date");
                 if(event!=null) {
                     if(!event.isEmpty()) {
-                        timerEvent.setEventDate(Converter.convertStringToDate(event));
+                        timerEvent.setEventDate(Converter.convertStringToDate(event, this.context));
                     }
                 }
                 timerEvent.setTitle(this.unescapeText(xmlElement.getAttributes().get("title")));
@@ -1471,7 +1473,7 @@ public class ApiHelper {
     public PDFBuilder exportLearningCardGroupToPDF(PDFBuilder pdfBuilder, LearningCardGroup learningCardGroup) throws Exception {
         pdfBuilder.addTitle(learningCardGroup.getTitle(), "header", Paragraph.ALIGN_CENTER);
         pdfBuilder.addTitle(this.context.getString(R.string.todo_category) + ": " + learningCardGroup.getCategory(), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
-        pdfBuilder.addTitle(this.context.getString(R.string.learningCard_group_deadline) + ": " + Converter.convertDateToString(learningCardGroup.getDeadLine()), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
+        pdfBuilder.addTitle(this.context.getString(R.string.learningCard_group_deadline) + ": " + Converter.convertDateToString(learningCardGroup.getDeadLine(), this.context), "CONTENT_PARAM", Paragraph.ALIGN_LEFT);
         if(learningCardGroup.getTeacher()!=null) {
             String name = "";
             if(learningCardGroup.getTeacher().getFirstName()!=null) {
@@ -1560,7 +1562,7 @@ public class ApiHelper {
                 for(LearningCardGroup learningCardGroup : learningCardGroups) {
                     XMLElement element = new XMLElement("LearningCardGroup");
                     element.addAttribute("id", String.valueOf(learningCardGroup.getID()));
-                    element.addAttribute("deadline", Converter.convertDateToString(learningCardGroup.getDeadLine()));
+                    element.addAttribute("deadline", Converter.convertDateToString(learningCardGroup.getDeadLine(), this.context));
                     element.addAttribute("title", this.escapeText(learningCardGroup.getTitle()));
                     element.addAttribute("category", this.escapeText(learningCardGroup.getCategory()));
                     element.addSubElement(this.getXMLElementFromSubject(learningCardGroup.getSubject()));
@@ -1645,7 +1647,7 @@ public class ApiHelper {
                 String deadline = xmlElement.getAttributes().get("deadline");
                 if(deadline!=null) {
                     if(!deadline.isEmpty()) {
-                        learningCardGroup.setDeadLine(Converter.convertStringToDate(deadline));
+                        learningCardGroup.setDeadLine(Converter.convertStringToDate(deadline, this.context));
                     }
                 }
                 learningCardGroup.setTitle(this.unescapeText(xmlElement.getAttributes().get("title")));
@@ -1722,14 +1724,8 @@ public class ApiHelper {
 
     public static String findExistingFolder(Context context) {
         File documentsFolder, downloadsFolder;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-            documentsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-            downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        } else {
-            documentsFolder = new File(Environment.getExternalStorageDirectory() + "/Documents");
-            downloadsFolder = new File(Environment.getExternalStorageDirectory() + "/Downloads");
-
-        }
+        documentsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
         if(ApiHelper.isExternalStorageWritable()) {
             if(documentsFolder.exists() && documentsFolder.isDirectory()) {
@@ -1752,10 +1748,7 @@ public class ApiHelper {
 
     public static boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
 
@@ -1913,7 +1906,7 @@ public class ApiHelper {
             toDo.setCategory(this.unescapeText(element.getAttributes().get("category")));
             toDo.setDescription(this.unescapeText(element.getContent()));
             try {
-                toDo.setMemoryDate(Converter.convertStringToDate(element.getAttributes().get("memory_date")));
+                toDo.setMemoryDate(Converter.convertStringToDate(element.getAttributes().get("memory_date"), this.context));
             } catch (Exception ex) {
                 toDo.setMemoryDate(null);
             }
@@ -1932,7 +1925,7 @@ public class ApiHelper {
             element.addAttribute("title", this.escapeText(toDo.getTitle()));
             element.addAttribute("category", this.escapeText(toDo.getCategory()));
             element.setContent(this.escapeText(toDo.getDescription()));
-            element.addAttribute("memory_date", Converter.convertDateToString(toDo.getMemoryDate()));
+            element.addAttribute("memory_date", Converter.convertDateToString(toDo.getMemoryDate(), this.context));
             element.addAttribute("importance", String.valueOf(toDo.getImportance()));
             element.addAttribute("solved", String.valueOf(toDo.isSolved()));
             return element;
@@ -2054,14 +2047,14 @@ public class ApiHelper {
 
     private XMLElement getXMLElementFromYear(Year year) {
         if(year!=null) {
-            return this.getDescriptionElement("Year", year.getID(), year.getTitle(), year.getDescription());
+            return this.getDescriptionElement(year.getID(), year.getTitle(), year.getDescription());
         } else {
             return null;
         }
     }
 
-    private XMLElement getDescriptionElement(String name, int id, String title, String description) {
-        XMLElement element = new XMLElement(name);
+    private XMLElement getDescriptionElement(int id, String title, String description) {
+        XMLElement element = new XMLElement("Year");
         element.addAttribute("id", String.valueOf(id));
         element.addAttribute("title", this.escapeText(title));
         element.addAttribute("description", this.escapeText(description));

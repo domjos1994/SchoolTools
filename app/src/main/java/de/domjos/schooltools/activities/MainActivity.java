@@ -52,7 +52,7 @@ import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
 import de.domjos.schooltools.screenWidgets.QuickQueryScreenWidget;
@@ -448,7 +448,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
         for(TimerEvent timerEvent : MainActivity.globals.getSqLite().getTimerEvents("title like '%" + search + "%'")) {
             SearchItem searchItem = new SearchItem(timerEvent.getID(), timerEvent.getTitle(), this.getString(R.string.main_nav_timer));
-            searchItem.setExtra(Converter.convertDateToString(timerEvent.getEventDate()));
+            searchItem.setExtra(Converter.convertDateToString(timerEvent.getEventDate(), this.getApplicationContext()));
             this.searchAdapter.add(searchItem);
         }
 
@@ -523,7 +523,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         if(MainActivity.globals.getUserSettings().isDeleteMemories()) {
             for(Memory memory : MainActivity.globals.getSqLite().getCurrentMemories()) {
                 try {
-                    if (Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate()))) {
+                    if (Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate(), this.getApplicationContext()))) {
                         MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
                     }
                 } catch (Exception ex) {

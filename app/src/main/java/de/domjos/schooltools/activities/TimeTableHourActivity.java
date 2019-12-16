@@ -23,11 +23,11 @@ import java.util.Calendar;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.utils.Converter;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.Hour;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
-import de.domjos.schooltools.helper.Converter;
 import de.domjos.schooltools.helper.Helper;
 
 /**
@@ -279,15 +279,15 @@ public final class TimeTableHourActivity extends AbstractActivity {
     }
 
     private boolean checkHourIsValid(Hour hour) {
-        Time start = Converter.convertStringToTime(this.getApplicationContext(), hour.getStart());
-        Time end = Converter.convertStringToTime(this.getApplicationContext(), hour.getEnd());
+        Time start = de.domjos.customwidgets.utils.Converter.convertStringToTime(this.getApplicationContext(), hour.getStart(), R.mipmap.ic_launcher_round);
+        Time end = de.domjos.customwidgets.utils.Converter.convertStringToTime(this.getApplicationContext(), hour.getEnd(), R.mipmap.ic_launcher_round);
         if(start==null || end==null) {
             return false;
         }
 
         for(Hour currentHour : MainActivity.globals.getSqLite().getHours("")) {
-            Time currentStart = Converter.convertStringToTime(this.getApplicationContext(), currentHour.getStart());
-            Time currentEnd = Converter.convertStringToTime(this.getApplicationContext(), currentHour.getEnd());
+            Time currentStart = de.domjos.customwidgets.utils.Converter.convertStringToTime(this.getApplicationContext(), currentHour.getStart(), R.mipmap.ic_launcher_round);
+            Time currentEnd = Converter.convertStringToTime(this.getApplicationContext(), currentHour.getEnd(), R.mipmap.ic_launcher_round);
 
             if(start.before(currentStart)) {
                 if(end.after(currentStart)) {
