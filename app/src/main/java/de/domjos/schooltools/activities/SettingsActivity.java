@@ -29,7 +29,7 @@ import androidx.core.app.NavUtils;
 
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.services.ImportToDictionaryTask;
 
@@ -254,9 +254,9 @@ public final class SettingsActivity extends SettingsAppCompatActivity {
                 if (requestCode == 98 && resultCode == RESULT_OK) {
                     Uri uri = data.getData();
                     if(uri!=null) {
-                        Bitmap bitmap = Converter.convertUriToBitmap(getActivity(), uri);
+                        Bitmap bitmap = ConvertHelper.convertUriToBitmap(getActivity(), uri);
                         if(bitmap!=null) {
-                            byte[] bytes = Converter.convertBitmapToByteArray(bitmap);
+                            byte[] bytes = ConvertHelper.convertBitmapToByteArray(bitmap);
                             if(bytes!=null) {
                                 MainActivity.globals.getSqLite().addSetting("background", uri.getPath(), bytes);
                             }
@@ -265,9 +265,9 @@ public final class SettingsActivity extends SettingsAppCompatActivity {
                 } else if (requestCode == 99 && resultCode == RESULT_OK) {
                     Uri uri = data.getData();
                     if(uri!=null) {
-                        Bitmap bitmap = Converter.convertUriToBitmap(getActivity(), uri);
+                        Bitmap bitmap = ConvertHelper.convertUriToBitmap(getActivity(), uri);
                         if(bitmap!=null) {
-                            byte[] bytes = Converter.convertBitmapToByteArray(bitmap);
+                            byte[] bytes = ConvertHelper.convertBitmapToByteArray(bitmap);
                             if(bytes!=null) {
                                 MainActivity.globals.getSqLite().addSetting("app_bar_background", uri.getPath(), bytes);
                             }

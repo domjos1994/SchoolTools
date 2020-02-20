@@ -53,7 +53,7 @@ import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.schooltoolslib.utils.fileUtils.PDFBuilder;
 import de.domjos.schooltools.helper.ApiHelper;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.EventHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
@@ -262,7 +262,7 @@ public final class ApiActivity extends AbstractActivity {
             if (requestCode == 9999) {
                 Uri uri = data.getData();
                 if (uri != null) {
-                    lblApiPath.setText(Converter.convertURIToStringPath(this.getApplicationContext(), uri, R.mipmap.ic_launcher_round));
+                    lblApiPath.setText(ConvertHelper.convertURIToStringPath(this.getApplicationContext(), uri, R.mipmap.ic_launcher_round));
                 }
             }
         }
@@ -398,7 +398,7 @@ public final class ApiActivity extends AbstractActivity {
                 }
             }
 
-            PDFBuilder pdfBuilder = new PDFBuilder(emptyPDF.getAbsolutePath(), Converter.convertDrawableToByteArray(this.getApplicationContext(), R.drawable.icon), this.getApplicationContext());
+            PDFBuilder pdfBuilder = new PDFBuilder(emptyPDF.getAbsolutePath(), ConvertHelper.convertDrawableToByteArray(this.getApplicationContext(), R.drawable.icon), this.getApplicationContext());
             pdfBuilder.addFont("header", Font.FontFamily.HELVETICA, 32, true, true, BaseColor.BLACK);
             pdfBuilder.addFont("subHeader", Font.FontFamily.HELVETICA, 28, true, false, BaseColor.BLACK);
             pdfBuilder.addFont("CONTENT_PARAM", Font.FontFamily.HELVETICA, 16, false, false, BaseColor.BLACK);
@@ -480,7 +480,7 @@ public final class ApiActivity extends AbstractActivity {
                 return true;
             } else {
                 for(Memory memory : sqLite.getCurrentMemories()) {
-                    if(memory.getID()==id) {
+                    if(memory.getId()==id) {
                         EventHelper helper = new EventHelper(memory, this.getApplicationContext());
                         Intent intent = helper.openCalendar();
                         if(intent!=null) {
@@ -520,37 +520,37 @@ public final class ApiActivity extends AbstractActivity {
             }
             if(selectedType.equals(this.getString(R.string.main_nav_calculateMark))) {
                 for(Subject subject : sqLite.getSubjects("")) {
-                    this.apiEntry.add(new BaseObject(subject.getID(), subject.getTitle()));
+                    this.apiEntry.add(new BaseObject(subject.getId(), subject.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_timetable))) {
                 for(TimeTable timeTable : sqLite.getTimeTables("")) {
-                    this.apiEntry.add(new BaseObject(timeTable.getID(), timeTable.getTitle()));
+                    this.apiEntry.add(new BaseObject(timeTable.getId(), timeTable.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_notes))) {
                 for(Note note : sqLite.getNotes("")) {
-                    this.apiEntry.add(new BaseObject(note.getID(), note.getTitle()));
+                    this.apiEntry.add(new BaseObject(note.getId(), note.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_timer))) {
                 for(TimerEvent timerEvent : sqLite.getTimerEvents("")) {
-                    this.apiEntry.add(new BaseObject(timerEvent.getID(), timerEvent.getTitle()));
+                    this.apiEntry.add(new BaseObject(timerEvent.getId(), timerEvent.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_todo))) {
                 for(ToDoList toDoList : sqLite.getToDoLists("")) {
-                    this.apiEntry.add(new BaseObject(toDoList.getID(), toDoList.getTitle()));
+                    this.apiEntry.add(new BaseObject(toDoList.getId(), toDoList.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.main_nav_learningCards))) {
                 for(LearningCardGroup group : sqLite.getLearningCardGroups("", false)) {
-                    this.apiEntry.add(new BaseObject(group.getID(), group.getTitle()));
+                    this.apiEntry.add(new BaseObject(group.getId(), group.getTitle()));
                 }
             }
             if(selectedType.equals(this.getString(R.string.sys_memory))) {
                 for(Memory memory : sqLite.getCurrentMemories()) {
-                    this.apiEntry.add(new BaseObject(memory.getID(), memory.getTitle()));
+                    this.apiEntry.add(new BaseObject(memory.getId(), memory.getTitle()));
                 }
             }
         }
@@ -595,7 +595,7 @@ public final class ApiActivity extends AbstractActivity {
                 if(spApiEntry.getSelectedItemPosition()!=-1) {
                     BaseObject selectedEntry = apiEntry.getItem(spApiEntry.getSelectedItemPosition());
                     if(selectedEntry!=null) {
-                        where = "ID=" + selectedEntry.getID();
+                        where = "ID=" + selectedEntry.getId();
                     }
                 }
             }

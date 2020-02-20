@@ -23,7 +23,7 @@ import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDo;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
 
@@ -69,7 +69,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
                     chkToDoSolved.setChecked(toDo.isSolved());
                     rbToDoImportance.setRating(toDo.getImportance());
                     chkToDoMemory.setChecked(true);
-                    txtToDoMemoryDate.setText(Converter.convertDateToString(toDo.getMemoryDate(), this.getApplicationContext()));
+                    txtToDoMemoryDate.setText(ConvertHelper.convertDateToString(toDo.getMemoryDate(), this.getApplicationContext()));
                     txtToDoMemoryDate.setVisibility(View.VISIBLE);
                 }
             }
@@ -100,7 +100,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
                     case R.id.navTimeTableSubSave:
                         if (validator.getState()) {
                             ToDo toDo = new ToDo();
-                            toDo.setID(id);
+                            toDo.setId(id);
                             toDo.setTitle(txtToDoTitle.getText().toString());
                             toDo.setDescription(txtToDoDescription.getText().toString());
                             toDo.setCategory(txtToDoCategory.getText().toString());
@@ -108,7 +108,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
                             toDo.setImportance((int) rbToDoImportance.getRating());
                             if (chkToDoMemory.isChecked()) {
                                 if (!txtToDoMemoryDate.getText().toString().equals("")) {
-                                    toDo.setMemoryDate(Converter.convertStringToDate(txtToDoMemoryDate.getText().toString(), getApplicationContext()));
+                                    toDo.setMemoryDate(ConvertHelper.convertStringToDate(txtToDoMemoryDate.getText().toString(), getApplicationContext()));
                                 }
                             }
                             MainActivity.globals.getSqLite().insertOrUpdateToDo(toDo, list);

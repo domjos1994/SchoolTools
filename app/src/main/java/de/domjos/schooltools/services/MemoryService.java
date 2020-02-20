@@ -18,7 +18,7 @@ import de.domjos.schooltools.activities.*;
 import de.domjos.schooltoolslib.model.Memory;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardQuery;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardQueryTraining;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 
 import java.util.Calendar;
@@ -36,7 +36,7 @@ public class MemoryService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         for(Memory memory : MainActivity.globals.getSqLite().getCurrentMemories()) {
             try {
-                if(Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate(), this.getApplicationContext()))) {
+                if(Helper.compareDateWithCurrentDate(ConvertHelper.convertStringToDate(memory.getDate(), this.getApplicationContext()))) {
                     Intent linkedIntent = null;
                     switch (memory.getType()) {
                         case Note:
@@ -44,7 +44,7 @@ public class MemoryService extends IntentService {
                             break;
                         case Test:
                             linkedIntent = new Intent(this.getApplicationContext(), MarkEntryActivity.class);
-                            linkedIntent.putExtra("id", memory.getID());
+                            linkedIntent.putExtra("id", memory.getId());
                             linkedIntent.putExtra("enabled", false);
                             break;
                         case toDo:
@@ -59,13 +59,13 @@ public class MemoryService extends IntentService {
                     MessageHelper.showNotification(this.getApplicationContext(), memory.getTitle(), memory.getDescription(), R.mipmap.ic_launcher_round, linkedIntent, 99);
                 } else {
                     if(MainActivity.globals.getUserSettings().isDeleteMemories()) {
-                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
+                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getId());
                     }
                 }
             } catch (Exception ex) {
                 MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getApplicationContext());
                 if(MainActivity.globals.getUserSettings().isDeleteMemories()) {
-                    MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
+                    MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getId());
                 }
             }
         }
@@ -96,7 +96,7 @@ public class MemoryService extends IntentService {
                 List<LearningCardQueryTraining> learningCardQueryTrainings = MainActivity.globals.getSqLite().getLearningCardQueryTraining("current_date>" + start.getTimeInMillis() + " AND current_date<=" + end.getTimeInMillis());
                 for(LearningCardQueryTraining training : learningCardQueryTrainings) {
                     if(training.getLearningCardQuery()!=null) {
-                        if(training.getLearningCardQuery().getID()==learningCardQuery.getID()) {
+                        if(training.getLearningCardQuery().getId()==learningCardQuery.getId()) {
                             learningCardQueries.add(learningCardQuery);
                         }
                     }

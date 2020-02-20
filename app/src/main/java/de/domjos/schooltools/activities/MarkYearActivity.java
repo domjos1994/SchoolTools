@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.mark.Year;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
@@ -28,7 +27,7 @@ import de.domjos.schooltools.helper.Helper;
  * @version 1.0
  */
 public final class MarkYearActivity extends AbstractActivity {
-    private int currentID;
+    private long currentID;
     private EditText txtYearTitle, txtYearDescription;
     private SwipeRefreshDeleteList lvYear;
 
@@ -42,33 +41,22 @@ public final class MarkYearActivity extends AbstractActivity {
     protected void initActions() {
         this.reloadYears();
 
-        this.lvYear.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                Year year = (Year) listObject;
-                if(year!=null) {
-                    currentID = year.getID();
-                    txtYearTitle.setText(year.getTitle());
-                    txtYearDescription.setText(year.getDescription());
-                    controlFields(false, false, true);
-                }
+        this.lvYear.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener)  listObject -> {
+            Year year = (Year) listObject.getObject();
+            if(year!=null) {
+                currentID = year.getId();
+                txtYearTitle.setText(year.getTitle());
+                txtYearDescription.setText(year.getDescription());
+                controlFields(false, false, true);
             }
         });
 
-        this.lvYear.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadYears();
-            }
-        });
+        this.lvYear.setOnReloadListener(this::reloadYears);
 
-        this.lvYear.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("years", "ID", listObject.getID(), "");
-                controlFields(false, true, false);
-                reloadYears();
-            }
+        this.lvYear.setOnDeleteListener(listObject -> {
+            MainActivity.globals.getSqLite().deleteEntry("years", "ID", listObject.getId(), "");
+            controlFields(false, true, false);
+            reloadYears();
         });
     }
 
@@ -160,7 +148,7 @@ public final class MarkYearActivity extends AbstractActivity {
                     break;
                 case R.id.navTimeTableSubSave:
                     Year year = new Year();
-                    year.setID(currentID);
+                    year.setId(currentID);
                     year.setTitle(txtYearTitle.getText().toString());
                     year.setDescription(txtYearDescription.getText().toString());
                     MainActivity.globals.getSqLite().insertOrUpdateYear(year);

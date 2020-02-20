@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import de.domjos.customwidgets.model.AbstractActivity;
@@ -137,128 +138,125 @@ public final class TimeTableEntryActivity extends AbstractActivity {
     @Override
     protected void initControls() {
         // init BottomNavigation
-        OnNavigationItemSelectedListener navListener = new OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (Helper.checkMenuID(item)) {
-                    case R.id.navTimeTableSubEdit:
-                        controlFields(true);
-                        return true;
-                    case R.id.navTimeTableSubDelete:
-                        if(currentItem!=null) {
-                            MainActivity.globals.getSqLite().deleteEntry("plans", "ID", currentItem.getID(), "");
-                            MainActivity.globals.getSqLite().deleteEntry("timeTable", "plan", currentItem.getID(), "");
-                        }
-                        setResult(RESULT_OK);
-                        finish();
-                        return true;
-                    case R.id.navTimeTableSubSave:
-                        try {
-                            if(validator.getState()) {
-                                if(currentItem==null)  {
-                                    currentItem = new TimeTable();
-                                }
-                                currentItem.setTitle(txtTimeTableTitle.getText().toString());
-                                currentItem.setCurrentTimeTable(chkTimeTableCurrent.isChecked());
-                                currentItem.setDescription(txtTimeTableDescription.getText().toString());
-                                if(spTimeTableClass.getSelectedItem()!=null) {
-                                    if(!spTimeTableClass.getSelectedItem().toString().equals("")) {
-                                        SchoolClass schoolClass = new SchoolClass();
-                                        schoolClass.setTitle(spTimeTableClass.getSelectedItem().toString());
-                                        currentItem.setSchoolClass(schoolClass);
-                                    } else {
-                                        currentItem.setSchoolClass(null);
-                                    }
+        OnNavigationItemSelectedListener navListener = item -> {
+            switch (Helper.checkMenuID(item)) {
+                case R.id.navTimeTableSubEdit:
+                    controlFields(true);
+                    return true;
+                case R.id.navTimeTableSubDelete:
+                    if(currentItem!=null) {
+                        MainActivity.globals.getSqLite().deleteEntry("plans", "ID", currentItem.getId(), "");
+                        MainActivity.globals.getSqLite().deleteEntry("timeTable", "plan", currentItem.getId(), "");
+                    }
+                    setResult(RESULT_OK);
+                    finish();
+                    return true;
+                case R.id.navTimeTableSubSave:
+                    try {
+                        if(validator.getState()) {
+                            if(currentItem==null)  {
+                                currentItem = new TimeTable();
+                            }
+                            currentItem.setTitle(txtTimeTableTitle.getText().toString());
+                            currentItem.setCurrentTimeTable(chkTimeTableCurrent.isChecked());
+                            currentItem.setDescription(txtTimeTableDescription.getText().toString());
+                            if(spTimeTableClass.getSelectedItem()!=null) {
+                                if(!spTimeTableClass.getSelectedItem().toString().equals("")) {
+                                    SchoolClass schoolClass = new SchoolClass();
+                                    schoolClass.setTitle(spTimeTableClass.getSelectedItem().toString());
+                                    currentItem.setSchoolClass(schoolClass);
                                 } else {
                                     currentItem.setSchoolClass(null);
                                 }
-                                if(spTimeTableYear.getSelectedItem()!=null) {
-                                    if(!spTimeTableYear.getSelectedItem().toString().equals("")) {
-                                        List<Year> years = MainActivity.globals.getSqLite().getYears("title='" + spTimeTableYear.getSelectedItem() + "'");
-                                        if(years!=null) {
-                                            if(!years.isEmpty()) {
-                                                currentItem.setYear(years.get(0));
-                                            }
+                            } else {
+                                currentItem.setSchoolClass(null);
+                            }
+                            if(spTimeTableYear.getSelectedItem()!=null) {
+                                if(!spTimeTableYear.getSelectedItem().toString().equals("")) {
+                                    List<Year> years = MainActivity.globals.getSqLite().getYears("title='" + spTimeTableYear.getSelectedItem() + "'");
+                                    if(years!=null) {
+                                        if(!years.isEmpty()) {
+                                            currentItem.setYear(years.get(0));
                                         }
-                                    } else {
-                                        currentItem.setYear(null);
                                     }
                                 } else {
                                     currentItem.setYear(null);
                                 }
+                            } else {
+                                currentItem.setYear(null);
+                            }
 
-                                for(int i = 0; i<=6; i++) {
-                                    Day day = new Day();
-                                    day.setPositionInWeek(i);
-                                    for(int row = 1; row<=gridContent.getChildCount()-1; row++) {
-                                        TableRow tableRow = (TableRow) gridContent.getChildAt(row);
-                                        TextView txtHour = (TextView) tableRow.getChildAt(0);
-                                        TextView txtCurrent = (TextView) tableRow.getChildAt(i+1);
+                            for(int i = 0; i<=6; i++) {
+                                Day day = new Day();
+                                day.setPositionInWeek(i);
+                                for(int row = 1; row<=gridContent.getChildCount()-1; row++) {
+                                    TableRow tableRow = (TableRow) gridContent.getChildAt(row);
+                                    TextView txtHour = (TextView) tableRow.getChildAt(0);
+                                    TextView txtCurrent = (TextView) tableRow.getChildAt(i+1);
 
 
-                                        if(txtHour.getTag()!=null) {
-                                            Hour hour = MainActivity.globals.getSqLite().getHours("ID=" + txtHour.getTag().toString().trim()).get(0);
-                                            if(txtCurrent.getTag()!=null) {
-                                                if(!MainActivity.globals.getUserSettings().isTimeTableMode()) {
-                                                    if(txtCurrent.getTag().toString().contains(" - ")) {
-                                                        String[] rows = txtCurrent.getTag().toString().split("\n");
-                                                        String[] spl = rows[0].trim().split(" - ");
-                                                        Subject subject = MainActivity.globals.getSqLite().getSubjects("ID=" + spl[0].trim()).get(0);
-                                                        Teacher teacher = null;
-                                                        if(!spl[1].trim().equals("0")) {
-                                                            teacher = MainActivity.globals.getSqLite().getTeachers("ID=" + spl[1].trim()).get(0);
-                                                        }
-                                                        if(rows.length==2) {
-                                                            day.addPupilHour(hour, subject, teacher, rows[1].trim());
-                                                        } else {
-                                                            day.addPupilHour(hour, subject, teacher, "");
-                                                        }
+                                    if(txtHour.getTag()!=null) {
+                                        Hour hour = MainActivity.globals.getSqLite().getHours("ID=" + txtHour.getTag().toString().trim()).get(0);
+                                        if(txtCurrent.getTag()!=null) {
+                                            if(!MainActivity.globals.getUserSettings().isTimeTableMode()) {
+                                                if(txtCurrent.getTag().toString().contains(" - ")) {
+                                                    String[] rows = txtCurrent.getTag().toString().split("\n");
+                                                    String[] spl = rows[0].trim().split(" - ");
+                                                    Subject subject = MainActivity.globals.getSqLite().getSubjects("ID=" + spl[0].trim()).get(0);
+                                                    Teacher teacher = null;
+                                                    if(!spl[1].trim().equals("0")) {
+                                                        teacher = MainActivity.globals.getSqLite().getTeachers("ID=" + spl[1].trim()).get(0);
                                                     }
-                                                } else {
-                                                    if(txtCurrent.getTag().toString().contains(" - ")) {
-                                                        String[] rows = txtCurrent.getTag().toString().trim().split("\n");
-                                                        String[] spl = rows[0].trim().split(" - ");
-                                                        Subject subject = MainActivity.globals.getSqLite().getSubjects("ID=" + spl[0].trim()).get(0);
-                                                        SchoolClass schoolClass = null;
-                                                        if(!spl[1].trim().equals("0")) {
-                                                            schoolClass = MainActivity.globals.getSqLite().getClasses("ID=" + spl[1].trim()).get(0);
-                                                        }
-                                                        if(rows.length==2) {
-                                                            day.addTeacherHour(hour, subject, schoolClass, rows[1].trim());
-                                                        } else {
-                                                            day.addTeacherHour(hour, subject, schoolClass, "");
-                                                        }
-
+                                                    if(rows.length==2) {
+                                                        day.addPupilHour(hour, subject, teacher, rows[1].trim());
+                                                    } else {
+                                                        day.addPupilHour(hour, subject, teacher, "");
                                                     }
+                                                }
+                                            } else {
+                                                if(txtCurrent.getTag().toString().contains(" - ")) {
+                                                    String[] rows = txtCurrent.getTag().toString().trim().split("\n");
+                                                    String[] spl = rows[0].trim().split(" - ");
+                                                    Subject subject = MainActivity.globals.getSqLite().getSubjects("ID=" + spl[0].trim()).get(0);
+                                                    SchoolClass schoolClass = null;
+                                                    if(!spl[1].trim().equals("0")) {
+                                                        schoolClass = MainActivity.globals.getSqLite().getClasses("ID=" + spl[1].trim()).get(0);
+                                                    }
+                                                    if(rows.length==2) {
+                                                        day.addTeacherHour(hour, subject, schoolClass, rows[1].trim());
+                                                    } else {
+                                                        day.addTeacherHour(hour, subject, schoolClass, "");
+                                                    }
+
                                                 }
                                             }
                                         }
                                     }
-                                    currentItem.addDay(day);
                                 }
-
-                                MainActivity.globals.getSqLite().insertOrUpdateTimeTable(currentItem);
-                                setResult(RESULT_OK);
-                                finish();
+                                currentItem.addDay(day);
                             }
-                        } catch (Exception ex) {
-                            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimeTableEntryActivity.this);
+
+                            MainActivity.globals.getSqLite().insertOrUpdateTimeTable(currentItem);
+                            setResult(RESULT_OK);
+                            finish();
                         }
-                        return true;
-                    case R.id.navTimeTableSubCancel:
-                        setResult(RESULT_OK);
-                        finish();
-                        return true;
-                    case R.id.navTimeTableShowData:
-                        if(svControls.getVisibility()==View.GONE) {
-                            svControls.setVisibility(View.VISIBLE);
-                        } else {
-                            svControls.setVisibility(View.GONE);
-                        }
-                        return true;
-                }
-                return false;
+                    } catch (Exception ex) {
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimeTableEntryActivity.this);
+                    }
+                    return true;
+                case R.id.navTimeTableSubCancel:
+                    setResult(RESULT_OK);
+                    finish();
+                    return true;
+                case R.id.navTimeTableShowData:
+                    if(svControls.getVisibility()==View.GONE) {
+                        svControls.setVisibility(View.VISIBLE);
+                    } else {
+                        svControls.setVisibility(View.GONE);
+                    }
+                    return true;
             }
+            return false;
         };
         this.navigation = this.findViewById(R.id.navigation);
         this.navigation.setOnNavigationItemSelectedListener(navListener);
@@ -270,7 +268,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
         this.chkTimeTableCurrent = this.findViewById(R.id.chkTimeTableCurrent);
 
         this.spTimeTableClass = this.findViewById(R.id.spTimeTableClass);
-        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, R.layout.spinner_item, new ArrayList<String>());
+        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, R.layout.spinner_item, new ArrayList<>());
         this.spTimeTableClass.setAdapter(classAdapter);
         classAdapter.notifyDataSetChanged();
         classAdapter.add("");
@@ -279,7 +277,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
         }
 
         this.spTimeTableYear = this.findViewById(R.id.spTimeTableYear);
-        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, R.layout.spinner_item, new ArrayList<String>());
+        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, R.layout.spinner_item, new ArrayList<>());
         this.spTimeTableYear.setAdapter(yearAdapter);
         yearAdapter.notifyDataSetChanged();
         yearAdapter.add("");
@@ -326,7 +324,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(Helper.showHelpMenu(item, getApplicationContext(), "help_timetable"));
     }
 
@@ -366,7 +364,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
                         for(Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
                             if(txtTime.getTag()!=null) {
                                 int timeID = Integer.parseInt(txtTime.getTag().toString().trim());
-                                if(entry.getKey().getID()==timeID) {
+                                if(entry.getKey().getId()==timeID) {
                                     Subject subject = entry.getValue().getSubject();
                                     if(mpSubjects!=null && subject!=null) {
                                         if(subject.getAlias()!=null) {
@@ -383,16 +381,16 @@ public final class TimeTableEntryActivity extends AbstractActivity {
                                     Teacher teacher = entry.getValue().getTeacher();
                                     String roomNumber = entry.getValue().getRoomNumber();
 
-                                    txtColumn.setText(subject.getAlias());
+                                    txtColumn.setText(Objects.requireNonNull(subject).getAlias());
                                     if(subject.getBackgroundColor()!=null) {
                                         if(!subject.getBackgroundColor().isEmpty()) {
                                             txtColumn.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
                                         }
                                     }
                                     if(teacher!=null) {
-                                        txtColumn.setTag(subject.getID() + " - " + teacher.getID());
+                                        txtColumn.setTag(subject.getId() + " - " + teacher.getId());
                                     } else {
-                                        txtColumn.setTag(subject.getID() + " - " + 0);
+                                        txtColumn.setTag(subject.getId() + " - " + 0);
                                     }
                                     if(roomNumber!=null) {
                                         if(!roomNumber.isEmpty()) {
@@ -409,10 +407,10 @@ public final class TimeTableEntryActivity extends AbstractActivity {
                         for(Map.Entry<Hour, TeacherHour> entry : day.getTeacherHour().entrySet()) {
                             if(txtTime.getTag()!=null) {
                                 int timeID = Integer.parseInt(txtTime.getTag().toString().trim());
-                                if(entry.getKey().getID()==timeID) {
+                                if(entry.getKey().getId()==timeID) {
                                     Subject subject = entry.getValue().getSubject();
-                                    if(mpSubjects.containsKey(subject.getAlias())) {
-                                        mpSubjects.put(subject.getAlias(), (mpSubjects.get(subject.getAlias()) + 1));
+                                    if(Objects.requireNonNull(mpSubjects).containsKey(subject.getAlias())) {
+                                        mpSubjects.put(subject.getAlias(), (Objects.requireNonNull(mpSubjects.get(subject.getAlias())) + 1));
                                     } else {
                                         mpSubjects.put(subject.getAlias(), 1);
                                     }
@@ -426,9 +424,9 @@ public final class TimeTableEntryActivity extends AbstractActivity {
                                         }
                                     }
                                     if(schoolClass!=null) {
-                                        txtColumn.setTag(subject.getID() + " - " + schoolClass.getID());
+                                        txtColumn.setTag(subject.getId() + " - " + schoolClass.getId());
                                     } else {
-                                        txtColumn.setTag(subject.getID() + " - " + 0);
+                                        txtColumn.setTag(subject.getId() + " - " + 0);
                                     }
 
                                     if(roomNumber!=null) {
@@ -454,151 +452,145 @@ public final class TimeTableEntryActivity extends AbstractActivity {
             for(int j = 0; j<=tableRow.getChildCount()-1; j++) {
                 final TextView textView = (TextView) tableRow.getChildAt(j);
                 final int finalJ = j;
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(tableRow.getChildCount()!=0) {
-                            if(tableRow.getChildAt(0).getTag()!=null) {
-                                Subject oldSubject = null;
+                textView.setOnClickListener(v -> {
+                    if(tableRow.getChildCount()!=0) {
+                        if(tableRow.getChildAt(0).getTag()!=null) {
+                            Subject oldSubject = null;
 
-                                int id = Integer.parseInt(tableRow.getChildAt(0).getTag().toString());
-                                Hour hour = MainActivity.globals.getSqLite().getHours("ID=" + id).get(0);
-                                if(finalJ != 0 && !hour.isBreak())  {
-                                    final Dialog dialog = new Dialog(TimeTableEntryActivity.this);
-                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    dialog.setContentView(R.layout.timetable_dialog);
-                                    dialog.setCancelable(true);
-                                    UserSettings settings = new UserSettings(getApplicationContext());
-                                    TextView txtHeader = dialog.findViewById(R.id.txtHeader);
-                                    if(settings.isTimeTableMode()) {
-                                        txtHeader.setText(getText(R.string.timetable_dialog_title_teacher));
-                                        dialog.setTitle(getString(R.string.timetable_dialog_title_teacher));
-                                    } else {
-                                        txtHeader.setText(getText(R.string.timetable_dialog_title_pupil));
-                                        dialog.setTitle(getString(R.string.timetable_dialog_title_pupil));
-                                    }
-
-                                    ImageButton cmdAdd = dialog.findViewById(R.id.cmdAdd);
-
-                                    final Spinner spSubjects = dialog.findViewById(R.id.spSubject);
-                                    ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, R.layout.spinner_item, new ArrayList<String>());
-                                    spSubjects.setAdapter(subjectAdapter);
-                                    subjectAdapter.notifyDataSetChanged();
-
-                                    final Spinner spOptional = dialog.findViewById(R.id.spTeacher);
-                                    ArrayAdapter<String> optionalAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, R.layout.spinner_item, new ArrayList<String>());
-                                    spOptional.setAdapter(optionalAdapter);
-                                    optionalAdapter.notifyDataSetChanged();
-
-                                    final EditText txtRoomNumber = dialog.findViewById(R.id.txtRoomNumber);
-
-                                    for(Subject subject : MainActivity.globals.getSqLite().getSubjects("")) {
-                                        if(mpSubjects.get(subject.getAlias())!=null) {
-                                            if(subject.getHoursInWeek()>mpSubjects.get(subject.getAlias())) {
-                                                subjectAdapter.add(String.format("%s: %s", subject.getID(), subject.getTitle()));
-                                            }
-                                        } else {
-                                            subjectAdapter.add(String.format("%s: %s", subject.getID(), subject.getTitle()));
-                                        }
-
-                                    }
-                                    subjectAdapter.add("");
-                                    spSubjects.setSelection(subjectAdapter.getPosition(""));
-
-                                    if(!MainActivity.globals.getUserSettings().isTimeTableMode()) {
-                                        for(Teacher teacher : MainActivity.globals.getSqLite().getTeachers("")) {
-                                            optionalAdapter.add(String.format("%s: %s %s", teacher.getID(), teacher.getFirstName(), teacher.getLastName()));
-                                        }
-                                    } else {
-                                        for(SchoolClass schoolClass : MainActivity.globals.getSqLite().getClasses("")) {
-                                            optionalAdapter.add(String.format("%s: %s", schoolClass.getID(), schoolClass.getTitle()));
-                                        }
-                                    }
-                                    optionalAdapter.add("");
-                                    spOptional.setSelection(optionalAdapter.getPosition(""));
-
-                                    if(textView.getTag()!=null) {
-                                        String tag[] = textView.getTag().toString().split("\n");
-                                        int subjectID = Integer.parseInt(tag[0].trim().split(" - ")[0].trim());
-                                        int optionalID = Integer.parseInt(tag[0].trim().split(" - ")[1].trim());
-                                        List<Subject> subjects = MainActivity.globals.getSqLite().getSubjects("ID=" + subjectID);
-                                        if(subjects!=null) {
-                                            if(!subjects.isEmpty()) {
-                                                oldSubject = subjects.get(0);
-                                                if(mpSubjects.containsKey(oldSubject.getAlias())) {
-                                                    mpSubjects.put(oldSubject.getAlias(), mpSubjects.get(oldSubject.getAlias())-1);
-                                                }
-                                                String formatted = String.format("%s: %s", oldSubject.getID(), oldSubject.getTitle());
-
-                                                boolean isAvailable = false;
-                                                for(int i = 0; i<=subjectAdapter.getCount()-1; i++) {
-                                                    String item = subjectAdapter.getItem(i);
-                                                    if(item!=null) {
-                                                        if (item.equals(formatted)) {
-                                                            spSubjects.setSelection(i);
-                                                            isAvailable = true;
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-
-                                                if(!isAvailable) {
-                                                    subjectAdapter.add(formatted);
-                                                }
-                                            }
-                                        }
-
-                                        listFromAdapter(subjectAdapter, spSubjects, subjectID);
-
-                                        if(optionalID!=0) {
-                                            listFromAdapter(optionalAdapter, spOptional, optionalID);
-                                        }
-                                        if(tag.length==2) {
-                                            txtRoomNumber.setText(tag[1]);
-                                        }
-                                    }
-
-                                    final Subject finalOldSubject = oldSubject;
-                                    cmdAdd.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            String item = spSubjects.getSelectedItem().toString();
-                                            if(!item.trim().equals("")) {
-                                                Subject subject = MainActivity.globals.getSqLite().getSubjects("ID=" + item.split(":")[0]).get(0);
-                                                if(mpSubjects.containsKey(subject.getAlias())) {
-                                                    mpSubjects.put(subject.getAlias(), (mpSubjects.get(subject.getAlias()) + 1));
-                                                } else {
-                                                    mpSubjects.put(subject.getAlias(), 1);
-                                                }
-                                                textView.setText(subject.getAlias());
-                                                textView.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
-                                                if(spOptional.getSelectedItem().toString().trim().equals("")) {
-                                                    textView.setTag(item.split(":")[0] + " - " + 0);
-                                                } else {
-                                                    textView.setTag(item.split(":")[0] + " - " + spOptional.getSelectedItem().toString().split(":")[0].trim());
-                                                }
-                                                textView.setTag(textView.getTag() + "\n" + txtRoomNumber.getText());
-                                            } else {
-                                                textView.setText("");
-                                                textView.setBackgroundResource(R.drawable.tbl_border);
-                                                textView.setTag(null);
-
-                                                if(finalOldSubject !=null) {
-                                                    if(mpSubjects.containsKey(finalOldSubject.getAlias())) {
-                                                        if(mpSubjects.get(finalOldSubject.getAlias())==1) {
-                                                            mpSubjects.remove(finalOldSubject.getAlias());
-                                                        } else {
-                                                            mpSubjects.put(finalOldSubject.getAlias(), (mpSubjects.get(finalOldSubject.getAlias()) - 1));
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            dialog.cancel();
-                                        }
-                                    });
-
-                                    dialog.show();
+                            int id = Integer.parseInt(tableRow.getChildAt(0).getTag().toString());
+                            Hour hour = MainActivity.globals.getSqLite().getHours("ID=" + id).get(0);
+                            if(finalJ != 0 && !hour.isBreak())  {
+                                final Dialog dialog = new Dialog(TimeTableEntryActivity.this);
+                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialog.setContentView(R.layout.timetable_dialog);
+                                dialog.setCancelable(true);
+                                UserSettings settings = new UserSettings(getApplicationContext());
+                                TextView txtHeader = dialog.findViewById(R.id.txtHeader);
+                                if(settings.isTimeTableMode()) {
+                                    txtHeader.setText(getText(R.string.timetable_dialog_title_teacher));
+                                    dialog.setTitle(getString(R.string.timetable_dialog_title_teacher));
+                                } else {
+                                    txtHeader.setText(getText(R.string.timetable_dialog_title_pupil));
+                                    dialog.setTitle(getString(R.string.timetable_dialog_title_pupil));
                                 }
+
+                                ImageButton cmdAdd = dialog.findViewById(R.id.cmdAdd);
+
+                                final Spinner spSubjects = dialog.findViewById(R.id.spSubject);
+                                ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, R.layout.spinner_item, new ArrayList<>());
+                                spSubjects.setAdapter(subjectAdapter);
+                                subjectAdapter.notifyDataSetChanged();
+
+                                final Spinner spOptional = dialog.findViewById(R.id.spTeacher);
+                                ArrayAdapter<String> optionalAdapter = new ArrayAdapter<>(TimeTableEntryActivity.this, R.layout.spinner_item, new ArrayList<>());
+                                spOptional.setAdapter(optionalAdapter);
+                                optionalAdapter.notifyDataSetChanged();
+
+                                final EditText txtRoomNumber = dialog.findViewById(R.id.txtRoomNumber);
+
+                                for(Subject subject : MainActivity.globals.getSqLite().getSubjects("")) {
+                                    if(mpSubjects.get(subject.getAlias())!=null) {
+                                        if(subject.getHoursInWeek()>Objects.requireNonNull(mpSubjects.get(subject.getAlias()))) {
+                                            subjectAdapter.add(String.format("%s: %s", subject.getId(), subject.getTitle()));
+                                        }
+                                    } else {
+                                        subjectAdapter.add(String.format("%s: %s", subject.getId(), subject.getTitle()));
+                                    }
+
+                                }
+                                subjectAdapter.add("");
+                                spSubjects.setSelection(subjectAdapter.getPosition(""));
+
+                                if(!MainActivity.globals.getUserSettings().isTimeTableMode()) {
+                                    for(Teacher teacher : MainActivity.globals.getSqLite().getTeachers("")) {
+                                        optionalAdapter.add(String.format("%s: %s %s", teacher.getId(), teacher.getFirstName(), teacher.getLastName()));
+                                    }
+                                } else {
+                                    for(SchoolClass schoolClass : MainActivity.globals.getSqLite().getClasses("")) {
+                                        optionalAdapter.add(String.format("%s: %s", schoolClass.getId(), schoolClass.getTitle()));
+                                    }
+                                }
+                                optionalAdapter.add("");
+                                spOptional.setSelection(optionalAdapter.getPosition(""));
+
+                                if(textView.getTag()!=null) {
+                                    String[] tag = textView.getTag().toString().split("\n");
+                                    int subjectID = Integer.parseInt(tag[0].trim().split(" - ")[0].trim());
+                                    int optionalID = Integer.parseInt(tag[0].trim().split(" - ")[1].trim());
+                                    List<Subject> subjects = MainActivity.globals.getSqLite().getSubjects("ID=" + subjectID);
+                                    if(subjects!=null) {
+                                        if(!subjects.isEmpty()) {
+                                            oldSubject = subjects.get(0);
+                                            if(mpSubjects.containsKey(oldSubject.getAlias())) {
+                                                mpSubjects.put(oldSubject.getAlias(), Objects.requireNonNull(mpSubjects.get(oldSubject.getAlias())) - 1);
+                                            }
+                                            String formatted = String.format("%s: %s", oldSubject.getId(), oldSubject.getTitle());
+
+                                            boolean isAvailable = false;
+                                            for(int i1 = 0; i1 <=subjectAdapter.getCount()-1; i1++) {
+                                                String item = subjectAdapter.getItem(i1);
+                                                if(item!=null) {
+                                                    if (item.equals(formatted)) {
+                                                        spSubjects.setSelection(i1);
+                                                        isAvailable = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            if(!isAvailable) {
+                                                subjectAdapter.add(formatted);
+                                            }
+                                        }
+                                    }
+
+                                    listFromAdapter(subjectAdapter, spSubjects, subjectID);
+
+                                    if(optionalID!=0) {
+                                        listFromAdapter(optionalAdapter, spOptional, optionalID);
+                                    }
+                                    if(tag.length==2) {
+                                        txtRoomNumber.setText(tag[1]);
+                                    }
+                                }
+
+                                final Subject finalOldSubject = oldSubject;
+                                cmdAdd.setOnClickListener(v1 -> {
+                                    String item = spSubjects.getSelectedItem().toString();
+                                    if(!item.trim().equals("")) {
+                                        Subject subject = MainActivity.globals.getSqLite().getSubjects("ID=" + item.split(":")[0]).get(0);
+                                        if(mpSubjects.containsKey(subject.getAlias())) {
+                                            mpSubjects.put(subject.getAlias(), Objects.requireNonNull(mpSubjects.get(subject.getAlias())) + 1);
+                                        } else {
+                                            mpSubjects.put(subject.getAlias(), 1);
+                                        }
+                                        textView.setText(subject.getAlias());
+                                        textView.setBackgroundColor(Integer.parseInt(subject.getBackgroundColor()));
+                                        if(spOptional.getSelectedItem().toString().trim().equals("")) {
+                                            textView.setTag(item.split(":")[0] + " - " + 0);
+                                        } else {
+                                            textView.setTag(item.split(":")[0] + " - " + spOptional.getSelectedItem().toString().split(":")[0].trim());
+                                        }
+                                        textView.setTag(textView.getTag() + "\n" + txtRoomNumber.getText());
+                                    } else {
+                                        textView.setText("");
+                                        textView.setBackgroundResource(R.drawable.tbl_border);
+                                        textView.setTag(null);
+
+                                        if(finalOldSubject !=null) {
+                                            if(mpSubjects.containsKey(finalOldSubject.getAlias())) {
+                                                if(Objects.requireNonNull(mpSubjects.get(finalOldSubject.getAlias()))==1) {
+                                                    mpSubjects.remove(finalOldSubject.getAlias());
+                                                } else {
+                                                    mpSubjects.put(finalOldSubject.getAlias(), Objects.requireNonNull(mpSubjects.get(finalOldSubject.getAlias())) - 1);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    dialog.cancel();
+                                });
+
+                                dialog.show();
                             }
                         }
                     }
@@ -636,7 +628,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
             if((i-1)<=max) {
                 Hour hour = (Hour) hourList.get(i-1);
                 textView.setText(String.format("%s%n%s", hour.getStart(), hour.getEnd()));
-                textView.setTag(String.valueOf(hour.getID()));
+                textView.setTag(String.valueOf(hour.getId()));
 
                 if(hour.isBreak()) {
                     textView.setTextSize(14);

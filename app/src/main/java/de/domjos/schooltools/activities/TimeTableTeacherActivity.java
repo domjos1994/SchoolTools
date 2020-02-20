@@ -17,7 +17,6 @@ import android.widget.EditText;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.Teacher;
@@ -35,7 +34,7 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
     private SwipeRefreshDeleteList lvTeachers;
     private EditText txtTeacherFirstName, txtTeacherLastName, txtTeacherDescription;
     private BottomNavigationView navigation;
-    private int currentID;
+    private long currentID;
 
     private Validator validator;
 
@@ -47,39 +46,28 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
     protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableTeacherActivity.this);
 
-        this.lvTeachers.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                Teacher teacher = (Teacher) listObject;
-                if(teacher!=null) {
-                    currentID = teacher.getID();
-                    txtTeacherFirstName.setText(teacher.getFirstName());
-                    txtTeacherLastName.setText(teacher.getLastName());
-                    txtTeacherDescription.setText(teacher.getDescription());
-                    navigation.getMenu().getItem(1).setEnabled(true);
-                    navigation.getMenu().getItem(2).setEnabled(true);
-                }
+        this.lvTeachers.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> {
+            Teacher teacher = (Teacher) listObject;
+            if(teacher!=null) {
+                currentID = teacher.getId();
+                txtTeacherFirstName.setText(teacher.getFirstName());
+                txtTeacherLastName.setText(teacher.getLastName());
+                txtTeacherDescription.setText(teacher.getDescription());
+                navigation.getMenu().getItem(1).setEnabled(true);
+                navigation.getMenu().getItem(2).setEnabled(true);
             }
         });
 
-        this.lvTeachers.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadTeachers();
-            }
-        });
+        this.lvTeachers.setOnReloadListener(this::reloadTeachers);
 
-        this.lvTeachers.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("teachers", "ID", listObject.getID(), "");
+        this.lvTeachers.setOnDeleteListener(listObject -> {
+            MainActivity.globals.getSqLite().deleteEntry("teachers", "ID", listObject.getId(), "");
 
-                currentID = 0;
-                navigation.getMenu().getItem(1).setEnabled(false);
-                navigation.getMenu().getItem(2).setEnabled(false);
-                controlFields(false, true);
-                reloadTeachers();
-            }
+            currentID = 0;
+            navigation.getMenu().getItem(1).setEnabled(false);
+            navigation.getMenu().getItem(2).setEnabled(false);
+            controlFields(false, true);
+            reloadTeachers();
         });
     }
 
@@ -119,7 +107,7 @@ public final class TimeTableTeacherActivity extends AbstractActivity {
                         case R.id.navTimeTableSubSave:
                             if(validator.getState()) {
                                 Teacher teacher = new Teacher();
-                                teacher.setID(currentID);
+                                teacher.setId(currentID);
                                 teacher.setFirstName(txtTeacherFirstName.getText().toString());
                                 teacher.setLastName(txtTeacherLastName.getText().toString());
                                 teacher.setDescription(txtTeacherDescription.getText().toString());

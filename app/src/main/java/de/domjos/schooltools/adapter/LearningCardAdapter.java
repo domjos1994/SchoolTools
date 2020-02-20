@@ -44,7 +44,7 @@ public class LearningCardAdapter extends ArrayAdapter<LearningCard> {
             lblTitle.setText(entry.getTitle());
             lblQuestion.setText(entry.getQuestion());
 
-            if(entry.getID()==0 && entry.getTitle().equals("") && entry.getQuestion().equals("")) {
+            if(entry.getId()==0 && entry.getTitle().equals("") && entry.getQuestion().equals("")) {
                 if(img!=null) {
                     img.setImageResource(android.R.drawable.ic_menu_add);
                 }

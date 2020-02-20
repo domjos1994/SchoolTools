@@ -28,7 +28,7 @@ import de.domjos.schooltoolslib.model.TimerEvent;
 import de.domjos.schooltoolslib.model.mark.Test;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
 import de.domjos.customwidgets.utils.Validator;
@@ -104,11 +104,11 @@ public final class MarkEntryActivity extends AbstractActivity {
                         txtTestAverage.setText(String.valueOf(test.getAverage()));
                     }
                     if(test.getTestDate()!=null) {
-                        txtTestDate.setText(Converter.convertDateToString(test.getTestDate(), this.getApplicationContext()));
+                        txtTestDate.setText(ConvertHelper.convertDateToString(test.getTestDate(), this.getApplicationContext()));
                     }
                     chkTestMemory.setChecked(true);
                     txtTestMemoryDate.setVisibility(View.VISIBLE);
-                    txtTestMemoryDate.setText(Converter.convertDateToString(test.getMemoryDate(), this.getApplicationContext()));
+                    txtTestMemoryDate.setText(ConvertHelper.convertDateToString(test.getMemoryDate(), this.getApplicationContext()));
 
                     txtTestThemes.setText(test.getThemes());
                     txtTestDescription.setText(test.getDescription());
@@ -141,7 +141,7 @@ public final class MarkEntryActivity extends AbstractActivity {
                         case R.id.navTimeTableSubSave:
                             if(validator.getState()) {
                                 Test test = new Test();
-                                test.setID(currentID);
+                                test.setId(currentID);
                                 test.setTitle(txtTestTitle.getText().toString());
                                 test.setWeight(Double.parseDouble(txtTestWeight.getText().toString()));
                                 if(!txtTestMark.getText().toString().equals("")) {
@@ -151,10 +151,10 @@ public final class MarkEntryActivity extends AbstractActivity {
                                     test.setAverage(Double.parseDouble(txtTestAverage.getText().toString()));
                                 }
                                 if(!txtTestDate.getText().toString().equals("")) {
-                                    test.setTestDate(Converter.convertStringToDate(txtTestDate.getText().toString(), this.getApplicationContext()));
+                                    test.setTestDate(ConvertHelper.convertStringToDate(txtTestDate.getText().toString(), this.getApplicationContext()));
                                 }
                                 if(!txtTestMemoryDate.getText().toString().equals("")) {
-                                    test.setMemoryDate(Converter.convertStringToDate(txtTestMemoryDate.getText().toString(), this.getApplicationContext()));
+                                    test.setMemoryDate(ConvertHelper.convertStringToDate(txtTestMemoryDate.getText().toString(), this.getApplicationContext()));
                                 }
                                 test.setThemes(txtTestThemes.getText().toString());
                                 test.setDescription(txtTestDescription.getText().toString());

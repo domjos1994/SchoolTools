@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.*;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardGroup;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardQuery;
@@ -47,30 +46,19 @@ public final class LearningCardQueryActivity extends AbstractActivity {
     @Override
     protected void initActions() {
 
-        this.lvLearningCardQueries.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                learningCardQuery = (LearningCardQuery) listObject;
-                loadFields();
-                controlElements(false, false);
-            }
+        this.lvLearningCardQueries.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener)  listObject -> {
+            learningCardQuery = (LearningCardQuery) listObject;
+            loadFields();
+            controlElements(false, false);
         });
 
-        this.lvLearningCardQueries.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadList();
-            }
-        });
+        this.lvLearningCardQueries.setOnReloadListener(this::reloadList);
 
-        this.lvLearningCardQueries.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("learningCardQueries", "ID=" + listObject.getID());
-                learningCardQuery = null;
-                controlElements(false, true);
-                reloadList();
-            }
+        this.lvLearningCardQueries.setOnDeleteListener(listObject -> {
+            MainActivity.globals.getSqLite().deleteEntry("learningCardQueries", "ID=" + listObject.getId());
+            learningCardQuery = null;
+            controlElements(false, true);
+            reloadList();
         });
 
         this.chkLearningCardQueryRandom.setOnCheckedChangeListener((buttonView, isChecked) -> txtLearningCardQueryRandomNumber.setVisibility(isChecked ? View.VISIBLE : View.GONE));
@@ -89,7 +77,7 @@ public final class LearningCardQueryActivity extends AbstractActivity {
                     controlElements(true, false);
                     break;
                 case R.id.navTimeTableSubDelete:
-                    MainActivity.globals.getSqLite().deleteEntry("learningCardQueries", "ID=" + learningCardQuery.getID());
+                    MainActivity.globals.getSqLite().deleteEntry("learningCardQueries", "ID=" + learningCardQuery.getId());
                     learningCardQuery = null;
                     controlElements(false, true);
                     reloadList();

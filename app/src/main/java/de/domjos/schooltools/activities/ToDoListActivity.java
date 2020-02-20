@@ -19,13 +19,12 @@ import android.widget.EditText;
 
 import java.util.List;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
 
@@ -40,7 +39,7 @@ public final class ToDoListActivity extends AbstractActivity {
     private SwipeRefreshDeleteList lvToDoLists;
     private EditText txtToDoListTitle, txtToDoListDescription, txtToDoListDate;
 
-    private int currentID;
+    private long currentID;
     private Validator validator;
 
     public ToDoListActivity() {
@@ -53,26 +52,13 @@ public final class ToDoListActivity extends AbstractActivity {
         this.changeControls(false, true, false);
         this.getListFromExtra();
 
-        this.lvToDoLists.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                setValues((ToDoList) listObject);
-            }
-        });
+        this.lvToDoLists.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> setValues((ToDoList) listObject));
 
-        this.lvToDoLists.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadItems();
-            }
-        });
+        this.lvToDoLists.setOnReloadListener(this::reloadItems);
 
-        this.lvToDoLists.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("toDoLists", "ID", listObject.getID(), "");
-                reloadItems();
-            }
+        this.lvToDoLists.setOnDeleteListener(listObject -> {
+            MainActivity.globals.getSqLite().deleteEntry("toDoLists", "ID", listObject.getId(), "");
+            reloadItems();
         });
     }
 
@@ -141,11 +127,11 @@ public final class ToDoListActivity extends AbstractActivity {
     private void setValues(ToDoList toDoList) {
         if(toDoList!=null) {
             Log.v("test", toDoList.getTitle());
-            currentID = toDoList.getID();
+            currentID = toDoList.getId();
             txtToDoListTitle.setText(toDoList.getTitle());
             txtToDoListDescription.setText(toDoList.getDescription());
             if(toDoList.getListDate()!=null) {
-                txtToDoListDate.setText(Converter.convertDateToString(toDoList.getListDate(), this.getApplicationContext()));
+                txtToDoListDate.setText(ConvertHelper.convertDateToString(toDoList.getListDate(), this.getApplicationContext()));
             }
             changeControls(false, false, true);
         }
@@ -186,11 +172,11 @@ public final class ToDoListActivity extends AbstractActivity {
                     try {
                         if(validator.getState()) {
                             ToDoList toDoList = new ToDoList();
-                            toDoList.setID(currentID);
+                            toDoList.setId(currentID);
                             toDoList.setTitle(txtToDoListTitle.getText().toString());
                             toDoList.setDescription(txtToDoListDescription.getText().toString());
                             if(!txtToDoListDate.getText().toString().equals("")) {
-                                toDoList.setListDate(Converter.convertStringToDate(txtToDoListDate.getText().toString(), this.getApplicationContext()));
+                                toDoList.setListDate(ConvertHelper.convertStringToDate(txtToDoListDate.getText().toString(), this.getApplicationContext()));
                             }
                             MainActivity.globals.getSqLite().insertOrUpdateToDoList(toDoList);
                             reloadItems();

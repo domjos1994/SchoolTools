@@ -24,7 +24,7 @@ import de.domjos.schooltoolslib.model.learningCard.LearningCardGroup;
 import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -65,12 +65,12 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
         this.lvLearningCards.setOnItemLongClickListener((parent, view, position, id) -> {
             LearningCard learningCard = learningCards.get(position);
             if(learningCard!=null) {
-                if(learningCard.getID()!=0) {
+                if(learningCard.getId()!=0) {
                     learningCards.remove(learningCard);
                     for(int i = 0; i<=learningCards.size()-1; i++) {
                         LearningCard tmp = learningCards.get(i);
                         if(tmp!=null) {
-                            if(tmp.getID()==0) {
+                            if(tmp.getId()==0) {
                                 cardPosition = i;
                                 loadCard();
                                 break;
@@ -361,7 +361,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
         this.txtLearningCardGroupDescription.setText(this.learningCardGroup.getDescription());
         Date deadLine = this.learningCardGroup.getDeadLine();
         if(deadLine!=null) {
-            this.txtLearningCardGroupDeadline.setText(Converter.convertDateToString(deadLine, this.getApplicationContext()));
+            this.txtLearningCardGroupDeadline.setText(ConvertHelper.convertDateToString(deadLine, this.getApplicationContext()));
         }
 
         Subject subject = this.learningCardGroup.getSubject();
@@ -369,12 +369,12 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
             Subject tmp = this.subjectAdapter.getItem(i);
             if(tmp!=null) {
                 if(subject!=null) {
-                    if(tmp.getID()==subject.getID()) {
+                    if(tmp.getId()==subject.getId()) {
                         this.spLearningCardGroupSubject.setSelection(i);
                         break;
                     }
                 } else {
-                    if(tmp.getID()==0) {
+                    if(tmp.getId()==0) {
                         this.spLearningCardGroupSubject.setSelection(i);
                         break;
                     }
@@ -390,7 +390,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
             for(int i = 0; i<=this.teacherAdapter.getCount()-1; i++) {
                 Teacher tmp = this.teacherAdapter.getItem(i);
                 if(tmp!=null) {
-                    if(tmp.getID()==0) {
+                    if(tmp.getId()==0) {
                         this.spLearningCardGroupTeacher.setSelection(i);
                         break;
                     }
@@ -420,12 +420,12 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
 
         String deadLine = this.txtLearningCardGroupDeadline.getText().toString();
         if(!deadLine.trim().equals("")) {
-            this.learningCardGroup.setDeadLine(Converter.convertStringToDate(deadLine, this.getApplicationContext()));
+            this.learningCardGroup.setDeadLine(ConvertHelper.convertStringToDate(deadLine, this.getApplicationContext()));
         }
 
         Teacher teacher = this.teacherAdapter.getItem(this.spLearningCardGroupTeacher.getSelectedItemPosition());
         if(teacher!=null) {
-            if(teacher.getID()!=0) {
+            if(teacher.getId()!=0) {
                 this.learningCardGroup.setTeacher(teacher);
             } else {
                 this.learningCardGroup.setTeacher(null);
@@ -436,7 +436,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
 
         Subject subject = this.subjectAdapter.getItem(this.spLearningCardGroupSubject.getSelectedItemPosition());
         if(subject!=null) {
-            if(subject.getID()!=0) {
+            if(subject.getId()!=0) {
                 this.learningCardGroup.setSubject(subject);
             } else {
                 this.learningCardGroup.setSubject(null);
@@ -450,7 +450,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
     private void reloadList() {
         boolean isAvailable = false;
         for(LearningCard tmp : learningCards) {
-            if(tmp.getID()==0 && tmp.getTitle().trim().equals("") && tmp.getQuestion().trim().equals("")) {
+            if(tmp.getId()==0 && tmp.getTitle().trim().equals("") && tmp.getQuestion().trim().equals("")) {
                 isAvailable = true;
                 break;
             }

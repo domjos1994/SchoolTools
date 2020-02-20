@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import de.domjos.customwidgets.widgets.calendar.Event;
-import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.Memory;
 
 public class WidgetCalendarMemory extends Event {
@@ -35,6 +34,6 @@ public class WidgetCalendarMemory extends Event {
         super.setCalendar(new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(this.memory.getDate()));
         super.setName(this.memory.getTitle());
         super.setDescription(this.memory.getDescription());
-        super.setId(this.memory.getID());
+        super.setId(this.memory.getId());
     }
 }

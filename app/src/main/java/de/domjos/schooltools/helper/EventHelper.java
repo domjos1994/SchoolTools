@@ -22,7 +22,7 @@ import java.util.List;
 
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.model.Memory;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 
 /**
  *
@@ -49,7 +49,7 @@ public class EventHelper {
 
         if(memory!=null) {
             Calendar cal = Calendar.getInstance();
-            cal.setTime(Converter.convertStringToDate(memory.getDate(), this.context));
+            cal.setTime(ConvertHelper.convertStringToDate(memory.getDate(), this.context));
             return new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, cal.getTimeInMillis())
@@ -66,7 +66,7 @@ public class EventHelper {
     public void saveMemoriesToCalendar(Activity curActivity) throws Exception {
         for(Memory memory : this.memoryList) {
             Calendar cal = Calendar.getInstance();
-            cal.setTime(Converter.convertStringToDate(memory.getDate(), this.context));
+            cal.setTime(ConvertHelper.convertStringToDate(memory.getDate(), this.context));
 
             String eventUriString = "CONTENT_PARAM://com.android.calendar/events";
             ContentValues eventValues = new ContentValues();

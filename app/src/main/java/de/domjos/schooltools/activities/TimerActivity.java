@@ -31,7 +31,7 @@ import de.domjos.schooltools.helper.evenTypes.WidgetCalendarMemory;
 import de.domjos.schooltools.helper.evenTypes.WidgetCalendarTimerEvent;
 import de.domjos.schooltoolslib.model.Memory;
 import de.domjos.schooltoolslib.model.TimerEvent;
-import de.domjos.customwidgets.utils.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 
 /**
@@ -56,7 +56,7 @@ public final class TimerActivity extends AbstractActivity {
             Intent intent = new Intent(getApplicationContext(), TimerEntryActivity.class);
             intent.putExtra("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(this.widgetCalendar.getCurrentEvent().getCalendar().getTime()));
             if(event instanceof WidgetCalendarTimerEvent) {
-                intent.putExtra("id", ((WidgetCalendarTimerEvent)event).getTimerEvent().getID());
+                intent.putExtra("id", ((WidgetCalendarTimerEvent)event).getTimerEvent().getId());
             }
             startActivityForResult(intent, 99);
         });
@@ -71,7 +71,7 @@ public final class TimerActivity extends AbstractActivity {
                 Intent intent = new Intent(getApplicationContext(), TimerEntryActivity.class);
                 intent.putExtra("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(this.widgetCalendar.getCurrentEvent().getCalendar().getTime()));
                 if(event instanceof WidgetCalendarTimerEvent) {
-                    intent.putExtra("id", ((WidgetCalendarTimerEvent)event).getTimerEvent().getID());
+                    intent.putExtra("id", ((WidgetCalendarTimerEvent)event).getTimerEvent().getId());
                 }
                 startActivityForResult(intent, 99);
             }
@@ -210,7 +210,7 @@ public final class TimerActivity extends AbstractActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 try {
-                    Date dt = Converter.convertStringToDate(newText, getApplicationContext());
+                    Date dt = ConvertHelper.convertStringToDate(newText, getApplicationContext());
                     if(dt!=null) {
                         widgetCalendar.setCurrentDate(dt);
                     } else {

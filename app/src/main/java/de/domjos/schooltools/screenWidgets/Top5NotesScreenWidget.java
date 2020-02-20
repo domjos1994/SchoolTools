@@ -47,7 +47,7 @@ public final class Top5NotesScreenWidget extends ScreenWidget {
             Note note = (Note) screenWidgetAdapter.getItem(position);
             if(note!=null) {
                 Intent intent = new Intent(activity.getApplicationContext(), NoteActivity.class);
-                intent.putExtra("ID", note.getID());
+                intent.putExtra("ID", note.getId());
                 activity.startActivity(intent);
             }
         });

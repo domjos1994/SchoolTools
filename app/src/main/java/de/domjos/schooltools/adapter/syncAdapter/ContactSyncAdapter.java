@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
@@ -69,7 +70,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
 
                             if(entry.getValue().after(last_sync)) {
                                 teacher.setDescription(contact.getDescription());
-                                teacher.setID(contact.getID());
+                                teacher.setId(contact.getId());
                                 dirty = true;
                             }
                             available = true;
@@ -77,7 +78,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
                     }
 
                     if(!available) {
-                        teacher.setID(0);
+                        teacher.setId(0);
                         this.saveTeachersToContact(teacher, provider, account);
                     } else {
                         if(dirty) {
@@ -104,7 +105,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
 
                                     if(!teacherDescription.equals(contactDescription)) {
                                         contact.setDescription(teacher.getDescription());
-                                        contact.setID(teacher.getID());
+                                        contact.setId(teacher.getId());
                                         dirty = true;
                                     }
                                     available = true;
@@ -115,7 +116,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     if(contact!=null) {
                         if(!available) {
-                            contact.setID(0);
+                            contact.setId(0);
                             this.sql.insertOrUpdateTeacher(contact);
                         } else {
                             if(dirty) {
@@ -145,7 +146,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
             contentValues.put(Groups.GROUP_VISIBLE, 1);
             contentValues.put(Groups.SHOULD_SYNC, true);
             final Uri newGroupUri = provider.insert(ContactSyncAdapter.asSyncAdapter(Groups.CONTENT_URI, account), contentValues);
-            this.group_id = ContentUris.parseId(newGroupUri);
+            this.group_id = ContentUris.parseId(Objects.requireNonNull(newGroupUri));
         }
     }
 
@@ -185,7 +186,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
         if(teacherCursor!=null) {
             while (teacherCursor.moveToNext()) {
                 Teacher teacher = new Teacher();
-                teacher.setID(teacherCursor.getInt(teacherCursor.getColumnIndex(Contacts._ID)));
+                teacher.setId(teacherCursor.getInt(teacherCursor.getColumnIndex(Contacts._ID)));
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     dt = new Date(teacherCursor.getLong(teacherCursor.getColumnIndex(Contacts.CONTACT_LAST_UPDATED_TIMESTAMP)));
@@ -193,7 +194,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 String[] structuredProjection = new String[]{StructuredName.FAMILY_NAME, StructuredName.GIVEN_NAME};
                 String selection = StructuredName.CONTACT_ID + "=?";
-                String[] arguments = new String[]{String.valueOf(teacher.getID())};
+                String[] arguments = new String[]{String.valueOf(teacher.getId())};
                 Cursor structuredCursor = provider.query(asSyncAdapter(ContactsContract.Data.CONTENT_URI, account),structuredProjection, selection, arguments, null);
                 if(structuredCursor!=null) {
                     while (structuredCursor.moveToNext()) {
@@ -230,12 +231,12 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
         ContentValues contentValues = new ContentValues();
         contentValues.put(RawContacts.ACCOUNT_NAME, account.name);
         contentValues.put(RawContacts.ACCOUNT_TYPE, account.type);
-        if(teacher.getID()==0) {
+        if(teacher.getId()==0) {
             Uri uri = provider.insert(asSyncAdapter(RawContacts.CONTENT_URI, account), contentValues);
-            contact_id = ContentUris.parseId(uri);
+            contact_id = ContentUris.parseId(Objects.requireNonNull(uri));
         } else {
             String selection = RawContacts._ID + "=?";
-            provider.update(asSyncAdapter(RawContacts.CONTENT_URI, account), contentValues, selection, new String[]{String.valueOf(teacher.getID())});
+            provider.update(asSyncAdapter(RawContacts.CONTENT_URI, account), contentValues, selection, new String[]{String.valueOf(teacher.getId())});
         }
 
         contentValues = new ContentValues();

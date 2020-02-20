@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.Subject;
@@ -67,7 +66,7 @@ public final class MarkActivity extends AbstractActivity {
                 List<Subject> subjectList = MainActivity.globals.getSqLite().getSubjects("title='" + subjectAdapter.getItem(i) + "'");
                 if(subjectList!=null) {
                     if(!subjectList.isEmpty()) {
-                        if(subjectList.get(0).getID()==id) {
+                        if(subjectList.get(0).getId()==id) {
                             subject = subjectList.get(0).getTitle();
                             spMarkSubject.setSelection(subjectAdapter.getPosition(subject));
                             reloadTests();
@@ -87,35 +86,24 @@ public final class MarkActivity extends AbstractActivity {
             startActivityForResult(intent, 98);
         });
 
-        this.lvTest.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                Test test = (Test) listObject;
+        this.lvTest.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> {
+            Test test = (Test) listObject;
 
-                Intent intent = new Intent(getApplicationContext(), MarkEntryActivity.class);
-                if(test!=null) {
-                    intent.putExtra("id", test.getID());
-                }
-                intent.putExtra("subject", subject);
-                intent.putExtra("year", year);
-                startActivityForResult(intent, 98);
+            Intent intent = new Intent(getApplicationContext(), MarkEntryActivity.class);
+            if(test!=null) {
+                intent.putExtra("id", test.getId());
             }
+            intent.putExtra("subject", subject);
+            intent.putExtra("year", year);
+            startActivityForResult(intent, 98);
         });
 
-        this.lvTest.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadTests();
-            }
-        });
+        this.lvTest.setOnReloadListener(this::reloadTests);
 
-        this.lvTest.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("tests", "ID", listObject.getID(), "");
-                MainActivity.globals.getSqLite().deleteEntry("schoolYears", "test=" + listObject.getID());
-                reloadTests();
-            }
+        this.lvTest.setOnDeleteListener(listObject -> {
+            MainActivity.globals.getSqLite().deleteEntry("tests", "ID", listObject.getId(), "");
+            MainActivity.globals.getSqLite().deleteEntry("schoolYears", "test=" + listObject.getId());
+            reloadTests();
         });
 
         this.spMarkYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
