@@ -74,6 +74,15 @@ public class CSVBridge {
         obj.writeValue(key, value);
         this.lineMap.put(line, obj);
     }
+
+    public void writeValue(int line, String key, Long value) {
+        CSVObject obj = this.lineMap.get(line);
+        if (obj == null) {
+            return;
+        }
+        obj.writeValue(key, value);
+        this.lineMap.put(line, obj);
+    }
     
     public void writeValue(int line, String key, Double value) {
         CSVObject obj = this.lineMap.get(line);

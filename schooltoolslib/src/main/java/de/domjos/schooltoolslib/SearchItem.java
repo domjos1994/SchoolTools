@@ -19,9 +19,9 @@ public class SearchItem extends BaseObject {
     private String type;
     private String extra;
 
-    public SearchItem(int id, String title, String type) {
+    public SearchItem(long id, String title, String type) {
         super();
-        super.setID(id);
+        super.setId(id);
         super.setTitle(title);
         this.type = type;
         this.extra = "";
