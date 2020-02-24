@@ -8,7 +8,7 @@
  */
 package de.domjos.schooltoolslib.model.timetable;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 
 /**
  * Model-Class for the hour of a Time-Table

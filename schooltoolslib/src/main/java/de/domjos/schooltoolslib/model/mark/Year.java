@@ -8,7 +8,7 @@
  */
 package de.domjos.schooltoolslib.model.mark;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 
 /**
  * Model of a Year

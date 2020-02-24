@@ -1,6 +1,6 @@
 package de.domjos.schooltoolslib.model;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 
 public class Bookmark extends BaseDescriptionObject {
     private Subject subject;

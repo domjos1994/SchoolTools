@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 
 /**
  * Model-Class for the ToDo-Lists

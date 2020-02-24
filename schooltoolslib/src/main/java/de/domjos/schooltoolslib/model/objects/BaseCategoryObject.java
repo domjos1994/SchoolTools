@@ -9,7 +9,7 @@
 
 package de.domjos.schooltoolslib.model.objects;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 
 public class BaseCategoryObject extends BaseDescriptionObject {
     private String category;

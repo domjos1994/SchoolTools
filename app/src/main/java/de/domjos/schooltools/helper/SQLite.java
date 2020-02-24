@@ -22,8 +22,7 @@ import java.lang.reflect.Field;
 import java.sql.Types;
 import java.util.*;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
-import de.domjos.customwidgets.model.objects.BaseObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.customwidgets.utils.ConvertHelper;
 
@@ -218,8 +217,6 @@ public class SQLite extends SQLiteOpenHelper {
         try {
             if(object instanceof BaseDescriptionObject) {
                 db.execSQL("DELETE FROM " + table + " WHERE ID=" + ((BaseDescriptionObject)object).getId() + ";");
-            } else if(object instanceof BaseObject) {
-                db.execSQL("DELETE FROM " + table + " WHERE ID=" + ((BaseObject)object).getId() + ";");
             }
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);

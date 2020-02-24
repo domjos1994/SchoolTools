@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
