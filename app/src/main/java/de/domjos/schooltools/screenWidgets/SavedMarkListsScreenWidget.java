@@ -23,6 +23,7 @@ import java.util.Map;
 
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.ApiActivity;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.adapter.MarkListAdapter;
 import de.domjos.schooltoolslib.exceptions.MarkListException;
@@ -93,7 +94,7 @@ public final class SavedMarkListsScreenWidget extends ScreenWidget {
                 this.markListAdapter.add(entry);
             }
         } catch (MarkListException ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.activity);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, super.activity);
         }
     }
 

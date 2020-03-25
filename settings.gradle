@@ -1,5 +1,2 @@
 include ':app'
 include ':schooltoolslib'
-include ':customwidgets'
-
-project(':customwidgets').projectDir = new File(rootDir, '../Libraries/customwidgets')

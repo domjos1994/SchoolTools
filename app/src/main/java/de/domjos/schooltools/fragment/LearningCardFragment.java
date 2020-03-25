@@ -99,52 +99,49 @@ public class LearningCardFragment extends Fragment {
             this.lblLearningCardCurrentTry.setText("0");
             this.lblLearningCardMaxTries.setText(String.valueOf(learningCardQuery.getTries()));
 
-            this.cmdCheckAnswer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    boolean result = checkAnswer();
-                    learningCardQueryResult.setLearningCard(learningCard);
-                    learningCardQueryResult.setTraining(learningCardQueryTraining);
+            this.cmdCheckAnswer.setOnClickListener(v -> {
+                boolean result = checkAnswer();
+                learningCardQueryResult.setLearningCard(learningCard);
+                learningCardQueryResult.setTraining(learningCardQueryTraining);
 
-                    if(currentTry<=learningCardQuery.getTries()) {
-                        if(currentTry==0) {
-                            learningCardQueryResult.setResult1(result);
-                            learningCardQueryResult.setTry1(txtLearningCardAnswer.getText().toString());
-                        }
-                        if(currentTry==1) {
-                            learningCardQueryResult.setResult2(result);
-                            learningCardQueryResult.setTry2(txtLearningCardAnswer.getText().toString());
-                        }
-                        if(currentTry==2) {
-                            learningCardQueryResult.setResult3(result);
-                            learningCardQueryResult.setTry3(txtLearningCardAnswer.getText().toString());
-                        }
+                if(currentTry<=learningCardQuery.getTries()) {
+                    if(currentTry==0) {
+                        learningCardQueryResult.setResult1(result);
+                        learningCardQueryResult.setTry1(txtLearningCardAnswer.getText().toString());
                     }
-
-                    if(result) {
-                        lblLearningCardResult.setText(context.getString(R.string.learningCard_query_answer_right));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            lblLearningCardResult.setBackgroundColor(context.getColor(R.color.Green));
-                        } else {
-                            lblLearningCardResult.setBackgroundColor(getResources().getColor(R.color.Green));
-                        }
-                    } else {
-                        lblLearningCardResult.setText(context.getString(R.string.learningCard_query_answer_wrong));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            lblLearningCardResult.setBackgroundColor(context.getColor(R.color.Red));
-                        } else {
-                            lblLearningCardResult.setBackgroundColor(getResources().getColor(R.color.Red));
-                        }
+                    if(currentTry==1) {
+                        learningCardQueryResult.setResult2(result);
+                        learningCardQueryResult.setTry2(txtLearningCardAnswer.getText().toString());
                     }
-                    lblLearningCardCurrentTry.setText(String.valueOf(++currentTry));
-                    if(currentTry==learningCardQuery.getTries() || result) {
-                        cmdCheckAnswer.setEnabled(false);
-                        txtLearningCardAnswer.setEnabled(false);
-                    } else {
-                        txtLearningCardAnswer.setText("");
+                    if(currentTry==2) {
+                        learningCardQueryResult.setResult3(result);
+                        learningCardQueryResult.setTry3(txtLearningCardAnswer.getText().toString());
                     }
-                    learningCardQueryResult.setID(MainActivity.globals.getSqLite().insertOrUpdateLearningCardResult(learningCardQueryResult));
                 }
+
+                if(result) {
+                    lblLearningCardResult.setText(context.getString(R.string.learningCard_query_answer_right));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        lblLearningCardResult.setBackgroundColor(context.getColor(R.color.Green));
+                    } else {
+                        lblLearningCardResult.setBackgroundColor(getResources().getColor(R.color.Green));
+                    }
+                } else {
+                    lblLearningCardResult.setText(context.getString(R.string.learningCard_query_answer_wrong));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        lblLearningCardResult.setBackgroundColor(context.getColor(R.color.Red));
+                    } else {
+                        lblLearningCardResult.setBackgroundColor(getResources().getColor(R.color.Red));
+                    }
+                }
+                lblLearningCardCurrentTry.setText(String.valueOf(++currentTry));
+                if(currentTry==learningCardQuery.getTries() || result) {
+                    cmdCheckAnswer.setEnabled(false);
+                    txtLearningCardAnswer.setEnabled(false);
+                } else {
+                    txtLearningCardAnswer.setText("");
+                }
+                learningCardQueryResult.setId(MainActivity.globals.getSqLite().insertOrUpdateLearningCardResult(learningCardQueryResult));
             });
         }
     }

@@ -9,7 +9,7 @@
 
 package de.domjos.schooltoolslib.model.learningCard;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 
 public class LearningCard extends BaseDescriptionObject {
     private String category;

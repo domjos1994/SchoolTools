@@ -9,9 +9,9 @@
 
 package de.domjos.schooltoolslib.model.learningCard;
 
-import de.domjos.customwidgets.model.objects.BaseObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 
-public class LearningCardQueryResult extends BaseObject {
+public class LearningCardQueryResult extends BaseDescriptionObject {
     private LearningCard learningCard;
     private LearningCardQueryTraining training;
     private String try1;

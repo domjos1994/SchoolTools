@@ -53,7 +53,7 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
             ToDoList toDoList = adapter.getItem(cmbToDoLists.getSelectedItemPosition());
 
             if(toDoList!=null) {
-                getSettings(toDoList.getID(), chkToDoNotSolved.isChecked());
+                getSettings(toDoList.getId(), chkToDoNotSolved.isChecked());
             }
         });
     }
@@ -78,7 +78,7 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
         }
     }
 
-    private void getSettings(int id, boolean solved) {
+    private void getSettings(long id, boolean solved) {
         try {
             this.saveSettings(id, solved);
 
@@ -92,14 +92,13 @@ public class ToDoWidgetConfigurationActivity extends AppCompatActivity {
             setResult(RESULT_OK, resultValue);
             finish();
         } catch (Exception ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoWidgetConfigurationActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getApplicationContext());
         }
     }
 
-    @SuppressWarnings("deprecation")
-    private void saveSettings(int id, boolean solved) {
+    private void saveSettings(long id, boolean solved) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit();
-        editor.putInt("todo_list_id_" + this.appWidgetID, id);
+        editor.putLong("todo_list_id_" + this.appWidgetID, id);
         editor.putBoolean("todo_list_solved_" + this.appWidgetID, solved);
         editor.apply();
     }

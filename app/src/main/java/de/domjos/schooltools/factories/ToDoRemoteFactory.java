@@ -156,7 +156,7 @@ public class ToDoRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
                 }
             }
         } catch (Exception ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
 
         return row;

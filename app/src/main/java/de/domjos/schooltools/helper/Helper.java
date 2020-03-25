@@ -258,11 +258,11 @@ public class Helper {
         }
     }
 
-    public static boolean isInteger(String number) {
+    static boolean isInteger(String number) {
         return Pattern.matches("^\\d+$", number.trim());
     }
 
-    public static boolean isDouble(String number) {
+    static boolean isDouble(String number) {
         return Pattern.matches("^[0-9]+(.|,)?[0-9]?$", number.trim());
     }
 
@@ -338,32 +338,22 @@ public class Helper {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public static void setBackgroundToActivity(Activity activity) {
         Map.Entry<String, byte[]> entry = MainActivity.globals.getSqLite().getSetting("background");
         if(entry!=null) {
             if(!entry.getKey().equals("")) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    activity.getWindow().getDecorView().getRootView().setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
-                } else {
-                    activity.getWindow().getDecorView().getRootView().setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
-                }
+                activity.getWindow().getDecorView().getRootView().setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
                 return;
             }
         }
         activity.getWindow().getDecorView().getRootView().setBackgroundResource(R.drawable.bg_water);
     }
 
-    @SuppressWarnings("deprecation")
     public static void setBackgroundAppBarToActivity(NavigationView navigationView, Activity activity) {
         Map.Entry<String, byte[]> entry = MainActivity.globals.getSqLite().getSetting("app_bar_background");
         if(entry!=null) {
             if(!entry.getKey().equals("")) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    navigationView.setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
-                } else {
-                    navigationView.setBackgroundDrawable(new BitmapDrawable(BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
-                }
+                navigationView.setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
                 return;
             }
         }

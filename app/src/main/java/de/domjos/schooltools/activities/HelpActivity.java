@@ -84,13 +84,6 @@ public final class HelpActivity extends AbstractActivity {
 
     @Override
     protected void initControls() {
-        try {
-            this.logFile = new File(MainActivity.globals.getLogFile());
-        } catch (Exception ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, HelpActivity.this);
-        }
-
-
         // init toolbar
         Toolbar toolbar = this.findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

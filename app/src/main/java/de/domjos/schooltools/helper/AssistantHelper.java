@@ -219,7 +219,7 @@ public class AssistantHelper {
             }
 
             if(!contains) {
-                hour.setID(MainActivity.globals.getSqLite().insertOrUpdateHour(hour));
+                hour.setId(MainActivity.globals.getSqLite().insertOrUpdateHour(hour));
                 this.timeTableAssistantTimesAdapter.add(hour);
             }
         });
@@ -227,7 +227,7 @@ public class AssistantHelper {
         this.lvTimeTableAssistantTimes.setOnItemLongClickListener((parent, view, position, id) -> {
             Hour hour = this.timeTableAssistantTimesAdapter.getItem(position);
             if(hour != null) {
-                MainActivity.globals.getSqLite().deleteEntry("hours", "ID=" + hour.getID());
+                MainActivity.globals.getSqLite().deleteEntry("hours", "ID=" + hour.getId());
                 this.timeTableAssistantTimesAdapter.remove(hour);
             }
             return true;
@@ -269,7 +269,7 @@ public class AssistantHelper {
             }
 
             if(!contains) {
-                subject.setID(MainActivity.globals.getSqLite().insertOrUpdateSubject(subject));
+                subject.setId(MainActivity.globals.getSqLite().insertOrUpdateSubject(subject));
                 this.timeTableAssistantSubjectsAdapter.add(subject);
             }
         });
@@ -278,7 +278,7 @@ public class AssistantHelper {
             Subject subject = this.timeTableAssistantSubjectsAdapter.getItem(position);
             if(subject != null) {
                 this.timeTableAssistantSubjectsAdapter.remove(subject);
-                MainActivity.globals.getSqLite().deleteEntry("subjects", "ID=" + subject.getID());
+                MainActivity.globals.getSqLite().deleteEntry("subjects", "ID=" + subject.getId());
             }
             return true;
         });
@@ -422,7 +422,7 @@ public class AssistantHelper {
             }
         }
         this.group.setLearningCards(learningCards);
-        this.group.setID(MainActivity.globals.getSqLite().insertOrUpdateLearningCardGroup(this.group));
+        this.group.setId(MainActivity.globals.getSqLite().insertOrUpdateLearningCardGroup(this.group));
 
         this.query.setLearningCardGroup(this.group);
         MainActivity.globals.getSqLite().insertOrUpdateLearningCardQuery(this.query);
@@ -535,11 +535,11 @@ public class AssistantHelper {
         year.setTitle(this.txtTimeTableAssistantTimeTableYear.getText().toString().trim());
         for(de.domjos.schooltoolslib.model.mark.Year currentYear : MainActivity.globals.getSqLite().getYears("")) {
             if(currentYear.getTitle().equals(year.getTitle())) {
-                year.setID(currentYear.getID());
+                year.setId(currentYear.getId());
                 break;
             }
         }
-        year.setID(MainActivity.globals.getSqLite().insertOrUpdateYear(year));
+        year.setId(MainActivity.globals.getSqLite().insertOrUpdateYear(year));
 
         this.timeTable.setYear(year);
         this.timeTable.setTitle(this.txtTimeTableAssistantTimeTableTitle.getText().toString().trim());

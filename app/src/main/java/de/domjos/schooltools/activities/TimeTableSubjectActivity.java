@@ -33,7 +33,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.ColorAdapter;
@@ -57,7 +56,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
     private TextView lblSelectedColor;
     private Spinner spSubjectTeachers;
     private CheckBox chkSubjectMainSubject;
-    private int currentID;
+    private long currentID;
 
     private ColorAdapter colorAdapter;
     private ArrayAdapter<String> adapter;
@@ -78,50 +77,39 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         navigation.getMenu().getItem(1).setEnabled(false);
         navigation.getMenu().getItem(2).setEnabled(false);
 
-        this.lvSubjects.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                Subject subject = (Subject) listObject;
-                if(subject!=null) {
-                    currentID = subject.getID();
-                    txtSubjectTitle.setText(subject.getTitle());
-                    txtSubjectAlias.setText(subject.getAlias());
-                    txtSubjectDescription.setText(subject.getDescription());
-                    txtSubjectHoursInWeek.setText(String.valueOf(subject.getHoursInWeek()));
-                    chkSubjectMainSubject.setChecked(subject.isMainSubject());
-                    int color = Integer.parseInt(subject.getBackgroundColor());
-                    lblSelectedColor.setBackgroundColor(color);
-                    lblSelectedColor.setText(getSelectedName(TimeTableSubjectActivity.this, color));
-                    if(subject.getTeacher()!=null) {
-                        Teacher t = subject.getTeacher();
-                        spSubjectTeachers.setSelection(adapter.getPosition(String.format("%s: %s %s", t.getID(), t.getFirstName(), t.getLastName())));
-                    } else {
-                        spSubjectTeachers.setSelection(-1);
-                    }
-                    navigation.getMenu().getItem(1).setEnabled(true);
-                    navigation.getMenu().getItem(2).setEnabled(true);
+        this.lvSubjects.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> {
+            Subject subject = (Subject) listObject;
+            if(subject!=null) {
+                currentID = subject.getId();
+                txtSubjectTitle.setText(subject.getTitle());
+                txtSubjectAlias.setText(subject.getAlias());
+                txtSubjectDescription.setText(subject.getDescription());
+                txtSubjectHoursInWeek.setText(String.valueOf(subject.getHoursInWeek()));
+                chkSubjectMainSubject.setChecked(subject.isMainSubject());
+                int color = Integer.parseInt(subject.getBackgroundColor());
+                lblSelectedColor.setBackgroundColor(color);
+                lblSelectedColor.setText(getSelectedName(TimeTableSubjectActivity.this, color));
+                if(subject.getTeacher()!=null) {
+                    Teacher t = subject.getTeacher();
+                    spSubjectTeachers.setSelection(adapter.getPosition(String.format("%s: %s %s", t.getId(), t.getFirstName(), t.getLastName())));
+                } else {
+                    spSubjectTeachers.setSelection(-1);
                 }
+                navigation.getMenu().getItem(1).setEnabled(true);
+                navigation.getMenu().getItem(2).setEnabled(true);
             }
         });
 
-        this.lvSubjects.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadSubjects();
-            }
-        });
+        this.lvSubjects.setOnReloadListener(this::reloadSubjects);
 
-        this.lvSubjects.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("subjects", "ID", listObject.getID(), "");
+        this.lvSubjects.setOnDeleteListener(listObject -> {
+            MainActivity.globals.getSqLite().deleteEntry("subjects", "ID", listObject.getId(), "");
 
-                currentID = 0;
-                navigation.getMenu().getItem(1).setEnabled(false);
-                navigation.getMenu().getItem(2).setEnabled(false);
-                controlFields(false, true);
-                reloadSubjects();
-            }
+            currentID = 0;
+            navigation.getMenu().getItem(1).setEnabled(false);
+            navigation.getMenu().getItem(2).setEnabled(false);
+            controlFields(false, true);
+            reloadSubjects();
         });
 
         this.txtSubjectAlias.addTextChangedListener(new TextWatcher() {
@@ -220,7 +208,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
                             MessageHelper.printMessage(getString(R.string.message_validator_duplicated), R.mipmap.ic_launcher_round, TimeTableSubjectActivity.this);
                         } else {
                             Subject subject = new Subject();
-                            subject.setID(currentID);
+                            subject.setId(currentID);
                             subject.setTitle(txtSubjectTitle.getText().toString());
                             subject.setAlias(txtSubjectAlias.getText().toString());
                             subject.setDescription(txtSubjectDescription.getText().toString());
@@ -424,7 +412,6 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void setDefaultValues(int name, int color_name, boolean main) {
         txtSubjectTitle.setText(this.getString(name));
         chkSubjectMainSubject.setChecked(main);
@@ -438,7 +425,6 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         lblSelectedColor.setText(this.getString(color_name));
     }
 
-    @SuppressWarnings("deprecation")
     private void setDefaultValues(int color_name, boolean main) {
         chkSubjectMainSubject.setChecked(main);
         if(main) {
@@ -453,7 +439,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator =  new Validator(getApplicationContext(), R.mipmap.ic_launcher_round);
+        this.validator =  new Validator(TimeTableSubjectActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtSubjectTitle, 1, 500);
         this.validator.addLengthValidator(txtSubjectAlias, 1, 3);
     }
@@ -463,7 +449,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         for(int i = 0; i<=this.lvSubjects.getAdapter().getItemCount()-1; i++) {
             Subject subject = (Subject) this.lvSubjects.getAdapter().getItem(i);
             if(subject!=null) {
-                if(subject.getID()!=this.currentID) {
+                if(subject.getId()!=this.currentID) {
                     if(txtSubjectAlias.getText().toString().toLowerCase().trim().equals(subject.getAlias().toLowerCase())) {
                         duplicated = true;
                         break;
@@ -478,7 +464,6 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         return duplicated;
     }
 
-    @SuppressWarnings("deprecation")
     private void controlFields(boolean editMode, boolean reset) {
         this.txtSubjectTitle.setEnabled(editMode);
         this.txtSubjectAlias.setEnabled(editMode);
@@ -506,7 +491,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
     private void reloadTeachers() {
         this.adapter.clear();
         for(Teacher teacher : MainActivity.globals.getSqLite().getTeachers("")) {
-            this.adapter.add(String.format("%s: %s %s", teacher.getID(), teacher.getFirstName(), teacher.getLastName()).trim());
+            this.adapter.add(String.format("%s: %s %s", teacher.getId(), teacher.getFirstName(), teacher.getLastName()).trim());
         }
         this.adapter.add("");
         this.spSubjectTeachers.setSelection(this.adapter.getPosition(""));

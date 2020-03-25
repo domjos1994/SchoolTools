@@ -9,13 +9,10 @@
 
 package de.domjos.schooltools.activities;
 
-import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -26,7 +23,7 @@ import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDo;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
 
@@ -50,15 +47,12 @@ public final class ToDoEntryActivity extends AbstractActivity {
     @Override
     protected void initActions() {
 
-        this.chkToDoMemory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                   txtToDoMemoryDate.setVisibility(View.VISIBLE);
-                } else {
-                    txtToDoMemoryDate.setText("");
-                    txtToDoMemoryDate.setVisibility(View.GONE);
-                }
+        this.chkToDoMemory.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+               txtToDoMemoryDate.setVisibility(View.VISIBLE);
+            } else {
+                txtToDoMemoryDate.setText("");
+                txtToDoMemoryDate.setVisibility(View.GONE);
             }
         });
     }
@@ -75,7 +69,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
                     chkToDoSolved.setChecked(toDo.isSolved());
                     rbToDoImportance.setRating(toDo.getImportance());
                     chkToDoMemory.setChecked(true);
-                    txtToDoMemoryDate.setText(Converter.convertDateToString(toDo.getMemoryDate()));
+                    txtToDoMemoryDate.setText(ConvertHelper.convertDateToString(toDo.getMemoryDate(), this.getApplicationContext()));
                     txtToDoMemoryDate.setVisibility(View.VISIBLE);
                 }
             }
@@ -83,7 +77,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
     }
 
     private void initValidation() {
-        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
+        this.validator = new Validator(ToDoEntryActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtToDoTitle, 3, 500);
         this.validator.addDateValidator(txtToDoMemoryDate);
     }
@@ -95,47 +89,44 @@ public final class ToDoEntryActivity extends AbstractActivity {
         final String list = this.getIntent().getStringExtra("list");
 
         // init navigation_learning_card_group
-        OnNavigationItemSelectedListener listener = new OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                try {
-                    switch (Helper.checkMenuID(item)) {
-                        case R.id.navTimeTableSubDelete:
-                            MainActivity.globals.getSqLite().deleteEntry("toDos", "ID", id, "");
-                            setResult(RESULT_OK);
-                            finish();
-                            break;
-                        case R.id.navTimeTableSubSave:
-                            if (validator.getState()) {
-                                ToDo toDo = new ToDo();
-                                toDo.setID(id);
-                                toDo.setTitle(txtToDoTitle.getText().toString());
-                                toDo.setDescription(txtToDoDescription.getText().toString());
-                                toDo.setCategory(txtToDoCategory.getText().toString());
-                                toDo.setSolved(chkToDoSolved.isChecked());
-                                toDo.setImportance((int) rbToDoImportance.getRating());
-                                if (chkToDoMemory.isChecked()) {
-                                    if (!txtToDoMemoryDate.getText().toString().equals("")) {
-                                        toDo.setMemoryDate(Converter.convertStringToDate(txtToDoMemoryDate.getText().toString()));
-                                    }
+        OnNavigationItemSelectedListener listener = item -> {
+            try {
+                switch (Helper.checkMenuID(item)) {
+                    case R.id.navTimeTableSubDelete:
+                        MainActivity.globals.getSqLite().deleteEntry("toDos", "ID", id, "");
+                        setResult(RESULT_OK);
+                        finish();
+                        break;
+                    case R.id.navTimeTableSubSave:
+                        if (validator.getState()) {
+                            ToDo toDo = new ToDo();
+                            toDo.setId(id);
+                            toDo.setTitle(txtToDoTitle.getText().toString());
+                            toDo.setDescription(txtToDoDescription.getText().toString());
+                            toDo.setCategory(txtToDoCategory.getText().toString());
+                            toDo.setSolved(chkToDoSolved.isChecked());
+                            toDo.setImportance((int) rbToDoImportance.getRating());
+                            if (chkToDoMemory.isChecked()) {
+                                if (!txtToDoMemoryDate.getText().toString().equals("")) {
+                                    toDo.setMemoryDate(ConvertHelper.convertStringToDate(txtToDoMemoryDate.getText().toString(), getApplicationContext()));
                                 }
-                                MainActivity.globals.getSqLite().insertOrUpdateToDo(toDo, list);
-
-                                setResult(RESULT_OK);
-                                finish();
                             }
-                            break;
-                        case R.id.navTimeTableSubCancel:
+                            MainActivity.globals.getSqLite().insertOrUpdateToDo(toDo, list);
+
                             setResult(RESULT_OK);
                             finish();
-                            break;
-                        default:
-                    }
-                } catch (Exception ex) {
-                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoEntryActivity.this);
+                        }
+                        break;
+                    case R.id.navTimeTableSubCancel:
+                        setResult(RESULT_OK);
+                        finish();
+                        break;
+                    default:
                 }
-                return false;
+            } catch (Exception ex) {
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ToDoEntryActivity.this);
             }
+            return false;
         };
         BottomNavigationView navigation = this.findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(listener);

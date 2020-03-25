@@ -25,7 +25,7 @@ import de.domjos.schooltools.adapter.EventAdapter;
 import de.domjos.schooltoolslib.model.Memory;
 import de.domjos.schooltoolslib.model.TimerEvent;
 import de.domjos.customwidgets.model.ScreenWidget;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 
 public final class TodayScreenWidget extends ScreenWidget {
@@ -59,11 +59,11 @@ public final class TodayScreenWidget extends ScreenWidget {
             List<Memory> memories = MainActivity.globals.getSqLite().getCurrentMemories();
             for(Memory memory : memories) {
                 try {
-                    if(Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate()))) {
+                    if(Helper.compareDateWithCurrentDate(ConvertHelper.convertStringToDate(memory.getDate(), this.activity))) {
                         this.eventAdapter.add(new AbstractMap.SimpleEntry<>("Er.(" + memory.getStringType(this.activity) + ")", memory.getTitle()));
                     }
                 } catch (Exception ex) {
-                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.activity);
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, super.activity);
                 }
             }
 

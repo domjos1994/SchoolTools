@@ -1,18 +1,21 @@
 package de.domjos.schooltools.activities;
 
 import android.Manifest;
-import android.app.NotificationManager;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.MediaRecorder;
 import android.os.Build;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.jjoe64.graphview.GraphView;
@@ -34,11 +37,13 @@ public final class TrafficLightActivity extends AbstractActivity {
 
     private int currentState = 0;
     private boolean startRecording = false;
+    private boolean lock = false;
 
     private AppCompatImageView ivTrafficLights;
     private BottomNavigationView navigation;
     private GraphView graphView;
-    private EditText txtTrafficLightsOrange, txtTrafficLightsRed, txtTrafficlightsMaximum;
+    private EditText txtTrafficLightsOrange, txtTrafficLightsRed, txtTrafficLightsMaximum, txtTrafficLightsPassword;
+    private SharedPreferences sharedPreferences;
 
     private MediaRecorder mediaRecorder;
     private Timer timer;
@@ -60,6 +65,8 @@ public final class TrafficLightActivity extends AbstractActivity {
 
     @Override
     protected void initActions() {
+        this.sharedPreferences = TrafficLightActivity.this.getSharedPreferences("traffic_lights", MODE_PRIVATE);
+        this.getSettings();
 
         this.ivTrafficLights.setOnClickListener(view -> {
             if(!this.startRecording) {
@@ -85,10 +92,12 @@ public final class TrafficLightActivity extends AbstractActivity {
                     this.startRecording();
                     break;
                 case R.id.navTrafficLightsStop:
-                    this.startRecording = false;
-                    this.navigation.getMenu().findItem(R.id.navTrafficLightsStart).setVisible(true);
-                    this.navigation.getMenu().findItem(R.id.navTrafficLightsStop).setVisible(false);
-                    this.stopRecording();
+                    if(this.lock()) {
+                        this.startRecording = false;
+                        this.navigation.getMenu().findItem(R.id.navTrafficLightsStart).setVisible(true);
+                        this.navigation.getMenu().findItem(R.id.navTrafficLightsStop).setVisible(false);
+                        this.stopRecording();
+                    }
                     break;
                 case R.id.navTrafficLightsExpand:
                     if(this.graphView.getVisibility()==View.GONE) {
@@ -110,7 +119,8 @@ public final class TrafficLightActivity extends AbstractActivity {
         this.graphView.setVisibility(View.GONE);
         this.txtTrafficLightsOrange = this.findViewById(R.id.txtTrafficLightsOrange);
         this.txtTrafficLightsRed = this.findViewById(R.id.txtTrafficLightsRed);
-        this.txtTrafficlightsMaximum = this.findViewById(R.id.txtTrafficLightsMaximum);
+        this.txtTrafficLightsMaximum = this.findViewById(R.id.txtTrafficLightsMaximum);
+        this.txtTrafficLightsPassword = this.findViewById(R.id.txtTrafficLightsPassword);
 
         this.iniDefault();
 
@@ -124,7 +134,56 @@ public final class TrafficLightActivity extends AbstractActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(this.lock()) {
+            super.onBackPressed();
+        }
+    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(!this.lock()) {
+            if(keyCode==KeyEvent.KEYCODE_BACK) {
+                return false;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_traffic_lights, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.menTrafficLightsSave:
+                this.saveSettings();
+                break;
+            case R.id.menTrafficLightsLock:
+                if(this.lock()) {
+                    if (!this.lock) {
+                        this.sharedPreferences.edit().putString("password", this.txtTrafficLightsPassword.getText().toString()).apply();
+                        this.txtTrafficLightsPassword.setText("");
+                    }
+                    this.lock = !this.lock;
+
+                    ActionBar actionBar = this.getSupportActionBar();
+                    if(actionBar != null) {
+                        actionBar.setDisplayHomeAsUpEnabled(!this.lock);
+                    }
+                    TrafficLightActivity.this.setTitle(this.getString(R.string.traffic_light) + (this.lock ? " " + this.getString(R.string.traffic_light_locked) : ""));
+                }
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private void stopRecording() {
         if(this.timer!=null) {
@@ -135,8 +194,8 @@ public final class TrafficLightActivity extends AbstractActivity {
             this.mediaRecorder.stop();
 
             this.txtTrafficLightsRed.setEnabled(true);
+            this.txtTrafficLightsMaximum.setEnabled(true);
             this.txtTrafficLightsOrange.setEnabled(true);
-            this.txtTrafficlightsMaximum.setEnabled(true);
             this.iniDefault();
         }
     }
@@ -149,8 +208,8 @@ public final class TrafficLightActivity extends AbstractActivity {
             if(!this.txtTrafficLightsRed.getText().toString().trim().isEmpty()) {
                 TrafficLightActivity.RED_BORDER = Integer.parseInt(this.txtTrafficLightsRed.getText().toString().trim());
             }
-            if(!this.txtTrafficlightsMaximum.getText().toString().trim().isEmpty()) {
-                TrafficLightActivity.MAXIMUM = Integer.parseInt(this.txtTrafficlightsMaximum.getText().toString().trim());
+            if(!this.txtTrafficLightsMaximum.getText().toString().trim().isEmpty()) {
+                TrafficLightActivity.MAXIMUM = Integer.parseInt(this.txtTrafficLightsMaximum.getText().toString().trim());
             }
             this.iniDefault();
 
@@ -163,7 +222,7 @@ public final class TrafficLightActivity extends AbstractActivity {
 
             this.txtTrafficLightsRed.setEnabled(false);
             this.txtTrafficLightsOrange.setEnabled(false);
-            this.txtTrafficlightsMaximum.setEnabled(false);
+            this.txtTrafficLightsMaximum.setEnabled(false);
 
             this.timer = new Timer();
             this.timer.schedule(new TimerTask() {
@@ -215,7 +274,9 @@ public final class TrafficLightActivity extends AbstractActivity {
         switch (this.currentState) {
             case 0:
                 resId = R.drawable.ic_traffic_black_red;
-                this.showNotification();
+                if(this.startRecording) {
+                    this.showNotification();
+                }
                 break;
             case 1:
                 resId = R.drawable.ic_traffic_black_orange;
@@ -293,27 +354,54 @@ public final class TrafficLightActivity extends AbstractActivity {
     private void showNotification() {
         if(MainActivity.globals.getUserSettings().isNotificationsShown()) {
             if(this.notification_id==-1) {
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(TrafficLightActivity.this.getApplicationContext(), MainActivity.CHANNEL_ID);
-                builder.setContentTitle(this.getString(R.string.traffic_light_notification_title));
-                builder.setContentText(this.getString(R.string.traffic_light_notification_content));
-                builder.setSmallIcon(R.mipmap.ic_launcher_round);
-
-                NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
-                if(notificationManager!=null) {
-                    this.notification_id = 99;
-                    notificationManager.notify(this.notification_id, builder.build());
-                }
+                this.notification_id =
+                    MessageHelper.showNotification(
+                            TrafficLightActivity.this,
+                            this.getString(R.string.traffic_light_notification_title),
+                            this.getString(R.string.traffic_light_notification_content),
+                            R.mipmap.ic_launcher_round
+                    );
             }
         }
     }
 
     private void removeNotification() {
         if(this.notification_id!=-1) {
-            NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
-            if(notificationManager!=null) {
-                notificationManager.cancel(this.notification_id);
-                this.notification_id = -1;
-            }
+            MessageHelper.stopNotification(TrafficLightActivity.this, this.notification_id);
+            this.notification_id = -1;
         }
+    }
+
+    private void saveSettings() {
+        try {
+            this.sharedPreferences = TrafficLightActivity.this.getSharedPreferences("traffic_lights", MODE_PRIVATE);
+            SharedPreferences.Editor editor = this.sharedPreferences.edit();
+            editor.putString("orange", this.txtTrafficLightsOrange.getText().toString());
+            editor.putString("red", this.txtTrafficLightsRed.getText().toString());
+            editor.putString("maximum", this.txtTrafficLightsMaximum.getText().toString());
+            editor.apply();
+            MessageHelper.printMessage(this.getString(R.string.traffic_light_saved_success), R.mipmap.ic_launcher_round, TrafficLightActivity.this);
+        } catch (Exception ex) {
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TrafficLightActivity.this);
+        }
+    }
+
+    private void getSettings() {
+        try {
+            this.sharedPreferences = TrafficLightActivity.this.getSharedPreferences("traffic_lights", MODE_PRIVATE);
+            this.txtTrafficLightsOrange.setText(this.sharedPreferences.getString("orange", String.valueOf(ORANGE_BORDER)));
+            this.txtTrafficLightsRed.setText(this.sharedPreferences.getString("red", String.valueOf(RED_BORDER)));
+            this.txtTrafficLightsMaximum.setText(this.sharedPreferences.getString("maximum", String.valueOf(MAXIMUM)));
+        } catch (Exception ex) {
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TrafficLightActivity.this);
+        }
+    }
+
+    private boolean lock() {
+        if(this.lock) {
+            String savedPwd = this.sharedPreferences.getString("password", "");
+            return savedPwd.equals(this.txtTrafficLightsPassword.getText().toString().trim());
+        }
+        return true;
     }
 }

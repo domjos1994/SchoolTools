@@ -9,19 +9,19 @@
 
 package de.domjos.schooltoolslib;
 
-import de.domjos.customwidgets.model.objects.BaseObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 
 /**
  * @author Dominic Joas
  */
 
-public class SearchItem extends BaseObject {
+public class SearchItem extends BaseDescriptionObject {
     private String type;
     private String extra;
 
-    public SearchItem(int id, String title, String type) {
+    public SearchItem(long id, String title, String type) {
         super();
-        super.setID(id);
+        super.setId(id);
         super.setTitle(title);
         this.type = type;
         this.extra = "";

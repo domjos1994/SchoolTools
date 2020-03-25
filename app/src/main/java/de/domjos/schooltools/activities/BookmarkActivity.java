@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Objects;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.Bookmark;
@@ -67,7 +67,7 @@ public final class BookmarkActivity extends AbstractActivity {
     private ImageButton cmdBookmarkLink, cmdBookmarkFile;
     private Bookmark currentBookmark = new Bookmark();
     private Validator validator;
-    private int subjectID = 0;
+    private long subjectID = 0;
 
     public BookmarkActivity() {
         super(R.layout.bookmark_activity,MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
@@ -142,23 +142,17 @@ public final class BookmarkActivity extends AbstractActivity {
             }
         });
 
-        this.lvBookmarks.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                currentBookmark = (Bookmark) listObject;
-                setFieldsFromObject();
-            }
+        this.lvBookmarks.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener)  listObject -> {
+            currentBookmark = (Bookmark) listObject;
+            setFieldsFromObject();
         });
 
-        this.lvBookmarks.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                if(currentBookmark.getID()!=0) {
-                    MainActivity.globals.getSqLite().deleteEntry("bookmarks", currentBookmark);
-                }
-                changeControls(false, true);
-                reloadBookmarks("");
+        this.lvBookmarks.setOnDeleteListener(listObject -> {
+            if(currentBookmark.getId()!=0) {
+                MainActivity.globals.getSqLite().deleteEntry("bookmarks", currentBookmark);
             }
+            changeControls(false, true);
+            reloadBookmarks("");
         });
 
         this.spBookmarksFilterSubject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -166,7 +160,7 @@ public final class BookmarkActivity extends AbstractActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Subject subject = bookmarksFilterSubjectAdapter.getItem(position);
                 if(subject!=null) {
-                    subjectID = subject.getID();
+                    subjectID = subject.getId();
                     reloadBookmarks(searchView.getQuery().toString());
                 }
             }
@@ -296,7 +290,7 @@ public final class BookmarkActivity extends AbstractActivity {
                     changeControls(true, false);
                     return true;
                 case R.id.navTimeTableSubDelete:
-                    if(currentBookmark.getID()!=0) {
+                    if(currentBookmark.getId()!=0) {
                         MainActivity.globals.getSqLite().deleteEntry("bookmarks", currentBookmark);
                     }
                     changeControls(false, true);
@@ -307,6 +301,7 @@ public final class BookmarkActivity extends AbstractActivity {
                     return true;
                 case R.id.navTimeTableSubSave:
                     if(validator.getState()) {
+                        int result = 0;
                         try {
                             currentBookmark.setTitle(txtBookmarkTitle.getText().toString());
                             currentBookmark.setTags(txtBookmarkTags.getText().toString());
@@ -321,7 +316,7 @@ public final class BookmarkActivity extends AbstractActivity {
                                 File importFile = new File(txtBookmarkLink.getText().toString());
                                 FileInputStream fileInputStream = new FileInputStream(importFile);
                                 byte[] fileContent = new byte[(int) importFile.length()];
-                                int result = fileInputStream.read(fileContent);
+                                result = fileInputStream.read(fileContent);
                                 fileInputStream.close();
                                 currentBookmark.setData(fileContent);
                             }
@@ -343,7 +338,7 @@ public final class BookmarkActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
+        this.validator = new Validator(BookmarkActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addEmptyValidator(this.txtBookmarkTitle);
         this.validator.addEmptyValidator(this.txtBookmarkLink);
     }
@@ -424,7 +419,7 @@ public final class BookmarkActivity extends AbstractActivity {
 
             if(this.subjectID!=0) {
                 if(bookmark.getSubject()!=null) {
-                    if(bookmark.getSubject().getID()!=this.subjectID) {
+                    if(bookmark.getSubject().getId()!=this.subjectID) {
                         continue;
                     }
                 } else {

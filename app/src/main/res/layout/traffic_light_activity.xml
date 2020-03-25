@@ -22,38 +22,46 @@
         android:layout_above="@+id/controls"
         android:layout_margin="2dp"/>
 
-    <LinearLayout
+    <TableLayout
         android:id="@+id/controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/navigation"
-        android:weightSum="9"
-        android:orientation="horizontal">
+        android:weightSum="9">
+        <TableRow>
+            <EditText
+                android:id="@+id/txtTrafficLightsOrange"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:inputType="numberSigned"
+                android:hint="@string/traffic_light_orange"
+                android:text="@string/traffic_light_orange_def"/>
+            <EditText
+                android:id="@+id/txtTrafficLightsRed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:inputType="numberSigned"
+                android:hint="@string/traffic_light_red"
+                android:text="@string/traffic_light_red_def"/>
+            <EditText
+                android:id="@+id/txtTrafficLightsMaximum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:inputType="numberSigned"
+                android:hint="@string/traffic_light_max"
+                android:text="@string/traffic_light_max_def"/>
+        </TableRow>
         <EditText
-            android:id="@+id/txtTrafficLightsOrange"
+            android:id="@+id/txtTrafficLightsPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:inputType="numberSigned"
-            android:hint="@string/traffic_light_orange"
-            android:text="@string/traffic_light_orange_def"/>
-        <EditText
-            android:id="@+id/txtTrafficLightsRed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:inputType="numberSigned"
-            android:hint="@string/traffic_light_red"
-            android:text="@string/traffic_light_red_def"/>
-        <EditText
-            android:id="@+id/txtTrafficLightsMaximum"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:inputType="numberSigned"
-            android:hint="@string/traffic_light_max"
-            android:text="@string/traffic_light_max_def"/>
-    </LinearLayout>
+            android:layout_weight="9"
+            android:inputType="textPassword"
+            android:hint="@string/traffic_light_password"/>
+    </TableLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"

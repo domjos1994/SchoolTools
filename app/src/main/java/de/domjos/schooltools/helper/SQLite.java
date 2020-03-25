@@ -22,9 +22,10 @@ import java.lang.reflect.Field;
 import java.sql.Types;
 import java.util.*;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
-import de.domjos.customwidgets.model.objects.BaseObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.customwidgets.utils.ConvertHelper;
+
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.model.Bookmark;
@@ -88,7 +89,6 @@ public class SQLite extends SQLiteOpenHelper {
      * @param db the SQLite-Database
      */
     @Override
-    @SuppressWarnings("deprecation")
     public void onCreate(SQLiteDatabase db) {
         try {
             this.createDatabase(R.raw.init, db);
@@ -186,7 +186,7 @@ public class SQLite extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteEntry(String table, String column, int id, String where) {
+    public void deleteEntry(String table, String column, long id, String where) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             if(!where.isEmpty()) {
@@ -216,9 +216,7 @@ public class SQLite extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             if(object instanceof BaseDescriptionObject) {
-                db.execSQL("DELETE FROM " + table + " WHERE ID=" + ((BaseDescriptionObject)object).getID() + ";");
-            } else if(object instanceof BaseObject) {
-                db.execSQL("DELETE FROM " + table + " WHERE ID=" + ((BaseObject)object).getID() + ";");
+                db.execSQL("DELETE FROM " + table + " WHERE ID=" + ((BaseDescriptionObject)object).getId() + ";");
             }
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
@@ -244,7 +242,7 @@ public class SQLite extends SQLiteOpenHelper {
         return false;
     }
 
-    boolean entryExists(@NonNull String table, int id) {
+    boolean entryExists(@NonNull String table, long id) {
         return this.entryExists(table, "ID=" + id);
     }
 
@@ -269,14 +267,14 @@ public class SQLite extends SQLiteOpenHelper {
         return results;
     }
 
-    public List<LearningCard> getLearningCards(LearningCardQuery query) {
+    List<LearningCard> getLearningCards(LearningCardQuery query) {
         List<LearningCard> learningCards = new LinkedList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         try {
             if(query.getWrongCardsOfQuery()==null)  {
                 List<String> ls = new LinkedList<>();
                 if (query.getLearningCardGroup() != null) {
-                    ls.add("cardGroup=" + query.getLearningCardGroup().getID());
+                    ls.add("cardGroup=" + query.getLearningCardGroup().getId());
                 }
                 if (!query.getCategory().isEmpty()) {
                     ls.add("category='" + query.getCategory() + "'");
@@ -431,14 +429,14 @@ public class SQLite extends SQLiteOpenHelper {
         return settings;
     }
 
-    public int insertOrUpdateTeacher(Teacher teacher) {
+    public long insertOrUpdateTeacher(Teacher teacher) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(teacher.getID()!=0) {
+            if(teacher.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE teachers SET lastName=?, firstName=?, description=? WHERE ID=?;");
-                sqLiteStatement.bindLong(4, teacher.getID());
+                sqLiteStatement.bindLong(4, teacher.getId());
             } else {
                 sqLiteStatement = db.compileStatement("INSERT INTO teachers(lastName, firstName, description) VALUES(?,?,?);");
             }
@@ -451,11 +449,11 @@ public class SQLite extends SQLiteOpenHelper {
                 sqLiteStatement.bindNull(3);
             }
 
-            teacher.setID(this.saveAndClose(teacher.getID(), db, sqLiteStatement));
+            teacher.setId(this.saveAndClose(teacher.getId(), db, sqLiteStatement));
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
-        return teacher.getID();
+        return teacher.getId();
     }
 
     public List<Teacher> getTeachers(String where) {
@@ -469,7 +467,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM teachers" + where + ";", null);
             while (cursor.moveToNext()) {
                 Teacher teacher = new Teacher();
-                teacher.setID(cursor.getInt(0));
+                teacher.setId(cursor.getInt(0));
                 teacher.setLastName(cursor.getString(1));
                 teacher.setFirstName(cursor.getString(2));
                 teacher.setDescription(cursor.getString(3));
@@ -483,14 +481,14 @@ public class SQLite extends SQLiteOpenHelper {
         return teachers;
     }
 
-    public int insertOrUpdateClass(SchoolClass schoolClass) {
+    public long insertOrUpdateClass(SchoolClass schoolClass) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(schoolClass.getID()!=0) {
+            if(schoolClass.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE classes SET title=?, numberOfPupils=?, description=? WHERE ID=?;");
-                sqLiteStatement.bindLong(4, schoolClass.getID());
+                sqLiteStatement.bindLong(4, schoolClass.getId());
             } else {
                 int id = 0;
                 Cursor cursor = db.rawQuery("SELECT ID FROM classes WHERE title=?;", new String[]{schoolClass.getTitle().trim()});
@@ -498,23 +496,23 @@ public class SQLite extends SQLiteOpenHelper {
                     id = cursor.getInt(0);
                 }
                 cursor.close();
-                schoolClass.setID(id);
+                schoolClass.setId(id);
             }
-            if(schoolClass.getID()==0) {
+            if(schoolClass.getId()==0) {
                 sqLiteStatement = db.compileStatement("INSERT INTO classes(title, numberOfPupils, description) VALUES(?,?,?);");
             } else {
                 sqLiteStatement = db.compileStatement("UPDATE classes SET title=?, numberOfPupils=?, description=? WHERE ID=?;");
-                sqLiteStatement.bindLong(4, schoolClass.getID());
+                sqLiteStatement.bindLong(4, schoolClass.getId());
             }
             sqLiteStatement.bindString(1, schoolClass.getTitle());
             sqLiteStatement.bindLong(2, schoolClass.getNumberOfPupils());
             sqLiteStatement.bindString(3, schoolClass.getDescription());
 
-            schoolClass.setID(this.saveAndClose(schoolClass.getID(), db, sqLiteStatement));
+            schoolClass.setId(this.saveAndClose(schoolClass.getId(), db, sqLiteStatement));
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
-        return schoolClass.getID();
+        return schoolClass.getId();
     }
 
     public List<SchoolClass> getClasses(String where) {
@@ -528,7 +526,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM classes" + where + ";", null);
             while (cursor.moveToNext()) {
                 SchoolClass schoolClass = new SchoolClass();
-                schoolClass.setID(cursor.getInt(0));
+                schoolClass.setId(cursor.getInt(0));
                 schoolClass.setTitle(cursor.getString(1));
                 schoolClass.setNumberOfPupils(cursor.getInt(2));
                 schoolClass.setDescription(cursor.getString(3));
@@ -542,20 +540,20 @@ public class SQLite extends SQLiteOpenHelper {
         return schoolClasses;
     }
 
-    public int insertOrUpdateSubject(Subject subject) {
+    public long insertOrUpdateSubject(Subject subject) {
         return this.insertOrUpdateSubject(subject, null);
     }
 
-    private int insertOrUpdateSubject(Subject subject, SQLiteDatabase db) {
+    private long insertOrUpdateSubject(Subject subject, SQLiteDatabase db) {
         if(db==null) {
             db = this.getWritableDatabase();
         }
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(subject.getID()!=0) {
+            if(subject.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE subjects SET  title=?, alias=?, description=?, hoursInWeek=?, isMainSubject=?, backgroundColor=?, teacher=? WHERE ID=?;");
-                sqLiteStatement.bindLong(8, subject.getID());
+                sqLiteStatement.bindLong(8, subject.getId());
             } else {
                 sqLiteStatement = db.compileStatement("INSERT INTO subjects(title, alias, description, hoursInWeek, isMainSubject, backgroundColor, teacher) VALUES(?,?,?,?,?,?,?);");
             }
@@ -575,11 +573,11 @@ public class SQLite extends SQLiteOpenHelper {
                 sqLiteStatement.bindLong(7, 0);
             }
 
-            subject.setID(this.saveAndClose(subject.getID(), db, sqLiteStatement));
+            subject.setId(this.saveAndClose(subject.getId(), db, sqLiteStatement));
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
-        return subject.getID();
+        return subject.getId();
     }
 
     public List<Subject> getSubjects(String where) {
@@ -593,7 +591,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM subjects" + where + ";", null);
             while (cursor.moveToNext()) {
                 Subject subject = new Subject();
-                subject.setID(cursor.getInt(0));
+                subject.setId(cursor.getInt(0));
                 subject.setTitle(cursor.getString(1));
                 subject.setAlias(cursor.getString(2));
                 subject.setDescription(cursor.getString(3));
@@ -619,14 +617,14 @@ public class SQLite extends SQLiteOpenHelper {
         return subjects;
     }
 
-    public int insertOrUpdateHour(Hour hour) {
+    public long insertOrUpdateHour(Hour hour) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(hour.getID()!=0) {
+            if(hour.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE hours SET start_time=?, end_time=?, isBreak=? WHERE ID=?;");
-                sqLiteStatement.bindLong(4, hour.getID());
+                sqLiteStatement.bindLong(4, hour.getId());
             } else {
                 sqLiteStatement = db.compileStatement("INSERT INTO hours(start_time, end_time, isBreak) VALUES(?,?,?);");
             }
@@ -638,11 +636,11 @@ public class SQLite extends SQLiteOpenHelper {
                 sqLiteStatement.bindLong(3, 0);
             }
 
-            hour.setID(this.saveAndClose(hour.getID(), db, sqLiteStatement));
+            hour.setId(this.saveAndClose(hour.getId(), db, sqLiteStatement));
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
-        return hour.getID();
+        return hour.getId();
     }
 
     public List<Hour> getHours(String where) {
@@ -656,7 +654,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM hours" + where + ";", null);
             while (cursor.moveToNext()) {
                 Hour hour = new Hour();
-                hour.setID(cursor.getInt(0));
+                hour.setId(cursor.getInt(0));
                 hour.setStart(cursor.getString(1));
                 hour.setEnd(cursor.getString(2));
                 hour.setBreak(cursor.getInt(3)==1);
@@ -675,9 +673,9 @@ public class SQLite extends SQLiteOpenHelper {
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(timeTable.getID()!=0) {
+            if(timeTable.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE plans SET title=?, class=?, plan_year=?, description=? WHERE ID=?;");
-                sqLiteStatement.bindLong(5, timeTable.getID());
+                sqLiteStatement.bindLong(5, timeTable.getId());
             } else {
                 sqLiteStatement = db.compileStatement("INSERT INTO plans(title, class, plan_year, description) VALUES(?,?,?,?);");
             }
@@ -686,18 +684,18 @@ public class SQLite extends SQLiteOpenHelper {
                 sqLiteStatement.bindLong(2, this.insertOrUpdateClass(timeTable.getSchoolClass()));
             }
             if(timeTable.getYear()!=null) {
-                sqLiteStatement.bindLong(3, timeTable.getYear().getID());
+                sqLiteStatement.bindLong(3, timeTable.getYear().getId());
             }
             sqLiteStatement.bindString(4, timeTable.getDescription());
 
-            if(timeTable.getID()==0) {
-                timeTable.setID((int) sqLiteStatement.executeInsert());
+            if(timeTable.getId()==0) {
+                timeTable.setId((int) sqLiteStatement.executeInsert());
             } else {
                 sqLiteStatement.execute();
             }
             sqLiteStatement.close();
 
-            db.execSQL("DELETE FROM timeTable WHERE plan=" + timeTable.getID() + ";");
+            db.execSQL("DELETE FROM timeTable WHERE plan=" + timeTable.getId() + ";");
             for(Day day : timeTable.getDays()) {
                 if(day!=null) {
                     for(Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
@@ -705,9 +703,9 @@ public class SQLite extends SQLiteOpenHelper {
                             if(entry.getValue().getSubject()!=null) {
                                 sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, teacher, roomNumber, current_timetable) VALUES(?, ?, ?, ?, ?, ?, ?);");
                                 if(entry.getValue().getTeacher()!=null) {
-                                    sqLiteStatement.bindLong(5, entry.getValue().getTeacher().getID());
+                                    sqLiteStatement.bindLong(5, entry.getValue().getTeacher().getId());
                                 }
-                                this.saveTimeTable(sqLiteStatement, timeTable, day, entry.getKey().getID(), entry.getValue().getSubject().getID(), entry.getValue().getRoomNumber());
+                                this.saveTimeTable(sqLiteStatement, timeTable, day, entry.getKey().getId(), entry.getValue().getSubject().getId(), entry.getValue().getRoomNumber());
                             }
                         }
                     }
@@ -717,9 +715,9 @@ public class SQLite extends SQLiteOpenHelper {
                             if(entry.getValue().getSubject()!=null) {
                                 sqLiteStatement = db.compileStatement("INSERT INTO timeTable('plan', day, hour, subject, class, roomNumber, current_timetable) VALUES(?, ?, ?, ?, ?, ?, ?);");
                                 if(entry.getValue().getSchoolClass()!=null) {
-                                    sqLiteStatement.bindLong(5, entry.getValue().getSchoolClass().getID());
+                                    sqLiteStatement.bindLong(5, entry.getValue().getSchoolClass().getId());
                                 }
-                                this.saveTimeTable(sqLiteStatement, timeTable, day, entry.getKey().getID(), entry.getValue().getSubject().getID(), entry.getValue().getRoomNumber());
+                                this.saveTimeTable(sqLiteStatement, timeTable, day, entry.getKey().getId(), entry.getValue().getSubject().getId(), entry.getValue().getRoomNumber());
                             }
                         }
                     }
@@ -733,8 +731,8 @@ public class SQLite extends SQLiteOpenHelper {
         }
     }
 
-    private void saveTimeTable(SQLiteStatement sqLiteStatement, TimeTable timeTable, Day day, int hour, int subject, String roomNumber) {
-        sqLiteStatement.bindLong(1, timeTable.getID());
+    private void saveTimeTable(SQLiteStatement sqLiteStatement, TimeTable timeTable, Day day, long hour, long subject, String roomNumber) {
+        sqLiteStatement.bindLong(1, timeTable.getId());
         sqLiteStatement.bindLong(2, day.getPositionInWeek());
         sqLiteStatement.bindLong(3, hour);
         sqLiteStatement.bindLong(4, subject);
@@ -761,7 +759,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM plans" + where + ";", null);
             while (cursor.moveToNext()) {
                 TimeTable timeTable = new TimeTable();
-                timeTable.setID(cursor.getInt(0));
+                timeTable.setId(cursor.getInt(0));
                 timeTable.setTitle(cursor.getString(1));
                 List<SchoolClass> classes = this.getClasses("ID=" + cursor.getInt(2));
                 if(classes!=null) {
@@ -781,7 +779,7 @@ public class SQLite extends SQLiteOpenHelper {
             cursor.close();
 
             for(int i = 0; i<=timeTables.size()-1; i++) {
-                int id = timeTables.get(i).getID();
+                long id = timeTables.get(i).getId();
 
                 int currentDay = Integer.MAX_VALUE;
                 Day day = new Day();
@@ -858,14 +856,14 @@ public class SQLite extends SQLiteOpenHelper {
         return timeTables;
     }
 
-    int insertOrUpdateTest(Test test) {
+    long insertOrUpdateTest(Test test) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(test.getID()!=0) {
+            if(test.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE tests SET title=?, description=?, themes=?, weight=?, mark=?, average=?, testDate=? WHERE ID=?;");
-                sqLiteStatement.bindLong(8, test.getID());
+                sqLiteStatement.bindLong(8, test.getId());
             } else {
                 sqLiteStatement = db.compileStatement("INSERT INTO tests(title,description,themes,weight,mark,average,testDate) VALUES(?,?,?,?,?,?,?);");
             }
@@ -876,20 +874,20 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindDouble(5, test.getMark());
             sqLiteStatement.bindDouble(6, test.getAverage());
             if(test.getTestDate()!=null) {
-                sqLiteStatement.bindString(7, Converter.convertDateToString(test.getTestDate()));
+                sqLiteStatement.bindString(7, ConvertHelper.convertDateToString(test.getTestDate(), this.context));
             } else {
                 sqLiteStatement.bindNull(7);
             }
 
-            if(test.getID()==0) {
-                test.setID((int) sqLiteStatement.executeInsert());
+            if(test.getId()==0) {
+                test.setId((int) sqLiteStatement.executeInsert());
             } else {
                 sqLiteStatement.execute();
             }
             sqLiteStatement.close();
 
             if(test.getMemoryDate()!=null) {
-                this.addMemory("tests", test.getID(), test.getMemoryDate(), db);
+                this.addMemory("tests", test.getId(), test.getMemoryDate(), db);
             }
 
             db.setTransactionSuccessful();
@@ -897,7 +895,7 @@ public class SQLite extends SQLiteOpenHelper {
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
-        return test.getID();
+        return test.getId();
     }
 
     public List<Test> getTests(String where) {
@@ -911,7 +909,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM tests" + where + ";", null);
             while (cursor.moveToNext()) {
                 Test test = new Test();
-                test.setID(cursor.getInt(0));
+                test.setId(cursor.getInt(0));
                 test.setTitle(cursor.getString(1));
                 test.setDescription(cursor.getString(2));
                 test.setThemes(cursor.getString(3));
@@ -923,7 +921,7 @@ public class SQLite extends SQLiteOpenHelper {
                     if(dt.equals("")) {
                         test.setTestDate(null);
                     } else {
-                        test.setTestDate(Converter.convertStringToDate(dt));
+                        test.setTestDate(ConvertHelper.convertStringToDate(dt, this.context));
                     }
                 } else {
                     test.setTestDate(null);
@@ -933,7 +931,7 @@ public class SQLite extends SQLiteOpenHelper {
             cursor.close();
 
             for(int i = 0; i<=tests.size()-1; i++) {
-                tests.get(i).setMemoryDate(this.getMemoryDate("tests", tests.get(i).getID(), db));
+                tests.get(i).setMemoryDate(this.getMemoryDate("tests", tests.get(i).getId(), db));
             }
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
@@ -941,25 +939,25 @@ public class SQLite extends SQLiteOpenHelper {
         return tests;
     }
 
-    public int insertOrUpdateYear(Year year) {
+    public long insertOrUpdateYear(Year year) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(year.getID()!=0) {
+            if(year.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE years SET title=?, description=? WHERE ID=?;");
-                sqLiteStatement.bindLong(3, year.getID());
+                sqLiteStatement.bindLong(3, year.getId());
             } else {
                 sqLiteStatement = db.compileStatement("INSERT INTO years(title,description) VALUES(?,?);");
             }
             sqLiteStatement.bindString(1, year.getTitle());
             sqLiteStatement.bindString(2, year.getDescription());
 
-            year.setID(this.saveAndClose(year.getID(), db, sqLiteStatement));
+            year.setId(this.saveAndClose(year.getId(), db, sqLiteStatement));
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
-        return year.getID();
+        return year.getId();
     }
 
     public List<Year> getYears(String where) {
@@ -973,7 +971,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM years" + where + ";", null);
             while (cursor.moveToNext()) {
                 Year year = new Year();
-                year.setID(cursor.getInt(0));
+                year.setId(cursor.getInt(0));
                 year.setTitle(cursor.getString(1));
                 year.setDescription(cursor.getString(2));
                 years.add(year);
@@ -990,20 +988,20 @@ public class SQLite extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.beginTransaction();
-            int testID = this.insertOrUpdateTest(test);
+            long testID = this.insertOrUpdateTest(test);
             db.execSQL("DELETE FROM schoolYears WHERE test=" + testID + ";");
 
-            int subjectID = 0, yearID = 0;
+            long subjectID = 0, yearID = 0;
             List<Year> years = this.getYears("title='" + year + "'");
             if(year!=null) {
                 if(!years.isEmpty()) {
-                    yearID = years.get(0).getID();
+                    yearID = years.get(0).getId();
                 }
             }
             List<Subject> subjects = this.getSubjects("title='" + subject + "'");
             if(subjects!=null) {
                 if(!subjects.isEmpty()) {
-                    subjectID = subjects.get(0).getID();
+                    subjectID = subjects.get(0).getId();
                 }
             }
 
@@ -1066,7 +1064,7 @@ public class SQLite extends SQLiteOpenHelper {
                 SchoolYear schoolYear = new SchoolYear();
                 schoolYear.setSubject(tmpSubject);
                 schoolYear.setYear(tmpYear);
-                Cursor cursor = db.rawQuery("SELECT test FROM schoolYears WHERE subject=? and [year]=?;", new String[]{String.valueOf(tmpSubject.getID()), String.valueOf(tmpYear.getID())});
+                Cursor cursor = db.rawQuery("SELECT test FROM schoolYears WHERE subject=? and [year]=?;", new String[]{String.valueOf(tmpSubject.getId()), String.valueOf(tmpYear.getId())});
                 while (cursor.moveToNext()) {
                     List<Test> tests = this.getTests("ID=" + cursor.getInt(0));
                     if(tests!=null) {
@@ -1088,26 +1086,26 @@ public class SQLite extends SQLiteOpenHelper {
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(note.getID()!=0) {
+            if(note.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE notes SET title=?, description=? WHERE ID=?;");
-                sqLiteStatement.bindLong(3, note.getID());
+                sqLiteStatement.bindLong(3, note.getId());
             } else {
                 sqLiteStatement = db.compileStatement("INSERT INTO notes(title,description) VALUES(?,?);");
             }
             sqLiteStatement.bindString(1, note.getTitle());
             sqLiteStatement.bindString(2, note.getDescription());
 
-            if(note.getID()==0) {
-                note.setID((int) sqLiteStatement.executeInsert());
+            if(note.getId()==0) {
+                note.setId((int) sqLiteStatement.executeInsert());
             } else {
                 sqLiteStatement.execute();
             }
             sqLiteStatement.close();
 
             if(note.getMemoryDate()!=null) {
-                this.addMemory("notes", note.getID(), note.getMemoryDate(), db);
+                this.addMemory("notes", note.getId(), note.getMemoryDate(), db);
             } else {
-                this.deleteEntry("memories", "itemID", note.getID(), "[table]='notes'");
+                this.deleteEntry("memories", "itemID", note.getId(), "[table]='notes'");
             }
 
             db.setTransactionSuccessful();
@@ -1128,7 +1126,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM notes" + where + ";", null);
             while (cursor.moveToNext()) {
                 Note note = new Note();
-                note.setID(cursor.getInt(0));
+                note.setId(cursor.getInt(0));
                 note.setDescription(cursor.getString(2));
                 note.setTitle(cursor.getString(1));
                 notes.add(note);
@@ -1136,7 +1134,7 @@ public class SQLite extends SQLiteOpenHelper {
             cursor.close();
 
             for(int i = 0; i<=notes.size()-1; i++) {
-                notes.get(i).setMemoryDate(this.getMemoryDate("notes", notes.get(i).getID(), db));
+                notes.get(i).setMemoryDate(this.getMemoryDate("notes", notes.get(i).getId(), db));
             }
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
@@ -1149,22 +1147,22 @@ public class SQLite extends SQLiteOpenHelper {
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(toDoList.getID()!=0) {
+            if(toDoList.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE toDoLists SET title=?, description=?, listDate=? WHERE ID=?;");
-                sqLiteStatement.bindLong(4, toDoList.getID());
+                sqLiteStatement.bindLong(4, toDoList.getId());
             } else {
                 sqLiteStatement = db.compileStatement("INSERT INTO toDoLists(title,description,listDate) VALUES(?,?,?);");
             }
             sqLiteStatement.bindString(1, toDoList.getTitle());
             sqLiteStatement.bindString(2, toDoList.getDescription());
             if(toDoList.getListDate()!=null) {
-                sqLiteStatement.bindString(3, Converter.convertDateToString(toDoList.getListDate()));
+                sqLiteStatement.bindString(3, ConvertHelper.convertDateToString(toDoList.getListDate(), this.context));
             } else {
                 sqLiteStatement.bindNull(3);
             }
 
-            if(toDoList.getID()==0) {
-                toDoList.setID((int) sqLiteStatement.executeInsert());
+            if(toDoList.getId()==0) {
+                toDoList.setId((int) sqLiteStatement.executeInsert());
             } else {
                 sqLiteStatement.execute();
             }
@@ -1188,16 +1186,16 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM toDoLists" + where + ";", null);
             while (cursor.moveToNext()) {
                 ToDoList toDoList = new ToDoList();
-                toDoList.setID(cursor.getInt(0));
+                toDoList.setId(cursor.getInt(0));
                 toDoList.setTitle(cursor.getString(1));
                 toDoList.setDescription(cursor.getString(2));
                 String item = cursor.getString(3);
                 if(item!=null) {
                     if(!item.equals("")) {
-                        toDoList.setListDate(Converter.convertStringToDate(cursor.getString(3)));
+                        toDoList.setListDate(ConvertHelper.convertStringToDate(cursor.getString(3), this.context));
                     }
                 }
-                toDoList.setToDos(this.getToDos("toDoList=" + toDoList.getID()));
+                toDoList.setToDos(this.getToDos("toDoList=" + toDoList.getId()));
                 toDoLists.add(toDoList);
             }
             cursor.close();
@@ -1208,7 +1206,7 @@ public class SQLite extends SQLiteOpenHelper {
         return toDoLists;
     }
 
-    public int insertOrUpdateToDo(ToDo toDo, String title) {
+    public long insertOrUpdateToDo(ToDo toDo, String title) {
         SQLiteDatabase db = this.getWritableDatabase();
         List<ToDoList> toDoLists = this.getToDoLists("title='" + title + "'");
         ToDoList toDoList = null;
@@ -1221,9 +1219,9 @@ public class SQLite extends SQLiteOpenHelper {
             try {
                 db.beginTransaction();
                 SQLiteStatement sqLiteStatement;
-                if(toDo.getID()!=0) {
+                if(toDo.getId()!=0) {
                     sqLiteStatement = db.compileStatement("UPDATE toDos SET title=?, description=?, importance=?, solved=?, category=?, toDoList=? WHERE ID=?;");
-                    sqLiteStatement.bindLong(7, toDo.getID());
+                    sqLiteStatement.bindLong(7, toDo.getId());
                 } else {
                     sqLiteStatement = db.compileStatement("INSERT INTO toDos(title,description,importance,solved,category,toDoList) VALUES(?,?,?,?,?,?);");
                 }
@@ -1236,17 +1234,17 @@ public class SQLite extends SQLiteOpenHelper {
                     sqLiteStatement.bindLong(4, 0);
                 }
                 sqLiteStatement.bindString(5, toDo.getCategory());
-                sqLiteStatement.bindLong(6, toDoList.getID());
+                sqLiteStatement.bindLong(6, toDoList.getId());
 
-                if(toDo.getID()==0) {
-                    toDo.setID((int) sqLiteStatement.executeInsert());
+                if(toDo.getId()==0) {
+                    toDo.setId((int) sqLiteStatement.executeInsert());
                 } else {
                     sqLiteStatement.execute();
                 }
                 sqLiteStatement.close();
 
                 if(toDo.getMemoryDate()!=null) {
-                    this.addMemory("toDos", toDo.getID(), toDo.getMemoryDate(), db);
+                    this.addMemory("toDos", toDo.getId(), toDo.getMemoryDate(), db);
                 }
 
                 db.setTransactionSuccessful();
@@ -1255,7 +1253,7 @@ public class SQLite extends SQLiteOpenHelper {
                 MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
             }
         }
-        return toDo.getID();
+        return toDo.getId();
     }
 
     public List<ToDo> getToDos(String where) {
@@ -1269,7 +1267,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM toDos" + where + ";", null);
             while (cursor.moveToNext()) {
                 ToDo toDo = new ToDo();
-                toDo.setID(cursor.getInt(0));
+                toDo.setId(cursor.getInt(0));
                 toDo.setTitle(cursor.getString(1));
                 toDo.setDescription(cursor.getString(2));
                 toDo.setImportance(cursor.getInt(3));
@@ -1280,7 +1278,7 @@ public class SQLite extends SQLiteOpenHelper {
             cursor.close();
 
             for(int i = 0; i<=toDos.size()-1; i++) {
-                toDos.get(i).setMemoryDate(this.getMemoryDate("toDos", toDos.get(i).getID(), db));
+                toDos.get(i).setMemoryDate(this.getMemoryDate("toDos", toDos.get(i).getId(), db));
             }
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
@@ -1293,9 +1291,9 @@ public class SQLite extends SQLiteOpenHelper {
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(timerEvent.getID()!=0) {
+            if(timerEvent.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE timerEvents SET title=?, description=?, category=?, subject=?, teacher=?, schoolClass=?, eventDate=? WHERE ID=?;");
-                sqLiteStatement.bindLong(8, timerEvent.getID());
+                sqLiteStatement.bindLong(8, timerEvent.getId());
             } else {
                 sqLiteStatement = db.compileStatement("INSERT INTO timerEvents(title,description,category,subject,teacher,schoolClass,eventDate) VALUES(?,?,?,?,?,?,?);");
             }
@@ -1303,31 +1301,31 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindString(2, timerEvent.getDescription());
             sqLiteStatement.bindString(3, timerEvent.getCategory());
             if(timerEvent.getSubject()!=null) {
-                sqLiteStatement.bindLong(4, timerEvent.getSubject().getID());
+                sqLiteStatement.bindLong(4, timerEvent.getSubject().getId());
             } else {
                 sqLiteStatement.bindNull(4);
             }
             if(timerEvent.getTeacher()!=null) {
-                sqLiteStatement.bindLong(5, timerEvent.getTeacher().getID());
+                sqLiteStatement.bindLong(5, timerEvent.getTeacher().getId());
             } else {
                 sqLiteStatement.bindNull(5);
             }
             if(timerEvent.getSchoolClass()!=null) {
-                sqLiteStatement.bindLong(6, timerEvent.getSchoolClass().getID());
+                sqLiteStatement.bindLong(6, timerEvent.getSchoolClass().getId());
             } else {
                 sqLiteStatement.bindNull(6);
             }
-            sqLiteStatement.bindString(7, Converter.convertDateToString(timerEvent.getEventDate()));
+            sqLiteStatement.bindString(7, ConvertHelper.convertDateToString(timerEvent.getEventDate(), this.context));
 
-            if(timerEvent.getID()==0) {
-                timerEvent.setID((int) sqLiteStatement.executeInsert());
+            if(timerEvent.getId()==0) {
+                timerEvent.setId((int) sqLiteStatement.executeInsert());
             } else {
                 sqLiteStatement.execute();
             }
             sqLiteStatement.close();
 
             if(timerEvent.getMemoryDate()!=null) {
-                this.addMemory("timerEvents", timerEvent.getID(), timerEvent.getMemoryDate(), db);
+                this.addMemory("timerEvents", timerEvent.getId(), timerEvent.getMemoryDate(), db);
             }
 
             db.setTransactionSuccessful();
@@ -1348,7 +1346,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM timerEvents" + where + ";", null);
             while (cursor.moveToNext()) {
                 TimerEvent timerEvent = new TimerEvent();
-                timerEvent.setID(cursor.getInt(0));
+                timerEvent.setId(cursor.getInt(0));
                 timerEvent.setTitle(cursor.getString(1));
                 timerEvent.setDescription(cursor.getString(2));
                 timerEvent.setCategory(cursor.getString(3));
@@ -1373,13 +1371,13 @@ public class SQLite extends SQLiteOpenHelper {
                     }
                 }
 
-                timerEvent.setEventDate(Converter.convertStringToDate(cursor.getString(7)));
+                timerEvent.setEventDate(ConvertHelper.convertStringToDate(cursor.getString(7), this.context));
                 timerEvents.add(timerEvent);
             }
             cursor.close();
 
             for(int i = 0; i<=timerEvents.size()-1; i++) {
-                timerEvents.get(i).setMemoryDate(this.getMemoryDate("timerEvents", timerEvents.get(i).getID(), db));
+                timerEvents.get(i).setMemoryDate(this.getMemoryDate("timerEvents", timerEvents.get(i).getId(), db));
             }
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
@@ -1387,14 +1385,14 @@ public class SQLite extends SQLiteOpenHelper {
         return timerEvents;
     }
 
-    public int insertOrUpdateLearningCardGroup(LearningCardGroup learningCardGroup) {
+    public long insertOrUpdateLearningCardGroup(LearningCardGroup learningCardGroup) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.beginTransaction();
             SQLiteStatement sqLiteStatement;
-            if(learningCardGroup.getID()!=0) {
+            if(learningCardGroup.getId()!=0) {
                 sqLiteStatement = db.compileStatement("UPDATE learningCardGroups SET title=?, description=?, category=?, deadline=?, subject=?, teacher=? WHERE ID=?;");
-                sqLiteStatement.bindLong(7, learningCardGroup.getID());
+                sqLiteStatement.bindLong(7, learningCardGroup.getId());
             } else {
                 sqLiteStatement = db.compileStatement("INSERT INTO learningCardGroups(title,description,category, deadline,subject,teacher) VALUES(?,?,?,?,?,?);");
             }
@@ -1402,30 +1400,30 @@ public class SQLite extends SQLiteOpenHelper {
             sqLiteStatement.bindString(2, learningCardGroup.getDescription());
             sqLiteStatement.bindString(3, learningCardGroup.getCategory());
             if(learningCardGroup.getDeadLine()!=null) {
-                sqLiteStatement.bindString(4, Converter.convertDateToString(learningCardGroup.getDeadLine()));
+                sqLiteStatement.bindString(4, ConvertHelper.convertDateToString(learningCardGroup.getDeadLine(), this.context));
             } else {
                 sqLiteStatement.bindNull(4);
             }
             if(learningCardGroup.getSubject()!=null) {
-                sqLiteStatement.bindLong(5, learningCardGroup.getSubject().getID());
+                sqLiteStatement.bindLong(5, learningCardGroup.getSubject().getId());
             } else {
                 sqLiteStatement.bindNull(5);
             }
             if(learningCardGroup.getTeacher()!=null) {
-                sqLiteStatement.bindLong(6, learningCardGroup.getTeacher().getID());
+                sqLiteStatement.bindLong(6, learningCardGroup.getTeacher().getId());
             } else {
                 sqLiteStatement.bindNull(6);
             }
 
-            if(learningCardGroup.getID()==0) {
-                learningCardGroup.setID((int) sqLiteStatement.executeInsert());
+            if(learningCardGroup.getId()==0) {
+                learningCardGroup.setId((int) sqLiteStatement.executeInsert());
             } else {
                 sqLiteStatement.execute();
             }
 
             List<LearningCard> cards = new LinkedList<>();
             for(LearningCard learningCard : learningCardGroup.getLearningCards()) {
-                if(learningCard.getID()!=0 || !learningCard.getTitle().trim().equals("") || !learningCard.getQuestion().trim().equals("")) {
+                if(learningCard.getId()!=0 || !learningCard.getTitle().trim().equals("") || !learningCard.getQuestion().trim().equals("")) {
                     cards.add(learningCard);
                 }
             }
@@ -1433,17 +1431,17 @@ public class SQLite extends SQLiteOpenHelper {
 
             StringBuilder list = new StringBuilder("(");
             for(LearningCard learningCard : learningCardGroup.getLearningCards()) {
-                if(learningCard.getID()!=0) {
-                    list.append(learningCard.getID());
+                if(learningCard.getId()!=0) {
+                    list.append(learningCard.getId());
                     list.append(",");
                 }
             }
             list.append(")");
 
-            db.execSQL("DELETE FROM learningCards WHERE cardGroup=" + learningCardGroup.getID() + " AND NOT ID IN " + list.toString().replace(",)", ")"));
+            db.execSQL("DELETE FROM learningCards WHERE cardGroup=" + learningCardGroup.getId() + " AND NOT ID IN " + list.toString().replace(",)", ")"));
 
             for(LearningCard learningCard : learningCardGroup.getLearningCards()) {
-                this.insertOrUpdateLearningCard(learningCardGroup.getID(), learningCard, db);
+                this.insertOrUpdateLearningCard(learningCardGroup.getId(), learningCard, db);
             }
 
             db.setTransactionSuccessful();
@@ -1452,7 +1450,7 @@ public class SQLite extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
-        return learningCardGroup.getID();
+        return learningCardGroup.getId();
     }
 
     public List<LearningCardGroup> getLearningCardGroups(String where, boolean listLearningCards) {
@@ -1466,14 +1464,14 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM learningCardGroups" + where, null);
             while (cursor.moveToNext()) {
                 LearningCardGroup learningCardGroup = new LearningCardGroup();
-                learningCardGroup.setID(cursor.getInt(0));
+                learningCardGroup.setId(cursor.getInt(0));
                 learningCardGroup.setDescription(cursor.getString(2));
                 learningCardGroup.setTitle(cursor.getString(1));
                 learningCardGroup.setCategory(cursor.getString(3));
                 String deadLine = cursor.getString(4);
                 if(deadLine!=null) {
                     if(!deadLine.equals("")) {
-                        learningCardGroup.setDeadLine(Converter.convertStringToDate(deadLine));
+                        learningCardGroup.setDeadLine(ConvertHelper.convertStringToDate(deadLine, this.context));
                     }
                 }
                 int subjectID = cursor.getInt(5);
@@ -1501,7 +1499,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             if(listLearningCards) {
                 for(LearningCardGroup group : learningCardGroups) {
-                    group.setLearningCards(this.getLearningCards("cardGroup=" + group.getID(), db));
+                    group.setLearningCards(this.getLearningCards("cardGroup=" + group.getId(), db));
                 }
             }
         } catch (Exception ex) {
@@ -1516,7 +1514,7 @@ public class SQLite extends SQLiteOpenHelper {
             db.beginTransaction();
 
             SQLiteStatement statement;
-            if(learningCardQuery.getID()==0) {
+            if(learningCardQuery.getId()==0) {
                 statement = db.compileStatement(
                     "INSERT INTO learningCardQueries(title,description,cardGroup,category,priority,wrongCardsOfQuery," +
                             "periodic,period,untilDeadLine,answerMustEqual,showNotes,tries,showNotesImmediately, randomVocab, randomVocabNumber) " +
@@ -1529,20 +1527,20 @@ public class SQLite extends SQLiteOpenHelper {
                             "randomVocab=?,randomVocabNumber=? " +
                             "WHERE ID=?"
                 );
-                statement.bindLong(16, learningCardQuery.getID());
+                statement.bindLong(16, learningCardQuery.getId());
             }
 
             statement.bindString(1, learningCardQuery.getTitle());
             statement.bindString(2, learningCardQuery.getDescription());
             if(learningCardQuery.getLearningCardGroup()!=null) {
-                statement.bindLong(3, learningCardQuery.getLearningCardGroup().getID());
+                statement.bindLong(3, learningCardQuery.getLearningCardGroup().getId());
             } else {
                 statement.bindNull(3);
             }
             statement.bindString(4, learningCardQuery.getCategory());
             statement.bindLong(5, learningCardQuery.getPriority());
             if(learningCardQuery.getWrongCardsOfQuery()!=null) {
-                statement.bindLong(6, learningCardQuery.getWrongCardsOfQuery().getID());
+                statement.bindLong(6, learningCardQuery.getWrongCardsOfQuery().getId());
             } else {
                 statement.bindNull(6);
             }
@@ -1577,7 +1575,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM learningCardQueries" + where, null);
             while (cursor.moveToNext()) {
                 LearningCardQuery learningCardQuery = new LearningCardQuery();
-                learningCardQuery.setID(cursor.getInt(0));
+                learningCardQuery.setId(cursor.getInt(0));
                 learningCardQuery.setTitle(cursor.getString(1));
                 learningCardQuery.setDescription(cursor.getString(2));
                 int cardGroup = cursor.getInt(3);
@@ -1611,26 +1609,26 @@ public class SQLite extends SQLiteOpenHelper {
         return learningCardQueries;
     }
 
-    public int insertOrUpdateLearningCardResult(LearningCardQueryResult learningCardQueryResult) {
+    public long insertOrUpdateLearningCardResult(LearningCardQueryResult learningCardQueryResult) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             SQLiteStatement statement;
-            if(learningCardQueryResult.getID()==0) {
+            if(learningCardQueryResult.getId()==0) {
                 statement = db.compileStatement("INSERT INTO learningCardQueryResults(learningCardQueryTraining, learningCard, answerTry1, resultTry1, answerTry2, resultTry2, answerTry3, resultTry3, resultWhole) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
             } else {
                 statement = db.compileStatement("UPDATE learningCardQueryResults SET learningCardQueryTraining=?, learningCard=?, answerTry1=?, resultTry1=?, answerTry2=?, resultTry2=?, answerTry3=?, resultTry3=?, resultWhole=? WHERE ID=?");
-                statement.bindLong(10, learningCardQueryResult.getID());
+                statement.bindLong(10, learningCardQueryResult.getId());
             }
             statement.bindLong(1, learningCardQueryResult.getTraining().getID());
-            statement.bindLong(2,learningCardQueryResult.getLearningCard().getID());
+            statement.bindLong(2,learningCardQueryResult.getLearningCard().getId());
             statement.bindString(3,learningCardQueryResult.getTry1());
             statement.bindLong(4, learningCardQueryResult.isResult1() ? 1 : 0);
             statement.bindString(5,learningCardQueryResult.getTry2());
             statement.bindLong(6, learningCardQueryResult.isResult2() ? 1 : 0);
             statement.bindString(7,learningCardQueryResult.getTry3());
             statement.bindLong(8, learningCardQueryResult.isResult3() ? 1 : 0);
-            if(learningCardQueryResult.getID()==0) {
-                learningCardQueryResult.setID((int) statement.executeInsert());
+            if(learningCardQueryResult.getId()==0) {
+                learningCardQueryResult.setId((int) statement.executeInsert());
             } else {
                 statement.execute();
             }
@@ -1638,7 +1636,7 @@ public class SQLite extends SQLiteOpenHelper {
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
         }
-        return learningCardQueryResult.getID();
+        return learningCardQueryResult.getId();
     }
 
     private List<LearningCardQueryResult> getLearningCardResults(String where) {
@@ -1652,7 +1650,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM learningCardQueryResults" + where, null);
             while (cursor.moveToNext()) {
                 LearningCardQueryResult learningCardQueryResult = new LearningCardQueryResult();
-                learningCardQueryResult.setID(cursor.getInt(0));
+                learningCardQueryResult.setId(cursor.getLong(0));
                 learningCardQueryResult.setLearningCard(this.getLearningCards("ID=" + cursor.getInt(2), db).get(0));
                 learningCardQueryResult.setTry1(cursor.getString(3));
                 learningCardQueryResult.setResult1(cursor.getInt(4)==1);
@@ -1680,7 +1678,7 @@ public class SQLite extends SQLiteOpenHelper {
                 statement = db.compileStatement("UPDATE learningCardQueryTrainings SET learningCardQuery=? WHERE ID=?");
                 statement.bindLong(2, learningCardQueryTraining.getID());
             }
-            statement.bindLong(1, learningCardQueryTraining.getLearningCardQuery().getID());
+            statement.bindLong(1, learningCardQueryTraining.getLearningCardQuery().getId());
 
             if(learningCardQueryTraining.getID()==0) {
                 learningCardQueryTraining.setID((int) statement.executeInsert());
@@ -1720,13 +1718,13 @@ public class SQLite extends SQLiteOpenHelper {
         return learningCardQueryTrainings;
     }
 
-    private void insertOrUpdateLearningCard(int learningCardGroupId, LearningCard learningCard, SQLiteDatabase db) {
+    private void insertOrUpdateLearningCard(long learningCardGroupId, LearningCard learningCard, SQLiteDatabase db) {
         SQLiteStatement statement;
-        if(learningCard.getID()==0) {
+        if(learningCard.getId()==0) {
             statement = db.compileStatement("INSERT INTO learningCards(title,category,question,answer,note1,note2,priority,cardGroup) VALUES(?,?,?,?,?,?,?,?);");
         } else {
             statement = db.compileStatement("UPDATE learningCards SET title=?,category=?,question=?,answer=?,note1=?,note2=?,priority=?,cardGroup=? WHERE ID=?");
-            statement.bindLong(9, learningCard.getID());
+            statement.bindLong(9, learningCard.getId());
         }
         statement.bindString(1, learningCard.getTitle());
         statement.bindString(2, learningCard.getCategory());
@@ -1750,7 +1748,7 @@ public class SQLite extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM learningCards" + where, null);
         while (cursor.moveToNext()) {
             LearningCard learningCard = new LearningCard();
-            learningCard.setID(cursor.getInt(0));
+            learningCard.setId(cursor.getInt(0));
             learningCard.setTitle(cursor.getString(1));
             learningCard.setCategory(cursor.getString(2));
             learningCard.setQuestion(cursor.getString(3));
@@ -1769,18 +1767,18 @@ public class SQLite extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             SQLiteStatement statement;
-            if(bookmark.getID()==0) {
+            if(bookmark.getId()==0) {
                 statement = db.compileStatement("INSERT INTO bookmarks(title,tags,link,themes,subject,description,preview,contentData) VALUES(?,?,?,?,?,?,?,?);");
             } else {
                 statement = db.compileStatement("UPDATE bookmarks SET title=?,tags=?,link=?,themes=?,subject=?,description=?,preview=?,contentData=? WHERE ID=?");
-                statement.bindLong(9, bookmark.getID());
+                statement.bindLong(9, bookmark.getId());
             }
             statement.bindString(1, bookmark.getTitle());
             statement.bindString(2, bookmark.getTags());
             statement.bindString(3, bookmark.getLink());
             statement.bindString(4, bookmark.getThemes());
             if(bookmark.getSubject()!=null) {
-                statement.bindLong(5, bookmark.getSubject().getID());
+                statement.bindLong(5, bookmark.getSubject().getId());
             } else {
                 statement.bindNull(5);
             }
@@ -1813,7 +1811,7 @@ public class SQLite extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery("SELECT * FROM bookmarks" + where, null);
             while (cursor.moveToNext()) {
                 Bookmark bookmark = new Bookmark();
-                bookmark.setID(cursor.getInt(0));
+                bookmark.setId(cursor.getInt(0));
                 bookmark.setTitle(cursor.getString(1));
                 bookmark.setTags(cursor.getString(2));
                 bookmark.setLink(cursor.getString(3));
@@ -1848,7 +1846,7 @@ public class SQLite extends SQLiteOpenHelper {
                     Cursor itemCursor = db.rawQuery(String.format("SELECT title, description FROM %s WHERE ID=%s;", table, id), null);
                     while (itemCursor.moveToNext()) {
                         Memory memory = new Memory();
-                        memory.setID(id);
+                        memory.setId(id);
                         memory.setTitle(itemCursor.getString(0));
                         memory.setDescription(itemCursor.getString(1));
                         memory.setDate(memDate);
@@ -1989,9 +1987,9 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     private boolean showNotification(String date) throws Exception {
-        Calendar calendar =  Converter.convertStringDateToCalendar(date);
+        Calendar calendar =  ConvertHelper.convertStringToCalendar(date, this.context);
         if(calendar!=null) {
-            Calendar calendarCur = Converter.convertStringDateToCalendar(Converter.convertDateToString(new Date()));
+            Calendar calendarCur = ConvertHelper.convertStringToCalendar(ConvertHelper.convertDateToString(new Date(), this.context), this.context);
             if(calendarCur!=null) {
                 if(calendar.get(Calendar.YEAR)==calendarCur.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && calendar.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
                     return true;
@@ -2007,18 +2005,18 @@ public class SQLite extends SQLiteOpenHelper {
         }
     }
 
-    private void addMemory(String table, int id, Date date, SQLiteDatabase db) {
+    private void addMemory(String table, long id, Date date, SQLiteDatabase db) {
         db.execSQL("DELETE FROM memories WHERE itemID=" + id + " AND [table]='" + table + "';");
-        db.execSQL(String.format("INSERT INTO memories(memoryDate, itemID, [table]) VALUES('%s', %s, '%s');", Converter.convertDateToString(date), id, table));
+        db.execSQL(String.format("INSERT INTO memories(memoryDate, itemID, [table]) VALUES('%s', %s, '%s');", ConvertHelper.convertDateToString(date, this.context), id, table));
     }
 
-    private Date getMemoryDate(String table, int id, SQLiteDatabase db) throws Exception {
+    private Date getMemoryDate(String table, long id, SQLiteDatabase db) throws Exception {
         Cursor cursor = db.rawQuery("SELECT memoryDate FROM memories WHERE itemID=" + id + " AND [table]='" + table + "';", null);
         while (cursor.moveToNext()) {
             String item = cursor.getString(0);
             if(item!=null) {
                 if(!item.equals("")) {
-                    return Converter.convertStringToDate(item);
+                    return ConvertHelper.convertStringToDate(item, this.context);
                 }
             }
         }
@@ -2073,7 +2071,7 @@ public class SQLite extends SQLiteOpenHelper {
         return !exists;
     }
 
-    private int saveAndClose(int id, SQLiteDatabase db, SQLiteStatement statement) {
+    private long saveAndClose(long id, SQLiteDatabase db, SQLiteStatement statement) {
         if(id==0) {
             id = (int) statement.executeInsert();
         } else {

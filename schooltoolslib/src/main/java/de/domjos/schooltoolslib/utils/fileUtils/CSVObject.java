@@ -111,6 +111,14 @@ public class CSVObject {
             this.columns.put(key, CSVObject.EMPTY);
         }
     }
+
+    public void writeValue(String key, Long value) {
+        if (value != null) {
+            this.columns.put(key, String.valueOf(value));
+        } else {
+            this.columns.put(key, CSVObject.EMPTY);
+        }
+    }
     
     public void writeValue(String key, Double value) {
         if(value!=null) {

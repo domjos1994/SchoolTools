@@ -161,7 +161,7 @@ public final class TaggedBookMarksScreenWidget extends ScreenWidget {
             Bookmark bookmark = (Bookmark) screenWidgetAdapter.getItem(position);
             if(bookmark!=null) {
                 Intent intent = new Intent(activity.getApplicationContext(), BookmarkActivity.class);
-                intent.putExtra("id", bookmark.getID());
+                intent.putExtra("id", bookmark.getId());
                 activity.startActivity(intent);
             }
         });

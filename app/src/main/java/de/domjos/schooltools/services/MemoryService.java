@@ -10,10 +10,7 @@
 package de.domjos.schooltools.services;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
-import androidx.core.app.NotificationCompat.Builder;
 
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
@@ -21,7 +18,7 @@ import de.domjos.schooltools.activities.*;
 import de.domjos.schooltoolslib.model.Memory;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardQuery;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardQueryTraining;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 
 import java.util.Calendar;
@@ -37,16 +34,9 @@ public class MemoryService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        int id = 1;
         for(Memory memory : MainActivity.globals.getSqLite().getCurrentMemories()) {
             try {
-                if(Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate()))) {
-                    Builder builder = new Builder(this.getApplicationContext(), MainActivity.CHANNEL_ID);
-                    builder.setSmallIcon(R.mipmap.ic_launcher);
-                    builder.setLights(0xFFff0000, 500, 500);
-                    builder.setContentTitle(memory.getTitle());
-                    builder.setContentText(memory.getDescription());
+                if(Helper.compareDateWithCurrentDate(ConvertHelper.convertStringToDate(memory.getDate(), this.getApplicationContext()))) {
                     Intent linkedIntent = null;
                     switch (memory.getType()) {
                         case Note:
@@ -54,7 +44,7 @@ public class MemoryService extends IntentService {
                             break;
                         case Test:
                             linkedIntent = new Intent(this.getApplicationContext(), MarkEntryActivity.class);
-                            linkedIntent.putExtra("id", memory.getID());
+                            linkedIntent.putExtra("id", memory.getId());
                             linkedIntent.putExtra("enabled", false);
                             break;
                         case toDo:
@@ -66,36 +56,22 @@ public class MemoryService extends IntentService {
                             break;
                     }
 
-                    builder.setContentIntent(PendingIntent.getActivity(this.getApplicationContext(), 99, linkedIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-                    if(notificationManager!=null) {
-                        notificationManager.notify(id, builder.build());
-                    }
-                    id++;
+                    MessageHelper.showNotification(this.getApplicationContext(), memory.getTitle(), memory.getDescription(), R.mipmap.ic_launcher_round, linkedIntent, 99);
                 } else {
                     if(MainActivity.globals.getUserSettings().isDeleteMemories()) {
-                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
+                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getId());
                     }
                 }
             } catch (Exception ex) {
-                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.getApplicationContext());
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getApplicationContext());
                 if(MainActivity.globals.getUserSettings().isDeleteMemories()) {
-                    MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
+                    MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getId());
                 }
             }
         }
 
         for(LearningCardQuery query : this.loadPeriodicLearningCardQueries()) {
-            Builder builder = new Builder(this.getApplicationContext(), "default");
-            builder.setSmallIcon(R.mipmap.ic_launcher);
-            builder.setLights(0xFFff0000, 501, 501);
-            builder.setContentTitle(query.getTitle());
-            builder.setContentText(getApplicationContext().getString(R.string.learningCard_query_memory) + query.getTitle());
-            Intent overViewIntent = new Intent(this.getApplicationContext(), LearningCardOverviewActivity.class);
-            overViewIntent.putExtra("queryID", query.getID());
-            builder.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 99, intent, PendingIntent.FLAG_UPDATE_CURRENT));
-            if(notificationManager!=null) {
-                notificationManager.notify(id, builder.build());
-            }
+            MessageHelper.showNotification(this.getApplicationContext(), query.getTitle(), getApplicationContext().getString(R.string.learningCard_query_memory) + query.getTitle(), R.mipmap.ic_launcher_round, intent, 99);
         }
     }
 
@@ -120,7 +96,7 @@ public class MemoryService extends IntentService {
                 List<LearningCardQueryTraining> learningCardQueryTrainings = MainActivity.globals.getSqLite().getLearningCardQueryTraining("current_date>" + start.getTimeInMillis() + " AND current_date<=" + end.getTimeInMillis());
                 for(LearningCardQueryTraining training : learningCardQueryTrainings) {
                     if(training.getLearningCardQuery()!=null) {
-                        if(training.getLearningCardQuery().getID()==learningCardQuery.getID()) {
+                        if(training.getLearningCardQuery().getId()==learningCardQuery.getId()) {
                             learningCardQueries.add(learningCardQuery);
                         }
                     }

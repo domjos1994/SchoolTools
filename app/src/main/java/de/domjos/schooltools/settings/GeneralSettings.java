@@ -16,8 +16,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 
 public class GeneralSettings {
-    private final static String INTERNAL_VERSION = "internalVersion";
-    private final static String INTERNAL_PHASE = "internalPhase";
     private final static String ACCEPT_MARK_LIST_MESSAGE = "acceptMarkListMessage";
     private final static String WIDGET_TIMETABLE_SPINNER = "widgetTimeTableSpinner";
     private final static String WIDGET_MARKLIST_SPINNER = "widgetTimeTableSpinner";

@@ -26,6 +26,7 @@ import java.util.List;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
+import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
 
 /**
@@ -64,7 +65,7 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
                     List<TimeTable> timeTableList = sqLite.getTimeTables("");
                     for (TimeTable timeTable : timeTableList) {
                         if (selected.equals(timeTable.getTitle())) {
-                            getSettings(timeTable.getID());
+                            getSettings(timeTable.getId());
                         }
                     }
                 }
@@ -88,14 +89,13 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
         this.timeTableAdapter.notifyDataSetChanged();
     }
 
-    @SuppressWarnings("deprecation")
-    private void setTT_ID(int id) {
+    private void setTT_ID(long id) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit();
-        editor.putInt("tt_id_" + this.appWidgetID, id);
+        editor.putLong("tt_id_" + this.appWidgetID, id);
         editor.apply();
     }
 
-    private void getSettings(int timeTableID) {
+    private void getSettings(long timeTableID) {
         try {
             this.setTT_ID(timeTableID);
 
@@ -108,7 +108,7 @@ public class TimeTableWidgetConfigurationActivity extends AppCompatActivity {
             setResult(RESULT_OK, resultValue);
             finish();
         } catch (Exception ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimeTableWidgetConfigurationActivity.this);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, getApplicationContext());
         }
     }
 }

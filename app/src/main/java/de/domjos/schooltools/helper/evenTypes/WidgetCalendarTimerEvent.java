@@ -27,6 +27,6 @@ public class WidgetCalendarTimerEvent extends Event {
         super.setCalendar(this.timerEvent.getEventDate());
         super.setName(this.timerEvent.getTitle());
         super.setDescription(this.timerEvent.getDescription());
-        super.setId(this.timerEvent.getID());
+        super.setId(this.timerEvent.getId());
     }
 }

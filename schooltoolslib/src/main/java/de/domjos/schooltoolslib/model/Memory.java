@@ -11,7 +11,7 @@ package de.domjos.schooltoolslib.model;
 
 import android.content.Context;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 import de.domjos.schooltoolslib.R;
 
 /**

@@ -14,13 +14,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.navigation.NavigationView;
 import android.view.Menu;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import de.domjos.customwidgets.utils.MessageHelper;
@@ -140,12 +141,10 @@ public class UserSettings {
         int[] colors = this.context.getResources().getIntArray(R.array.colors);
 
         int color = 0;
-        if(strColor!=null) {
-            for(int i = 0; i<=colorNames.length-1; i++) {
-                if(strColor.equals(colorNames[i])) {
-                    color =  colors[i];
-                    break;
-                }
+        for(int i = 0; i<=colorNames.length-1; i++) {
+            if(strColor.equals(colorNames[i])) {
+                color =  colors[i];
+                break;
             }
         }
         return color;
@@ -159,15 +158,13 @@ public class UserSettings {
         boolean state = this.isDictionary();
         if(state) {
             String path = this.sharedPreferences.getString("txtLearningCardEnableDictionary", "");
-            if(path != null) {
-                if(!path.equals("")) {
-                    File directory = new File(this.context.getFilesDir() + "/dict/");
-                    if(directory.exists()) {
-                        for(File file : directory.listFiles()) {
-                            if(file!=null) {
-                                if(file.getAbsolutePath().endsWith(".txt")) {
-                                    return file.getAbsolutePath();
-                                }
+            if(!path.equals("")) {
+                File directory = new File(this.context.getFilesDir() + "/dict/");
+                if(directory.exists()) {
+                    for(File file : Objects.requireNonNull(directory.listFiles())) {
+                        if(file!=null) {
+                            if(file.getAbsolutePath().endsWith(".txt")) {
+                                return file.getAbsolutePath();
                             }
                         }
                     }

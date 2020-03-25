@@ -45,7 +45,7 @@ public final class SavedTimeTablesScreenWidget extends ScreenWidget {
     @Override
     public void init() {
         this.cmbSavedTimeTables = super.view.findViewById(R.id.cmbSavedTimeTables);
-        this.savedTimeTablesAdapter = new ArrayAdapter<>(super.activity, R.layout.spinner_item, new ArrayList<String>());
+        this.savedTimeTablesAdapter = new ArrayAdapter<>(super.activity, R.layout.spinner_item, new ArrayList<>());
         this.cmbSavedTimeTables.setAdapter(this.savedTimeTablesAdapter);
         this.savedTimeTablesAdapter.notifyDataSetChanged();
         this.grdSavedTimeTables = super.view.findViewById(R.id.grdSavedTimeTables);
@@ -85,7 +85,7 @@ public final class SavedTimeTablesScreenWidget extends ScreenWidget {
                 if(tables!=null) {
                     if(!tables.isEmpty()) {
                         initTimes(grdSavedTimeTables);
-                        TimeTableEntryActivity.loadTimeTable(tables.get(0), grdSavedTimeTables, new LinkedHashMap<String, Integer>());
+                        TimeTableEntryActivity.loadTimeTable(tables.get(0), grdSavedTimeTables, new LinkedHashMap<>());
                     } else {
                         for(int i = 0; i<=grdSavedTimeTables.getChildCount()-1; i++) {
                             TableRow tableRow = (TableRow) grdSavedTimeTables.getChildAt(i);
@@ -128,7 +128,7 @@ public final class SavedTimeTablesScreenWidget extends ScreenWidget {
             if((i-1)<=max) {
                 Hour hour = (Hour) hourList.get(i-1);
                 textView.setText(String.format("%s%n%s", hour.getStart(), hour.getEnd()));
-                textView.setTag(String.valueOf(hour.getID()));
+                textView.setTag(String.valueOf(hour.getId()));
 
                 if(hour.isBreak()) {
                     textView.setTextSize(14);

@@ -83,7 +83,7 @@ public class BookmarkWidget extends AppWidgetProvider {
                 try {
                     return IntentHelper.openFileViaIntent(file, context);
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(context, "No handler for this type of file.", Toast.LENGTH_LONG).show();
+                    MessageHelper.printMessage("No handler for this type of file.", R.mipmap.ic_launcher_round, context);
                 }
             }
 

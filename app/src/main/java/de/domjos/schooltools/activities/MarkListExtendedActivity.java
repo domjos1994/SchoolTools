@@ -78,8 +78,11 @@ public final class MarkListExtendedActivity extends AbstractActivity {
         });
 
         this.sbCustomMark.setOnChangeListener(this::calculateMarkListAndDrawDiagram);
+
         this.sbCustomPoints.setOnChangeListener(this::calculateMarkListAndDrawDiagram);
+
         this.sbBestMarkFirst.setOnChangeListener(this::calculateMarkListAndDrawDiagram);
+
         this.sbWorstMarkTo.setOnChangeListener(this::calculateMarkListAndDrawDiagram);
 
         this.ivMarkListState.setOnClickListener(view -> {
@@ -208,7 +211,6 @@ public final class MarkListExtendedActivity extends AbstractActivity {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void configureGraphView() {
         int color = Color.WHITE;
 

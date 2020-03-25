@@ -13,6 +13,10 @@ import de.domjos.schooltools.R;
 
 import java.io.File;
 
+import de.domjos.customwidgets.utils.MessageHelper;
+import de.domjos.schooltools.R;
+import de.domjos.schooltools.activities.ApiActivity;
+
 public class IntentHelper {
 
     public static void openWebBrowser(Context context, String url) {

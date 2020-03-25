@@ -24,7 +24,6 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDo;
@@ -68,34 +67,23 @@ public final class ToDoActivity extends AbstractActivity {
             }
         });
 
-        this.lvToDos.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                if(cmdToDoAdd.getVisibility()!=View.GONE) {
-                    ToDo toDo = (ToDo) listObject;
-                    if(toDo!=null) {
-                        Intent intent = new Intent(getApplicationContext(), ToDoEntryActivity.class);
-                        intent.putExtra("id", toDo.getID());
-                        intent.putExtra("list", spToDoList.getSelectedItem().toString());
-                        startActivityForResult(intent, 98);
-                    }
+        this.lvToDos.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> {
+            if(cmdToDoAdd.getVisibility()!=View.GONE) {
+                ToDo toDo = (ToDo) listObject;
+                if(toDo!=null) {
+                    Intent intent = new Intent(getApplicationContext(), ToDoEntryActivity.class);
+                    intent.putExtra("id", toDo.getId());
+                    intent.putExtra("list", spToDoList.getSelectedItem().toString());
+                    startActivityForResult(intent, 98);
                 }
             }
         });
 
-        this.lvToDos.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadToDos();
-            }
-        });
+        this.lvToDos.setOnReloadListener(this::reloadToDos);
 
-        this.lvToDos.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("toDos", "ID", listObject.getID(), "");
-                reloadToDoLists();
-            }
+        this.lvToDos.setOnDeleteListener(listObject -> {
+            MainActivity.globals.getSqLite().deleteEntry("toDos", "ID", listObject.getId(), "");
+            reloadToDoLists();
         });
 
         this.cmdToDoAdd.setOnClickListener(v -> {
@@ -153,7 +141,7 @@ public final class ToDoActivity extends AbstractActivity {
                 String list = "";
                 for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("")) {
                     for(ToDo tmp : toDoList.getToDos()) {
-                        if(tmp.getID() == toDo.getID()) {
+                        if(tmp.getId() == toDo.getId()) {
                             list = toDoList.getTitle();
                             break;
                         }

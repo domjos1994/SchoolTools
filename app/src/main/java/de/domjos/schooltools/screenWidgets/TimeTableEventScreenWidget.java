@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltools.adapter.SubjectHourAdapter;
@@ -31,7 +32,6 @@ import de.domjos.schooltoolslib.model.timetable.PupilHour;
 import de.domjos.schooltoolslib.model.timetable.TeacherHour;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.customwidgets.model.ScreenWidget;
-import de.domjos.schooltools.helper.Converter;
 
 public final class TimeTableEventScreenWidget extends ScreenWidget {
     private SubjectHourAdapter timeTableEventAdapter;
@@ -71,8 +71,8 @@ public final class TimeTableEventScreenWidget extends ScreenWidget {
                                     if (day.getPupilHour() != null) {
                                         int counter = 0;
                                         for (Map.Entry<Hour, PupilHour> entry : day.getPupilHour().entrySet()) {
-                                            Date start = Converter.convertStringTimeToDate(super.activity.getApplicationContext(), entry.getKey().getStart());
-                                            Date end = Converter.convertStringTimeToDate(super.activity.getApplicationContext(), entry.getKey().getEnd());
+                                            Date start = de.domjos.customwidgets.utils.ConvertHelper.convertStringTimeToDate(super.activity.getApplicationContext(), entry.getKey().getStart(), R.mipmap.ic_launcher_round);
+                                            Date end = de.domjos.customwidgets.utils.ConvertHelper.convertStringTimeToDate(super.activity.getApplicationContext(), entry.getKey().getEnd(), R.mipmap.ic_launcher_round);
 
                                             if(start != null && end != null)  {
                                                 boolean isAfterStart = start.before(date);
@@ -97,8 +97,8 @@ public final class TimeTableEventScreenWidget extends ScreenWidget {
                                     if (day.getTeacherHour() != null) {
                                         int counter = 0;
                                         for (Map.Entry<Hour, TeacherHour> entry : day.getTeacherHour().entrySet()) {
-                                            Date start = Converter.convertStringTimeToDate(super.activity.getApplicationContext(), entry.getKey().getStart());
-                                            Date end = Converter.convertStringTimeToDate(super.activity.getApplicationContext(), entry.getKey().getEnd());
+                                            Date start = de.domjos.customwidgets.utils.ConvertHelper.convertStringTimeToDate(super.activity.getApplicationContext(), entry.getKey().getStart(), R.mipmap.ic_launcher_round);
+                                            Date end = ConvertHelper.convertStringTimeToDate(super.activity.getApplicationContext(), entry.getKey().getEnd(), R.mipmap.ic_launcher_round);
 
                                             if(start != null && end != null)  {
                                                 boolean isAfterStart = start.before(date);

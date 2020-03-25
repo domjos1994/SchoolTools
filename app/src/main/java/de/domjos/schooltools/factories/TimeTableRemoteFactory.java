@@ -239,7 +239,7 @@ public class TimeTableRemoteFactory implements RemoteViewsService.RemoteViewsFac
                 }
             }
         } catch (Exception ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.context);
+            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
     }
 }

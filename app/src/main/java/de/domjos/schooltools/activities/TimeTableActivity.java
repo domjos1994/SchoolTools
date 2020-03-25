@@ -24,7 +24,6 @@ import android.view.View;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
@@ -104,30 +103,19 @@ public final class TimeTableActivity extends AbstractActivity {
             assistantHelper.showTimeTableAssistant(this::reloadTimeTables);
         });
 
-        this.lvTimeTable.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
-                intent.putExtra("id", listObject.getID());
-                startActivityForResult(intent, 99);
-            }
+        this.lvTimeTable.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> {
+            Intent intent = new Intent(getApplicationContext(), TimeTableEntryActivity.class);
+            intent.putExtra("id", listObject.getId());
+            startActivityForResult(intent, 99);
         });
 
-        this.lvTimeTable.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("plans", "ID", listObject.getID(), "");
-                MainActivity.globals.getSqLite().deleteEntry("timeTable", "plan", listObject.getID(), "");
-                reloadTimeTables();
-            }
+        this.lvTimeTable.setOnDeleteListener(listObject -> {
+            MainActivity.globals.getSqLite().deleteEntry("plans", "ID", listObject.getId(), "");
+            MainActivity.globals.getSqLite().deleteEntry("timeTable", "plan", listObject.getId(), "");
+            reloadTimeTables();
         });
 
-        this.lvTimeTable.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadTimeTables();
-            }
-        });
+        this.lvTimeTable.setOnReloadListener(this::reloadTimeTables);
     }
 
     private void openDescription() {

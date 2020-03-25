@@ -20,14 +20,12 @@ public class Globals {
     private boolean startScreen;
     private UserSettings userSettings;
     private GeneralSettings generalSettings;
-    private String logFile;
 
     public Globals() {
         this.sqLite = null;
         this.startScreen = false;
         this.userSettings = null;
         this.generalSettings = null;
-        this.logFile = "";
     }
 
     public SQLite getSqLite() {
@@ -38,11 +36,11 @@ public class Globals {
         this.sqLite = sqLite;
     }
 
-    public void setStartScreen(boolean startScreen) {
+    void setStartScreen(boolean startScreen) {
         this.startScreen = startScreen;
     }
 
-    public boolean isStartScreen() {
+    boolean isStartScreen() {
         return this.startScreen;
     }
 
@@ -60,13 +58,5 @@ public class Globals {
 
     public void setGeneralSettings(GeneralSettings generalSettings) {
         this.generalSettings = generalSettings;
-    }
-
-    public String getLogFile() {
-        return this.logFile;
-    }
-
-    public void setLogFile(String logFile) {
-        this.logFile = logFile;
     }
 }

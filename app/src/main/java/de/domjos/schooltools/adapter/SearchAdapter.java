@@ -77,7 +77,7 @@ public class SearchAdapter extends ArrayAdapter<SearchItem> {
                         for(SchoolYear schoolYear : schoolYears) {
                             boolean isFound = false;
                             for(Test test : schoolYear.getTests()) {
-                                if(test.getID()==entry.getID()) {
+                                if(test.getId()==entry.getId()) {
                                     intent.putExtra("subject", schoolYear.getSubject().getTitle());
                                     intent.putExtra("year", schoolYear.getYear().getTitle());
                                     isFound = true;
@@ -104,7 +104,7 @@ public class SearchAdapter extends ArrayAdapter<SearchItem> {
                         for(ToDoList toDoList : toDoLists) {
                             boolean isFound = false;
                             for(ToDo toDo : toDoList.getToDos()) {
-                                if(toDo.getID()==entry.getID()) {
+                                if(toDo.getId()==entry.getId()) {
                                     intent.putExtra("list", toDoList.getTitle());
                                     isFound = true;
                                     break;
@@ -140,7 +140,7 @@ public class SearchAdapter extends ArrayAdapter<SearchItem> {
                     }
 
                     if(intent!=null) {
-                        intent.putExtra("id", entry.getID());
+                        intent.putExtra("id", entry.getId());
                         context.startActivity(intent);
                     }
                 });

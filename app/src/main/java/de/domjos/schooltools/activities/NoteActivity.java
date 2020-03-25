@@ -22,14 +22,13 @@ import android.widget.*;
 import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.Note;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
 import de.domjos.schooltools.spotlight.OnBoardingHelper;
@@ -44,7 +43,7 @@ public final class NoteActivity extends AbstractActivity {
     private BottomNavigationView navigation;
     private static final int SPEECH_REQUEST_CODE = 0;
 
-    private int currentID;
+    private long currentID;
     private Validator validator;
     private SwipeRefreshDeleteList lvNotes;
     private EditText txtNoteTitle, txtNoteDescription, txtNoteMemoryDate;
@@ -64,34 +63,23 @@ public final class NoteActivity extends AbstractActivity {
         this.getNoteFromExtra();
         this.txtNoteTitle.setError(null);
 
-        this.lvNotes.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                Note note = (Note) listObject;
-                if(note!=null) {
-                    currentID = note.getID();
-                    fillNote(note);
-                    changeControls(false, false, true);
-                }
-                menu.findItem(R.id.menDelete).setVisible(false);
-                menu.findItem(R.id.menToDo).setVisible(false);
+        this.lvNotes.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener)  listObject -> {
+            Note note = (Note) listObject.getObject();
+            if(note!=null) {
+                currentID = note.getId();
+                fillNote(note);
+                changeControls(false, false, true);
             }
+            menu.findItem(R.id.menDelete).setVisible(false);
+            menu.findItem(R.id.menToDo).setVisible(false);
         });
 
-        this.lvNotes.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                currentID = listObject.getID();
-                deleteNote();
-            }
+        this.lvNotes.setOnDeleteListener(listObject -> {
+            currentID = listObject.getId();
+            deleteNote();
         });
 
-        this.lvNotes.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadNotes();
-            }
-        });
+        this.lvNotes.setOnReloadListener(this::reloadNotes);
 
         this.chkNoteMemory.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked) {
@@ -226,13 +214,13 @@ public final class NoteActivity extends AbstractActivity {
     private void fillNote(Note note) {
         txtNoteTitle.setText(note.getTitle());
         txtNoteDescription.setText(note.getDescription());
-        txtNoteMemoryDate.setText(Converter.convertDateToString(note.getMemoryDate()));
+        txtNoteMemoryDate.setText(ConvertHelper.convertDateToString(note.getMemoryDate(), this.getApplicationContext()));
         chkNoteMemory.setChecked(!txtNoteMemoryDate.getText().toString().trim().equals(""));
     }
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
+        this.validator = new Validator(NoteActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtNoteTitle, 3, 500);
         this.validator.addDateValidator(txtNoteMemoryDate);
 
@@ -267,11 +255,11 @@ public final class NoteActivity extends AbstractActivity {
                     try {
                         if(validator.getState()) {
                             Note note = new Note();
-                            note.setID(currentID);
+                            note.setId(currentID);
                             note.setTitle(txtNoteTitle.getText().toString());
                             note.setDescription(txtNoteDescription.getText().toString());
                             if(!txtNoteMemoryDate.getText().toString().equals("")) {
-                                note.setMemoryDate(Converter.convertStringToDate(txtNoteMemoryDate.getText().toString()));
+                                note.setMemoryDate(ConvertHelper.convertStringToDate(txtNoteMemoryDate.getText().toString(), this.getApplicationContext()));
                             }
                             MainActivity.globals.getSqLite().insertOrUpdateNote(note);
                             reloadNotes();

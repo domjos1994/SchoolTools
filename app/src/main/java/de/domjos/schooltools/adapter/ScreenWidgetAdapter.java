@@ -12,7 +12,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import java.util.ArrayList;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltools.helper.Helper;

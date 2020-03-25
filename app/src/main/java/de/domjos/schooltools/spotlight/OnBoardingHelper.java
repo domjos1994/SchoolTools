@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 
@@ -35,6 +36,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
+import de.domjos.schooltools.activities.ApiActivity;
+import de.domjos.schooltools.helper.Helper;
 
 @SuppressWarnings("SameParameterValue")
 public class OnBoardingHelper {
@@ -72,6 +75,19 @@ public class OnBoardingHelper {
                 spotlightHelper.addTarget(spSubject, R.string.on_boarding_mark, R.string.on_boarding_mark_subject, null, null);
                 spotlightHelper.addTarget(spSubject, R.string.on_boarding_mark, R.string.on_boarding_mark_both, null, null);
                 spotlightHelper.addTarget(list, R.string.on_boarding_mark, R.string.on_boarding_mark_list, null, ()->writePref(activity, 1));
+                spotlightHelper.show();
+            });
+        }
+    }
+
+    public static void tutorialTimer(Activity activity, FloatingActionButton floatingActionButton, SwipeRefreshDeleteList list, ImageView ivPrevious, ImageView ivNext) {
+        if(!readPref(activity, 1)) {
+            OnBoardingHelper.execute(activity, () -> {
+                SpotlightHelper spotlightHelper = new SpotlightHelper(activity);
+                spotlightHelper.addTarget(floatingActionButton, R.string.on_boarding_timer, R.string.on_boarding_timer_new, null, null);
+                spotlightHelper.addTarget(list, R.string.on_boarding_timer, R.string.on_boarding_timer_list, null, null);
+                spotlightHelper.addTarget(ivPrevious, R.string.on_boarding_timer, R.string.on_boarding_timer_previous, null, null);
+                spotlightHelper.addTarget(ivNext, R.string.on_boarding_timer, R.string.on_boarding_timer_next, null, ()->writePref(activity, 1));
                 spotlightHelper.show();
             });
         }

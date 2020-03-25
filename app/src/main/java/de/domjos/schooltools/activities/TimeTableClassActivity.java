@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.timetable.SchoolClass;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
@@ -34,7 +33,7 @@ public final class TimeTableClassActivity extends AbstractActivity {
     private SwipeRefreshDeleteList lvSchoolClass;
     private EditText txtSchoolClassName, txtSchoolClassNumberOfPupil, txtSchoolClassDescription;
     private BottomNavigationView navigation;
-    private int currentID;
+    private long currentID;
 
     private Validator validator;
 
@@ -47,39 +46,28 @@ public final class TimeTableClassActivity extends AbstractActivity {
     protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableClassActivity.this);
 
-        this.lvSchoolClass.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                SchoolClass schoolClass = (SchoolClass) listObject;
-                if (schoolClass != null) {
-                    currentID = schoolClass.getID();
-                    txtSchoolClassName.setText(schoolClass.getTitle());
-                    txtSchoolClassNumberOfPupil.setText(String.valueOf(schoolClass.getNumberOfPupils()));
-                    txtSchoolClassDescription.setText(schoolClass.getDescription());
-                    navigation.getMenu().getItem(1).setEnabled(true);
-                    navigation.getMenu().getItem(2).setEnabled(true);
-                }
+        this.lvSchoolClass.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> {
+            SchoolClass schoolClass = (SchoolClass) listObject;
+            if (schoolClass != null) {
+                currentID = schoolClass.getId();
+                txtSchoolClassName.setText(schoolClass.getTitle());
+                txtSchoolClassNumberOfPupil.setText(String.valueOf(schoolClass.getNumberOfPupils()));
+                txtSchoolClassDescription.setText(schoolClass.getDescription());
+                navigation.getMenu().getItem(1).setEnabled(true);
+                navigation.getMenu().getItem(2).setEnabled(true);
             }
         });
 
-        this.lvSchoolClass.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadSchoolClass();
-            }
-        });
+        this.lvSchoolClass.setOnReloadListener(this::reloadSchoolClass);
 
-        this.lvSchoolClass.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                MainActivity.globals.getSqLite().deleteEntry("classes", "ID", listObject.getID(), "");
+        this.lvSchoolClass.setOnDeleteListener(listObject -> {
+            MainActivity.globals.getSqLite().deleteEntry("classes", "ID", listObject.getId(), "");
 
-                currentID = 0;
-                navigation.getMenu().getItem(1).setEnabled(false);
-                navigation.getMenu().getItem(2).setEnabled(false);
-                controlFields(false, true);
-                reloadSchoolClass();
-            }
+            currentID = 0;
+            navigation.getMenu().getItem(1).setEnabled(false);
+            navigation.getMenu().getItem(2).setEnabled(false);
+            controlFields(false, true);
+            reloadSchoolClass();
         });
     }
 
@@ -119,7 +107,7 @@ public final class TimeTableClassActivity extends AbstractActivity {
                         case R.id.navTimeTableSubSave:
                             if (validator.getState()) {
                                 SchoolClass schoolClass = new SchoolClass();
-                                schoolClass.setID(currentID);
+                                schoolClass.setId(currentID);
                                 schoolClass.setTitle(txtSchoolClassName.getText().toString());
                                 if (!txtSchoolClassNumberOfPupil.getText().toString().equals("")) {
                                     schoolClass.setNumberOfPupils(Integer.parseInt(txtSchoolClassNumberOfPupil.getText().toString()));
@@ -159,7 +147,7 @@ public final class TimeTableClassActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
+        this.validator = new Validator(TimeTableClassActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtSchoolClassName, 1, 500);
     }
 

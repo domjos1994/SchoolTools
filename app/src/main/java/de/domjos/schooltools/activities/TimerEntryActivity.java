@@ -34,7 +34,7 @@ import de.domjos.schooltoolslib.model.Subject;
 import de.domjos.schooltoolslib.model.TimerEvent;
 import de.domjos.schooltoolslib.model.timetable.SchoolClass;
 import de.domjos.schooltoolslib.model.timetable.Teacher;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
 
@@ -95,7 +95,7 @@ public final class TimerEntryActivity extends AbstractActivity {
                 txtTimerCategories.setText(event.getCategory());
                 chkTimerMemory.setChecked(true);
                 txtTimerMemoryDate.setVisibility(View.VISIBLE);
-                txtTimerMemoryDate.setText(Converter.convertDateToString(event.getMemoryDate()));
+                txtTimerMemoryDate.setText(ConvertHelper.convertDateToString(event.getMemoryDate(), this.getApplicationContext()));
                 if(event.getSubject()!=null) {
                     spTimerSubject.setSelection(subjectAdapter.getPosition(event.getSubject().getTitle()));
                 }
@@ -131,7 +131,7 @@ public final class TimerEntryActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.validator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
+        this.validator = new Validator(TimerEntryActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtTimerTitle, 3, 500);
         this.validator.addDateValidator(txtTimerMemoryDate);
     }
@@ -152,13 +152,13 @@ public final class TimerEntryActivity extends AbstractActivity {
                         try {
                             if(validator.getState()) {
                                 TimerEvent timerEvent = new TimerEvent();
-                                timerEvent.setID(currentID);
+                                timerEvent.setId(currentID);
                                 timerEvent.setEventDate(currentDate);
                                 timerEvent.setTitle(txtTimerTitle.getText().toString());
                                 timerEvent.setDescription(txtTimerDescription.getText().toString());
                                 timerEvent.setCategory(txtTimerCategories.getText().toString());
                                 if(!txtTimerMemoryDate.getText().toString().equals("")) {
-                                    timerEvent.setMemoryDate(Converter.convertStringToDate(txtTimerMemoryDate.getText().toString()));
+                                    timerEvent.setMemoryDate(ConvertHelper.convertStringToDate(txtTimerMemoryDate.getText().toString(), this.getApplicationContext()));
                                 }
                                 if(spTimerSubject.getSelectedItem()!=null) {
                                     if(!spTimerSubject.getSelectedItem().equals("")) {
@@ -203,7 +203,7 @@ public final class TimerEntryActivity extends AbstractActivity {
                 Intent intent = this.getIntent();
                 String extra = intent.getStringExtra("date");
                 if(extra!=null) {
-                    this.currentDate = Converter.convertStringToDate(extra);
+                    this.currentDate = ConvertHelper.convertStringToDate(extra, this.getApplicationContext());
                 }
             }
 

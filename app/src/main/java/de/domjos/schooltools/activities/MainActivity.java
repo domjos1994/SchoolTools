@@ -33,6 +33,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import java.util.Objects;
+
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
@@ -50,7 +52,7 @@ import de.domjos.schooltoolslib.model.timetable.Teacher;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
-import de.domjos.schooltools.helper.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.SQLite;
 import de.domjos.schooltools.screenWidgets.QuickQueryScreenWidget;
@@ -341,7 +343,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if(!this.cmdSearch.isInEditMode()) {
@@ -355,7 +357,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
 
         Account account = AuthenticatorService.GetAccount(this.getApplicationContext(), "de.domjos.schooltools.account");
         AccountManager accountManager = (AccountManager) this.getApplicationContext().getSystemService(Context.ACCOUNT_SERVICE);
-        if(accountManager.addAccountExplicitly(account, null, null)) {
+        if(Objects.requireNonNull(accountManager).addAccountExplicitly(account, null, null)) {
             ContentResolver.setIsSyncable(account, AUTHORITY, 1);
             ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
             Bundle bundle = new Bundle();
@@ -423,48 +425,48 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         for(SchoolYear schoolYear : MainActivity.globals.getSqLite().getSchoolYears("")) {
             for(Test test : schoolYear.getTests()) {
                 if(test.getTitle().toLowerCase().contains(search.toLowerCase())) {
-                    this.searchAdapter.add(new SearchItem(test.getID(), test.getTitle(), this.getString(R.string.mark_test)));
+                    this.searchAdapter.add(new SearchItem(test.getId(), test.getTitle(), this.getString(R.string.mark_test)));
                 }
             }
         }
 
         for(Note note : MainActivity.globals.getSqLite().getNotes("title like '%" + search + "%'")) {
-            this.searchAdapter.add(new SearchItem(note.getID(), note.getTitle(), this.getString(R.string.main_nav_notes)));
+            this.searchAdapter.add(new SearchItem(note.getId(), note.getTitle(), this.getString(R.string.main_nav_notes)));
         }
 
         for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("title like '%" + search + "%'")) {
-            this.searchAdapter.add(new SearchItem(toDoList.getID(), toDoList.getTitle(), this.getString(R.string.todo_list)));
+            this.searchAdapter.add(new SearchItem(toDoList.getId(), toDoList.getTitle(), this.getString(R.string.todo_list)));
         }
 
         for(ToDo toDo : MainActivity.globals.getSqLite().getToDos("title like '%" + search + "%'")) {
-            this.searchAdapter.add(new SearchItem(toDo.getID(), toDo.getTitle(), this.getString(R.string.main_nav_todo)));
+            this.searchAdapter.add(new SearchItem(toDo.getId(), toDo.getTitle(), this.getString(R.string.main_nav_todo)));
         }
 
         for(TimeTable timeTable : MainActivity.globals.getSqLite().getTimeTables("title like '%" + search + "%'")) {
-            this.searchAdapter.add(new SearchItem(timeTable.getID(), timeTable.getTitle(), this.getString(R.string.main_nav_timetable)));
+            this.searchAdapter.add(new SearchItem(timeTable.getId(), timeTable.getTitle(), this.getString(R.string.main_nav_timetable)));
         }
 
         for(TimerEvent timerEvent : MainActivity.globals.getSqLite().getTimerEvents("title like '%" + search + "%'")) {
-            SearchItem searchItem = new SearchItem(timerEvent.getID(), timerEvent.getTitle(), this.getString(R.string.main_nav_timer));
-            searchItem.setExtra(Converter.convertDateToString(timerEvent.getEventDate()));
+            SearchItem searchItem = new SearchItem(timerEvent.getId(), timerEvent.getTitle(), this.getString(R.string.main_nav_timer));
+            searchItem.setExtra(ConvertHelper.convertDateToString(timerEvent.getEventDate(), this.getApplicationContext()));
             this.searchAdapter.add(searchItem);
         }
 
 
         for(Subject subject : MainActivity.globals.getSqLite().getSubjects("title like '%" + search + "%'")) {
-            this.searchAdapter.add(new SearchItem(subject.getID(), subject.getTitle(), this.getString(R.string.timetable_lesson)));
+            this.searchAdapter.add(new SearchItem(subject.getId(), subject.getTitle(), this.getString(R.string.timetable_lesson)));
         }
 
         for(Teacher teacher : MainActivity.globals.getSqLite().getTeachers("lastName like '%" + search + "%'")) {
-            this.searchAdapter.add(new SearchItem(teacher.getID(), teacher.getLastName(), this.getString(R.string.timetable_teacher)));
+            this.searchAdapter.add(new SearchItem(teacher.getId(), teacher.getLastName(), this.getString(R.string.timetable_teacher)));
         }
 
         for(SchoolClass schoolClass : MainActivity.globals.getSqLite().getClasses("title like '%" + search + "%'")) {
-            this.searchAdapter.add(new SearchItem(schoolClass.getID(), schoolClass.getTitle(), this.getString(R.string.timetable_class)));
+            this.searchAdapter.add(new SearchItem(schoolClass.getId(), schoolClass.getTitle(), this.getString(R.string.timetable_class)));
         }
 
         for(Year year : MainActivity.globals.getSqLite().getYears("title like '%" + search + "%'")) {
-            this.searchAdapter.add(new SearchItem(year.getID(), year.getTitle(), this.getString(R.string.mark_year)));
+            this.searchAdapter.add(new SearchItem(year.getId(), year.getTitle(), this.getString(R.string.mark_year)));
         }
 
 
@@ -521,11 +523,12 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         if(MainActivity.globals.getUserSettings().isDeleteMemories()) {
             for(Memory memory : MainActivity.globals.getSqLite().getCurrentMemories()) {
                 try {
-                    if (Helper.compareDateWithCurrentDate(Converter.convertStringToDate(memory.getDate()))) {
-                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
+                    if (Helper.compareDateWithCurrentDate(ConvertHelper.convertStringToDate(memory.getDate(), this.getApplicationContext()))) {
+                        MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getId());
                     }
                 } catch (Exception ex) {
-                    MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getID());
+                    MainActivity.globals.getSqLite().deleteEntry("memories", "itemID=" + memory.getId());
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
                 }
             }
         }
@@ -536,10 +539,10 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
             for(ToDoList toDoList : MainActivity.globals.getSqLite().getToDoLists("")) {
                 try {
                     if(Helper.compareDateWithCurrentDate(toDoList.getListDate())) {
-                        MainActivity.globals.getSqLite().deleteEntry("toDoLists", "ID=" + toDoList.getID());
+                        MainActivity.globals.getSqLite().deleteEntry("toDoLists", "ID=" + toDoList.getId());
                     }
                 } catch (Exception ex) {
-                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, this.getApplicationContext());
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MainActivity.this);
                 }
             }
         }

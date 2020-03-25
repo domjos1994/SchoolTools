@@ -361,7 +361,7 @@ public final class MarkListActivity extends AbstractActivity {
                                 if(!input.getText().toString().isEmpty()) {
                                     curSettings = getValues(input.getText().toString());
                                     MainActivity.globals.getSqLite().insertOrUpdateMarkList(input.getText().toString(), curSettings);
-                                    MessageHelper.printMessage(this.getString(R.string.message_marklist_settings_saved), R.mipmap.ic_launcher_round, MarkListActivity.this);
+                                    MessageHelper.printMessage(getString(R.string.message_marklist_settings_saved), R.mipmap.ic_launcher_round, MarkListActivity.this);
                                 }
                             }
                         });
@@ -459,10 +459,10 @@ public final class MarkListActivity extends AbstractActivity {
 
     @Override
     protected void initValidator() {
-        this.baseValidator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
+        this.baseValidator = new Validator(MarkListActivity.this, R.mipmap.ic_launcher_round);
         this.baseValidator.addIntegerValidator(this.txtMarkListMaxPoints);
 
-        this.withCreaseValidator = new Validator(this.getApplicationContext(), R.mipmap.ic_launcher_round);
+        this.withCreaseValidator = new Validator(MarkListActivity.this, R.mipmap.ic_launcher_round);
         this.withCreaseValidator.addDoubleValidator(this.txtMarkListWithCreaseCustomMark);
         this.withCreaseValidator.addDoubleValidator(this.txtMarkListWithCreaseCustomPoints);
         this.withCreaseValidator.addDoubleValidator(this.txtMarkListWithCreaseBestMarkAt);
@@ -770,7 +770,7 @@ public final class MarkListActivity extends AbstractActivity {
                             }
                         }
                     } catch(Exception e) {
-                        MessageHelper.printException(e, R.mipmap.ic_launcher_round, MarkListActivity.this);
+                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListActivity.this);
                     }
                 }
             }

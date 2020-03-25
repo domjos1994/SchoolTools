@@ -11,7 +11,7 @@ package de.domjos.schooltoolslib.model;
 
 import java.util.Date;
 
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
+import de.domjos.customwidgets.model.BaseDescriptionObject;
 
 /**
  * Model-Class for Notices

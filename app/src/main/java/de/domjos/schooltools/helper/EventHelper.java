@@ -11,6 +11,7 @@ package de.domjos.schooltools.helper;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.CalendarContract;
@@ -21,23 +22,26 @@ import java.util.List;
 
 import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.model.Memory;
+import de.domjos.customwidgets.utils.ConvertHelper;
 
 /**
  *
  */
 public class EventHelper {
     private List<Memory> memoryList;
+    private Context context;
 
-    public EventHelper() {
-        this(MainActivity.globals.getSqLite().getCurrentMemories());
+    public EventHelper(Context context) {
+        this(MainActivity.globals.getSqLite().getCurrentMemories(), context);
     }
 
-    public EventHelper(Memory memory) {
-        this(Collections.singletonList(memory));
+    public EventHelper(Memory memory, Context context) {
+        this(Collections.singletonList(memory), context);
     }
 
-    private EventHelper(List<Memory> memories) {
+    private EventHelper(List<Memory> memories, Context context) {
         this.memoryList = memories;
+        this.context = context;
     }
 
     public Intent openCalendar() throws Exception {
@@ -45,7 +49,7 @@ public class EventHelper {
 
         if(memory!=null) {
             Calendar cal = Calendar.getInstance();
-            cal.setTime(Converter.convertStringToDate(memory.getDate()));
+            cal.setTime(ConvertHelper.convertStringToDate(memory.getDate(), this.context));
             return new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, cal.getTimeInMillis())
@@ -62,7 +66,7 @@ public class EventHelper {
     public void saveMemoriesToCalendar(Activity curActivity) throws Exception {
         for(Memory memory : this.memoryList) {
             Calendar cal = Calendar.getInstance();
-            cal.setTime(Converter.convertStringToDate(memory.getDate()));
+            cal.setTime(ConvertHelper.convertStringToDate(memory.getDate(), this.context));
 
             String eventUriString = "CONTENT_PARAM://com.android.calendar/events";
             ContentValues eventValues = new ContentValues();

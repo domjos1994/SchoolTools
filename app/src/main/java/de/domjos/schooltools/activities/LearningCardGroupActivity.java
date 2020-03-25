@@ -21,7 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.model.objects.BaseDescriptionObject;
 import de.domjos.schooltools.R;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardGroup;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
@@ -43,53 +42,42 @@ public final class LearningCardGroupActivity extends AbstractActivity {
             startActivityForResult(intent, 99);
         });
 
-        this.lvLearnCardGroups.click(new SwipeRefreshDeleteList.ClickListener() {
-            @Override
-            public void onClick(BaseDescriptionObject listObject) {
-                Intent intent = new Intent(getApplicationContext(), LearningCardGroupEntryActivity.class);
-                LearningCardGroup group = (LearningCardGroup) listObject;
-                if(group!=null) {
-                    intent.putExtra("ID", group.getID());
-                }
-                startActivityForResult(intent, 99);
+        this.lvLearnCardGroups.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener)  listObject -> {
+            Intent intent = new Intent(getApplicationContext(), LearningCardGroupEntryActivity.class);
+            LearningCardGroup group = (LearningCardGroup) listObject.getObject();
+            if(group!=null) {
+                intent.putExtra("ID", group.getId());
+            }
+            startActivityForResult(intent, 99);
+        });
+
+        this.lvLearnCardGroups.setOnDeleteListener(listObject -> {
+            LearningCardGroup group = (LearningCardGroup) listObject;
+
+            if(group!=null) {
+                DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            MainActivity.globals.getSqLite().deleteEntry("learningCardGroups", "ID=" + group.getId());
+                            reloadGroups();
+                            dialog.dismiss();
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            dialog.dismiss();
+                            break;
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(LearningCardGroupActivity.this, R.style.AlertDialogTheme);
+                builder.setMessage(R.string.learningCard_group_delete_dialog);
+                builder.setPositiveButton(R.string.learningCard_group_delete_dialog_yes, dialogClickListener);
+                builder.setNegativeButton(R.string.learningCard_group_delete_dialog_no, dialogClickListener);
+                builder.show();
             }
         });
 
-        this.lvLearnCardGroups.deleteItem(new SwipeRefreshDeleteList.DeleteListener() {
-            @Override
-            public void onDelete(BaseDescriptionObject listObject) {
-                LearningCardGroup group = (LearningCardGroup) listObject;
-
-                if(group!=null) {
-                    DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                MainActivity.globals.getSqLite().deleteEntry("learningCardGroups", "ID=" + group.getID());
-                                reloadGroups();
-                                dialog.dismiss();
-                                break;
-
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                dialog.dismiss();
-                                break;
-                        }
-                    };
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LearningCardGroupActivity.this, R.style.AlertDialogTheme);
-                    builder.setMessage(R.string.learningCard_group_delete_dialog);
-                    builder.setPositiveButton(R.string.learningCard_group_delete_dialog_yes, dialogClickListener);
-                    builder.setNegativeButton(R.string.learningCard_group_delete_dialog_no, dialogClickListener);
-                    builder.show();
-                }
-            }
-        });
-
-        this.lvLearnCardGroups.reload(new SwipeRefreshDeleteList.ReloadListener() {
-            @Override
-            public void onReload() {
-                reloadGroups();
-            }
-        });
+        this.lvLearnCardGroups.setOnReloadListener(this::reloadGroups);
     }
 
     @Override
