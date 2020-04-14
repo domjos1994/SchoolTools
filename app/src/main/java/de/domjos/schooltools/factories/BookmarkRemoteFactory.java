@@ -180,7 +180,7 @@ public class BookmarkRemoteFactory implements RemoteViewsService.RemoteViewsFact
             }
 
         } else {
-            return IntentHelper.openWebBrowser(context, s);
+            IntentHelper.openWebBrowser(context, s);
         }
         return null;
     }

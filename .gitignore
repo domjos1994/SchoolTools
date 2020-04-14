@@ -4,10 +4,7 @@
 /.idea
 *.iml
 /.gradle
-/gradle
 /build
-gradlew
-gradlew.bat
-local.properties
 /app/build
+/app/release
 goo

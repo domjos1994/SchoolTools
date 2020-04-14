@@ -42,5 +42,5 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
 
     // own Libraries
-    implementation 'de.domjos:customwidgets:2.1'
+    implementation "de.domjos:customwidgets:${propCustomWidgetsVersion}"
 }

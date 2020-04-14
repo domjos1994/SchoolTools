@@ -71,7 +71,7 @@ dependencies {
 
     // own Libraries
     implementation project(path: ':schooltoolslib')
-    implementation 'de.domjos:customwidgets:2.1'
+    implementation "de.domjos:customwidgets:${propCustomWidgetsVersion}"
 
     // Test-Libraries
     testImplementation "junit:junit:${propJUnitVersion}"
