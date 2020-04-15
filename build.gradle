@@ -28,7 +28,7 @@ ext.propAndroidVersion = "1.1.0"
 ext.propJUnitVersion = "4.12"
 ext.propEspressoVersion = "3.2.0"
 
-ext.propCustomWidgetsVersion = '2.3.28'
+ext.propCustomWidgetsVersion = '2.3.29'
 
 buildscript {
     repositories {
@@ -37,7 +37,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.2'
         
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

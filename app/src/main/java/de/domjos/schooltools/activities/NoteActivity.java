@@ -222,7 +222,7 @@ public final class NoteActivity extends AbstractActivity {
     protected void initValidator() {
         this.validator = new Validator(NoteActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtNoteTitle, 3, 500);
-        this.validator.addDateValidator(txtNoteMemoryDate);
+        this.validator.addDateValidator(txtNoteMemoryDate, false);
 
     }
 
