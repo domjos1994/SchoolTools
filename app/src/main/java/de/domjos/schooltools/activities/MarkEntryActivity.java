@@ -40,7 +40,7 @@ import de.domjos.customwidgets.utils.Validator;
  */
 public final class MarkEntryActivity extends AbstractActivity {
     private SQLite sql;
-    private int currentID;
+    private long currentID;
     private Validator validator;
 
     private TextView lblTestYear, lblTestSubject;
@@ -217,7 +217,7 @@ public final class MarkEntryActivity extends AbstractActivity {
             this.lblTestYear = this.findViewById(R.id.lblTestYear);
             this.lblTestSubject.setText(this.getIntent().getStringExtra("subject"));
             this.lblTestYear.setText(this.getIntent().getStringExtra("year"));
-            this.currentID = getIntent().getIntExtra("id", 0);
+            this.currentID = getIntent().getLongExtra("id", 0);
             boolean enabled = this.getIntent().getBooleanExtra("enabled", true);
 
             this.txtTestTitle = this.findViewById(R.id.txtTestTitle);

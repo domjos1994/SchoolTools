@@ -100,7 +100,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:itemIcon="@drawable/ic_check_circle_black_24dp"
-                app:listItemBackground="@drawable/listview_background"/>
+                app:listItemBackground="@drawable/listview_background"
+                app:listItemForeground="@color/background"/>
         </RelativeLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -26,6 +26,7 @@ public class Test extends BaseDescriptionObject {
 
     public Test() {
         super();
+
         this.weight = 0.0;
         this.mark = 0.0;
         this.average = 0.0;
