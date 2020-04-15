@@ -400,7 +400,12 @@ public final class TrafficLightActivity extends AbstractActivity {
     private boolean lock() {
         if(this.lock) {
             String savedPwd = this.sharedPreferences.getString("password", "");
-            return savedPwd.equals(this.txtTrafficLightsPassword.getText().toString().trim());
+            if(!savedPwd.equals(this.txtTrafficLightsPassword.getText().toString().trim())) {
+                MessageHelper.printMessage(this.getString(R.string.traffic_light_password_wrong), R.mipmap.ic_launcher_round, TrafficLightActivity.this);
+                return false;
+            } else {
+                return true;
+            }
         }
         return true;
     }

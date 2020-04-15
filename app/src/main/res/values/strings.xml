@@ -410,6 +410,7 @@
     <string name="traffic_light_max">Maximum</string>
     <string name="traffic_light_max_def">100</string>
     <string name="traffic_light_password">Password</string>
+    <string name="traffic_light_password_wrong">Falsches Passwort!</string>
     <string name="traffic_light_notification_title">Zu Laut!</string>
     <string name="traffic_light_notification_content">Es ist zu Laut! Bitte Leiser!</string>
     <string name="traffic_light_menu_save">Einstellungen speichern</string>
