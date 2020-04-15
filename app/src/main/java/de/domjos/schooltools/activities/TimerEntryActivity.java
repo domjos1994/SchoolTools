@@ -133,7 +133,7 @@ public final class TimerEntryActivity extends AbstractActivity {
     protected void initValidator() {
         this.validator = new Validator(TimerEntryActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtTimerTitle, 3, 500);
-        this.validator.addDateValidator(txtTimerMemoryDate);
+        this.validator.addDateValidator(txtTimerMemoryDate, false);
     }
 
     @Override

@@ -79,7 +79,7 @@ public final class ToDoEntryActivity extends AbstractActivity {
     private void initValidation() {
         this.validator = new Validator(ToDoEntryActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(txtToDoTitle, 3, 500);
-        this.validator.addDateValidator(txtToDoMemoryDate);
+        this.validator.addDateValidator(txtToDoMemoryDate, false);
     }
 
     @Override

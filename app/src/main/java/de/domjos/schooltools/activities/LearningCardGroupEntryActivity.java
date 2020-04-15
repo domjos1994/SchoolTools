@@ -344,7 +344,7 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
     protected void initValidator() {
         this.validator = new Validator(LearningCardGroupEntryActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addEmptyValidator(this.txtLearningCardGroupTitle);
-        this.validator.addDateValidator(this.txtLearningCardGroupDeadline, new Date(), null);
+        this.validator.addDateValidator(this.txtLearningCardGroupDeadline, new Date(), null, false);
     }
 
     private void loadCardGroup() {

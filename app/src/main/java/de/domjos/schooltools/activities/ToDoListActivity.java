@@ -114,7 +114,7 @@ public final class ToDoListActivity extends AbstractActivity {
     protected void initValidator() {
         this.validator = new Validator(ToDoListActivity.this, R.mipmap.ic_launcher_round);
         this.validator.addLengthValidator(this.txtToDoListTitle, 3, 500);
-        this.validator.addDateValidator(this.txtToDoListDate);
+        this.validator.addDateValidator(this.txtToDoListDate, false);
     }
 
     private void reloadItems() {
