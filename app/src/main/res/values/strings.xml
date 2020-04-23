@@ -430,6 +430,7 @@
     <string name="api_path_choose_">Datei wählen</string>
     <string name="api_choice_successfully">%s erfolgreich ausgeführt!</string>
     <string name="api_choice_error">%s hat leider nicht funktioniert!</string>
+    <string name="api_action">Import/Export läuft…</string>
 
     <string name="api_choice_import">Import</string>
     <string name="api_choice_export">Export</string>

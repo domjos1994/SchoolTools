@@ -23,35 +23,30 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.model.BaseDescriptionObject;
+import de.domjos.customwidgets.model.tasks.AbstractTask;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.tasks.ApiTask;
 import de.domjos.schooltoolslib.model.Memory;
 import de.domjos.schooltoolslib.model.Note;
 import de.domjos.schooltoolslib.model.Subject;
 import de.domjos.schooltoolslib.model.TimerEvent;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardGroup;
-import de.domjos.schooltoolslib.model.mark.SchoolYear;
 import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
-import de.domjos.schooltoolslib.utils.fileUtils.PDFBuilder;
 import de.domjos.schooltools.helper.ApiHelper;
 import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.EventHelper;
@@ -67,7 +62,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
  * @version 1.0
  */
 public final class ApiActivity extends AbstractActivity {
-    private SQLite sqLite;
+    private ProgressBar pbProgress;
     private Spinner spApiChoice, spApiType, spApiEntryType, spApiEntry, spApiFormat;
     private ArrayAdapter<String> apiChoice, apiType, apiEntryType, apiFormat;
     private ArrayAdapter<BaseDescriptionObject> apiEntry;
@@ -75,7 +70,6 @@ public final class ApiActivity extends AbstractActivity {
     private Button cmdApiPath;
     private ImageButton cmdApiSave;
     private FilePickerDialog dialog;
-    private ApiHelper apiHelper;
 
     public ApiActivity() {
         super(R.layout.api_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
@@ -83,7 +77,6 @@ public final class ApiActivity extends AbstractActivity {
 
     @Override
     protected void initActions() {
-        this.apiHelper = new ApiHelper(this.getApplicationContext());
         this.loadTypes();
 
 
@@ -232,11 +225,15 @@ public final class ApiActivity extends AbstractActivity {
         this.cmdApiSave.setOnClickListener(v -> {
             try {
                 if(Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE, ApiActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    if(executeChoice()) {
-                        MessageHelper.printMessage(String.format(getString(R.string.api_choice_successfully), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
-                    } else {
-                        MessageHelper.printMessage(String.format(getString(R.string.api_choice_error), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
-                    }
+                    ApiTask apiTask = this.executeChoice();
+                    apiTask.after((AbstractTask.PostExecuteListener<Boolean>) o -> {
+                        if(o) {
+                            MessageHelper.printMessage(String.format(getString(R.string.api_choice_successfully), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
+                        } else {
+                            MessageHelper.printMessage(String.format(getString(R.string.api_choice_error), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
+                        }
+                    });
+                    apiTask.execute();
                 }
             } catch (Exception ex) {
                 MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
@@ -288,212 +285,21 @@ public final class ApiActivity extends AbstractActivity {
                     }
                     break;
                 case Helper.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
-                    if(this.executeChoice()) {
-                        MessageHelper.printMessage(String.format(getString(R.string.api_choice_successfully), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
-                    } else {
-                        MessageHelper.printMessage(String.format(getString(R.string.api_choice_error), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
-                    }
+                    ApiTask apiTask = this.executeChoice();
+                    apiTask.after((AbstractTask.PostExecuteListener<Boolean>) o -> {
+                        if(o) {
+                            MessageHelper.printMessage(String.format(getString(R.string.api_choice_successfully), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
+                        } else {
+                            MessageHelper.printMessage(String.format(getString(R.string.api_choice_error), apiChoice.getItem(spApiChoice.getSelectedItemPosition())), R.mipmap.ic_launcher_round, ApiActivity.this);
+                        }
+                    });
+                    apiTask.execute();
                     break;
                 default:
             }
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
         }
-    }
-
-    private boolean importTextOrCsv(String path, String type) {
-        String content = Helper.getStringFromFile(path, this.getApplicationContext());
-        try {
-            if(type.equals(this.getString(R.string.main_nav_mark_list))) return this.apiHelper.importMarkListFromTEXT(content);
-            if(type.equals(this.getString(R.string.main_nav_calculateMark))) return this.apiHelper.importMarkFromTEXT(content);
-            if(type.equals(this.getString(R.string.main_nav_timetable))) return this.apiHelper.importTimeTableFromTEXT(content);
-            if(type.equals(this.getString(R.string.main_nav_notes))) return this.apiHelper.importNoteFromTEXT(content);
-            if(type.equals(this.getString(R.string.main_nav_todo))) return this.apiHelper.importToDoListFromText(content);
-            if(type.equals(this.getString(R.string.main_nav_learningCards))) return this.apiHelper.importLearningCardGroupFromText(content);
-            if(type.equals(this.getString(R.string.main_nav_timer))) return this.apiHelper.importTimerEventFromTEXT(content);
-        } catch (Exception ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
-        }
-
-        return false;
-    }
-
-    private boolean importXml(String path, String type) {
-        try {
-            if(type.equals(this.getString(R.string.main_nav_mark_list))) return this.apiHelper.importMarkListFromXML(path);
-            if(type.equals(this.getString(R.string.main_nav_calculateMark))) return this.apiHelper.importMarkFromXML(path);
-            if(type.equals(this.getString(R.string.main_nav_timetable))) return this.apiHelper.importTimeTableFromXML(path);
-            if(type.equals(this.getString(R.string.main_nav_notes))) return this.apiHelper.importNoteFromXML(path);
-            if(type.equals(this.getString(R.string.main_nav_todo))) return this.apiHelper.importToDoListFromXML(path);
-            if(type.equals(this.getString(R.string.main_nav_learningCards))) return this.apiHelper.importLearningCardGroupFromXML(path);
-            if(type.equals(this.getString(R.string.main_nav_timer))) return this.apiHelper.importTimerEventFromXML(path);
-        } catch (Exception ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
-        }
-        return false;
-    }
-
-    private boolean exportTextOrCsv(String path, String type, String format, String where) {
-        String extension = "";
-        if(format.equals(this.getString(R.string.api_format_csv))) {
-            extension = "csv";
-        }
-        String exportPath = String.format("%s/export_%s.%s", path, type, extension);
-
-        StringBuilder content = new StringBuilder();
-        if(type.equals(this.getString(R.string.main_nav_mark_list))) {
-            List<MarkListSettings> settingsList = new LinkedList<>();
-            for(String name : this.sqLite.listMarkLists(where)) {
-                settingsList.add(this.sqLite.getMarkList(name));
-            }
-            content.append(this.apiHelper.exportMarkListToTEXT(settingsList));
-        } else if(type.equals(this.getString(R.string.main_nav_calculateMark))) {
-            content.append(this.apiHelper.exportMarkToTEXT(this.sqLite.getSchoolYears(where)));
-        } else if(type.equals(this.getString(R.string.main_nav_timetable))) {
-            content.append(this.apiHelper.exportTimeTableToTEXT(this.sqLite.getTimeTables(where)));
-        } else if(type.equals(this.getString(R.string.main_nav_notes))) {
-            content.append(this.apiHelper.exportNoteToTEXT(this.sqLite.getNotes(where)));
-        } else if(type.equals(this.getString(R.string.main_nav_todo))) {
-            content.append(this.apiHelper.exportToDoListToTEXT(this.sqLite.getToDoLists(where)));
-        } else if(type.equals(this.getString(R.string.main_nav_learningCards))) {
-            content.append(this.apiHelper.exportLearningCardGroupToTEXT(this.sqLite.getLearningCardGroups(where, true)));
-        } else if(type.equals(this.getString(R.string.main_nav_timer))) {
-            content.append(this.apiHelper.exportTimerEventToTEXT(this.sqLite.getTimerEvents(where)));
-        }
-
-        return Helper.writeStringToFile(content.toString(), exportPath, this.getApplicationContext());
-    }
-
-    private boolean exportXml(String path, String type, String where) {
-        try {
-            String exportPath = String.format("%s/export_%s.xml", path, type);
-
-            if(type.equals(this.getString(R.string.main_nav_mark_list))) {
-                return this.apiHelper.exportMarkListToXML(where, exportPath);
-            } else if(type.equals(this.getString(R.string.main_nav_calculateMark))) {
-                return this.apiHelper.exportMarkToXML(where, exportPath);
-            } else if(type.equals(this.getString(R.string.main_nav_timetable))) {
-                return this.apiHelper.exportTimeTableToXML(where, exportPath);
-            } else if(type.equals(this.getString(R.string.main_nav_notes))) {
-                return this.apiHelper.exportNoteToXML(where, exportPath);
-            } else if(type.equals(this.getString(R.string.main_nav_todo))) {
-                return this.apiHelper.exportToDoListToXMLElement(where, exportPath);
-            } else if(type.equals(this.getString(R.string.main_nav_learningCards))) {
-                return this.apiHelper.exportLearningCardGroupToXML(where, exportPath);
-            } else if(type.equals(this.getString(R.string.main_nav_timer))) {
-                return this.apiHelper.exportTimerEventToXML(where, exportPath);
-            }
-        } catch (Exception ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
-        }
-        return false;
-    }
-
-    private boolean exportPDF(String path, String type, String where) {
-        try {
-            File emptyPDF = new File(path);
-            if(!emptyPDF.exists()) {
-                if (!emptyPDF.createNewFile()) {
-                    return false;
-                }
-            }
-
-            PDFBuilder pdfBuilder = new PDFBuilder(emptyPDF.getAbsolutePath(), ConvertHelper.convertDrawableToByteArray(this.getApplicationContext(), R.drawable.icon), this.getApplicationContext());
-            pdfBuilder.addFont("header", Font.FontFamily.HELVETICA, 32, true, true, BaseColor.BLACK);
-            pdfBuilder.addFont("subHeader", Font.FontFamily.HELVETICA, 28, true, false, BaseColor.BLACK);
-            pdfBuilder.addFont("CONTENT_PARAM", Font.FontFamily.HELVETICA, 16, false, false, BaseColor.BLACK);
-
-            if(type.equals(this.getString(R.string.main_nav_mark_list))) {
-                List<String> stringList = this.sqLite.listMarkLists(where);
-                List<MarkListSettings> markListSettings = new LinkedList<>();
-                for(String string : stringList) {
-                    markListSettings.add(this.sqLite.getMarkList(string));
-                }
-                pdfBuilder.addTitle(this.getString(R.string.main_nav_mark_list), "header", Paragraph.ALIGN_CENTER);
-                for(MarkListSettings settings : markListSettings) {
-                    pdfBuilder = this.apiHelper.exportMarkListToPDF(pdfBuilder, settings);
-                }
-                pdfBuilder.close();
-                return true;
-            } else if(type.equals(this.getString(R.string.main_nav_calculateMark))) {
-                List<SchoolYear> schoolYears = this.sqLite.getSchoolYears(where);
-                for(SchoolYear schoolYear : schoolYears) {
-                    pdfBuilder = apiHelper.exportMarkToPDF(pdfBuilder, schoolYear);
-                }
-                pdfBuilder.close();
-                return true;
-            } else if(type.equals(this.getString(R.string.main_nav_timetable))) {
-                List<TimeTable> timeTables = this.sqLite.getTimeTables(where);
-                List<String> headers =
-                        Arrays.asList(
-                                this.getString(R.string.timetable_times), this.getString(R.string.timetable_days_mon), this.getString(R.string.timetable_days_tue), this.getString(R.string.timetable_days_wed),
-                                this.getString(R.string.timetable_days_thu), this.getString(R.string.timetable_days_fri), this.getString(R.string.timetable_days_sat), this.getString(R.string.timetable_days_sun)
-                        );
-
-                for(TimeTable timeTable : timeTables) {
-                    pdfBuilder = this.apiHelper.exportTimeTableToPDF(pdfBuilder, timeTable, headers, this.sqLite);
-                }
-                pdfBuilder.close();
-                return true;
-            } else if(type.equals(this.getString(R.string.main_nav_notes))) {
-                for(Note note : this.sqLite.getNotes(where)) {
-                    pdfBuilder = this.apiHelper.exportNoteToPDF(pdfBuilder, note);
-                }
-                pdfBuilder.close();
-                return true;
-            } else if(type.equals(this.getString(R.string.main_nav_todo))) {
-                for(ToDoList toDoList : this.sqLite.getToDoLists(where)) {
-                    pdfBuilder = this.apiHelper.exportToDoListToPDF(pdfBuilder, toDoList);
-                }
-                pdfBuilder.close();
-                return true;
-            } else if(type.equals(this.getString(R.string.main_nav_learningCards))) {
-                for(LearningCardGroup learningCardGroup : this.sqLite.getLearningCardGroups(where, true)) {
-                    pdfBuilder = this.apiHelper.exportLearningCardGroupToPDF(pdfBuilder, learningCardGroup);
-                }
-                pdfBuilder.close();
-                return true;
-            } else if(type.equals(this.getString(R.string.main_nav_timer))) {
-                for(TimerEvent timerEvent : this.sqLite.getTimerEvents(where)) {
-                    pdfBuilder = this.apiHelper.exportTimerEventToPDF(pdfBuilder, timerEvent);
-                }
-                pdfBuilder.close();
-                return true;
-            }
-        } catch (Exception ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
-        }
-        return false;
-    }
-
-    private boolean exportToCalendar(String entryType, int id) {
-        try {
-            if(entryType.equals(this.getString(R.string.api_entry_all))) {
-                if(Helper.checkPermissions(Helper.PERMISSIONS_REQUEST_WRITE_CALENDAR, ApiActivity.this, Manifest.permission.WRITE_CALENDAR)) {
-                    try {
-                        EventHelper helper = new EventHelper(this.getApplicationContext());
-                        helper.saveMemoriesToCalendar(ApiActivity.this);
-                    } catch (Exception ex) {
-                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
-                    }
-                }
-                return true;
-            } else {
-                for(Memory memory : sqLite.getCurrentMemories()) {
-                    if(memory.getId()==id) {
-                        EventHelper helper = new EventHelper(memory, this.getApplicationContext());
-                        Intent intent = helper.openCalendar();
-                        if(intent!=null) {
-                            startActivity(intent);
-                            return true;
-                        }
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
-        }
-        return false;
     }
 
     private void loadTypes() {
@@ -607,7 +413,7 @@ public final class ApiActivity extends AbstractActivity {
         adapter.add(item);
     }
 
-    private boolean executeChoice() {
+    private ApiTask executeChoice() {
         // get selected Data from controls
         String exportPath = lblApiPath.getText().toString();
 
@@ -628,51 +434,48 @@ public final class ApiActivity extends AbstractActivity {
         String choice = spApiChoice.getSelectedItem().toString();
         String format = spApiFormat.getSelectedItem().toString();
         String type = spApiType.getSelectedItem().toString();
+        ApiTask.Format taskFormat = ApiTask.Format.XML;
+        ApiTask.Type taskType;
+        int id = -1;
 
         if(choice.equals(this.getString(R.string.api_choice_export))) {
             if(type.equals(this.getString(R.string.sys_memory))) {
-                int id = -1;
+
                 if(this.spApiEntry.getSelectedItem()!=null) {
                     if(this.spApiEntry.getSelectedItem().toString().contains(":")) {
                         id = Integer.parseInt(this.spApiEntry.getSelectedItem().toString().split(":")[0].trim());
+                        taskFormat = ApiTask.Format.Calendar;
                     }
                 }
-                return this.exportToCalendar(entryType, id);
             }
         }
 
         if(choice.equals(this.getString(R.string.api_choice_import))) {
+            taskType = ApiTask.Type.Import;
             if(format.equals(this.getString(R.string.api_format_csv))) {
-                return this.importTextOrCsv(exportPath, type);
+                taskFormat = ApiTask.Format.CSV;
             } else if(format.equals(this.getString(R.string.api_format_xml))) {
-                return this.importXml(exportPath, type);
+                taskFormat = ApiTask.Format.XML;
             }
         } else {
+            taskType = ApiTask.Type.Export;
             if(format.equals(this.getString(R.string.api_format_csv))) {
-                return this.exportTextOrCsv(exportPath, type, format, where);
+                taskFormat = ApiTask.Format.CSV;
             } else if(format.equals(this.getString(R.string.api_format_pdf))) {
-                exportPath = String.format("%s/export_%s.pdf", exportPath, type);
-                boolean state =  this.exportPDF(exportPath, type, where);
-                if(state) {
-                    try {
-                        PDFBuilder.openPDFFile(exportPath, this.getApplicationContext());
-                    } catch (Exception ex) {
-                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, ApiActivity.this);
-                    }
-                }
-                return state;
+                taskFormat = ApiTask.Format.Pdf;
             } else if(format.equals(this.getString(R.string.api_format_xml))) {
-                return this.exportXml(exportPath, type, where);
+                taskFormat = ApiTask.Format.XML;
             }
         }
-        return false;
+
+        return new ApiTask(ApiActivity.this, this.pbProgress, taskType, taskFormat, exportPath, type, where, entryType, id);
     }
 
     @Override
     protected void initControls() {
-        this.sqLite = MainActivity.globals.getSqLite();
-
         // init other controls
+        this.pbProgress = this.findViewById(R.id.pbProgress);
+
         this.spApiChoice = this.findViewById(R.id.spApiChoice);
         this.apiChoice = new ArrayAdapter<>(this.getApplicationContext(), R.layout.spinner_item, this.getResources().getStringArray(R.array.api_choice));
         this.spApiChoice.setAdapter(this.apiChoice);

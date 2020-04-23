@@ -18,7 +18,8 @@
     <ScrollView
             android:id="@+id/scrollPanel"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/pbProgress">
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -144,14 +145,12 @@
                         android:padding="4dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toStartOf="@+id/cmdApiPath"
-                        android:layout_toLeftOf="@+id/cmdApiPath"/>
+                        android:layout_toStartOf="@+id/cmdApiPath" />
                 <TextView
                         android:id="@+id/lblApiPathContent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toStartOf="@+id/cmdApiPath"
-                        android:layout_toLeftOf="@+id/cmdApiPath"
                         android:layout_below="@+id/lblApiPath"/>
 
                 <Button
@@ -159,12 +158,18 @@
                         android:text="@string/api_path_choose"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"/>
+                        android:layout_alignParentEnd="true" />
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
 
+    <ProgressBar
+        android:id="@+id/pbProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cmdApiSave"
+        android:background="@drawable/tbl_border"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
     <ImageButton
         android:id="@+id/cmdApiSave"
         android:contentDescription="@string/sys_save"
