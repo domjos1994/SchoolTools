@@ -16,8 +16,8 @@
  * along with UniTrackerMobile. If not, see <http://www.gnu.org/licenses/>.
  */
 
-ext.propVersion = 21
-ext.propVersionCode = "0.5.alpha.5"
+ext.propVersion = 22
+ext.propVersionCode = "1.0"
 
 ext.propJavaVersion = "8"
 
