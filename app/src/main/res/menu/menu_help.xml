@@ -12,16 +12,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menHelpSendLog"
-        android:orderInCategory="100"
-        android:title="@string/help_sendLog"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/menHelpDeleteLog"
-        android:orderInCategory="100"
-        android:title="@string/help_deleteLog"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/menHelpAbout"
         android:orderInCategory="100"
         android:title="@string/help_about"

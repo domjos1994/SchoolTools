@@ -25,10 +25,10 @@ ext.propCompVersion = 29
 ext.propMinVersion = 20
 ext.propAndroidVersion = "1.1.0"
 
-ext.propJUnitVersion = "4.12"
-ext.propEspressoVersion = "3.2.0"
+ext.propJUnitVersion = "4.13"
+ext.propEspressoVersion = "3.3.0"
 
-ext.propCustomWidgetsVersion = '3.3.3'
+ext.propCustomWidgetsVersion = '3.5.0'
 
 buildscript {
     repositories {
@@ -44,23 +44,12 @@ buildscript {
     }
 }
 
-def githubProperties = new Properties()
-githubProperties.load(new FileInputStream(new File(projectDir, "../Libraries/customwidgets/credentials/github.properties")))
-
 allprojects {
     repositories {
         google()
         jcenter()
         mavenCentral()
         maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases/' }
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/domjos1994/Customwidgets")
-            credentials {
-                username = githubProperties['gpr.usr']
-                password = githubProperties['gpr.key']
-            }
-        }
     }
 }
 

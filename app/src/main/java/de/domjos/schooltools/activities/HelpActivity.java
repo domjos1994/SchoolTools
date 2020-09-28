@@ -14,12 +14,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.io.File;
-
 import android.widget.TextView;
 
 import de.domjos.customwidgets.model.AbstractActivity;
-import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.helper.Helper;
 
@@ -29,7 +26,6 @@ import de.domjos.schooltools.helper.Helper;
  * @version 1.0
  */
 public final class HelpActivity extends AbstractActivity {
-    private File logFile;
 
     public HelpActivity() {
         super(R.layout.help_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
@@ -48,35 +44,15 @@ public final class HelpActivity extends AbstractActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.menHelpSendLog:
-                if(this.logFile.exists()) {
-                    try {
-                        Helper.sendMailWithAttachment("webmaster@domjos.de", "SchoolTools-LogFile", this.logFile, HelpActivity.this);
-                        MessageHelper.printMessage(getString(R.string.message_help_send_success), R.mipmap.ic_launcher_round, HelpActivity.this);
-                    } catch (Exception ex) {
-                        MessageHelper.printException(ex, R.mipmap.ic_launcher_round, HelpActivity.this);
-                    }
-                }
-                break;
-            case R.id.menHelpDeleteLog:
-                if(this.logFile.exists()) {
-                    if(this.logFile.delete()) {
-                        MessageHelper.printMessage(getString(R.string.message_help_delete_success), R.mipmap.ic_launcher_round, HelpActivity.this);
-                    }
-                }
-                break;
-            case R.id.menHelpAbout:
-                Intent intent = new Intent(this.getApplicationContext(), WhatsNewActivity.class);
-                intent.putExtra(WhatsNewActivity.isWhatsNew, false);
-                intent.putExtra(WhatsNewActivity.isShownAlways, true);
-                intent.putExtra(WhatsNewActivity.INFO_PARAM, "");
-                intent.putExtra(WhatsNewActivity.TITLE_PARAM, "help_about");
-                intent.putExtra(WhatsNewActivity.CONTENT_PARAM, "help_about_content");
-                intent.putExtra(WhatsNewActivity.PARENT_CLASS, HelpActivity.class.getName());
-                startActivity(intent);
-                break;
-            default:
+        if (id == R.id.menHelpAbout) {
+            Intent intent = new Intent(this.getApplicationContext(), WhatsNewActivity.class);
+            intent.putExtra(WhatsNewActivity.isWhatsNew, false);
+            intent.putExtra(WhatsNewActivity.isShownAlways, true);
+            intent.putExtra(WhatsNewActivity.INFO_PARAM, "");
+            intent.putExtra(WhatsNewActivity.TITLE_PARAM, "help_about");
+            intent.putExtra(WhatsNewActivity.CONTENT_PARAM, "help_about_content");
+            intent.putExtra(WhatsNewActivity.PARENT_CLASS, HelpActivity.class.getName());
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
