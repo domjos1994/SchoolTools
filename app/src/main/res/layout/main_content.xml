@@ -402,7 +402,8 @@
                     android:id="@+id/cmbSavedMarklist"
                     android:layout_below="@+id/lblSavedMarklist"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"/>
                 <ListView
                     android:id="@+id/lvMarklist"
                     android:layout_below="@+id/cmbSavedMarklist"
