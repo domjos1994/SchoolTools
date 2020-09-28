@@ -2,7 +2,6 @@ package de.domjos.schooltools.activities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -23,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
@@ -218,13 +216,17 @@ public final class BookmarkActivity extends AbstractActivity {
             if(fileExists) {
                 try {
                     IntentHelper.openFileViaIntent(file, activity);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(activity.getApplicationContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
+                } catch (Exception ex) {
+                    MessageHelper.printException(ex, R.mipmap.ic_launcher_round, activity);
                 }
             }
 
         } else {
-            IntentHelper.openWebBrowser(activity, s);
+            try {
+                IntentHelper.openWebBrowser(activity, s);
+            } catch (Exception ex) {
+                MessageHelper.printException(ex, R.mipmap.ic_launcher_round, activity);
+            }
         }
     }
 
