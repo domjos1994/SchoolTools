@@ -497,15 +497,11 @@
     <string name="whats_new">Neuigkeiten</string>
     <string name="whats_new_content">
         <![CDATA[
-            <h1>SchoolTools Version 0.4</h1>
+            <h1>SchoolTools Version 1.1</h1>
             <p>
                 <ul>
-                    <li>Assistenten für Stundenplan und Kartei-Karten hinzugefügt</li>
-                    <li>Einführungen für das jeweilige Tool hinzugefügt</li>
-                    <li>Löschen von Einträgen durch Swipen</li>
-                    <li>Neues Design der Listen-Einträge</li>
-                    <li>Fehler in Einstellungen behoben</li>
-                    <li>diverse kleinere Fehler und Unschönheiten behoben</li>
+                    <li>Datums-Format in Einstellungen</li>
+                    <li>kleiner Fehler</li>
                 </ul>
             </p>
         ]]>
