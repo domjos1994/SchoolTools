@@ -19,9 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.MessageHelper;
@@ -42,9 +40,11 @@ import de.domjos.schooltools.helper.Helper;
 public final class TimerActivity extends AbstractActivity {
     private WidgetCalendar widgetCalendar;
     private FloatingActionButton cmdTimerEventAdd;
+    private final String dateFormat;
 
     public TimerActivity() {
         super(R.layout.timer_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        this.dateFormat = MainActivity.globals.getUserSettings().getDateFormat();
     }
 
     @Override
@@ -54,7 +54,7 @@ public final class TimerActivity extends AbstractActivity {
 
         this.widgetCalendar.setOnClick(event -> {
             Intent intent = new Intent(getApplicationContext(), TimerEntryActivity.class);
-            intent.putExtra("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(this.widgetCalendar.getCurrentEvent().getCalendar().getTime()));
+            intent.putExtra("date", ConvertHelper.convertDateToString(this.widgetCalendar.getCurrentEvent().getCalendar().getTime(), this.dateFormat));
             if(event instanceof WidgetCalendarTimerEvent) {
                 intent.putExtra("id", ((WidgetCalendarTimerEvent)event).getTimerEvent().getId());
             }
@@ -69,7 +69,7 @@ public final class TimerActivity extends AbstractActivity {
         this.widgetCalendar.setOnHourGroupClick(event -> {
             if(event.getColor()==android.R.color.transparent) {
                 Intent intent = new Intent(getApplicationContext(), TimerEntryActivity.class);
-                intent.putExtra("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(this.widgetCalendar.getCurrentEvent().getCalendar().getTime()));
+                intent.putExtra("date", ConvertHelper.convertDateToString(this.widgetCalendar.getCurrentEvent().getCalendar().getTime(), this.dateFormat));
                 if(event instanceof WidgetCalendarTimerEvent) {
                     intent.putExtra("id", ((WidgetCalendarTimerEvent)event).getTimerEvent().getId());
                 }
@@ -79,14 +79,14 @@ public final class TimerActivity extends AbstractActivity {
 
         this.widgetCalendar.setOnHourHeaderClick(event -> {
             Intent intent = new Intent(getApplicationContext(), TimerEntryActivity.class);
-            intent.putExtra("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(this.widgetCalendar.getCurrentEvent().getCalendar().getTime()));
+            intent.putExtra("date",  ConvertHelper.convertDateToString(this.widgetCalendar.getCurrentEvent().getCalendar().getTime(), this.dateFormat));
             intent.putExtra("id", 0);
             startActivityForResult(intent, 99);
         });
 
         this.cmdTimerEventAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), TimerEntryActivity.class);
-            intent.putExtra("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(this.widgetCalendar.getCurrentEvent().getCalendar().getTime()));
+            intent.putExtra("date",  ConvertHelper.convertDateToString(this.widgetCalendar.getCurrentEvent().getCalendar().getTime(), this.dateFormat));
             intent.putExtra("id", 0);
             startActivityForResult(intent, 99);
         });
@@ -223,8 +223,6 @@ public final class TimerActivity extends AbstractActivity {
                 return false;
             }
         });
-
-        //OnBoardingHelper.tutorialTimer(this, cmdTimerEventAdd, lvTimerEvents, ivTimerPrevious, ivTimerNext);
     }
 
     private void changeDate() {
@@ -232,7 +230,7 @@ public final class TimerActivity extends AbstractActivity {
             if(this.getIntent().hasExtra("date")) {
                 String dt = this.getIntent().getStringExtra("date");
                 if(dt!=null) {
-                    widgetCalendar.setCurrentDate(new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(dt));
+                    widgetCalendar.setCurrentDate(ConvertHelper.convertStringToDate(dt, this.dateFormat));
                 }
                 this.reloadEvents();
             }

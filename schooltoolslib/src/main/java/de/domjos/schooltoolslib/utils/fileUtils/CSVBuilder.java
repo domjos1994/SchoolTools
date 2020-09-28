@@ -20,17 +20,19 @@ public class CSVBuilder {
     private final StringBuilder stringBuilder;
     private int numberOfColumns;
     private CSVRow currentRow;
+    private String format;
 
-    public CSVBuilder(char separator, int numberOfColumns) {
-        this(separator, null, numberOfColumns);
+    public CSVBuilder(char separator, int numberOfColumns, String format) {
+        this(separator, null, numberOfColumns, format);
     }
 
-    public CSVBuilder(char separator, List<String> headers) {
-        this(separator, headers, headers.size());
+    public CSVBuilder(char separator, List<String> headers, String format) {
+        this(separator, headers, headers.size(), format);
     }
 
-    private CSVBuilder(char separator, List<String> headers, int numberOfColumns) {
+    private CSVBuilder(char separator, List<String> headers, int numberOfColumns, String format) {
         this.separator = separator;
+        this.format = format;
         this.stringBuilder = new StringBuilder();
         this.numberOfColumns = numberOfColumns;
         if(headers!=null) {
@@ -59,7 +61,7 @@ public class CSVBuilder {
     }
 
     public void addValue(Date value) throws Exception {
-        this.currentRow.addValue(value);
+        this.currentRow.addValue(value, this.format);
     }
 
     public void newLine() {

@@ -115,6 +115,13 @@
     <string name="settings_general_notifications_summary">Notifikationen von aktuellen Erinnerungen anzeigen!</string>
     <string name="settings_general_assistant">Assistent benutzen</string>
     <string name="settings_general_assistant_summary">Wenn Assistent vorhanden, dann diesen benutzen, um ein neues Element hinzuzufügen!</string>
+    <string name="settings_general_date_and_time">Datum und Zeit</string>
+    <string name="settings_general_date">Datums-Format</string>
+    <string name="settings_general_date_summary">Datums-Format, welches in der App verwendet wird, ändern</string>
+    <string name="settings_general_date_default">dd.MM.yyyy</string>
+    <string name="settings_general_time">Zeit-Format</string>
+    <string name="settings_general_time_summary">Zeit-Format, welches in der App verwendet wird, ändern</string>
+    <string name="settings_general_time_default">HH:mm:ss</string>
     <string name="settings_general_background">Hintergründe</string>
     <string name="settings_general_custom_background_title">Eigenes Hintergrundbild</string>
     <string name="settings_general_custom_background_summary">App-Hintergrundbild durch eigenes Bild ersetzen!</string>

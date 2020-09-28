@@ -154,7 +154,7 @@ public class ApiHelper {
     }
 
     public String exportMarkListToTEXT(List<MarkListSettings> settingList) {
-        CSVBridge writer = new CSVBridge(";", "id;title;max_points;best_mark_at;worst_mark_to;custom_mark;custom_points;half_points;tenth_marks;dictat_mode;type;mark_mode;view_mode");
+        CSVBridge writer = new CSVBridge(";", "id;title;max_points;best_mark_at;worst_mark_to;custom_mark;custom_points;half_points;tenth_marks;dictat_mode;type;mark_mode;view_mode", MainActivity.globals.getUserSettings().getDateFormat());
         for(int i = 1; i<= settingList.size(); i++) {
             try {
                 MarkListSettings settings = settingList.get(i-1);
@@ -188,7 +188,7 @@ public class ApiHelper {
     public boolean exportMarkListToXML(String where, String path) throws Exception {
         List<MarkListSettings> markListSettings = this.sqLite.getMarkListSearch(where);
         if(!markListSettings.isEmpty()) {
-            ObjectXML.saveObjectListToXML("MarkListSettings", markListSettings, path);
+            ObjectXML.saveObjectListToXML("MarkListSettings", markListSettings, path, MainActivity.globals.getUserSettings().getDateFormat());
             return true;
         } else {
             return false;
@@ -199,7 +199,7 @@ public class ApiHelper {
         if(!content.trim().contains(";")) {
             return false;
         } else {
-            CSVBridge reader = new CSVBridge(";", "", content.trim(), true);
+            CSVBridge reader = new CSVBridge(";", "", content.trim(), true, MainActivity.globals.getUserSettings().getDateFormat());
             for(int i = 1; i<=reader.size(); i++) {
                 MarkListSettings settings = new MarkListSettings(reader.readStringValue(i, "title"));
                 settings.setId(reader.readIntegerValue(i, "id"));
@@ -309,7 +309,7 @@ public class ApiHelper {
     }
 
     public String exportMarkToTEXT(List<SchoolYear> schoolYears) {
-        CSVBridge writer = new CSVBridge(";", "id;subject;year;tests");
+        CSVBridge writer = new CSVBridge(";", "id;subject;year;tests", MainActivity.globals.getUserSettings().getDateFormat());
         for(int i = 1; i<=schoolYears.size(); i++) {
             try {
                 SchoolYear schoolYear = schoolYears.get(i-1);
@@ -327,8 +327,8 @@ public class ApiHelper {
                         csvObject.writeValue("5", test.getWeight());
                         csvObject.writeValue("6", test.getThemes());
                         csvObject.writeValue("7", test.getDescription());
-                        csvObject.writeValue("8", test.getTestDate());
-                        csvObject.writeValue("9", test.getMemoryDate());
+                        csvObject.writeValue("8", test.getTestDate(), MainActivity.globals.getUserSettings().getDateFormat());
+                        csvObject.writeValue("9", test.getMemoryDate(), MainActivity.globals.getUserSettings().getDateFormat());
                         testObjects.add(csvObject);
                     }
                 }
@@ -395,7 +395,7 @@ public class ApiHelper {
         if(!content.trim().contains(";")) {
             return false;
         } else {
-            CSVBridge reader = new CSVBridge(";", "", content.trim(), true);
+            CSVBridge reader = new CSVBridge(";", "", content.trim(), true, MainActivity.globals.getUserSettings().getDateFormat());
             for(int i = 1; i<=reader.size(); i++) {
                 SchoolYear schoolYear = new SchoolYear();
                 schoolYear.setID(reader.readIntegerValue(i, "id"));
@@ -419,8 +419,8 @@ public class ApiHelper {
                                 test.setWeight(csvObject.readDoubleValue("5"));
                                 test.setThemes(csvObject.readStringValue("6"));
                                 test.setDescription(csvObject.readStringValue("7"));
-                                test.setTestDate(csvObject.readDateValue("8"));
-                                test.setMemoryDate(csvObject.readDateValue("9"));
+                                test.setTestDate(csvObject.readDateValue("8", MainActivity.globals.getUserSettings().getDateFormat()));
+                                test.setMemoryDate(csvObject.readDateValue("9", MainActivity.globals.getUserSettings().getDateFormat()));
                                 schoolYear.addTest(test);
                             }
                         }
@@ -597,7 +597,7 @@ public class ApiHelper {
     }
 
     public String exportTimeTableToTEXT(List<TimeTable> timeTables) {
-        CSVBridge writer = new CSVBridge(";", "id;title;description;year;school_class;days");
+        CSVBridge writer = new CSVBridge(";", "id;title;description;year;school_class;days", MainActivity.globals.getUserSettings().getDateFormat());
         for(int i = 1; i<=timeTables.size(); i++) {
             try {
                 TimeTable timeTable = timeTables.get(i-1);
@@ -849,7 +849,7 @@ public class ApiHelper {
         if(!content.trim().contains(";")) {
             return false;
         } else {
-            CSVBridge reader = new CSVBridge(";", "", content.trim(), true);
+            CSVBridge reader = new CSVBridge(";", "", content.trim(), true, MainActivity.globals.getUserSettings().getDateFormat());
             for(int i = 1; i<=reader.size(); i++) {
                 TimeTable timeTable = new TimeTable();
                 timeTable.setId(reader.readIntegerValue(i, "id"));
@@ -1065,7 +1065,7 @@ public class ApiHelper {
     }
 
     public String exportNoteToTEXT(List<Note> notes) {
-        CSVBridge writer = new CSVBridge(";", "id;title;memory_date;description");
+        CSVBridge writer = new CSVBridge(";", "id;title;memory_date;description", MainActivity.globals.getUserSettings().getDateFormat());
         for(int i = 1; i<=notes.size(); i++) {
             try {
                 writer.writeValue(i, "id", notes.get(i-1).getId());
@@ -1109,7 +1109,7 @@ public class ApiHelper {
         if (!content.trim().contains(";")) {
             return false;
         } else {
-            CSVBridge reader = new CSVBridge(";", "", content.trim(), true);
+            CSVBridge reader = new CSVBridge(";", "", content.trim(), true, MainActivity.globals.getUserSettings().getDateFormat());
             for(int i = 1; i<=reader.size(); i++) {
                 Note note = new Note();
                 note.setId(reader.readIntegerValue(i, "id"));
@@ -1195,7 +1195,7 @@ public class ApiHelper {
     }
 
     public String exportToDoListToTEXT(List<ToDoList> toDoLists) {
-        CSVBridge writer = new CSVBridge(";", "id;title;description;list_date;to_dos");
+        CSVBridge writer = new CSVBridge(";", "id;title;description;list_date;to_dos", MainActivity.globals.getUserSettings().getDateFormat());
         for(int i = 1; i<=toDoLists.size(); i++) {
             try {
                 writer.writeValue(i, "id", toDoLists.get(i-1).getId());
@@ -1253,7 +1253,7 @@ public class ApiHelper {
         if (!content.contains(";")) {
             return false;
         } else {
-            CSVBridge reader = new CSVBridge(";", "", content.trim(), true);
+            CSVBridge reader = new CSVBridge(";", "", content.trim(), true, MainActivity.globals.getUserSettings().getDateFormat());
             for(int i = 1; i<=reader.size(); i++) {
                 ToDoList toDoList = new ToDoList();
                 toDoList.setId(reader.readIntegerValue(i, "id"));
@@ -1339,7 +1339,7 @@ public class ApiHelper {
     }
 
     public String exportTimerEventToTEXT(List<TimerEvent> timerEvents) {
-        CSVBridge writer = new CSVBridge(";", "id;title;category;description;event_date;memory_date;school_class;subject;teacher");
+        CSVBridge writer = new CSVBridge(";", "id;title;category;description;event_date;memory_date;school_class;subject;teacher", MainActivity.globals.getUserSettings().getDateFormat());
         for(int i = 1; i<=timerEvents.size(); i++) {
             try {
                 writer.writeValue(i, "id", timerEvents.get(i-1).getId());
@@ -1393,7 +1393,7 @@ public class ApiHelper {
         if (!content.trim().contains(";")) {
             return false;
         } else {
-            CSVBridge reader = new CSVBridge(";", "", content.trim(), true);
+            CSVBridge reader = new CSVBridge(";", "", content.trim(), true, MainActivity.globals.getUserSettings().getDateFormat());
             for(int i = 1; i<=reader.size(); i++) {
                 TimerEvent timerEvent = new TimerEvent();
                 timerEvent.setId(reader.readIntegerValue(i, "id"));
@@ -1516,7 +1516,7 @@ public class ApiHelper {
     }
 
     public String exportLearningCardGroupToTEXT(List<LearningCardGroup> learningCardGroups) {
-        CSVBridge writer = new CSVBridge(";", "id;title;category;description;deadline;subject;teacher;learningCards");
+        CSVBridge writer = new CSVBridge(";", "id;title;category;description;deadline;subject;teacher;learningCards", MainActivity.globals.getUserSettings().getDateFormat());
         for(int i = 1; i<=learningCardGroups.size(); i++) {
             try {
                 writer.writeValue(i, "id", learningCardGroups.get(i-1).getId());
@@ -1592,7 +1592,7 @@ public class ApiHelper {
         if (!content.trim().contains(";")) {
             return false;
         } else {
-            CSVBridge reader = new CSVBridge(";", "", content.trim(), true);
+            CSVBridge reader = new CSVBridge(";", "", content.trim(), true, MainActivity.globals.getUserSettings().getDateFormat());
             for(int i = 1; i<=reader.size(); i++) {
                 LearningCardGroup learningCardGroup = new LearningCardGroup();
                 learningCardGroup.setId(reader.readIntegerValue(i, "id"));
@@ -1873,7 +1873,7 @@ public class ApiHelper {
             toDo.setTitle(csvObject.readStringValue("2"));
             toDo.setCategory(csvObject.readStringValue("3"));
             toDo.setDescription(csvObject.readStringValue("4"));
-            toDo.setMemoryDate(csvObject.readDateValue("5"));
+            toDo.setMemoryDate(csvObject.readDateValue("5", MainActivity.globals.getUserSettings().getDateFormat()));
             toDo.setImportance(csvObject.readIntegerValue("6"));
             toDo.setSolved(csvObject.readBooleanValue("7"));
             return toDo;
@@ -1889,7 +1889,7 @@ public class ApiHelper {
             csvObject.writeValue("2", toDo.getTitle());
             csvObject.writeValue("3", toDo.getCategory());
             csvObject.writeValue("4", toDo.getDescription());
-            csvObject.writeValue("5", toDo.getMemoryDate());
+            csvObject.writeValue("5", toDo.getMemoryDate(), MainActivity.globals.getUserSettings().getDateFormat());
             csvObject.writeValue("6", toDo.getImportance());
             csvObject.writeValue("7", toDo.isSolved());
             return csvObject;

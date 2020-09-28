@@ -20,17 +20,17 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import de.domjos.schooltoolslib.helper.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 
 public class ObjectXML {
 
-    public static void saveObjectListToXML(String root, List lst, String path) throws Exception {
+    public static void saveObjectListToXML(String root, List<?> lst, String path, String format) throws Exception {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document document = dBuilder.newDocument();
         Element element = document.createElement(root);
         for(Object object : lst) {
-            element.appendChild(ObjectXML.convertObjectToXMLElement(object, document));
+            element.appendChild(ObjectXML.convertObjectToXMLElement(object, document, format));
         }
         document.appendChild(element);
 
@@ -41,7 +41,7 @@ public class ObjectXML {
         transformer.transform(source, result);
     }
 
-    static List<Object> saveXMLToObjectList(String path) throws Exception {
+    static List<Object> saveXMLToObjectList(String path, String format) throws Exception {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
@@ -50,12 +50,12 @@ public class ObjectXML {
         List<Object> objectList = new LinkedList<>();
         for(int i = 0; i<=element.getChildNodes().getLength()-1; i++) {
             Node node = element.getChildNodes().item(i);
-            objectList.add(ObjectXML.convertXMLElementToObject(node));
+            objectList.add(ObjectXML.convertXMLElementToObject(node, format));
         }
         return objectList;
     }
 
-    private static Object convertXMLElementToObject(Node node) throws Exception {
+    private static Object convertXMLElementToObject(Node node, String format) throws Exception {
         Class<?> cls = ObjectXML.findClassByName(node.getNodeName());
         if(cls==null) {
             throw new Exception();
@@ -90,7 +90,7 @@ public class ObjectXML {
                         field.set(object, attribute.getNodeValue());
                     }
                     if(field.getType() == Date.class) {
-                        field.set(object, Converter.convertStringToDate(attribute.getNodeValue()));
+                        field.set(object, ConvertHelper.convertStringToDate(attribute.getNodeValue(), format));
                     }
                 }
             }
@@ -101,13 +101,13 @@ public class ObjectXML {
                 if(subNode.hasAttributes()) {
                     Field field = fieldMap.get(subNode.getNodeName());
                     if(field!=null) {
-                        field.set(object, convertXMLElementToObject(subNode));
+                        field.set(object, convertXMLElementToObject(subNode, format));
                     }
                 } else {
                     if(subNode.hasChildNodes()) {
                         List<Object> lst = new LinkedList<>();
                         for(int j = 0; j<=subNode.getChildNodes().getLength()-1; j++) {
-                            lst.add(convertXMLElementToObject(subNode.getChildNodes().item(j)));
+                            lst.add(convertXMLElementToObject(subNode.getChildNodes().item(j), format));
                         }
                         Field field = fieldMap.get(subNode.getNodeName());
                         if(field!=null) {
@@ -121,7 +121,7 @@ public class ObjectXML {
         return object;
     }
 
-    private static Map<String, Field> getAllFields(Class cls, Map<String, Field> map) {
+    private static Map<String, Field> getAllFields(Class<?> cls, Map<String, Field> map) {
         if(cls.getSuperclass()!=null) {
             map = ObjectXML.getAllFields(cls.getSuperclass(), map);
         }
@@ -133,17 +133,17 @@ public class ObjectXML {
         return map;
     }
 
-    private static Element convertObjectToXMLElement(Object object, Document document) throws Exception {
+    private static Element convertObjectToXMLElement(Object object, Document document, String format) throws Exception {
         Element element = document.createElement(object.getClass().getSimpleName());
 
-        ObjectXML.convertObjectToXMLElementSubClass(object.getClass(), object, element);
+        ObjectXML.convertObjectToXMLElementSubClass(object.getClass(), object, element, format);
 
         return element;
     }
 
-    private static void convertObjectToXMLElementSubClass(Class cls, Object object, Element element) throws Exception {
+    private static void convertObjectToXMLElementSubClass(Class<?> cls, Object object, Element element, String format) throws Exception {
         if(cls.getSuperclass()!=null) {
-            convertObjectToXMLElementSubClass(cls.getSuperclass(), object, element);
+            convertObjectToXMLElementSubClass(cls.getSuperclass(), object, element, format);
         }
 
         for(Field field : cls.getDeclaredFields()) {
@@ -153,16 +153,16 @@ public class ObjectXML {
                     element.setAttribute(field.getName(), Objects.requireNonNull(field.get(object)).toString());
                 } else if (field.getType() == Date.class) {
                     if (field.get(object) != null) {
-                        element.setAttribute(field.getName(), Converter.convertDateToString((Date) field.get(object)));
+                        element.setAttribute(field.getName(), ConvertHelper.convertDateToString((Date) field.get(object), format));
                     } else {
                         element.setAttribute(field.getName(), null);
                     }
                 } else if (field.getType() == List.class) {
                     Element sub = element.getOwnerDocument().createElement(field.getName());
 
-                    for (Object subObject : (List) Objects.requireNonNull(field.get(object))) {
+                    for (Object subObject : (List<?>) Objects.requireNonNull(field.get(object))) {
                         Element subSub = element.getOwnerDocument().createElement(subObject.getClass().getSimpleName());
-                        ObjectXML.convertObjectToXMLElementSubClass(subObject.getClass(), subObject, subSub);
+                        ObjectXML.convertObjectToXMLElementSubClass(subObject.getClass(), subObject, subSub, format);
                         sub.appendChild(subSub);
                     }
                     element.appendChild(sub);
@@ -171,7 +171,7 @@ public class ObjectXML {
                     element.setAttribute(field.getName(), Arrays.toString(bytes));
                 } else {
                     Element sub = element.getOwnerDocument().createElement(field.getName());
-                    ObjectXML.convertObjectToXMLElementSubClass(field.getType(), field.get(object), sub);
+                    ObjectXML.convertObjectToXMLElementSubClass(field.getType(), field.get(object), sub, format);
                     element.appendChild(sub);
                 }
             }
@@ -182,7 +182,7 @@ public class ObjectXML {
         List<String> packages = Arrays.asList("model", "model.learningCard", "model.mark", "model.marklist", "model.objects", "model.timetable", "model.todo", "marklist.de");
 
         for(String pkg : packages) {
-            Class cls;
+            Class<?> cls;
             try {
                 name = name.substring(0,1).toUpperCase() + name.substring(1);
                 cls = Class.forName("de.domjos.schooltools.core." + pkg + "." + name);

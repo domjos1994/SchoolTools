@@ -1,13 +1,11 @@
 package de.domjos.schooltools.helper.evenTypes;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.customwidgets.widgets.calendar.Event;
+import de.domjos.schooltools.activities.MainActivity;
 import de.domjos.schooltoolslib.model.Memory;
 
 public class WidgetCalendarMemory extends Event {
-    private Memory memory;
     private int icon;
 
     public WidgetCalendarMemory() {
@@ -25,15 +23,10 @@ public class WidgetCalendarMemory extends Event {
         this.icon = icon;
     }
 
-    public Memory getMemory() {
-        return this.memory;
-    }
-
     public void setMemory(Memory memory) throws Exception {
-        this.memory = memory;
-        super.setCalendar(new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(this.memory.getDate()));
-        super.setName(this.memory.getTitle());
-        super.setDescription(this.memory.getDescription());
-        super.setId(this.memory.getId());
+        super.setCalendar(ConvertHelper.convertStringToDate(memory.getDate(), MainActivity.globals.getUserSettings().getDateFormat()));
+        super.setName(memory.getTitle());
+        super.setDescription(memory.getDescription());
+        super.setId(memory.getId());
     }
 }

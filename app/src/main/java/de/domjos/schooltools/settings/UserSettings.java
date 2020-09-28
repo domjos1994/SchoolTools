@@ -57,6 +57,14 @@ public class UserSettings {
         return this.sharedPreferences.getBoolean("swtUseAssistant", true);
     }
 
+    public String getDateFormat() {
+        return this.sharedPreferences.getString("txtDateFormat", this.context.getString(R.string.settings_general_date_default));
+    }
+
+    public String getTimeFormat() {
+        return this.sharedPreferences.getString("txtTimeFormat", this.context.getString(R.string.settings_general_time_default));
+    }
+
     public boolean isExpertMode() {
         return this.sharedPreferences.getBoolean("swtSchoolMarkListExpert", false);
     }

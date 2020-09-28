@@ -12,7 +12,7 @@ package de.domjos.schooltoolslib.utils.fileUtils;
 import java.util.Date;
 import java.util.List;
 
-import de.domjos.schooltoolslib.helper.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 
 /**
  * @author Dominic Joas
@@ -76,10 +76,10 @@ public class CSVRow {
         }
     }
 
-    public void addValue(Date value) throws Exception {
+    public void addValue(Date value, String format) throws Exception {
         if(this.numberOfColumns>=this.currentColumn) {
             if(value!=null) {
-                this.stringBuilder.append(Converter.convertDateToString(value));
+                this.stringBuilder.append(ConvertHelper.convertDateToString(value, format));
                 this.stringBuilder.append(this.separator);
                 this.currentColumn++;
             } else {

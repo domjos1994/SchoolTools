@@ -28,13 +28,15 @@ public class CSVBridge {
     private final String SEPARATOR;
     private final Map<Integer, CSVObject> lineMap;
     private int currentLine;
+    private String format;
     
-    public CSVBridge(String separator, String header) {
-        this(separator, header, "", false);
+    public CSVBridge(String separator, String header, String format) {
+        this(separator, header, "", false, format);
     }
     
-    public CSVBridge(String separator, String header, String content, boolean contentWithHeader) {
+    public CSVBridge(String separator, String header, String content, boolean contentWithHeader, String format) {
         this.SEPARATOR = separator;
+        this.format = format;
         this.lineMap = new LinkedHashMap<>();
         if(contentWithHeader) {
             if (!content.isEmpty()) {
@@ -107,7 +109,7 @@ public class CSVBridge {
         if (obj == null) {
             return;
         }
-        obj.writeValue(key, value);
+        obj.writeValue(key, value, this.format);
         this.lineMap.put(line, obj);
     }
 
@@ -158,7 +160,7 @@ public class CSVBridge {
         if (obj == null) {
             return null;
         }
-        return obj.readDateValue(key);
+        return obj.readDateValue(key, this.format);
     }
 
     public CSVObject readObjectValue(int line, String key, String separator, String startTag, String endTag) {

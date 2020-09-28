@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import de.domjos.schooltoolslib.helper.Converter;
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltoolslib.helper.Helper;
 
 /**
@@ -136,9 +136,9 @@ public class CSVObject {
         }
     }
 
-    public void writeValue(String key, Date value) {
+    public void writeValue(String key, Date value, String format) {
         if (value != null) {
-            String date = Converter.convertDateToString(value);
+            String date = ConvertHelper.convertDateToString(value, format);
             if(date.isEmpty()) {
                 this.columns.put(key, CSVObject.EMPTY);
             } else {
@@ -215,11 +215,11 @@ public class CSVObject {
         }
     }
 
-    public Date readDateValue(String key) {
+    public Date readDateValue(String key, String format) {
         try {
             String content = this.readStringValue(key);
             if(content!=null) {
-                return Converter.convertStringToDate(content.trim());
+                return ConvertHelper.convertStringToDate(content.trim(), format);
             }
         } catch (ParseException ex) {
             return null;

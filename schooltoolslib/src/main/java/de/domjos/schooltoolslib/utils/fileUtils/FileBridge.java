@@ -17,8 +17,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
+import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltoolslib.R;
-import de.domjos.schooltoolslib.helper.Converter;
 
 public class FileBridge {
     private final Context context;
@@ -33,7 +33,7 @@ public class FileBridge {
         this.methods = new LinkedHashMap<>();
     }
 
-    public void writeObjectToFile() throws Exception {
+    public void writeObjectToFile(String format) throws Exception {
         if(this.file!=null && this.object!=null) {
             if(!this.file.isEmpty()) {
                 this.knownExtension(false);
@@ -45,7 +45,7 @@ public class FileBridge {
         }
 
         if(this.file.endsWith(".txt") || this.file.endsWith(".csv")) {
-            this.writeObjectToTXTOrCSV();
+            this.writeObjectToTXTOrCSV(format);
         } else if(this.file.endsWith(".xml")) {
             this.writeObjectToXML();
         } else {
@@ -75,7 +75,7 @@ public class FileBridge {
         }
     }
 
-    private void writeObjectToTXTOrCSV() throws Exception {
+    private void writeObjectToTXTOrCSV(String format) throws Exception {
         List<Object> ls = new LinkedList<>();
         if(this.object.getClass()== List.class) {
             if(!((List)this.object).isEmpty()) {
@@ -107,7 +107,7 @@ public class FileBridge {
                     content.append(method.invoke(tmp));
                     content.append(";");
                 } else if(this.isReturnTypeDate(method)) {
-                    content.append(Converter.convertDateToString((Date) method.invoke(tmp)));
+                    content.append(ConvertHelper.convertDateToString((Date) method.invoke(tmp), format));
                     content.append(";");
                 } else {
                     content.append(";");

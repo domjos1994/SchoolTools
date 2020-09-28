@@ -23,6 +23,22 @@
         android:summary="@string/settings_general_assistant_summary"/>
 
     <PreferenceCategory
+        android:title="@string/settings_general_date_and_time"
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:layout="@android:layout/preference_category">
+        <EditTextPreference
+            android:key="txtDateFormat"
+            android:defaultValue="@string/settings_general_date_default"
+            android:title="@string/settings_general_date"
+            android:summary="@string/settings_general_date_summary"/>
+        <SwitchPreference
+            android:key="txtTimeFormat"
+            android:defaultValue="@string/settings_general_time_default"
+            android:title="@string/settings_general_time"
+            android:summary="@string/settings_general_time_summary"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/settings_general_background"
         android:icon="@drawable/ic_view_list_black_24dp"
         android:layout="@android:layout/preference_category">
