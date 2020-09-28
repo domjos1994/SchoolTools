@@ -294,145 +294,145 @@
     </array>
 
     <string-array name="colorNames">
-        <item>White</item>
-        <item>Ivory</item>
-        <item>Light Yellow</item>
-        <item>Yellow</item>
-        <item>Snow</item>
-        <item>Floral White</item>
-        <item>Lemon Chiffon</item>
-        <item>Cornsilk</item>
-        <item>Seashell</item>
-        <item>Lavender Blush</item>
-        <item>Papaya Whip</item>
-        <item>Blanched Almond</item>
-        <item>Misty Rose</item>
-        <item>Bisque</item>
-        <item>Moccasin</item>
-        <item>Navajo White</item>
-        <item>Peach Puff</item>
-        <item>Gold</item>
-        <item>Pink</item>
-        <item>Light Pink</item>
-        <item>Orange</item>
-        <item>Light Salmon</item>
-        <item>Dark Orange</item>
-        <item>Coral</item>
-        <item>Hot Pink</item>
-        <item>Tomato</item>
-        <item>Orange Red</item>
-        <item>Deep Pink</item>
-        <item>Fuchsia</item>
-        <item>Magenta</item>
-        <item>Red</item>
-        <item>Old Lace</item>
-        <item>Light Goldenrod Yellow</item>
-        <item>Linen</item>
-        <item>Antique White</item>
-        <item>Salmon</item>
-        <item>Ghost White</item>
-        <item>Mint Cream</item>
-        <item>White Smoke</item>
-        <item>Beige</item>
-        <item>Wheat</item>
-        <item>Sandy Brown</item>
-        <item>Azure</item>
-        <item>Honeydew</item>
-        <item>Alice Blue</item>
-        <item>Khaki</item>
-        <item>Light Coral</item>
-        <item>Pale Goldenrod</item>
-        <item>Violet</item>
-        <item>Dark Salmon</item>
-        <item>Lavender</item>
-        <item>Light Cyan</item>
-        <item>Burly Wood</item>
-        <item>Plum</item>
-        <item>Gainsboro</item>
-        <item>Crimson</item>
-        <item>Pale Violet Red</item>
-        <item>Goldenrod</item>
-        <item>Orchid</item>
-        <item>Thistle</item>
-        <item>Light Grey</item>
-        <item>Tan</item>
-        <item>Chocolate</item>
-        <item>Peru</item>
-        <item>Indian Red</item>
-        <item>Medium Violet Red</item>
-        <item>Silver</item>
-        <item>Dark Khaki</item>
-        <item>Rosy Brown</item>
-        <item>Medium Orchid</item>
-        <item>Dark Goldenrod</item>
-        <item>Fire Brick</item>
-        <item>Powder Blue</item>
-        <item>Light Steel Blue</item>
-        <item>Pale Turquoise</item>
-        <item>Green Yellow</item>
-        <item>Light Blue</item>
-        <item>Dark Gray</item>
-        <item>Brown</item>
-        <item>Sienna</item>
-        <item>Yellow Green</item>
-        <item>Dark Orchid</item>
-        <item>Pale Green</item>
-        <item>Dark Violet</item>
-        <item>Medium Purple</item>
-        <item>Light Green</item>
-        <item>Dark Sea Green</item>
-        <item>Saddle Brown</item>
-        <item>Dark Magenta</item>
-        <item>Dark Red</item>
-        <item>Blue Violet</item>
-        <item>Light Sky Blue</item>
-        <item>Sky Blue</item>
-        <item>Gray</item>
-        <item>Olive</item>
-        <item>Purple</item>
-        <item>Maroon</item>
-        <item>Aquamarine</item>
-        <item>Chartreuse</item>
-        <item>Lawn Green</item>
-        <item>Medium Slate Blue</item>
-        <item>Light Slate Gray</item>
-        <item>Slate Gray</item>
-        <item>Olive Drab</item>
-        <item>Slate Blue</item>
-        <item>Dim Gray</item>
-        <item>Medium Aquamarine</item>
-        <item>Cornflower Blue</item>
-        <item>Cadet Blue</item>
-        <item>Dark Olive Green</item>
-        <item>Indigo</item>
-        <item>Medium Turquoise</item>
-        <item>Dark Slate Blue</item>
-        <item>Steel Blue</item>
-        <item>Royal Blue</item>
-        <item>Turquoise</item>
-        <item>Medium Sea Green</item>
-        <item>Lime Green</item>
-        <item>Dark Slate Gray</item>
-        <item>Sea Green</item>
-        <item>Forest Green</item>
-        <item>Light Sea Green</item>
-        <item>Dodger Blue</item>
-        <item>Midnight Blue</item>
-        <item>Aqua</item>
-        <item>Cyan</item>
-        <item>Spring Green</item>
-        <item>Lime</item>
-        <item>Medium Spring Green</item>
-        <item>Dark Turquoise</item>
-        <item>Deep Sky Blue</item>
-        <item>Dark Cyan</item>
-        <item>Teal</item>
-        <item>Green</item>
-        <item>Dark Green</item>
-        <item>Blue</item>
-        <item>Medium Blue</item>
-        <item>Dark Blue</item>
-        <item>Navy</item>
-        <item>Black</item>
+        <item>weiß</item>
+        <item>elfenbein</item>
+        <item>helles gelb</item>
+        <item>gelb</item>
+        <item>schnee</item>
+        <item>blumenweiß</item>
+        <item>kornseide</item>
+        <item>mais Seide</item>
+        <item>seemuschel</item>
+        <item>lavendelrot</item>
+        <item>papayacreme</item>
+        <item>mandelweiß</item>
+        <item>blaß rosenfarben</item>
+        <item>biskuit / porzellanfarben</item>
+        <item>mokassin</item>
+        <item>navajoweiß</item>
+        <item>pfirsich</item>
+        <item>gold</item>
+        <item>pink</item>
+        <item>hellpink</item>
+        <item>orange</item>
+        <item>helllachsfarben</item>
+        <item>dunkelorange</item>
+        <item>koralle</item>
+        <item>knallrosa</item>
+        <item>tomatenfarben</item>
+        <item>orangenrot</item>
+        <item>dunkelrosarot</item>
+        <item>fuchsie</item>
+        <item>magenta</item>
+        <item>rot</item>
+        <item>alte spitze</item>
+        <item>helles goldrutengelb</item>
+        <item>leinen</item>
+        <item>antikweiß</item>
+        <item>lachsfarben</item>
+        <item>geisterweiß</item>
+        <item>pfefferminzcreme</item>
+        <item>rauchfarben</item>
+        <item>beige</item>
+        <item>weizenfarben</item>
+        <item>sandbraun</item>
+        <item>azur</item>
+        <item>honigmelone</item>
+        <item>alis-blau</item>
+        <item>khaki</item>
+        <item>hellkorall</item>
+        <item>blasse goldrute</item>
+        <item>violett</item>
+        <item>dunkellachsfarben</item>
+        <item>lavendel</item>
+        <item>hellcyan</item>
+        <item>stammholz</item>
+        <item>pflaumenfarben</item>
+        <item>gainsboro</item>
+        <item>karmesinrot / blutrot</item>
+        <item>blassvioletrot</item>
+        <item>goldrute</item>
+        <item>orchideenfarben</item>
+        <item>distelfarben</item>
+        <item>hellgrau</item>
+        <item>gerbbraun</item>
+        <item>schokolade</item>
+        <item>peru</item>
+        <item>indischrot</item>
+        <item>mittleres violetrot</item>
+        <item>silber</item>
+        <item>dunkelkhaki</item>
+        <item>rosiges braun</item>
+        <item>mittel orchideenfarben</item>
+        <item>dunkelgoldrute</item>
+        <item>ziegelfarben</item>
+        <item>pulverblau</item>
+        <item>helles stahlblau</item>
+        <item>blasstürkis</item>
+        <item>grüngelb</item>
+        <item>hellblau</item>
+        <item>dunkelgrau</item>
+        <item>braun</item>
+        <item>sienaerde</item>
+        <item>gelbgrün</item>
+        <item>dunkelorchideefarben</item>
+        <item>blassgrün</item>
+        <item>dunkelviolet</item>
+        <item>mittleres purpur</item>
+        <item>hellgrün</item>
+        <item>dunkelmeergrün</item>
+        <item>sattelbraun</item>
+        <item>dunkelmagenta</item>
+        <item>dunkelrot</item>
+        <item>blauviolet</item>
+        <item>helles himmelblau</item>
+        <item>himmelblau</item>
+        <item>grau</item>
+        <item>olive</item>
+        <item>purpur</item>
+        <item>kastanienbraun</item>
+        <item>aquamarin</item>
+        <item>grüngelb</item>
+        <item>rasengrün</item>
+        <item>mittleres schieferblau</item>
+        <item>helles schiefergrau</item>
+        <item>schiefergrau</item>
+        <item>olivengraubraun</item>
+        <item>schieferblau</item>
+        <item>dunkelgrau</item>
+        <item>mittleres aquamarin</item>
+        <item>kornblumenblau</item>
+        <item>kadettenblau</item>
+        <item>dunkelolivengrün</item>
+        <item>indigo</item>
+        <item>mittleres türkis</item>
+        <item>dunkelschieferblau</item>
+        <item>stahlblau</item>
+        <item>königsblau</item>
+        <item>türkis</item>
+        <item>mittleres meergrün</item>
+        <item>limonengrün</item>
+        <item>dunkelschiefergrau</item>
+        <item>meergrün</item>
+        <item>waldgrün</item>
+        <item>helles meergrün</item>
+        <item>persenningblau</item>
+        <item>mitternachtsblau</item>
+        <item>wasser</item>
+        <item>cyan</item>
+        <item>frühlingsgrün</item>
+        <item>limone</item>
+        <item>mittleres frühlingsgrün</item>
+        <item>dunkles Türkis</item>
+        <item>dunkeles himmelblau</item>
+        <item>dunkles cyan</item>
+        <item>blaugrün</item>
+        <item>grün</item>
+        <item>dunkles grün</item>
+        <item>blau</item>
+        <item>mittleres blau</item>
+        <item>dunles blau</item>
+        <item>marineblau</item>
+        <item>schwarz</item>
     </string-array>
 </resources>

@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017-2019  Dominic Joas
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 3
+  ~ of the License, or (at your option) any later version.
+  -->
+
+<resources>
+    <string name="help_start">
+        <![CDATA[
+            <h1>Startbildschirm</h1>
+            <div class="ce-bodytext">
+                <p>
+                    Auf dem Startbildschirm werden verschiedene Widgets eingeblendet, welche man in den Einstellungen ausw\u00e4hlen kann.
+                </p>
+                <p>
+                    Über die Lupe kann man Datensätze modulübergreifend Suchen.
+                </p>
+                <p>
+                    Der Refresh-Knopf aktualisiert alle sichtbaren Widgets.
+                </p>
+                <p>
+                    Über das Menu gelangt man zu den Einstellungen und zum Ex-/Import.
+                </p>
+            </div>
+        ]]>
+    </string>
+    <string name="help_export_import">
+        <![CDATA[
+            <h1>Export/Import</h1>
+            <div class="ce-bodytext">
+                <p>
+                    Hier wird es ermöglicht Daten aus der App in verschiedene Formate zu exportieren oder Daten in die App zu Importieren.
+                </p>
+                <p>
+                    Man kann in eine PDF-Datei, eine Text-Datei, eine CSV-Datei oder eine XML-Datei zu exportieren<br>
+                    und aus einer Text-Datei, einer CSV-Datei oder einer XML-Datei Daten zu importieren.
+                </p>
+                <p>
+                    Man kann aus sämtlichen Modulen Daten ex- bzw. importieren. Es ist möglich alle Datensätze oder nur bestimmte auszuwählen.
+                </p>
+            </div>
+        ]]>
+    </string>
+    <string name="help_settings">
+        <![CDATA[
+            <h1>Einstellungen</h1>
+            <div class="ce-bodytext">
+                <p>
+                    Man kommt zum Einstellungs-Bildschirm, indem man auf dem Startbildschirm im Menu den Punkt "Einstellungen" berührt.
+                </p>
+                <p>
+                    Hier kann man zwischen 4 Ober-Kategorien auswählen:
+                </p>
+                <ol>
+                    <li>Allgemein (allgemeine Einstellungen)</li>
+                    <li>Startbildschirm (Einstellungen für die Wigets auf dem Startbildschirm)</li>
+                    <li>Thematische Einstellungen (Einstellungen zu den Modulen)</li>
+                    <li>Export/Import (Einstellungen zu den Schnittstellen)</li>
+                </ol>
+            </div>
+            <div class="ce-bodytext">
+                <p>
+                    <strong>Allgemeine Einstellungen</strong>
+                </p>
+                <p>
+                    Notifikationen anzeigen:<br>
+                    Sollen Notifikationen angezeigt werden?<br>
+                    SchoolTools blendet im Handy Notifikationen für aktuelle Ereignisse wie Klassenarbeiten ein.
+                </p>
+                <p>
+                    Eigenes Hintergrundbild:<br>
+                    App-Hintergrundbild durch eigenes Bild ersetzen!
+                </p>
+                <p>
+                    Neuigkeiten erneut anzeigen:<br>
+                    Zeigt den Neuigkeiten-Bildschirm erneut an.<br>
+                    Beim ersten Start der App wird ein Neuigkeiten-Bildschirm angezeigt.
+                    Um diesen erneut anzuzeigen, kann man diese Einstellung im Menu treffen.
+                </p>
+                <p>
+                    Erinnerungen löschen:<br>
+                    Löscht Erinnerungen, nachdem sie von der App angezeigt wurden.
+                </p>
+                <p>
+                    Datenbank zurücksetzen:<br>
+                    Setzt die Datenbank zurück.<br>
+                    Achtung: Diese Einstellung löscht die Daten unwiederuflich.
+                </p>
+            </div>
+            <div class="ce-bodytext">
+                <p>
+                    <strong>Startbildschirm:</strong>
+                </p>
+                <p>
+                    Widgets für Startseite auswählen:<br>
+                    Hier kann man die Widgets auswählen, welche auf dem Startbildschirm der App angezeigt werden.
+                </p>
+                <p>
+                    Module anzeigen:<br>
+                    Hier kann man die Module anzeigen und ausblenden lassen.
+                </p>
+                <p>
+                    Start-Modul auswählen:<br>
+                    Hier kann man das Modul auswählen, welches beim Start der App angezeigt wird.
+                </p>
+            </div>
+            <div class="ce-bodytext">
+                <p>
+                    <strong>Thematische Einstellungen:</strong>
+                </p>
+                <p>
+                    Hier sind die Einstellungen für die Module der App aufgelistet.
+                </p>
+                <p>
+                    Experten-Modus:<br>
+                    Blendet zusätzliche Einstellungen für die Notenlisten ein.
+                </p>
+                <p>
+                    Maximale Punktzahl:<br>
+                    Maximale Punktzahl für den grafischen erweiterten Modus.
+                </p>
+                <p>
+                    Stundenplan-Modus:<br>
+                    Aus Sicht eines Lehrers (Pro Stunde Klasse auswählbar)<br>
+                    Aus Sicht eines Schülers (Pro Stunde Lehrer auswählbar)
+                </p>
+                <p>
+                    Länge der Pause:<br>
+                    Gibt die Länge der Pause an (Standard 20 Minuten)
+                </p>
+                <p>
+                    Automatische Ergänzung der Fächer:<br>
+                    Fächer werden bei der Eingabe bekannter Abkürzungen automatisch ergänzt.
+                </p>
+                <p>
+                    Erinnerung x Tage vorher:<br>
+                    Erinnert an Ereignisse im Schul-Timer x Tage vorher.
+                </p>
+                <p>
+                    ToDo-Liste nach Stichtag löschen:<br>
+                    Löscht ToDo-Liste nach dem der Stichtag überschritten wurde.
+                </p>
+            </div>
+            <div class="ce-bodytext">
+                <p>
+                    <strong>Export/Import:</strong>
+                </p>
+                <p>
+                    Einträge überschreiben:<br>
+                    Überschreibt Einträge, welche in der APP bereits vorhanden sind.
+                </p>
+                <p>
+                    Export abbrechen:<br>
+                    Bricht Vorgang ab, sobald ein Datensatz fehlerhaft ist.
+                </p>
+            </div>
+        ]]>
+    </string>
+    <string name="help_marklist">
+        <![CDATA[
+            <h1>Notenlisten</h1>
+            <div class="ce-bodytext">
+                <p>
+                    In diesem Modul wird es ermöglicht Punkt-Notenlisten zu erstellen, welche man als Notenliste für Klassenarbeiten braucht.
+                </p>
+                <p>
+                    Es gibt verschiedene Typen an Listen: linear, mit Knicks, exponentiell und IHK.
+                </p>
+                <p>
+                    <strong>Diktat-Modus:</strong><br>
+                    Im Dikat-Modus gibt es keine Anzahl an Punkte,
+                    welche erreicht werden müssen, sondern eine Fehleranzahl,
+                    welche maximal für eine Note erreicht werden darf.
+                </p>
+                <p>
+                    <strong>Lineare Notenliste:</strong><br>
+                    Die lineare Notenliste ist die simpelste Liste.
+                    Man kann eine maximale Punktzahl angeben, angeben, ob es zehntel oder viertel Noten gibt und
+                    man kann einstellen, ob es ganze oder halbe Punkte gibt.
+                </p>
+                <p>
+                    <strong>Notenliste mit Knicks:</strong><br>
+                    Hier kann man zusätzlich noch eine Anzahl an Punkte angeben
+                    bis wann es die beste bzw. schlechteste Note gibt.
+                    Und eine zusätzlich Note und die dazugehörigen Punkte.
+                </p>
+                <p>
+                    <strong>Exponentielle Notenliste:</strong><br>
+                    Einstellung gleich wie bei linearer Notenliste.
+                </p>
+                <p>
+                    <strong>IHK Notenliste:</strong><br>
+                    Einstellung gleich wie bei linearer Notenliste.
+                </p>
+                <p>&nbsp;</p>
+                <p>
+                    <strong>Menu:</strong><br>
+                    Im Menu kann man eine Notenliste mit deren Einstellungen
+                    als Standard setzen oder Notenlisten speichern.
+                    Außerdem kommt man hier zur erweiterteten grafischen Ansicht.
+                </p>
+                <p>
+                    <strong>Erweiterte grafische Ansicht:</strong><br>
+                    Hier wird die Notenliste grafisch dargestellt.
+                    Über die Schalter kann man die Einstellungen anpassen
+                    und im Menu kann man die Einstellungen exportieren.
+                </p>
+            </div>
+        ]]>
+    </string>
+    <string name="help_calculate_mark">
+        <![CDATA[
+            <h1>Noten berechnen</h1>
+            <div class="ce-bodytext">
+                <p>
+                    Hier kann man durch Angabe von Resultaten in Klassenarbeiten
+                    und Tests den aktuellen Notendurchschnitt berechnen.
+                </p>
+                <p>
+                    Durch Betätigen der Schaltflächen im Fußbereich kann man Jahre bzw. Fächer hinzufügen.
+                </p>
+                <p>
+                    Wenn man im Kopfbereich ein Jahr bzw. ein Fach ausgewählt hat
+                    erscheint im Fußbereich eine runde Schaltfläche.
+                    Wenn man auf diese drauf drückt kann man eine neue Klassenarbeit bzw. Test anlegen.
+                    man kann diese durch Angabe der Gewichtung unterschiedlich gewichten.
+                </p>
+            </div>
+        ]]>
+    </string>
+    <string name="help_timetable">
+        <![CDATA[
+            <h1>Stundenplan</h1>
+            <div class="ce-bodytext">
+                <p>
+                    Hier kann man neue Stundenpläne für ein Jahr angeben.
+                </p>
+                <p>
+                    Durch Betätigen der Schaltflächen im Fußbereich kann man Fächer,
+                    Klassen, Lehrer, Jahre und Zeiten hinzufügen.
+                </p>
+                <p>
+                    Wenn man den Fächern der App bekannten Abkürzungen angibt,
+                    werden diese automatisch ergänzt.
+                </p>
+                <p>
+                    Wenn man bei den Zeiten der Beginn der Stunde angibt wird
+                    das Ende automatisch um 45 Minuten zum Beginn umgestellt.
+                </p>
+                <p>
+                    Wenn man auf einen der blauen Kästen im Stundenplan-Eintrag drückt öffnet sich ein Dialog,
+                    in welchem man das Fach, den Lehrer und eine Raum-Nummer angeben kann.
+                </p>
+            </div>
+        ]]>
+    </string>
+    <string name="help_notes">
+        <![CDATA[
+            <h1>Notizen</h1>
+            <div class="ce-bodytext">
+                <p>
+                    Hier kann man Notizen eingeben.
+                </p>
+                <p>
+                    Wenn man auf das Mikrofon drückt, kann man diese auch der App diktieren.
+                </p>
+                <p>
+                    Wenn Titel sagt, wird der danach folgende Teil als Titel eingetragen,
+                    wenn man Beschreibung sagt, wird der danach folgende Teil als Beschreibung eingetragen.
+            </div>
+        ]]>
+    </string>
+    <string name="help_todo">
+        <![CDATA[
+            <h1>ToDo-Listen</h1>
+            <div class="ce-bodytext">
+                <p>
+                    Hier kann man ToDo-Listen hinzufügen.
+                </p>
+                <p>
+                    Wenn man auf den Knopf im Fußbereich drückt, kann man neue ToDo-Listen eintragen.
+                </p>
+                <p>
+                    Wählt man eine Liste im Kopfbereich aus, kann man durch Drücken auf das Plus neue Todos hinzufügen.
+                </p>
+                <p>
+                    Hierbei kann man unterschiedliche Prioritäten festlegen.
+                </p>
+            </div>
+        ]]>
+    </string>
+    <string name="help_timer">
+        <![CDATA[
+            <h1>Schul-Timer</h1>
+            <div class="ce-bodytext">
+                <p>
+                    Hier kann man neue Ereignisse hinzufügen.
+                </p>
+                <p>
+                    Hierbei kann man im oberen Teil ein Datum suchen oder durch die Pfeile den Tag ändern.
+                </p>
+                <p>
+                    Durch drücken auf das Plus kann man ein Ereignis hinzufügen.
+                </p>
+            </div>
+        ]]>
+    </string>
+    <string name="help_learning_cards">
+        <![CDATA[
+            <h1>Kartei-Karten</h1>
+            <div class="ce-bodytext">
+                <p>
+                    Hier kann man Kartei-Karten anlegen und sich abfragen lassen.
+                </p>
+                <p>
+                    Im Fußbereich kann man über die Schaltflächen Fächer, Lehrer,
+                    Gruppen bzw. Kartei-Karten und Abfragen anlegen.
+                </p>
+            </div>
+        ]]>
+    </string>
+</resources>

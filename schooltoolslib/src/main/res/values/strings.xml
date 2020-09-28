@@ -1,41 +1,41 @@
 <resources>
     <string name="app_name">SchoolToolsLib</string>
 
-    <string name="main_nav_mark_list">Notenliste</string>
-    <string name="main_nav_notes">Notizen</string>
-    <string name="main_nav_timer">Schultimer</string>
+    <string name="main_nav_mark_list">Mark-List</string>
+    <string name="main_nav_notes">Note</string>
+    <string name="main_nav_timer">School-Timer</string>
     <string name="main_nav_todo">ToDo</string>
 
-    <string name="mark_test">Arbeit</string>
+    <string name="mark_test">Exam</string>
 
-    <string name="message_marklist_1">Die maximale Punktzahl sollte größer als 0 sein!</string>
-    <string name="message_marklist_2">Die maximale Punktzahl sollte kleiner als 40000 sein!</string>
-    <string name="message_marklist_3">Die kleinste Note sollte größer als 0 sein!</string>
-    <string name="message_marklist_4">Die kleinste Note sollte kleiner als die maximale Punktzahl sein!</string>
-    <string name="message_marklist_5">Die größte Note sollte größer als 0 sein!</string>
-    <string name="message_marklist_6">Die größte Note sollte kleiner als die maximale Punktzahl sein!</string>
-    <string name="message_marklist_7">Der Noten-Multiplikator sollte zwischen 0 und 5 liegen!</string>
-    <string name="message_marklist_8">Der Punkte-Multiplikator sollte zwischen 0 und 5 liegen!</string>
-    <string name="message_marklist_9">Die Punktzahl, mit der man die beste Note bekommt, sollte zwischen 0 und der
-        Maximalen Punktzahl liegen!
+    <string name="message_marklist_1">The maximum number of points should be greater than 0!</string>
+    <string name="message_marklist_2">The maximum number of points should be less than 40000!</string>
+    <string name="message_marklist_3">The smallest note should be greater than 0!</string>
+    <string name="message_marklist_4">The lowest grade should be smaller than the maximum number of points!</string>
+    <string name="message_marklist_5">The highest grade should be greater than 0!</string>
+    <string name="message_marklist_6">The highest grade should be smaller than the maximum score!</string>
+    <string name="message_marklist_7">The grade multiplier should be between 0 and 5!</string>
+    <string name="message_marklist_8">The point multiplier should be between 0 and 5!</string>
+    <string name="message_marklist_9">The number of points with which you get the best grade should be between 0 and the
+         Maximum points are!
     </string>
-    <string name="message_marklist_10">Die Punktzahl, mit der man die schlechteste Note bekommt, sollte zwischen 0 und
-        der Maximalen Punktzahl liegen!
+    <string name="message_marklist_10">The number of points with which you get the worst grade should be between 0 and
+         the maximum number of points!
     </string>
-    <string name="message_marklist_11">Die Punktzahl, mit der man die beste Note bekommt, sollte größer sein, als die
-        Punktzahl mit der man die schlechteste Note bekommt!
+    <string name="message_marklist_11">The number of points with which you get the best grade should be greater than that
+         Score with which you get the worst grade!
     </string>
-    <string name="message_marklist_12">Die benutzerdefinierte Punktzahl sollte zwischen 0 und der maximalen Punktzahl
-        liegen!
+    <string name="message_marklist_12">The custom score should be between 0 and the maximum score
+         lie!
     </string>
-    <string name="message_marklist_13">Die benutzerdefinierte Punktzahl sollte zwischen der Punktzahl, mit der man die
-        beste Note bekommt, und der Punktzahl, mit der man die schlechteste Note bekommt, liegen!
+    <string name="message_marklist_13">The custom score should be somewhere between the score with which you can enter the
+         get the best grade, and the number of points with which you get the worst grade are!
     </string>
-    <string name="message_marklist_14">Die benutzerdefinierte Note sollte zwischen der größten und der kleinsten Note
-        liegen!
+    <string name="message_marklist_14">The custom grade should be between the largest and the smallest
+         lie!
     </string>
 
-    <string name="message_file_format_unknown">Das Format ist nicht bekannt!</string>
-    <string name="message_file_not_exists">Die Datei existiert nicht!</string>
-    <string name="message_wrong_method">Falsche Methode wurde benutzt!</string>
+    <string name="message_file_format_unknown">The format is unknown!</string>
+    <string name="message_file_not_exists">The file does not exist!</string>
+    <string name="message_wrong_method">Wrong method was used!</string>
 </resources>

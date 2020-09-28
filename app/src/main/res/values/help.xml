@@ -11,19 +11,19 @@
 <resources>
     <string name="help_start">
         <![CDATA[
-            <h1>Startbildschirm</h1>
+            <h1>Home screen</h1>
             <div class="ce-bodytext">
                 <p>
-                    Auf dem Startbildschirm werden verschiedene Widgets eingeblendet, welche man in den Einstellungen ausw\u00e4hlen kann.
+                    Various widgets are displayed on the start screen, which can be selected in the settings.
                 </p>
                 <p>
-                    Über die Lupe kann man Datensätze modulübergreifend Suchen.
+                    Data records can be searched across modules using the magnifying glass.
                 </p>
                 <p>
-                    Der Refresh-Knopf aktualisiert alle sichtbaren Widgets.
+                    The refresh button updates all visible widgets.
                 </p>
                 <p>
-                    Über das Menu gelangt man zu den Einstellungen und zum Ex-/Import.
+                    The menu takes you to the settings and to the export / import.
                 </p>
             </div>
         ]]>
@@ -33,292 +33,196 @@
             <h1>Export/Import</h1>
             <div class="ce-bodytext">
                 <p>
-                    Hier wird es ermöglicht Daten aus der App in verschiedene Formate zu exportieren oder Daten in die App zu Importieren.
+                    Here it is possible to export data from the app in different formats or to import data into the app.
                 </p>
                 <p>
-                    Man kann in eine PDF-Datei, eine Text-Datei, eine CSV-Datei oder eine XML-Datei zu exportieren<br>
-                    und aus einer Text-Datei, einer CSV-Datei oder einer XML-Datei Daten zu importieren.
+                    One can export to a PDF file, a text file, a CSV file or an XML file<br>
+                    and import data from a text file, a CSV file or an XML file.
                 </p>
                 <p>
-                    Man kann aus sämtlichen Modulen Daten ex- bzw. importieren. Es ist möglich alle Datensätze oder nur bestimmte auszuwählen.
+                    You can export or import data from all modules. It is possible to select all data sets or only certain ones.
                 </p>
             </div>
         ]]>
     </string>
     <string name="help_settings">
         <![CDATA[
-            <h1>Einstellungen</h1>
+            <h1>Settings</h1>
             <div class="ce-bodytext">
                 <p>
-                    Man kommt zum Einstellungs-Bildschirm, indem man auf dem Startbildschirm im Menu den Punkt "Einstellungen" berührt.
+                    You can get to the settings screen by touching "Settings" in the menu on the start screen.
                 </p>
                 <p>
-                    Hier kann man zwischen 4 Ober-Kategorien auswählen:
+                    Here you can choose between 4 main categories:
                 </p>
                 <ol>
-                    <li>Allgemein (allgemeine Einstellungen)</li>
-                    <li>Startbildschirm (Einstellungen für die Wigets auf dem Startbildschirm)</li>
-                    <li>Thematische Einstellungen (Einstellungen zu den Modulen)</li>
-                    <li>Export/Import (Einstellungen zu den Schnittstellen)</li>
+                    <li>General (general settings)</li>
+                    <li>Start screen (settings for the wigets on the start screen)</li>
+                    <li>Thematic settings (settings for the modules)</li>
+                    <li>Export / import (settings for the interfaces)</li>
                 </ol>
-            </div>
-            <div class="ce-bodytext">
-                <p>
-                    <strong>Allgemeine Einstellungen</strong>
-                </p>
-                <p>
-                    Notifikationen anzeigen:<br>
-                    Sollen Notifikationen angezeigt werden?<br>
-                    SchoolTools blendet im Handy Notifikationen für aktuelle Ereignisse wie Klassenarbeiten ein.
-                </p>
-                <p>
-                    Eigenes Hintergrundbild:<br>
-                    App-Hintergrundbild durch eigenes Bild ersetzen!
-                </p>
-                <p>
-                    Neuigkeiten erneut anzeigen:<br>
-                    Zeigt den Neuigkeiten-Bildschirm erneut an.<br>
-                    Beim ersten Start der App wird ein Neuigkeiten-Bildschirm angezeigt.
-                    Um diesen erneut anzuzeigen, kann man diese Einstellung im Menu treffen.
-                </p>
-                <p>
-                    Erinnerungen löschen:<br>
-                    Löscht Erinnerungen, nachdem sie von der App angezeigt wurden.
-                </p>
-                <p>
-                    Datenbank zurücksetzen:<br>
-                    Setzt die Datenbank zurück.<br>
-                    Achtung: Diese Einstellung löscht die Daten unwiederuflich.
-                </p>
-            </div>
-            <div class="ce-bodytext">
-                <p>
-                    <strong>Startbildschirm:</strong>
-                </p>
-                <p>
-                    Widgets für Startseite auswählen:<br>
-                    Hier kann man die Widgets auswählen, welche auf dem Startbildschirm der App angezeigt werden.
-                </p>
-                <p>
-                    Module anzeigen:<br>
-                    Hier kann man die Module anzeigen und ausblenden lassen.
-                </p>
-                <p>
-                    Start-Modul auswählen:<br>
-                    Hier kann man das Modul auswählen, welches beim Start der App angezeigt wird.
-                </p>
-            </div>
-            <div class="ce-bodytext">
-                <p>
-                    <strong>Thematische Einstellungen:</strong>
-                </p>
-                <p>
-                    Hier sind die Einstellungen für die Module der App aufgelistet.
-                </p>
-                <p>
-                    Experten-Modus:<br>
-                    Blendet zusätzliche Einstellungen für die Notenlisten ein.
-                </p>
-                <p>
-                    Maximale Punktzahl:<br>
-                    Maximale Punktzahl für den grafischen erweiterten Modus.
-                </p>
-                <p>
-                    Stundenplan-Modus:<br>
-                    Aus Sicht eines Lehrers (Pro Stunde Klasse auswählbar)<br>
-                    Aus Sicht eines Schülers (Pro Stunde Lehrer auswählbar)
-                </p>
-                <p>
-                    Länge der Pause:<br>
-                    Gibt die Länge der Pause an (Standard 20 Minuten)
-                </p>
-                <p>
-                    Automatische Ergänzung der Fächer:<br>
-                    Fächer werden bei der Eingabe bekannter Abkürzungen automatisch ergänzt.
-                </p>
-                <p>
-                    Erinnerung x Tage vorher:<br>
-                    Erinnert an Ereignisse im Schul-Timer x Tage vorher.
-                </p>
-                <p>
-                    ToDo-Liste nach Stichtag löschen:<br>
-                    Löscht ToDo-Liste nach dem der Stichtag überschritten wurde.
-                </p>
-            </div>
-            <div class="ce-bodytext">
-                <p>
-                    <strong>Export/Import:</strong>
-                </p>
-                <p>
-                    Einträge überschreiben:<br>
-                    Überschreibt Einträge, welche in der APP bereits vorhanden sind.
-                </p>
-                <p>
-                    Export abbrechen:<br>
-                    Bricht Vorgang ab, sobald ein Datensatz fehlerhaft ist.
-                </p>
             </div>
         ]]>
     </string>
     <string name="help_marklist">
         <![CDATA[
-            <h1>Notenlisten</h1>
+            <h1>Note lists</h1>
             <div class="ce-bodytext">
                 <p>
-                    In diesem Modul wird es ermöglicht Punkt-Notenlisten zu erstellen, welche man als Notenliste für Klassenarbeiten braucht.
+                    In this module it is possible to create point grade lists, which you need as a grade list for class work.
                 </p>
                 <p>
-                    Es gibt verschiedene Typen an Listen: linear, mit Knicks, exponentiell und IHK.
+                    There are different types of lists: linear, with kinks, exponential and IHK.
                 </p>
                 <p>
-                    <strong>Diktat-Modus:</strong><br>
-                    Im Dikat-Modus gibt es keine Anzahl an Punkte,
-                    welche erreicht werden müssen, sondern eine Fehleranzahl,
-                    welche maximal für eine Note erreicht werden darf.
+                    <strong>Dictation mode:</strong><br>
+                    There is no number of points in dictation mode
+                    which must be achieved, but a number of errors,
+                    which can be achieved for a maximum of one grade.
                 </p>
                 <p>
-                    <strong>Lineare Notenliste:</strong><br>
-                    Die lineare Notenliste ist die simpelste Liste.
-                    Man kann eine maximale Punktzahl angeben, angeben, ob es zehntel oder viertel Noten gibt und
-                    man kann einstellen, ob es ganze oder halbe Punkte gibt.
+                    <strong>Linear note list:</strong><br>
+                    The linear grade list is the simplest list.
+                     You can specify a maximum number of points, indicate whether there are tenth or quarter grades and
+                     you can set whether there are whole or half points.
                 </p>
                 <p>
-                    <strong>Notenliste mit Knicks:</strong><br>
-                    Hier kann man zusätzlich noch eine Anzahl an Punkte angeben
-                    bis wann es die beste bzw. schlechteste Note gibt.
-                    Und eine zusätzlich Note und die dazugehörigen Punkte.
+                    <strong>List of notes with curtsey:</strong><br>
+                    Here you can also specify a number of points
+                    until when there is the best or worst grade.
+                    And an additional note and the associated points.
                 </p>
                 <p>
-                    <strong>Exponentielle Notenliste:</strong><br>
-                    Einstellung gleich wie bei linearer Notenliste.
+                    <strong>Exponential Note-list:</strong><br>
+                    Setting the same as for the linear note list.
                 </p>
                 <p>
-                    <strong>IHK Notenliste:</strong><br>
-                    Einstellung gleich wie bei linearer Notenliste.
+                    <strong>IHK grade list:</strong><br>
+                    Setting the same as for the linear note list.
                 </p>
                 <p>&nbsp;</p>
                 <p>
                     <strong>Menu:</strong><br>
-                    Im Menu kann man eine Notenliste mit deren Einstellungen
-                    als Standard setzen oder Notenlisten speichern.
-                    Außerdem kommt man hier zur erweiterteten grafischen Ansicht.
+                    In the menu you can find a list of notes with their settings
+                     set as default or save grade lists.
+                     You also get to the expanded graphical view here.
                 </p>
                 <p>
-                    <strong>Erweiterte grafische Ansicht:</strong><br>
-                    Hier wird die Notenliste grafisch dargestellt.
-                    Über die Schalter kann man die Einstellungen anpassen
-                    und im Menu kann man die Einstellungen exportieren.
+                    <strong>Extended graphical view:</strong><br>
+                    The list of grades is shown graphically here.
+                     The switches can be used to adjust the settings
+                     and in the menu you can export the settings.
                 </p>
             </div>
         ]]>
     </string>
     <string name="help_calculate_mark">
         <![CDATA[
-            <h1>Noten berechnen</h1>
+            <h1>Calculate grades</h1>
             <div class="ce-bodytext">
                 <p>
-                    Hier kann man durch Angabe von Resultaten in Klassenarbeiten
-                    und Tests den aktuellen Notendurchschnitt berechnen.
+                    Here you can by giving results in class tests
+                    and tests calculate the current grade point average.
                 </p>
                 <p>
-                    Durch Betätigen der Schaltflächen im Fußbereich kann man Jahre bzw. Fächer hinzufügen.
+                    By pressing the buttons in the footer area, years or subjects can be added.
                 </p>
                 <p>
-                    Wenn man im Kopfbereich ein Jahr bzw. ein Fach ausgewählt hat
-                    erscheint im Fußbereich eine runde Schaltfläche.
-                    Wenn man auf diese drauf drückt kann man eine neue Klassenarbeit bzw. Test anlegen.
-                    man kann diese durch Angabe der Gewichtung unterschiedlich gewichten.
+                    If you have selected a year or a subject in the header area
+                     A round button appears in the footer area.
+                     If you press on it you can create a new class test or test.
+                     you can weight them differently by specifying the weighting.
                 </p>
             </div>
         ]]>
     </string>
     <string name="help_timetable">
         <![CDATA[
-            <h1>Stundenplan</h1>
+            <h1>Timetable</h1>
             <div class="ce-bodytext">
                 <p>
-                    Hier kann man neue Stundenpläne für ein Jahr angeben.
+                    Here you can enter new timetables for a year.
                 </p>
                 <p>
-                    Durch Betätigen der Schaltflächen im Fußbereich kann man Fächer,
-                    Klassen, Lehrer, Jahre und Zeiten hinzufügen.
+                    By pressing the buttons in the foot area you can compartments,
+                    Add classes, teachers, years and times.
                 </p>
                 <p>
-                    Wenn man den Fächern der App bekannten Abkürzungen angibt,
-                    werden diese automatisch ergänzt.
+                    If you give known abbreviations to the subjects of the app,
+                    these are added automatically.
                 </p>
                 <p>
-                    Wenn man bei den Zeiten der Beginn der Stunde angibt wird
-                    das Ende automatisch um 45 Minuten zum Beginn umgestellt.
+                    If you indicate the beginning of the hour at the times
+                    the end is automatically switched to the beginning by 45 minutes.
                 </p>
                 <p>
-                    Wenn man auf einen der blauen Kästen im Stundenplan-Eintrag drückt öffnet sich ein Dialog,
-                    in welchem man das Fach, den Lehrer und eine Raum-Nummer angeben kann.
+                    If you press one of the blue boxes in the timetable entry, a dialog opens,
+                    in which you can specify the subject, the teacher and a room number.
                 </p>
             </div>
         ]]>
     </string>
     <string name="help_notes">
         <![CDATA[
-            <h1>Notizen</h1>
+            <h1>Notes</h1>
             <div class="ce-bodytext">
                 <p>
-                    Hier kann man Notizen eingeben.
+                    Here you can enter notes.
                 </p>
                 <p>
-                    Wenn man auf das Mikrofon drückt, kann man diese auch der App diktieren.
+                    If you press the microphone, you can dictate it to the app.
                 </p>
                 <p>
-                    Wenn Titel sagt, wird der danach folgende Teil als Titel eingetragen,
-                    wenn man Beschreibung sagt, wird der danach folgende Teil als Beschreibung eingetragen.
+                    If title says, the following part is entered as title,
+                    if you say description, the following part is entered as description.
             </div>
         ]]>
     </string>
     <string name="help_todo">
         <![CDATA[
-            <h1>ToDo-Listen</h1>
+            <h1>ToDo-Lists</h1>
             <div class="ce-bodytext">
                 <p>
-                    Hier kann man ToDo-Listen hinzufügen.
+                    Here you can add to-do lists.
                 </p>
                 <p>
-                    Wenn man auf den Knopf im Fußbereich drückt, kann man neue ToDo-Listen eintragen.
+                    If you press the button in the footer area, you can enter new ToDo lists.
                 </p>
                 <p>
-                    Wählt man eine Liste im Kopfbereich aus, kann man durch Drücken auf das Plus neue Todos hinzufügen.
+                    If you select a list in the header area, you can add new todos by pressing the plus.
                 </p>
                 <p>
-                    Hierbei kann man unterschiedliche Prioritäten festlegen.
+                    Here you can set different priorities.
                 </p>
             </div>
         ]]>
     </string>
     <string name="help_timer">
         <![CDATA[
-            <h1>Schul-Timer</h1>
+            <h1>School-Timer</h1>
             <div class="ce-bodytext">
                 <p>
-                    Hier kann man neue Ereignisse hinzufügen.
+                    Here you can add new events.
                 </p>
                 <p>
-                    Hierbei kann man im oberen Teil ein Datum suchen oder durch die Pfeile den Tag ändern.
+                    You can search for a date in the upper part or use the arrows to change the day.
                 </p>
                 <p>
-                    Durch drücken auf das Plus kann man ein Ereignis hinzufügen.
+                    By pressing the plus you can add an event.
                 </p>
             </div>
         ]]>
     </string>
     <string name="help_learning_cards">
         <![CDATA[
-            <h1>Kartei-Karten</h1>
+            <h1>Learning-Cards</h1>
             <div class="ce-bodytext">
                 <p>
-                    Hier kann man Kartei-Karten anlegen und sich abfragen lassen.
+                    Here you can create index cards and be queried.
                 </p>
                 <p>
-                    Im Fußbereich kann man über die Schaltflächen Fächer, Lehrer,
-                    Gruppen bzw. Kartei-Karten und Abfragen anlegen.
+                    In the foot area you can use the buttons for subjects, teachers,
+                    Create groups or index cards and queries.
                 </p>
             </div>
         ]]>
