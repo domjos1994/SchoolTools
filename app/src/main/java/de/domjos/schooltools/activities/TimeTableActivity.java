@@ -30,7 +30,6 @@ import de.domjos.schooltoolslib.model.timetable.TimeTable;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.AssistantHelper;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.spotlight.OnBoardingHelper;
 import de.domjos.schooltools.widgets.TimeTableWidget;
 
 /**
@@ -193,8 +192,6 @@ public final class TimeTableActivity extends AbstractActivity {
             this.cmdTimeTableAssistant.setVisibility(MainActivity.globals.getUserSettings().useAssistant() ? View.GONE : View.VISIBLE);
 
             this.lvTimeTable = this.findViewById(R.id.lvTimeTable);
-
-            OnBoardingHelper.tutorialTimeTable(this, navigation, this.cmdTimeTableAdd, this.lvTimeTable);
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, TimeTableActivity.this);
         }

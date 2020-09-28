@@ -35,7 +35,6 @@ import de.domjos.schooltoolslib.model.mark.Test;
 import de.domjos.schooltoolslib.model.mark.Year;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
 /**
  * Activity For the Mark-Screen
@@ -254,7 +253,5 @@ public final class MarkActivity extends AbstractActivity {
         this.yearAdapter = new ArrayAdapter<>(MarkActivity.this, R.layout.spinner_item, new ArrayList<>());
         this.spMarkYear.setAdapter(this.yearAdapter);
         this.yearAdapter.notifyDataSetChanged();
-
-        OnBoardingHelper.tutorialMark(this, this.spMarkYear, this.spMarkSubject, this.lvTest);
     }
 }

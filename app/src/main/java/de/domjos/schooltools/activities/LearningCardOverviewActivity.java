@@ -29,7 +29,6 @@ import de.domjos.schooltoolslib.model.learningCard.LearningCardQueryResult;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardQueryTraining;
 import de.domjos.schooltools.helper.AssistantHelper;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
 import java.util.List;
 
@@ -165,8 +164,6 @@ public final class LearningCardOverviewActivity extends FragmentActivity {
             }
         }
         this.startRandomQuery();
-
-        OnBoardingHelper.tutorialLearningCard(this, navigation, this.cmdLearningCardQueryStart);
     }
 
     private void startRandomQuery() {

@@ -49,7 +49,6 @@ import de.domjos.schooltools.helper.Helper;
 import de.domjos.schooltools.helper.IntentHelper;
 import de.domjos.customwidgets.utils.Validator;
 import de.domjos.customwidgets.tokenizer.CommaTokenizer;
-import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
 public final class BookmarkActivity extends AbstractActivity {
     private BottomNavigationView navigation;
@@ -301,7 +300,6 @@ public final class BookmarkActivity extends AbstractActivity {
                     return true;
                 case R.id.navTimeTableSubSave:
                     if(validator.getState()) {
-                        int result = 0;
                         try {
                             currentBookmark.setTitle(txtBookmarkTitle.getText().toString());
                             currentBookmark.setTags(txtBookmarkTags.getText().toString());
@@ -316,7 +314,6 @@ public final class BookmarkActivity extends AbstractActivity {
                                 File importFile = new File(txtBookmarkLink.getText().toString());
                                 FileInputStream fileInputStream = new FileInputStream(importFile);
                                 byte[] fileContent = new byte[(int) importFile.length()];
-                                result = fileInputStream.read(fileContent);
                                 fileInputStream.close();
                                 currentBookmark.setData(fileContent);
                             }
@@ -332,8 +329,6 @@ public final class BookmarkActivity extends AbstractActivity {
             }
             return false;
         });
-
-        OnBoardingHelper.tutorialBookmark(this, this.spBookmarksFilterSubject, this.navigation, this.cmdBookmarkFile, this.lvBookmarks);
     }
 
     @Override

@@ -31,7 +31,6 @@ import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDelete
 import de.domjos.customwidgets.utils.ConvertHelper;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
-import de.domjos.schooltools.spotlight.OnBoardingHelper;
 import de.domjos.schooltools.widgets.NoteWidget;
 
 /**
@@ -290,8 +289,6 @@ public final class NoteActivity extends AbstractActivity {
         this.txtNoteMemoryDate.setVisibility(View.GONE);
 
         this.lvNotes = this.findViewById(R.id.lvNotes);
-
-        OnBoardingHelper.tutorialNote(NoteActivity.this, this.findViewById(R.id.svControls), this.navigation, this.cmdNoteSpeak);
     }
 
     private void deleteNote() {

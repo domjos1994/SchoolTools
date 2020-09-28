@@ -30,7 +30,6 @@ import de.domjos.schooltoolslib.model.todo.ToDo;
 import de.domjos.schooltoolslib.model.todo.ToDoList;
 import de.domjos.customwidgets.widgets.swiperefreshdeletelist.SwipeRefreshDeleteList;
 import de.domjos.schooltools.helper.Helper;
-import de.domjos.schooltools.spotlight.OnBoardingHelper;
 import de.domjos.schooltools.widgets.ToDoWidget;
 
 /**
@@ -251,7 +250,5 @@ public final class ToDoActivity extends AbstractActivity {
         this.sbState.setEnabled(false);
         this.sbState.setMax(100);
         this.sbState.setProgress(0);
-
-        OnBoardingHelper.tutorialToDo(this, this.spToDoList, this.lvToDos);
     }
 }

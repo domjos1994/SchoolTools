@@ -23,6 +23,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+
     }
 
     lintOptions {
@@ -61,8 +63,6 @@ dependencies {
     // library to show graphs
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.github.lookfirst:sardine:5.9'
-    // library to show spotlight
-    implementation 'com.github.takusemba:spotlight:2.0.2'
 
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     implementation 'androidx.navigation:navigation-fragment:2.3.0'

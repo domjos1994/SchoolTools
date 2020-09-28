@@ -52,7 +52,6 @@ import de.domjos.schooltoolslib.model.marklist.MarkListWithMarkMode;
 import de.domjos.schooltools.helper.Helper;
 import de.domjos.customwidgets.utils.Validator;
 import de.domjos.schooltools.settings.MarkListSettings;
-import de.domjos.schooltools.spotlight.OnBoardingHelper;
 
 /**
  * Activity For the MarkList-Screen
@@ -453,8 +452,6 @@ public final class MarkListActivity extends AbstractActivity {
         this.txtMarkListWithCreaseCustomPoints = this.findViewById(R.id.txtMarkListWithCreaseCustomPoints);
         this.txtMarkListWithCreaseBestMarkAt = this.findViewById(R.id.txtMarkListWithCreaseBestMarkAt);
         this.txtMarkListWithCreaseWorstMarkTo = this.findViewById(R.id.txtMarkListWithCreaseWorstMarkTo);
-
-        OnBoardingHelper.tutorialMarkList(this, this.spMarkListType, this.cmdMarkListOpenSettings, toolbar);
     }
 
     @Override
