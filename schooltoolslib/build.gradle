@@ -1,3 +1,12 @@
+/*
+ * Copyright (C) 2017-2022  Dominic Joas
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ */
+
 apply plugin: 'com.android.library'
 
 android {
@@ -6,8 +15,6 @@ android {
     defaultConfig {
         minSdkVersion propMinVersion
         targetSdkVersion propCompVersion
-        versionCode propVersion
-        versionName propVersionCode
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'

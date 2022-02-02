@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2017-2022  Dominic Joas
   ~
@@ -9,7 +10,6 @@
 
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -18,8 +18,8 @@
 
         <item name="android:dialogTheme">@style/MyDialogStyle</item>
         <item name="android:alertDialogTheme">@style/MyDialogStyle</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
     </style>
-
 
     <style name="MyDialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/colorPrimary</item>
