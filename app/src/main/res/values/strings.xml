@@ -333,6 +333,8 @@
     <string name="sys_title">Title</string>
     <string name="sys_memory">Memory</string>
     <string name="sys_showData">Show Data</string>
+
+    <string name="message_webbrowser_no_intent">No Web-Browser installed!</string>
     <string name="message_marklist_not_implemented">Function not implemented!</string>
     <string name="message_marklist_number">Error converting to a number!</string>
     <string name="message_marklist_settings_saved">The settings have been saved successfully!</string>

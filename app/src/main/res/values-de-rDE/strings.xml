@@ -441,6 +441,7 @@
     <string name="sys_memory">Erinnerung</string>
     <string name="sys_showData">Daten zeigen</string>
 
+    <string name="message_webbrowser_no_intent">Kein Web-Browser installiert!</string>
     <string name="message_marklist_not_implemented">Funktion nicht implementiert!</string>
     <string name="message_marklist_number">Fehler bei der Konvertierung zu einer Nummer!</string>
     <string name="message_marklist_settings_saved">Die Einstellungen wurden erfolgreich gespeichert!</string>

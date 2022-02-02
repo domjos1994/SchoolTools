@@ -29,9 +29,13 @@ import de.domjos.schooltools.activities.ApiActivity;
 public class IntentHelper {
 
     public static void openWebBrowser(Context context, String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(url));
-        intent.putExtra(SearchManager.QUERY, "Karlos");
-        context.startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            intent.putExtra(SearchManager.QUERY, "");
+            context.startActivity(intent);
+        } catch (Exception ex) {
+            MessageHelper.printMessage(context.getString(R.string.message_webbrowser_no_intent), R.mipmap.ic_launcher_round, context);
+        }
     }
 
     public static void openFileViaIntent(File file, Activity activity) {
