@@ -661,7 +661,7 @@ public final class MarkListActivity extends AbstractActivity {
             this.ivMarkListState.setVisibility(View.VISIBLE);
             this.lblMarkListState.setText(this.getString(R.string.marklist_state_error));
             this.detailedErrorMessage = ex.getMessage();
-            MessageHelper.printException(ex, R.mipmap.ic_launcher_round, MarkListActivity.this);
+            //MessageHelper.printException(ex.getMessage(), R.mipmap.ic_launcher_round, MarkListActivity.this);
         } else {
             this.ivMarkListState.setVisibility(View.GONE);
             this.lblMarkListState.setText(this.getString(R.string.marklist_state_ok));
