@@ -280,7 +280,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         this.colorBuilder.setAdapter(this.colorAdapter, (dialogInterface, i) -> {
             String entry = colorAdapter.getItem(i);
             if (entry != null) {
-                lblSelectedColor.setBackgroundResource(ColorAdapter.getSelectedColor(getApplicationContext(), entry));
+                lblSelectedColor.setBackgroundResource(ColorAdapter.getSelectedColor(getApplicationContext(), entry, R.color.White));
                 lblSelectedColor.setText(entry);
                 dialogInterface.dismiss();
             }
@@ -421,7 +421,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         } else {
             txtSubjectHoursInWeek.setText(String.valueOf(2));
         }
-        int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name));
+        int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name), R.color.White);
         lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
         lblSelectedColor.setText(this.getString(color_name));
     }
@@ -433,10 +433,8 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         } else {
             txtSubjectHoursInWeek.setText(String.valueOf(2));
         }
-        int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name));
-        if(color != 0) {
-            lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
-        }
+        int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name), R.color.White);
+        lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
         lblSelectedColor.setText(this.getString(color_name));
     }
 
@@ -485,10 +483,8 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
             this.txtSubjectHoursInWeek.setText("");
             this.chkSubjectMainSubject.setChecked(false);
             this.spSubjectTeachers.setSelection(this.adapter.getPosition(""));
-            int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(R.string.timetable_subject_rel_color));
-            if(color != 0) {
-                this.lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
-            }
+            int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(R.string.timetable_subject_rel_color), R.color.White);
+            this.lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
             this.lblSelectedColor.setText(this.getString(R.string.timetable_subject_rel_color));
         }
     }

@@ -41,14 +41,14 @@ public class ColorAdapter extends ArrayAdapter<String> {
         if(entry!=null) {
             if(lblText!=null) {
                 lblText.setText(entry);
-                lblText.setBackgroundColor(this.context.getResources().getColor(getSelectedColor(context, entry)));
+                lblText.setBackgroundColor(this.context.getResources().getColor(getSelectedColor(context, entry, R.color.White)));
             }
         }
         return rowView;
     }
 
-    public static int getSelectedColor(Context context, String color) {
-        int colorToUse = 0;
+    public static int getSelectedColor(Context context, String color, int def) {
+        int colorToUse = def;
         String[] colorNames = context.getResources().getStringArray(R.array.colorNames);
         for(int i=0; i<colorNames.length; i++) {
             if (color.equals(colorNames[i].toLowerCase())) {

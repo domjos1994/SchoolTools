@@ -316,7 +316,7 @@ public class AssistantHelper {
                 if( spTimeTableAssistantSubjectsColor.getSelectedItem() != null) {
                     spTimeTableAssistantSubjectsColor.setBackgroundColor(
                         activity.getResources().getColor(
-                            ColorAdapter.getSelectedColor(activity, spTimeTableAssistantSubjectsColor.getSelectedItem().toString())
+                            ColorAdapter.getSelectedColor(activity, spTimeTableAssistantSubjectsColor.getSelectedItem().toString(), R.color.White)
                         )
                     );
                 }
