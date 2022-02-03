@@ -417,10 +417,10 @@
     <string name="whats_new">Neuigkeiten</string>
     <string name="whats_new_content">
         <![CDATA[
-            <h1>SchoolTools Version 1.1</h1>
+            <h1>SchoolTools Version 1.2</h1>
             <p>
                 <ul>
-                    <li>Datums-Format in Einstellungen</li>
+                    <li>Nacht-Modus hinzufügen</li>
                     <li>kleiner Fehler</li>
                 </ul>
             </p>

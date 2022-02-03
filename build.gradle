@@ -7,12 +7,12 @@
  * of the License, or (at your option) any later version.
  */
 
-ext.propVersion = 24
-ext.propVersionCode = "1.1.alpha.1"
+ext.propVersion = 25
+ext.propVersionCode = "1.2.alpha.1"
 
 ext.propJavaVersion = "8"
 
-ext.propCompVersion = 29
+ext.propCompVersion = 30
 ext.propMinVersion = 21
 ext.propAndroidVersion = "1.1.0"
 
@@ -58,11 +58,11 @@ task customZip(type: Zip) {
     include '*.java'
     include 'data/**'
     include 'app/**'
-    include 'unitrackerlibrary/**'
+    include 'schooltoolslib/**'
     include 'customwidgets/**'
     include 'gradle.properties'
 
-    exclude 'unitrackerlibrary/build'
+    exclude 'schooltoolslib/build'
     exclude 'app/build'
     exclude 'customwidgets/build'
     archiveFileName = rootProject.name + '.zip'

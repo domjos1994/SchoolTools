@@ -376,10 +376,10 @@
 
     <string name="whats_new_content">
         <![CDATA[
-            <h1>SchoolTools Version 1.1</h1>
+            <h1>SchoolTools Version 1.2</h1>
             <p>
                 <ul>
-                    <li>Date-Format in Settings</li>
+                    <li>Add Night-Mode</li>
                     <li>small bugs</li>
                 </ul>
             </p>

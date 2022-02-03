@@ -8,7 +8,7 @@
   -->
 
 <resources>
-    <string name="app_name">SchoolToolsLib</string>
+    <string name="lib_name">SchoolToolsLib</string>
 
     <string name="main_nav_mark_list">Notenliste</string>
     <string name="main_nav_notes">Notizen</string>
