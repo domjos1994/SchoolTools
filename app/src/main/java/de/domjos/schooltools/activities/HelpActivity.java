@@ -28,11 +28,13 @@ import de.domjos.schooltools.helper.Helper;
 public final class HelpActivity extends AbstractActivity {
 
     public HelpActivity() {
-        super(R.layout.help_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.help_activity);
     }
 
     @Override
-    protected void initActions() {}
+    protected void initActions() {
+        Helper.setBackgroundToActivity(this);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

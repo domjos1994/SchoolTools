@@ -34,11 +34,12 @@ public final class MarkYearActivity extends AbstractActivity {
     private BottomNavigationView navigation;
 
     public MarkYearActivity() {
-        super(R.layout.mark_year_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.mark_year_activity);
     }
 
     @Override
     protected void initActions() {
+        Helper.setBackgroundToActivity(this);
         this.reloadYears();
 
         this.lvYear.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener)  listObject -> {

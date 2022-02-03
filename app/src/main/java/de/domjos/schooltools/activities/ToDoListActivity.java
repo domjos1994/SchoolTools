@@ -43,7 +43,7 @@ public final class ToDoListActivity extends AbstractActivity {
     private Validator validator;
 
     public ToDoListActivity() {
-        super(R.layout.todo_list_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.todo_list_activity);
     }
 
     @Override
@@ -51,6 +51,7 @@ public final class ToDoListActivity extends AbstractActivity {
         this.reloadItems();
         this.changeControls(false, true, false);
         this.getListFromExtra();
+        Helper.setBackgroundToActivity(this);
 
         this.lvToDoLists.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> setValues((ToDoList) listObject));
 

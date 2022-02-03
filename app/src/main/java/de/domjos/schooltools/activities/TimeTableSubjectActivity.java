@@ -65,7 +65,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
     private Validator validator;
 
     public TimeTableSubjectActivity() {
-        super(R.layout.timetable_subject_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.timetable_subject_activity);
     }
 
     @Override
@@ -76,6 +76,7 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
         this.controlFields(false, true);
         navigation.getMenu().getItem(1).setEnabled(false);
         navigation.getMenu().getItem(2).setEnabled(false);
+        Helper.setBackgroundToActivity(this);
 
         this.lvSubjects.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> {
             Subject subject = (Subject) listObject;
@@ -433,7 +434,9 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
             txtSubjectHoursInWeek.setText(String.valueOf(2));
         }
         int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(color_name));
-        lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
+        if(color != 0) {
+            lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
+        }
         lblSelectedColor.setText(this.getString(color_name));
     }
 
@@ -483,7 +486,9 @@ public final class TimeTableSubjectActivity extends AbstractActivity {
             this.chkSubjectMainSubject.setChecked(false);
             this.spSubjectTeachers.setSelection(this.adapter.getPosition(""));
             int color = ColorAdapter.getSelectedColor(getApplicationContext(), this.getString(R.string.timetable_subject_rel_color));
-            this.lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
+            if(color != 0) {
+                this.lblSelectedColor.setBackgroundColor(this.getResources().getColor(color));
+            }
             this.lblSelectedColor.setText(this.getString(R.string.timetable_subject_rel_color));
         }
     }

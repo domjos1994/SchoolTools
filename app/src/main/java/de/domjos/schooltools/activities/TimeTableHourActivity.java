@@ -44,12 +44,13 @@ public final class TimeTableHourActivity extends AbstractActivity {
     private int intLatestHour, intLatestMinute;
 
     public TimeTableHourActivity() {
-        super(R.layout.timetable_hour_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.timetable_hour_activity);
     }
 
     @Override
     protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableHourActivity.this);
+        Helper.setBackgroundToActivity(this);
 
         this.lvHours.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> {
             Hour hour = (Hour) listObject.getObject();

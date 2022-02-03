@@ -51,7 +51,7 @@ public class ColorAdapter extends ArrayAdapter<String> {
         int colorToUse = 0;
         String[] colorNames = context.getResources().getStringArray(R.array.colorNames);
         for(int i=0; i<colorNames.length; i++) {
-            if (color.equals(colorNames[i])) {
+            if (color.equals(colorNames[i].toLowerCase())) {
                 TypedArray ta = context.getResources().obtainTypedArray(R.array.colors);
                 colorToUse = ta.getResourceId(i, 0);
                 ta.recycle();

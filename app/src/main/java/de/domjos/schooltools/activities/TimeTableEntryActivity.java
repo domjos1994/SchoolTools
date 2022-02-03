@@ -67,7 +67,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
     private Map<String, Integer> mpSubjects;
 
     public TimeTableEntryActivity() {
-        super(R.layout.timetable_entry_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.timetable_entry_activity);
     }
 
     @Override
@@ -75,6 +75,7 @@ public final class TimeTableEntryActivity extends AbstractActivity {
         this.mpSubjects = new LinkedHashMap<>();
         this.initGrid();
         Helper.closeSoftKeyboard(TimeTableEntryActivity.this);
+        Helper.setBackgroundToActivity(this);
 
         this.spTimeTableYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

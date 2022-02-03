@@ -31,11 +31,13 @@ public final class LearningCardGroupActivity extends AbstractActivity {
     private SwipeRefreshDeleteList lvLearnCardGroups;
 
     public LearningCardGroupActivity() {
-        super(R.layout.learning_card_group_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.learning_card_group_activity);
     }
 
     @Override
     protected void initActions() {
+        Helper.setBackgroundToActivity(this);
+
         this.cmdLearningCardGroupAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), LearningCardGroupEntryActivity.class);
             intent.putExtra("ID", 0);

@@ -76,13 +76,14 @@ public final class BookmarkActivity extends AbstractActivity {
     private long subjectID = 0;
 
     public BookmarkActivity() {
-        super(R.layout.bookmark_activity,MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.bookmark_activity);
     }
 
     @Override
     protected void initActions() {
         this.changeControls(false, true);
         this.getItemFromOutSide();
+        Helper.setBackgroundToActivity(this);
 
         this.cmdBookmarkLink.setOnClickListener(v -> {
             Helper.closeSoftKeyboard(BookmarkActivity.this);

@@ -61,13 +61,14 @@ public final class MarkListExtendedActivity extends AbstractActivity {
     private String detailedErrorMessage = "";
 
     public MarkListExtendedActivity() {
-        super(R.layout.marklist_extended_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.marklist_extended_activity);
     }
 
     @Override
     protected void initActions() {
         this.initDefaultValues();
         Helper.closeSoftKeyboard(MarkListExtendedActivity.this);
+        Helper.setBackgroundToActivity(this);
 
         this.sbMaximumPoints.setOnChangeListener(() -> {
             sbCustomPoints.setMax(sbMaximumPoints.getCurrent());

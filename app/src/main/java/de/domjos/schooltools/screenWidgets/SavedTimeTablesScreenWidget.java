@@ -117,7 +117,9 @@ public final class SavedTimeTablesScreenWidget extends ScreenWidget {
         Map<Double, Hour> times = new TreeMap<>();
         List<Hour> hours = MainActivity.globals.getSqLite().getHours("");
         for(Hour hour : hours) {
-            times.put(Double.parseDouble(hour.getStart().replace(":", ".")), hour);
+            if(!hour.getStart().isEmpty()) {
+                times.put(Double.parseDouble(hour.getStart().replace(":", ".")), hour);
+            }
         }
 
         List hourList = Arrays.asList(times.values().toArray());

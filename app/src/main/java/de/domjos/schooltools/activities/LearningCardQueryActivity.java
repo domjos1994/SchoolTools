@@ -40,11 +40,12 @@ public final class LearningCardQueryActivity extends AbstractActivity {
     private ArrayAdapter<LearningCardQuery> queryAdapter;
 
     public LearningCardQueryActivity() {
-        super(R.layout.learning_card_query_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.learning_card_query_activity);
     }
 
     @Override
     protected void initActions() {
+        Helper.setBackgroundToActivity(this);
 
         this.lvLearningCardQueries.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener)  listObject -> {
             learningCardQuery = (LearningCardQuery) listObject;

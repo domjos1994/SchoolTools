@@ -51,11 +51,12 @@ public final class MarkActivity extends AbstractActivity {
     private ArrayAdapter<String> yearAdapter, subjectAdapter;
 
     public MarkActivity() {
-        super(R.layout.mark_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.mark_activity);
     }
 
     @Override
     protected void initActions() {
+        Helper.setBackgroundToActivity(this);
         this.reloadSubject();
         this.reloadYear();
         this.reloadTests();

@@ -38,13 +38,14 @@ public final class TimeTableClassActivity extends AbstractActivity {
     private Validator validator;
 
     public TimeTableClassActivity() {
-        super(R.layout.timetable_class_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.timetable_class_activity);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initActions() {
         Helper.closeSoftKeyboard(TimeTableClassActivity.this);
+        Helper.setBackgroundToActivity(this);
 
         this.lvSchoolClass.setOnClickListener((SwipeRefreshDeleteList.SingleClickListener) listObject -> {
             SchoolClass schoolClass = (SchoolClass) listObject;

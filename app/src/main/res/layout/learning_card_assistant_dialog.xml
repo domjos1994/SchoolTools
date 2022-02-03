@@ -24,6 +24,7 @@
         android:layout_gravity="center"
         android:textStyle="bold"
         android:textSize="18sp"
+        android:textColor="@color/text_color"
         android:text="@string/learningCard_assistant_step1"
         android:layout_alignParentTop="true"/>
 
@@ -45,6 +46,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:hint="@string/sys_title"
+                android:textColor="@color/text_color"
+                android:backgroundTint="@color/text_color"
+                android:textColorHint="@color/text_color"
                 android:nextFocusForward="@+id/txtLearningCardAssistantVocabQuestion"/>
         </TableRow>
         <TableRow
@@ -56,6 +60,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:hint="@string/learningCard_question"
+                android:textColor="@color/text_color"
+                android:backgroundTint="@color/text_color"
+                android:textColorHint="@color/text_color"
                 android:nextFocusForward="@+id/txtLearningCardAssistantVocabAnswer"/>
         </TableRow>
         <TableRow
@@ -66,7 +73,10 @@
                 android:layout_weight="10"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:hint="@string/learningCard_answer"/>
+                android:hint="@string/learningCard_answer"
+                android:textColor="@color/text_color"
+                android:backgroundTint="@color/text_color"
+                android:textColorHint="@color/text_color"/>
         </TableRow>
         <TableRow
             android:tag="step2">
@@ -95,6 +105,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:hint="@string/sys_title"
+                android:textColor="@color/text_color"
+                android:backgroundTint="@color/text_color"
+                android:textColorHint="@color/text_color"
                 android:nextFocusForward="@+id/txtLearningCardAssistantQueryNumber"/>
         </TableRow>
         <TableRow
@@ -105,6 +118,9 @@
                 android:layout_weight="10"
                 android:layout_height="wrap_content"
                 android:inputType="numberSigned"
+                android:textColor="@color/text_color"
+                android:backgroundTint="@color/text_color"
+                android:textColorHint="@color/text_color"
                 android:hint="@string/learningCard_assistant_number"
                 android:nextFocusForward="@+id/cmdLearningCardAssistantSave"/>
         </TableRow>
@@ -148,7 +164,7 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/cmdLearningCardAssistantSave"
-            app:srcCompat="@android:drawable/ic_menu_save"
+            app:srcCompat="@drawable/save"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"/>
     </LinearLayout>

@@ -38,6 +38,7 @@ import java.util.TimerTask;
 import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
+import de.domjos.schooltools.helper.Helper;
 
 public final class TrafficLightActivity extends AbstractActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
@@ -69,13 +70,14 @@ public final class TrafficLightActivity extends AbstractActivity {
     private int notification_id = -1;
 
     public TrafficLightActivity() {
-        super(R.layout.traffic_light_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.traffic_light_activity);
     }
 
     @Override
     protected void initActions() {
         this.sharedPreferences = TrafficLightActivity.this.getSharedPreferences("traffic_lights", MODE_PRIVATE);
         this.getSettings();
+        Helper.setBackgroundToActivity(this);
 
         this.ivTrafficLights.setOnClickListener(view -> {
             if(!this.startRecording) {

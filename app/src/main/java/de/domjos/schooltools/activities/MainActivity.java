@@ -102,7 +102,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
     private QuickQueryScreenWidget quickQueryScreenWidget;
 
     public MainActivity() {
-        super(R.layout.main_activity, null, R.drawable.bg_water);
+        super(R.layout.main_activity);
     }
 
     @Override
@@ -112,6 +112,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         this.resetDatabase();
         this.initDatabase();
         this.initServices();
+        Helper.setBackgroundToActivity(this);
         Helper.setBackgroundAppBarToActivity(this.navigationView, MainActivity.this);
         Helper.createChannel(this.getApplicationContext());
 
@@ -349,6 +350,7 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         if(!this.cmdSearch.isInEditMode()) {
             this.lvSearchResults.setVisibility(View.GONE);
         }
+        Helper.setBackgroundToActivity(this);
     }
 
     private void initSyncServices() {

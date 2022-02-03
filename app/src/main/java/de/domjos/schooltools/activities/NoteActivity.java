@@ -51,11 +51,12 @@ public final class NoteActivity extends AbstractActivity {
     private Menu menu;
 
     public NoteActivity() {
-        super(R.layout.note_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.note_activity);
     }
 
     @Override
     protected void initActions() {
+        Helper.setBackgroundToActivity(this);
         this.reloadNotes();
         Helper.closeSoftKeyboard(NoteActivity.this);
         this.changeControls(false, true, false);

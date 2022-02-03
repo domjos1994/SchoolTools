@@ -46,13 +46,14 @@ public final class ToDoActivity extends AbstractActivity {
     private SeekBar sbState;
 
     public ToDoActivity() {
-        super(R.layout.todo_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.todo_activity);
     }
 
     @Override
     protected void initActions() {
         this.reloadToDoLists();
         this.reloadToDos();
+        Helper.setBackgroundToActivity(this);
 
         this.spToDoList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

@@ -49,12 +49,13 @@ public final class MarkEntryActivity extends AbstractActivity {
     private CheckBox chkTestMemory, chkTestTimerEvent, chkTestToDoList;
 
     public MarkEntryActivity() {
-        super(R.layout.mark_entry_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.mark_entry_activity);
     }
 
     @Override
     protected void initActions() {
         this.sql = MainActivity.globals.getSqLite();
+        Helper.setBackgroundToActivity(this);
 
         try {
             this.loadData();

@@ -13,7 +13,7 @@ ext.propVersionCode = "1.1.alpha.1"
 ext.propJavaVersion = "8"
 
 ext.propCompVersion = 29
-ext.propMinVersion = 20
+ext.propMinVersion = 21
 ext.propAndroidVersion = "1.1.0"
 
 ext.propJUnitVersion = "4.13"

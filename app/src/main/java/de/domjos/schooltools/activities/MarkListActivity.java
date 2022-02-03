@@ -92,11 +92,12 @@ public final class MarkListActivity extends AbstractActivity {
     private MarkListSettings curSettings;
 
     public MarkListActivity() {
-        super(R.layout.marklist_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.marklist_activity);
     }
 
     @Override
     protected void initActions() {
+        Helper.setBackgroundToActivity(this);
         this.setValues("");
         this.openMarkList(this.getIntent().getIntExtra("id", 0));
         Helper.closeSoftKeyboard(MarkListActivity.this);

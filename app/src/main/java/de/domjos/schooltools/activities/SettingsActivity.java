@@ -133,6 +133,7 @@ public final class SettingsActivity extends SettingsAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        Helper.setBackgroundToActivity(this);
     }
 
     @Override

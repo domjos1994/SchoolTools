@@ -43,13 +43,14 @@ public final class TimeTableActivity extends AbstractActivity {
     private AppCompatImageButton cmdTimeTableAssistant;
 
     public TimeTableActivity() {
-        super(R.layout.timetable_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.timetable_activity);
     }
 
     @Override
     protected void initActions() {
         this.reloadTimeTables();
         this.openDescription();
+        Helper.setBackgroundToActivity(this);
 
         this.cmdTimeTableAdd.setOnClickListener(v -> {
             if(MainActivity.globals.getUserSettings().useAssistant()) {

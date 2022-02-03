@@ -674,7 +674,7 @@ public class AssistantHelper {
 
         // step 2
         this.lvTimeTableAssistantTimes = dialog.findViewById(R.id.lvTimeTableAssistantTimes);
-        this.timeTableAssistantTimesAdapter = new ArrayAdapter<>(this.activity, android.R.layout.simple_list_item_1, MainActivity.globals.getSqLite().getHours(""));
+        this.timeTableAssistantTimesAdapter = new ArrayAdapter<>(this.activity, R.layout.spinner_item, MainActivity.globals.getSqLite().getHours(""));
         this.lvTimeTableAssistantTimes.setAdapter(this.timeTableAssistantTimesAdapter);
         this.timeTableAssistantTimesAdapter.notifyDataSetChanged();
 

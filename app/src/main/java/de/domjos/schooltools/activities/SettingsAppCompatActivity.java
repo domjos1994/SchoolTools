@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import de.domjos.schooltools.helper.Helper;
+
 /**
  * Activity For the Settings-Screen
  * @author Dominic Joas
@@ -35,6 +37,7 @@ public abstract class SettingsAppCompatActivity extends PreferenceActivity {
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
+        Helper.setBackgroundToActivity(this);
     }
 
     @Override

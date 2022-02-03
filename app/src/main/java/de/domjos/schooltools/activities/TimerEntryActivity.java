@@ -56,13 +56,14 @@ public final class TimerEntryActivity extends AbstractActivity {
     private Validator validator;
 
     public TimerEntryActivity() {
-        super(R.layout.timer_entry_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.timer_entry_activity);
     }
 
     @Override
     protected void initActions() {
         this.reloadComboBoxes();
         this.fillData();
+        Helper.setBackgroundToActivity(this);
 
         this.chkTimerMemory.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked) {

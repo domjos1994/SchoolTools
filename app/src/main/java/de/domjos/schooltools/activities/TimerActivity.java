@@ -43,7 +43,7 @@ public final class TimerActivity extends AbstractActivity {
     private final String dateFormat;
 
     public TimerActivity() {
-        super(R.layout.timer_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.timer_activity);
         this.dateFormat = MainActivity.globals.getUserSettings().getDateFormat();
     }
 
@@ -51,6 +51,7 @@ public final class TimerActivity extends AbstractActivity {
     protected void initActions() {
         this.reloadEvents();
         this.changeDate();
+        Helper.setBackgroundToActivity(this);
 
         this.widgetCalendar.setOnClick(event -> {
             Intent intent = new Intent(getApplicationContext(), TimerEntryActivity.class);

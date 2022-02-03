@@ -72,13 +72,13 @@ public final class ApiActivity extends AbstractActivity {
     private FilePickerDialog dialog;
 
     public ApiActivity() {
-        super(R.layout.api_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.api_activity);
     }
 
     @Override
     protected void initActions() {
         this.loadTypes();
-
+        Helper.setBackgroundToActivity(this);
 
         this.spApiChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

@@ -18,6 +18,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -346,7 +347,16 @@ public class Helper {
                 return;
             }
         }
-        activity.getWindow().getDecorView().getRootView().setBackgroundResource(R.drawable.bg_water);
+
+        int uiMode = activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (uiMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                activity.getWindow().getDecorView().getRootView().setBackgroundResource(R.drawable.bg_water);
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                activity.getWindow().getDecorView().getRootView().setBackgroundResource(R.drawable.bg_dark);
+                break;
+        }
     }
 
     public static void setBackgroundAppBarToActivity(NavigationView navigationView, Activity activity) {
@@ -357,7 +367,15 @@ public class Helper {
                 return;
             }
         }
-        navigationView.setBackgroundResource(R.drawable.bg_ice);
+        int uiMode = activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (uiMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                navigationView.setBackgroundResource(R.drawable.bg_ice);
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                navigationView.setBackgroundResource(R.drawable.bg_dark_nav);
+                break;
+        }
     }
 
 

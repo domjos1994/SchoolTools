@@ -41,11 +41,12 @@ public final class ToDoEntryActivity extends AbstractActivity {
     private Validator validator;
 
     public ToDoEntryActivity() {
-        super(R.layout.todo_entry_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.todo_entry_activity);
     }
 
     @Override
     protected void initActions() {
+        Helper.setBackgroundToActivity(this);
 
         this.chkToDoMemory.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked) {

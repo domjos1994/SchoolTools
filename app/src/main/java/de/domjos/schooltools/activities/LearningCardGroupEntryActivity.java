@@ -50,12 +50,13 @@ public final class LearningCardGroupEntryActivity extends AbstractActivity {
 
 
     public LearningCardGroupEntryActivity() {
-        super(R.layout.learning_card_group_entry_activity, MainActivity.globals.getSqLite().getSetting("background"), R.drawable.bg_water);
+        super(R.layout.learning_card_group_entry_activity);
     }
 
     @Override
     protected void initActions() {
         this.loadCardGroup();
+        Helper.setBackgroundToActivity(this);
 
         this.lvLearningCards.setOnItemClickListener((parent, view, position, id) -> {
             cardPosition = position;
