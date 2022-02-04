@@ -91,6 +91,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="6"
                     android:numStars="5"
+                    android:contentDescription="@string/description_mark_list_bar"
                     android:layout_gravity="center|center"/>
             </LinearLayout>
 

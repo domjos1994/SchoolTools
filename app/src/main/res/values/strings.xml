@@ -504,4 +504,24 @@
         <item>@string/main_importantToDos</item>
         <item>@string/main_savedMarkList</item>
     </string-array>
+
+    <!-- Content Description -->
+    <string name="description_marks_list" translatable="false">List of Marks</string>
+    <string name="description_bookmark_browser" translatable="false">Show in Browser</string>
+    <string name="description_bookmark_file" translatable="false">File as link</string>
+    <string name="description_voice_speak" translatable="false">Speak</string>
+    <string name="description_main_reload" translatable="false">Reload</string>
+    <string name="description_main_bookmark_list" translatable="false">Bookmark-List</string>
+    <string name="description_main_notes_list" translatable="false">Note-List</string>
+    <string name="description_main_teacher_list" translatable="false">Teacher-List</string>
+    <string name="description_main_timetable_list" translatable="false">Timetable-List</string>
+    <string name="description_main_todo_list" translatable="false">Todo-List</string>
+    <string name="description_main_year_list" translatable="false">Year-List</string>
+    <string name="description_main_query_list" translatable="false">Query-List</string>
+    <string name="description_main_card_list" translatable="false">Card-List</string>
+
+    <string name="description_mark_list_bar" translatable="false">Bar</string>
+    <string name="description_spinner" translatable="false">Spinner</string>
+    <string name="description_tab_host" translatable="false">Tab-Host</string>
+    <string name="description_tab" translatable="false">Tab</string>
 </resources>

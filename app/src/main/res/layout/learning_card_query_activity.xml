@@ -26,7 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:itemIcon="@drawable/ic_question_answer_black_24dp"
-            app:listItemBackground="@drawable/listview_background"/>
+            app:listItemBackground="@drawable/listview_background"
+            android:contentDescription="@string/description_main_query_list"/>
 
         <ScrollView
             android:id="@+id/scrollView"

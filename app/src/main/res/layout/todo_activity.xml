@@ -80,7 +80,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:itemIcon="@drawable/ic_done_all_black_24dp"
-                app:listItemBackground="@drawable/listview_background"/>
+                app:listItemBackground="@drawable/listview_background"
+                android:contentDescription="@string/description_main_todo_list"/>
         </RelativeLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

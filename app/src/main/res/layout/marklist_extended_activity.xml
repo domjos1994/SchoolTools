@@ -85,6 +85,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="15"
+                    android:contentDescription="@string/description_mark_list_bar"
                     custom:editableLabel="false"
                     custom:max="100"
                     custom:current="40.0"/>
@@ -106,6 +107,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="15"
+                    android:contentDescription="@string/description_mark_list_bar"
                     custom:editableLabel="false"
                     custom:max="40"
                     custom:current="20.0"/>
@@ -127,6 +129,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="15"
+                    android:contentDescription="@string/description_mark_list_bar"
                     custom:editableLabel="false"
                     custom:max="6"
                     custom:current="4.4"/>
@@ -148,6 +151,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="15"
+                    android:contentDescription="@string/description_mark_list_bar"
                     custom:editableLabel="false"
                     custom:max="40"
                     custom:current="40.0"/>
@@ -169,6 +173,7 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="15"
+                    android:contentDescription="@string/description_mark_list_bar"
                     custom:editableLabel="false"
                     custom:max="40"
                     custom:current="0.0"/>

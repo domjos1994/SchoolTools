@@ -76,6 +76,7 @@
         android:layout_above="@+id/svControls"
         custom:itemIcon="@drawable/ic_bookmark_black_24dp"
         app:listItemBackground="@drawable/listview_background"
+        android:contentDescription="@string/description_main_bookmark_list"
         android:padding="1dp"/>
 
     <WebView
@@ -136,11 +137,13 @@
                 <ImageButton
                     android:id="@+id/cmdBookMarkLink"
                     app:srcCompat="@drawable/ic_open_in_browser_black_24dp"
+                    android:contentDescription="@string/description_bookmark_browser"
                     android:layout_weight="1"
                     android:layout_width="0dp"/>
                 <ImageButton
                     android:id="@+id/cmdBookMarkFile"
                     app:srcCompat="@drawable/ic_attach_file_black_24dp"
+                    android:contentDescription="@string/description_bookmark_file"
                     android:layout_weight="1"
                     android:layout_width="0dp"/>
             </TableRow>

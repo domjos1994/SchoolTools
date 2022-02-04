@@ -34,7 +34,8 @@
                 android:layout_height="match_parent"
                 custom:itemIcon="@drawable/ic_access_time_black_24dp"
                 android:layout_above="@+id/cmdTimeTableAssistant"
-                app:listItemBackground="@drawable/listview_background"/>
+                app:listItemBackground="@drawable/listview_background"
+                android:contentDescription="@string/description_main_timetable_list"/>
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/cmdTimeTableAssistant"
                 android:layout_width="match_parent"
@@ -50,7 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:contentDescription="@string/timetable_assistant_add"/>
 
     </FrameLayout>
 

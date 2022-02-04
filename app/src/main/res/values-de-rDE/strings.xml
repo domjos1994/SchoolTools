@@ -463,6 +463,4 @@
     <string name="message_validator_teachers">Der Lehrer existiert bereits!</string>
     <string name="message_validator_duplicated">Der Eintrag existiert bereits!</string>
     <string name="settings_school_learningCard_dictionary_on_summary"><![CDATA[Dict.cc Dictionary zum Übersetzen verwenden. Datei hier herunterladen: https://www.dict.cc/translation_file_request.php]]></string>
-
-
 </resources>

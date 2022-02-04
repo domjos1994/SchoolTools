@@ -29,7 +29,8 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/svControls"
             app:itemIcon="@drawable/ic_person_black_24dp"
-            app:listItemBackground="@drawable/listview_background"/>
+            app:listItemBackground="@drawable/listview_background"
+            android:contentDescription="@string/description_main_teacher_list"/>
 
         <ScrollView
             android:id="@+id/svControls"

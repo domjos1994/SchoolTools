@@ -49,7 +49,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="6"
-                        android:padding="4dp"/>
+                        android:padding="4dp"
+                        android:contentDescription="@string/description_spinner"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -69,7 +70,8 @@
                         android:layout_height="wrap_content"
                         android:spinnerMode="dropdown"
                         android:layout_weight="6"
-                        android:padding="4dp"/>
+                        android:padding="4dp"
+                        android:contentDescription="@string/description_spinner"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -99,6 +101,7 @@
                 android:layout_below="@+id/pnlChoice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/description_marks_list"
                 app:itemIcon="@drawable/ic_check_circle_black_24dp"
                 app:listItemBackground="@drawable/listview_background"
                 app:listItemForeground="@color/colorPrimaryDark"/>

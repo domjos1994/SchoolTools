@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/description_tab_host">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -33,7 +34,8 @@
             <TabWidget
                     android:id="@android:id/tabs"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/description_tab"/>
 
             <FrameLayout
                     android:id="@android:id/tabcontent"
@@ -87,7 +89,8 @@
                             android:id="@+id/spLearningCardGroupSubject"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="7"/>
+                            android:layout_weight="7"
+                            android:contentDescription="@string/description_spinner"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -106,7 +109,8 @@
                             android:id="@+id/spLearningCardGroupTeacher"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="7"/>
+                            android:layout_weight="7"
+                            android:contentDescription="@string/description_spinner"/>
                     </LinearLayout>
                 </LinearLayout>
 

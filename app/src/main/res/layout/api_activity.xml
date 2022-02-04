@@ -45,7 +45,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="6"
-                        android:entries="@array/api_choice"/>
+                        android:entries="@array/api_choice"
+                        android:contentDescription="@string/description_spinner"/>
             </LinearLayout>
             <LinearLayout
                     android:id="@+id/typeRow"
@@ -66,7 +67,8 @@
                         android:id="@+id/spApiType"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="6"/>
+                        android:layout_weight="6"
+                    android:contentDescription="@string/description_spinner"/>
             </LinearLayout>
             <LinearLayout
                     android:id="@+id/entryTypeRow"
@@ -88,7 +90,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:entries="@array/api_entry_type"
-                        android:layout_weight="6"/>
+                        android:layout_weight="6"
+                    android:contentDescription="@string/description_spinner"/>
             </LinearLayout>
             <LinearLayout
                     android:id="@+id/entryRow"
@@ -109,7 +112,8 @@
                         android:id="@+id/spApiEntry"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="6" />
+                        android:layout_weight="6"
+                    android:contentDescription="@string/description_spinner"/>
             </LinearLayout>
             <LinearLayout
                     android:id="@+id/formatRow"
@@ -130,7 +134,8 @@
                         android:id="@+id/spApiFormat"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="6"/>
+                        android:layout_weight="6"
+                    android:contentDescription="@string/description_spinner"/>
             </LinearLayout>
 
             <RelativeLayout

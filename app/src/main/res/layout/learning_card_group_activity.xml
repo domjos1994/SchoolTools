@@ -21,11 +21,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:itemIcon="@drawable/ic_group_work_black_24dp"
-        app:listItemBackground="@drawable/listview_background"/>
+        app:listItemBackground="@drawable/listview_background"
+        android:contentDescription="@string/description_main_card_list"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/cmdLearningCardGroupAdd"
         android:src="@android:drawable/ic_menu_add"
+        android:contentDescription="@string/timetable_assistant_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"

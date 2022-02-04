@@ -229,6 +229,7 @@
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/cmdTimeTableAssistantSave"
             app:srcCompat="@drawable/save"
+            android:contentDescription="@string/sys_save"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"/>
     </LinearLayout>

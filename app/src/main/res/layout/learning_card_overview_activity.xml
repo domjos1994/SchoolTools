@@ -24,6 +24,7 @@
         android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
+        android:contentDescription="@string/learningCard_assistant_back"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:navigationIcon="?attr/homeAsUpIndicator"/>
