@@ -7,28 +7,27 @@
  * of the License, or (at your option) any later version.
  */
 
-ext.propVersion = 26
-ext.propVersionCode = "1.2"
+ext.propVersion = 27
+ext.propVersionCode = "1.2.1"
 
 ext.propJavaVersion = "8"
 
-ext.propCompVersion = 30
+ext.propCompVersion = 33
 ext.propMinVersion = 21
-ext.propAndroidVersion = "1.1.0"
+ext.propAndroidVersion = "1.6.1"
 
-ext.propJUnitVersion = "4.13"
-ext.propEspressoVersion = "3.3.0"
+ext.propJUnitVersion = "4.13.2"
+ext.propEspressoVersion = "3.5.1"
 
 ext.propCustomWidgetsVersion = '3.5.0'
 
 buildscript {
     repositories {
         google()
-        jcenter()
-        
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -38,17 +37,16 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
         maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases/' }
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
 
-task customZip(type: Zip) {
+tasks.register('customZip', Zip) {
     clean
     from '.'
     include 'build.gradle'
@@ -69,7 +67,7 @@ task customZip(type: Zip) {
     destinationDirectory = file(rootProject.rootDir)
 }
 
-task archiveReleases(type: Copy) {
+tasks.register('archiveReleases', Copy) {
     def appPath = projectDir.toString() + "/app"
     def releasePath = appPath + "/release"
     def apkDebugPath = appPath + "/build/outputs/apk/debug"
@@ -82,10 +80,10 @@ task archiveReleases(type: Copy) {
     // generate path
     def release
     def type
-    if(propVersionCode.contains(".beta")) {
+    if (propVersionCode.contains(".beta")) {
         release = propVersionCode.split("\\.beta")[0].trim()
         type = "beta/"
-    } else if(propVersionCode.contains(".alpha")) {
+    } else if (propVersionCode.contains(".alpha")) {
         release = propVersionCode.split("\\.alpha")[0].trim()
         type = "alpha/"
     } else {

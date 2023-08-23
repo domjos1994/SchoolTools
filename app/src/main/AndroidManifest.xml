@@ -9,7 +9,6 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="de.domjos.schooltools">
 
     <uses-permission
@@ -17,8 +16,6 @@
         android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -27,7 +24,6 @@
 
     <application
         android:allowBackup="true"
-        android:fullBackupContent="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -37,8 +33,7 @@
         <activity
             android:name=".activities.TrafficLightActivity"
             android:label="@string/traffic_light"
-            android:parentActivityName=".activities.MainActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -47,8 +42,7 @@
             android:name=".activities.BookmarkActivity"
             android:label="@string/main_nav_bookmarks"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:targetApi="jelly_bean">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -56,7 +50,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/app_name"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -79,8 +73,7 @@
             android:name=".activities.MarkListActivity"
             android:label="@string/main_nav_mark_list"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:targetApi="jelly_bean">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -88,8 +81,7 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/main_menu_settings"
-            android:parentActivityName=".activities.MainActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -97,8 +89,7 @@
         <activity
             android:name=".activities.ApiActivity"
             android:label="@string/main_menu_export"
-            android:parentActivityName=".activities.MainActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -106,8 +97,7 @@
         <activity
             android:name=".activities.TimeTableActivity"
             android:label="@string/main_nav_timetable"
-            android:parentActivityName=".activities.MainActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -115,8 +105,7 @@
         <activity
             android:name=".activities.TimeTableTeacherActivity"
             android:label="@string/timetable_teacher"
-            android:parentActivityName=".activities.TimeTableActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.TimeTableActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.TimeTableActivity" />
@@ -124,8 +113,7 @@
         <activity
             android:name=".activities.TimeTableSubjectActivity"
             android:label="@string/timetable_lesson"
-            android:parentActivityName=".activities.TimeTableActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.TimeTableActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.TimeTableActivity" />
@@ -133,8 +121,7 @@
         <activity
             android:name=".activities.TimeTableHourActivity"
             android:label="@string/timetable_times"
-            android:parentActivityName=".activities.TimeTableActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.TimeTableActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.TimeTableActivity" />
@@ -142,8 +129,7 @@
         <activity
             android:name=".activities.TimeTableEntryActivity"
             android:label="@string/main_nav_timetable"
-            android:parentActivityName=".activities.TimeTableActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.TimeTableActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.TimeTableActivity" />
@@ -151,8 +137,7 @@
         <activity
             android:name=".activities.TimeTableClassActivity"
             android:label="@string/timetable_class"
-            android:parentActivityName=".activities.TimeTableActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.TimeTableActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.TimeTableActivity" />
@@ -160,8 +145,7 @@
         <activity
             android:name=".activities.MarkActivity"
             android:label="@string/main_nav_mark"
-            android:parentActivityName=".activities.MainActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -169,8 +153,7 @@
         <activity
             android:name=".activities.MarkYearActivity"
             android:label="@string/mark_year"
-            android:parentActivityName=".activities.MarkActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MarkActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MarkActivity" />
@@ -178,8 +161,7 @@
         <activity
             android:name=".activities.MarkEntryActivity"
             android:label="@string/mark_test"
-            android:parentActivityName=".activities.MarkActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MarkActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MarkActivity" />
@@ -187,8 +169,7 @@
         <activity
             android:name=".activities.NoteActivity"
             android:label="@string/main_nav_notes"
-            android:parentActivityName=".activities.MainActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -196,8 +177,7 @@
         <activity
             android:name=".activities.ToDoActivity"
             android:label="@string/todo_list"
-            android:parentActivityName=".activities.MainActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -206,8 +186,7 @@
             android:name=".activities.TimerActivity"
             android:label="@string/main_nav_timer"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:targetApi="jelly_bean">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -216,8 +195,7 @@
             android:name=".activities.HelpActivity"
             android:label="@string/main_menu_help"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:targetApi="jelly_bean">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -225,8 +203,7 @@
         <activity
             android:name=".activities.ToDoListActivity"
             android:label="@string/todo_list"
-            android:parentActivityName=".activities.ToDoActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.ToDoActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.ToDoActivity" />
@@ -234,8 +211,7 @@
         <activity
             android:name=".activities.ToDoEntryActivity"
             android:label="@string/main_nav_todo"
-            android:parentActivityName=".activities.ToDoActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.ToDoActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.ToDoActivity" />
@@ -243,8 +219,7 @@
         <activity
             android:name=".activities.TimerEntryActivity"
             android:label="@string/main_nav_timer"
-            android:parentActivityName=".activities.TimerActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.TimerActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.TimerActivity" />
@@ -252,8 +227,7 @@
         <activity
             android:name=".activities.MarkListExtendedActivity"
             android:label="@string/marklist_menu_extended"
-            android:parentActivityName=".activities.MarkListActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MarkListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MarkListActivity" />
@@ -262,8 +236,7 @@
             android:name=".activities.WhatsNewActivity"
             android:label="@string/whats_new"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:targetApi="jelly_bean">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -271,8 +244,7 @@
         <activity
             android:name=".activities.LearningCardOverviewActivity"
             android:label="@string/learningCard_overView"
-            android:parentActivityName=".activities.MainActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.MainActivity" />
@@ -280,8 +252,7 @@
         <activity
             android:name=".activities.LearningCardGroupActivity"
             android:label="@string/learningCard_groups"
-            android:parentActivityName=".activities.LearningCardOverviewActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.LearningCardOverviewActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.LearningCardOverviewActivity" />
@@ -289,8 +260,7 @@
         <activity
             android:name=".activities.LearningCardGroupEntryActivity"
             android:label="@string/learningCard_groups"
-            android:parentActivityName=".activities.LearningCardGroupActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.LearningCardGroupActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.LearningCardGroupActivity" />
@@ -298,18 +268,21 @@
         <activity
             android:name=".activities.LearningCardQueryActivity"
             android:label="@string/learningCard_query"
-            android:parentActivityName=".activities.LearningCardOverviewActivity"
-            tools:targetApi="jelly_bean">
+            android:parentActivityName=".activities.LearningCardOverviewActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.domjos.schooltools.activities.LearningCardOverviewActivity" />
         </activity>
-        <activity android:name=".widgets.TimeTableWidgetConfigurationActivity">
+        <activity
+            android:name=".widgets.TimeTableWidgetConfigurationActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <activity android:name=".widgets.ToDoWidgetConfigurationActivity">
+        <activity
+            android:name=".widgets.ToDoWidgetConfigurationActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -327,7 +300,8 @@
 
         <receiver
             android:name=".widgets.LearningCardWidget"
-            android:label="@string/learningCard_query">
+            android:label="@string/learningCard_query"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -338,7 +312,8 @@
         </receiver>
         <receiver
             android:name=".widgets.TimeTableWidget"
-            android:label="@string/main_nav_timetable">
+            android:label="@string/main_nav_timetable"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -349,7 +324,8 @@
         </receiver>
         <receiver
             android:name=".widgets.NoteWidget"
-            android:label="@string/main_top5Notes">
+            android:label="@string/main_top5Notes"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -360,7 +336,8 @@
         </receiver>
         <receiver
             android:name=".widgets.ToDoWidget"
-            android:label="@string/main_importantToDos">
+            android:label="@string/main_importantToDos"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -371,7 +348,8 @@
         </receiver>
         <receiver
             android:name=".widgets.BookmarkWidget"
-            android:label="@string/main_nav_bookmarks">
+            android:label="@string/main_nav_bookmarks"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
