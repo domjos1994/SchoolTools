@@ -42,6 +42,7 @@ android {
         abortOnError false
         checkReleaseBuilds false
     }
+    namespace 'de.domjos.schooltools'
 }
 
 dependencies {

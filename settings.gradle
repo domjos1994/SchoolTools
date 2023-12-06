@@ -9,3 +9,4 @@
 
 include ':app'
 include ':schooltoolslib'
+include ':DBController'
