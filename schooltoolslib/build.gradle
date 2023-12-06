@@ -10,7 +10,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion propCompVersion
+    compileSdk propCompVersion
 
     defaultConfig {
         minSdkVersion propMinVersion

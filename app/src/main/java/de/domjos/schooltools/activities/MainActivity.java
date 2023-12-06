@@ -39,6 +39,8 @@ import de.domjos.customwidgets.model.AbstractActivity;
 import de.domjos.customwidgets.utils.MessageHelper;
 import de.domjos.schooltools.R;
 import de.domjos.schooltools.adapter.*;
+import de.domjos.schooltools.dbcontroller.AppDatabase;
+import de.domjos.schooltools.dbcontroller.DBStarter;
 import de.domjos.schooltoolslib.SearchItem;
 import de.domjos.schooltoolslib.model.Memory;
 import de.domjos.schooltoolslib.model.Note;
@@ -415,6 +417,8 @@ public final class MainActivity extends AbstractActivity implements NavigationVi
         SQLite sqLite = new SQLite(this.getApplicationContext(), "schoolTools.db", MainActivity.globals.getGeneralSettings().getCurrentVersionCode(MainActivity.this));
         MainActivity.globals.setSqLite(sqLite);
         super.setBackground(MainActivity.globals.getSqLite().getSetting("background"));
+
+        DBStarter.init(this.getApplicationContext());
     }
 
     private void addSearchItems(String search) {
