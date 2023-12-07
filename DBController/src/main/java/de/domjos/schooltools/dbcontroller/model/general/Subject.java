@@ -21,11 +21,66 @@ public class Subject extends BaseDescriptionObject {
     private String alias;
 
     @ColumnInfo(name = "hoursInWeek")
-    private String hoursInWeek;
+    private int hoursInWeek;
 
     @ColumnInfo(name = "isMainSubject")
     private boolean isMainSubject;
 
     @ColumnInfo(name = "backgroundColor")
     private int backgroundColor;
+
+    private long teacherID;
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAlias() {
+        return this.alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public int getHoursInWeek() {
+        return this.hoursInWeek;
+    }
+
+    public void setHoursInWeek(int hoursInWeek) {
+        this.hoursInWeek = hoursInWeek;
+    }
+
+    public boolean isMainSubject() {
+        return this.isMainSubject;
+    }
+
+    public void setMainSubject(boolean mainSubject) {
+        if(mainSubject) {
+            this.hoursInWeek = 4;
+        } else {
+            this.hoursInWeek = 2;
+        }
+        this.isMainSubject = mainSubject;
+    }
+
+    public int getBackgroundColor() {
+        return this.backgroundColor;
+    }
+
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public long getTeacherID() {
+        return this.teacherID;
+    }
+
+    public void setTeacherID(long teacherID) {
+        this.teacherID = teacherID;
+    }
 }
