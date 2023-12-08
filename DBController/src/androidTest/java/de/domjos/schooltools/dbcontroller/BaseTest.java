@@ -22,18 +22,21 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import de.domjos.schooltools.dbcontroller.model.general.Teacher;
+import de.domjos.schooltools.dbcontroller.repository.general.SubjectDao;
 import de.domjos.schooltools.dbcontroller.repository.general.TeacherDao;
 
 @RunWith(AndroidJUnit4.class)
 public abstract class BaseTest {
     protected AppDatabase db;
     protected TeacherDao teacherDao;
+    protected SubjectDao subjectDao;
 
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
         this.db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
         this.teacherDao = this.db.teacherDao();
+        this.subjectDao = this.db.subjectDao();
     }
 
     @After

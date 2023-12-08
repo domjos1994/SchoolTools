@@ -31,7 +31,7 @@ public interface TeacherDao {
     @Query("SELECT * FROM teachers WHERE firstName=:firstName and lastName=:lastName")
     Teacher getTeacherByName(String firstName, String lastName);
 
-    @Query("SELECT id FROM teachers")
+    @Query("SELECT count(id) FROM teachers")
     long countTeacher();
 
     @Insert

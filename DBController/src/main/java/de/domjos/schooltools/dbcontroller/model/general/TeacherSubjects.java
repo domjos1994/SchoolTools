@@ -19,7 +19,7 @@ public class TeacherSubjects {
     private Teacher teacher;
 
     @Relation(
-        parentColumn = "id",
+        parentColumn = "ID",
         entityColumn = "teacherID"
     )
     private List<Subject> subjects;

@@ -14,11 +14,14 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import de.domjos.schooltools.dbcontroller.converter.DateConverter;
+import de.domjos.schooltools.dbcontroller.model.general.Subject;
 import de.domjos.schooltools.dbcontroller.model.general.Teacher;
+import de.domjos.schooltools.dbcontroller.repository.general.SubjectDao;
 import de.domjos.schooltools.dbcontroller.repository.general.TeacherDao;
 
-@Database(entities = {Teacher.class}, version = 1)
+@Database(entities = {Teacher.class, Subject.class}, version = 1)
 @TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TeacherDao teacherDao();
+    public abstract SubjectDao subjectDao();
 }
