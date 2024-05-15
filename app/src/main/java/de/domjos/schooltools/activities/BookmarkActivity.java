@@ -412,7 +412,7 @@ public final class BookmarkActivity extends AbstractActivity {
         for(Bookmark bookmark : MainActivity.globals.getSqLite().getBookmarks("")) {
             getTagsFromBookmark(bookmark, tags);
 
-            if(!search.trim().equals("")) {
+            if(!search.trim().isEmpty()) {
                 if(!bookmark.getTags().trim().toLowerCase().contains(search.toLowerCase())) {
                     if(!bookmark.getThemes().toLowerCase().trim().contains(search.toLowerCase())) {
                         if(!bookmark.getDescription().toLowerCase().trim().contains(search.toLowerCase())) {

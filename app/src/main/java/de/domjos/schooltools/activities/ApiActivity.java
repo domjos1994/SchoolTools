@@ -148,7 +148,6 @@ public final class ApiActivity extends AbstractActivity {
         });
 
         this.spApiFormat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 cmdApiPath.setEnabled(true);

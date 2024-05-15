@@ -155,7 +155,7 @@ public class SQLite extends SQLiteOpenHelper {
         String initContent = Helper.readFileFromRaw(this.context, resourceID);
         String[] tables = initContent.split(";");
         for(String query : tables) {
-            if(!query.trim().equals("")) {
+            if(!query.trim().isEmpty()) {
                 db.execSQL(query);
             }
         }

@@ -8,6 +8,7 @@
  */
 package de.domjos.schooltools.helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
@@ -22,7 +23,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -30,7 +30,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -64,6 +63,7 @@ import de.domjos.schooltoolslib.model.Note;
 import de.domjos.schooltoolslib.model.learningCard.LearningCard;
 import de.domjos.schooltoolslib.model.learningCard.LearningCardQuery;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 /**
@@ -145,15 +145,19 @@ public class Helper {
 
             File newFile = new File(path);
             if(newFile.exists()) {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(newFile), Charset.defaultCharset());
+                FileOutputStream fos = new FileOutputStream(newFile);
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fos, Charset.defaultCharset());
                 outputStreamWriter.write(data);
                 outputStreamWriter.close();
+                fos.close();
                 return true;
             } else {
                 if(newFile.createNewFile()) {
-                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(newFile), Charset.defaultCharset());
+                    FileOutputStream fos = new FileOutputStream(newFile);
+                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fos, Charset.defaultCharset());
                     outputStreamWriter.write(data);
                     outputStreamWriter.close();
+                    fos.close();
                     return true;
                 }
             }
@@ -187,7 +191,8 @@ public class Helper {
         try {
             File readableFile = new File(path);
             if(readableFile.exists() && readableFile.isFile()) {
-                InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(readableFile), Charset.defaultCharset());
+                FileInputStream fis = new FileInputStream(readableFile);
+                InputStreamReader inputStreamReader = new InputStreamReader(fis, Charset.defaultCharset());
                 BufferedReader reader = new BufferedReader(inputStreamReader);
                 String line;
                 while ((line = reader.readLine()) != null){
@@ -196,23 +201,12 @@ public class Helper {
                 }
                 reader.close();
                 inputStreamReader.close();
+                fis.close();
             }
         } catch (Exception ex) {
             MessageHelper.printException(ex, R.mipmap.ic_launcher_round, context);
         }
         return fileContent.toString();
-    }
-
-    public static void sendMailWithAttachment(String email, String subject, File file, Context context) {
-        Uri attachment = FileProvider.getUriForFile(context, context.getPackageName() + ".my.package.name.provider", file);
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("vnd.android.cursor.dir/email");
-        String[] to = {email};
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Intent.EXTRA_EMAIL, to);
-        intent.putExtra(Intent.EXTRA_STREAM, attachment);
-        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        context.startActivity(Intent.createChooser(intent, "Send email..."));
     }
 
     public static boolean compareDateWithCurrentDate(Date date) {
@@ -327,10 +321,10 @@ public class Helper {
         return item;
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressLint("DiscouragedApi")
     public static void showHTMLInTextView(Context context, String resource, TextView txt) {
         String packageName = context.getPackageName();
-        int resId = context.getResources().getIdentifier(resource, "string", packageName);
+         int resId = context.getResources().getIdentifier(resource, "string", packageName);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             txt.setText(Html.fromHtml(context.getString(resId), Html.FROM_HTML_MODE_COMPACT));
@@ -342,7 +336,7 @@ public class Helper {
     public static void setBackgroundToActivity(Activity activity) {
         Map.Entry<String, byte[]> entry = MainActivity.globals.getSqLite().getSetting("background");
         if(entry!=null) {
-            if(!entry.getKey().equals("")) {
+            if(!entry.getKey().isEmpty()) {
                 activity.getWindow().getDecorView().getRootView().setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
                 return;
             }
@@ -362,7 +356,7 @@ public class Helper {
     public static void setBackgroundAppBarToActivity(NavigationView navigationView, Activity activity) {
         Map.Entry<String, byte[]> entry = MainActivity.globals.getSqLite().getSetting("app_bar_background");
         if(entry!=null) {
-            if(!entry.getKey().equals("")) {
+            if(!entry.getKey().isEmpty()) {
                 navigationView.setBackground(new BitmapDrawable(activity.getResources(), BitmapFactory.decodeByteArray(entry.getValue(), 0, entry.getValue().length)));
                 return;
             }
@@ -389,7 +383,7 @@ public class Helper {
     public static void initRepeatingService(Activity activity, Class<? extends Service> cls, long frequency) {
         // init Service
         Intent intent = new Intent(activity.getApplicationContext(), cls);
-        PendingIntent pendingIntent1 = PendingIntent.getService(activity,  0, intent, 0);
+        PendingIntent pendingIntent1 = PendingIntent.getService(activity,  0, intent, FLAG_IMMUTABLE);
 
         // init frequently
         AlarmManager alarmManager1 = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
